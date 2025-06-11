@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pyramid Casino</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: #18122b;
+      color: #f3e9dc;
+      min-height: 100vh;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #a0843a;
+      color: #fff;
+      padding: 1rem 2rem;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+    }
+    .header nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.2rem;
+      margin: 0;
+      padding: 0;
+    }
+    .header nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .header nav a:hover {
+      color: #f3e9dc;
+      text-shadow: 0 0 5px #f9d923;
+    }
+    .main-content {
+      padding: 2rem 1rem 3rem 1rem;
+      min-height: 60vh;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .home {
+      text-align: center;
+    }
+    .primary-btn {
+      display: inline-block;
+      margin-top: 1.5rem;
+      background: #f9d923;
+      color: #18122b;
+      padding: 0.8rem 2.2rem;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background 0.2s;
+      box-shadow: 0 4px 8px #0003;
+    }
+    .primary-btn:hover {
+      background: #ffe277;
+    }
+    .games-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    .game-card {
+      background: #231b36;
+      padding: 1.5rem;
+      border-radius: 18px;
+      box-shadow: 0 4px 12px #0005;
+      width: 240px;
+      text-align: center;
+    }
+    .game-card h3 {
+      color: #f9d923;
+      margin-bottom: 0.5rem;
+    }
+    .game-card button {
+      margin-top: 1rem;
+      background: #a0843a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      cursor: not-allowed;
+    }
+    .notice {
+      background: #f9d923;
+      color: #18122b;
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      margin: 1.5rem auto 2rem auto;
+      font-weight: bold;
+      max-width: 550px;
+      box-shadow: 0 2px 8px #0002;
+    }
+    .footer {
+      background: #231b36;
+      color: #f9d923;
+      text-align: center;
+      padding: 1rem 0;
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      width: 100vw;
+      font-size: 1rem;
+    }
+    @media (max-width: 700px) {
+      .games-list {
+        flex-direction: column;
+        align-items: center;
+      }
+      .main-content {
+        padding: 1rem 0.5rem 2.5rem 0.5rem;
+      }
+      .notice {
+        padding: 0.7rem 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#games">Games</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="main-content">
+    <div class="notice">
+      <span>✨ Pyramid Casino is a <b>free, fun experiment</b>. No real money is involved and no payments are accepted. Enjoy playing for entertainment only! ✨</span>
+    </div>
+    <section class="home">
+      <h1>Welcome to Pyramid Casino</h1>
+      <p>
+        Experience the thrill of ancient Egypt with our exclusive online casino! Play exciting games, win big, and discover the secrets of the pyramid.
+      </p>
+      <a class="primary-btn" href="#games">
+        Play Now
+      </a>
+    </section>
+    <section id="games">
+      <h2 style="text-align:center;margin-top:3rem;">Our Games</h2>
+      <div class="games-list">
+        <div class="game-card">
+          <h3>Pyramid Slots</h3>
+          <p>Spin the reels and match ancient Egyptian symbols to win treasures.</p>
+          <button disabled>Play Demo</button>
+        </div>
+        <div class="game-card">
+          <h3>Blackjack Oasis</h3>
+          <p>Beat the dealer in our classic blackjack with a desert twist.</p>
+          <button disabled>Play Demo</button>
+        </div>
+        <div class="game-card">
+          <h3>Sphinx Roulette</h3>
+          <p>Place your bets on the lucky numbers guarded by the Sphinx.</p>
+          <button disabled>Play Demo</button>
+        </div>
+      </div>
+    </section>
+    <section id="about" style="margin-top:3rem;text-align:center;">
+      <h2>About Pyramid Casino</h2>
+      <p>
+        Pyramid Casino offers a unique online gaming experience inspired by the wonders of ancient Egypt.<br>
+        <b>This is a fun project - not a real casino.</b>
+      </p>
+      <ul style="display:inline-block;text-align:left;margin-top:1.2rem;">
+        <li>Safe & Secure</li>
+        <li>No money or prizes involved</li>
+        <li>For entertainment only</li>
+      </ul>
+    </section>
+  </main>
+  <footer class="footer">
+    Pyramid Casino &copy; <span id="year"></span>
+  </footer>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
