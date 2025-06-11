@@ -1,24 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-   <!-- Google tag (gtag.js) -->Add commentMore actions
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-54EHS7HPNV"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-  
-    gtag('config', 'G-54EHS7HPNV');
-  </script>
-  
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-TS8MM3FT');</script>
-  <!-- End Google Tag Manager -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Pyramid Casino</title>
@@ -105,7 +87,8 @@
       color: #f9d923;
       margin-bottom: 0.5rem;
     }
-    .game-card button {
+    .game-card button,
+    .game-card a {
       margin-top: 1rem;
       background: #a0843a;
       color: #fff;
@@ -113,7 +96,19 @@
       border-radius: 8px;
       padding: 0.5rem 1.2rem;
       font-size: 1rem;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .game-card button[disabled] {
       cursor: not-allowed;
+      opacity: 0.7;
+    }
+    .game-card a:hover {
+      background: #f9d923;
+      color: #18122b;
     }
     .notice {
       background: #f9d923;
@@ -150,10 +145,6 @@
   </style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TS8MM3FT"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
   <header class="header">
     <div class="logo">
       <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
@@ -190,7 +181,7 @@
         <div class="game-card">
           <h3>Blackjack Oasis</h3>
           <p>Beat the dealer in our classic blackjack with a desert twist.</p>
-          <button disabled>Play Demo</button>
+          <a href="blackjack.html">Play Blackjack</a>
         </div>
         <div class="game-card">
           <h3>Sphinx Roulette</h3>
@@ -213,8 +204,7 @@
     </section>
   </main>
   <footer class="footer">
-    Pyramid Casino &copy; <span id="year"></span> |
-    Contact: <a href="mailto:casino.the.pyramid@gmail.com" style="color: #f9d923; text-decoration: underline;">casino.the.pyramid@gmail.com</a>
+    Pyramid Casino &copy; <span id="year"></span>
   </footer>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
