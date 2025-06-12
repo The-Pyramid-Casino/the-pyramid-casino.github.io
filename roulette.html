@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pyramid Casino – Sphinx Roulette</title>
+  <link rel="stylesheet" href="roulette.css" />
+</head>
+<body>
+<header class="header">
+  <div class="logo">
+    <a href="index.html" style="color:inherit;text-decoration:none;">
+      <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
+    </a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#games">Games</a></li>
+      <li><a href="index.html#about">About</a></li>
+    </ul>
+  </nav>
+</header>
+<main class="main-content">
+  <section class="roulette">
+    <h1>Sphinx Roulette</h1>
+    <div class="notice">
+      <span>✨ For fun only! No real money, just chips and luck. ✨</span>
+    </div>
+    <div id="chip-bank">
+      <span>Chips: <span id="chip-balance">1000</span></span>
+      <button id="reset-chips" title="Reset chips to 1000">Reset</button>
+    </div>
+    <div id="betting-area">
+      <div class="chips-row">
+        <button class="chip-btn" data-chip="1" aria-label="1 chip">1</button>
+        <button class="chip-btn" data-chip="5" aria-label="5 chip">5</button>
+        <button class="chip-btn" data-chip="25" aria-label="25 chip">25</button>
+        <button class="chip-btn" data-chip="100" aria-label="100 chip">100</button>
+      </div>
+      <div id="roulette-table"></div>
+      <div id="bet-summary"></div>
+      <button id="clear-bets">Clear Bets</button>
+      <button id="spin-btn">Spin</button>
+    </div>
+    <div id="result-area" style="display:none;">
+      <h2>Result</h2>
+      <div id="spin-result"></div>
+      <div id="payout-result"></div>
+      <button id="new-round">New Round</button>
+    </div>
+    <div class="rules">
+      <h3>Roulette Rules</h3>
+      <ul>
+        <li>You have 1,000 chips. No real money, just for fun!</li>
+        <li>Click chip values, then click the table to place chips.</li>
+        <li>Inside bets: straight up (35:1), split (17:1), street (11:1), corner (8:1), six line (5:1).</li>
+        <li>Outside bets: red/black, even/odd, 1-18/19-36 pay 1:1; columns and dozens pay 2:1.</li>
+        <li>Click "Spin" to play. Click "Clear Bets" to start over.</li>
+      </ul>
+    </div>
+    <div id="roulette-spin-overlay" style="display:none;"></div>
+  </section>
+</main>
+<footer class="footer">
+  Pyramid Casino &copy; <span id="year"></span>
+</footer>
+<script>
+/* ...The full JavaScript block from previous responses goes here (unchanged!)... */
+</script>
+</body>
+</html>
