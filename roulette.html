@@ -5,15 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Pyramid Casino – Sphinx Roulette</title>
   <link rel="stylesheet" href="roulette.css" />
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-
-  gtag("config", "G-V9DHVKBD85");
-</script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-V9DHVKBD85");
+  </script>
 </head>
 <body>
 <header class="header">
@@ -75,9 +74,31 @@
   Pyramid Casino &copy; <span id="year"></span>
 </footer>
 <script>
-document.getElementById('year').textContent = new Date().getFullYear();
+// Shared balance utilities
+function getCasinoBalance() {
+  let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+  if (isNaN(bal)) bal = 1000;
+  return bal;
+}
+function setCasinoBalance(newBalance) {
+  localStorage.setItem('pyramidCasinoBalance', newBalance);
+}
 
-let chips = 1000;
+// UI Elements
+document.getElementById('year').textContent = new Date().getFullYear();
+const chipBalanceEl = document.getElementById("chip-balance");
+const resetChipsBtn = document.getElementById("reset-chips");
+const rouletteTableEl = document.getElementById("roulette-table");
+const betSummaryEl = document.getElementById("bet-summary");
+const spinBtn = document.getElementById("spin-btn");
+const resultArea = document.getElementById("result-area");
+const spinResultEl = document.getElementById("spin-result");
+const payoutResultEl = document.getElementById("payout-result");
+const newRoundBtn = document.getElementById("new-round");
+const clearBetsBtn = document.getElementById("clear-bets");
+
+// Game State (uses shared balance!)
+let chips = getCasinoBalance();
 let selectedChip = 1;
 let bets = {}; // { betKey: {1: count, 5: count, 25: count, 100: count, 1000: count, total: sum} }
 let lastSpin = null;
@@ -92,16 +113,10 @@ const COLORS = {
 };
 const REDS = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
 
-const chipBalanceEl = document.getElementById("chip-balance");
-const resetChipsBtn = document.getElementById("reset-chips");
-const rouletteTableEl = document.getElementById("roulette-table");
-const betSummaryEl = document.getElementById("bet-summary");
-const spinBtn = document.getElementById("spin-btn");
-const resultArea = document.getElementById("result-area");
-const spinResultEl = document.getElementById("spin-result");
-const payoutResultEl = document.getElementById("payout-result");
-const newRoundBtn = document.getElementById("new-round");
-const clearBetsBtn = document.getElementById("clear-bets");
+function updateChipDisplay() {
+  chipBalanceEl.textContent = chips;
+  setCasinoBalance(chips);
+}
 
 // Chip buttons
 document.querySelectorAll('.chip-btn').forEach(btn => {
@@ -113,10 +128,16 @@ document.querySelectorAll('.chip-btn').forEach(btn => {
 });
 document.querySelector('.chip-btn[data-chip="1"]').classList.add('selected');
 
-// Reset chips: reload page for true reset
+// Reset chips: sets shared balance
 resetChipsBtn.onclick = () => {
   if (confirm("Reset your chips to 1000? This will restart the game.")) {
-    location.reload();
+    chips = 1000;
+    setCasinoBalance(chips);
+    chipBalanceEl.textContent = chips;
+    bets = {};
+    renderBets();
+    renderChipsOnTable();
+    resultArea.style.display = 'none';
   }
 };
 
@@ -207,7 +228,7 @@ function renderTable() {
 }
 renderTable();
 
-// Place a bet
+// Place a bet (shared chips)
 function placeBet(e) {
   const betKey = e.currentTarget.dataset.bet;
   // Only allow betting if you have chips and haven't spun yet
@@ -216,7 +237,7 @@ function placeBet(e) {
   bets[betKey][selectedChip] = (bets[betKey][selectedChip] || 0) + 1;
   bets[betKey].total += selectedChip;
   chips -= selectedChip;
-  chipBalanceEl.textContent = chips;
+  updateChipDisplay();
   renderBets();
   renderChipsOnTable();
 }
@@ -239,13 +260,11 @@ renderBets();
 
 // Render chip icons on numbers and outside bets
 function renderChipsOnTable() {
-  // Remove any previous chips
   document.querySelectorAll('.bet-chip').forEach(el => el.remove());
   document.querySelectorAll('.bet-total-label').forEach(el => el.remove());
   for (let key in bets) {
     if (bets[key].total > 0) {
       document.querySelectorAll(`[data-bet="${key}"]`).forEach(td => {
-        // Place chip icons for each chip type
         const chipDiv = document.createElement('div');
         chipDiv.className = 'bet-chip';
         for (let chip of [1,5,25,100,1000]) {
@@ -257,7 +276,6 @@ function renderChipsOnTable() {
           }
         }
         td.appendChild(chipDiv);
-        // Place total label
         const totalLabel = document.createElement('div');
         totalLabel.className = 'bet-total-label';
         totalLabel.textContent = bets[key].total;
@@ -284,7 +302,7 @@ clearBetsBtn.onclick = () => {
     chips += bets[key].total;
   }
   bets = {};
-  chipBalanceEl.textContent = chips;
+  updateChipDisplay();
   renderBets();
   renderChipsOnTable();
 };
@@ -300,6 +318,7 @@ spinBtn.onclick = () => {
   showSpinResult(spin);
   payout(spin);
   resultArea.style.display = '';
+  updateChipDisplay();
 };
 
 // Show spin result
@@ -344,7 +363,6 @@ function payout(spin) {
       payoutMsg += `<div>Bet on ${betDescription(key)}: Lost (-${amount})</div>`;
     }
   }
-  chipBalanceEl.textContent = chips;
   if (totalWin>0) {
     payoutResultEl.innerHTML = `<div class="win">You won ${totalWin} chips!</div>${payoutMsg}`;
   } else if (totalWin===0) {
@@ -363,6 +381,7 @@ newRoundBtn.onclick = () => {
 };
 
 renderChipsOnTable();
+updateChipDisplay();
 </script>
 </body>
 </html>
