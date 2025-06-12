@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-BASE_URL = "https://arthurb26.github.io/"
+BASE_URL = "https://the-pyramid-casino.github.io/"
 OUTPUT_FILE = "sitemap.xml"
 SITE_DIR = "."
 
