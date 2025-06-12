@@ -16,17 +16,16 @@ jobs:
       - name: Add Google Tag to HTML files
         run: |
           GTAG='<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
+          <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag("js", new Date());
 
-  gtag("config", "G-V9DHVKBD85");
-</script>'
+            gtag("config", "G-V9DHVKBD85");
+          </script>'
           for file in $(find . -type f -name "*.html"); do
             if ! grep -q 'googletagmanager.com/gtag/js?id=G-V9DHVKBD85' "$file"; then
-              # Insert GTAG just before </head>
               awk -v gtag="$GTAG" '
               BEGIN {added=0}
               /<\/head>/ && !added {
