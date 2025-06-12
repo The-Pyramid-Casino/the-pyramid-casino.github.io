@@ -1,10 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Pyramid Casino &ndash; Blackjack Oasis</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="blackjack.css" />
+  <meta charset="UTF-8">
+  <title>Blackjack Oasis - Pyramid Casino</title>
+  <link rel="stylesheet" href="blackjack.css">
+  <style>
+    .blackjack-container {
+      background: #231b36;
+      border-radius: 18px;
+      box-shadow: 0 4px 12px #0005;
+      padding: 2.2rem 1.2rem 2rem 1.2rem;
+      max-width: 420px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .blackjack-title {
+      color: #f9d923;
+      font-size: 2.1rem;
+      margin-bottom: 0.7rem;
+      text-shadow: 0 2px 6px #0006;
+    }
+    .balance-row {
+      display: flex;
+      align-items: center;
+      gap: 1.2em;
+      justify-content: center;
+      margin-bottom: 1.2em;
+    }
+    .reset-btn {
+      background: #f9d923;
+      color: #18122b;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.97rem;
+      font-weight: bold;
+      padding: 0.28em 1.1em;
+      cursor: pointer;
+      box-shadow: 0 2px 6px #0002;
+      transition: background 0.15s;
+    }
+    .reset-btn:hover {
+      background: #ffd924;
+    }
+    #betting-area input[type=number] {
+      background: #f3e9dc;
+      color: #18122b;
+      padding: 0.3rem;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+      text-align: center;
+      width: 70px;
+      margin-right: 0.4em;
+    }
+    #betting-area button, #controls button, #play-again-btn {
+      background: #a0843a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      margin-left: 0.5em;
+      margin-right: 0.5em;
+      margin-top: 0.2em;
+      margin-bottom: 0.2em;
+      transition: background 0.15s;
+    }
+    #betting-area button:disabled, #controls button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    #betting-area {
+      margin: 1.2rem auto 2rem auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    #game-area {
+      margin: 2rem auto 1.5rem auto;
+      text-align: center;
+    }
+    .card-row {
+      margin: 0.5rem 0;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .card {
+      display: inline-block;
+      background: #fffbe7;
+      border: 1.5px solid #a0843a;
+      border-radius: 8px;
+      width: 38px;
+      height: 54px;
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #18122b;
+      text-align: center;
+      padding-top: 0.7em;
+      box-shadow: 0 2px 6px #0002;
+      transition: transform 0.13s;
+    }
+    .card.red { color: #c72b2b; }
+    .card.back { background: #e2d5a7; color: #c7b76a; border-style: dashed; }
+    .score-row {
+      margin-bottom: 0.4em;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #ffe277;
+      text-shadow: 0 1px 4px #0005;
+    }
+    .result-msg {
+      font-size: 1.25em;
+      font-weight: bold;
+      margin: 1rem 0 0.5rem 0;
+      color: #f9d923;
+      text-shadow: 0 1px 4px #000;
+      letter-spacing: 0.5px;
+    }
+    #play-again-btn { margin-top: 0.9em; }
+    .bet-label {
+      color: #ffe277;
+      font-weight: 500;
+      margin-right: 0.5em;
+      font-size: 1.08em;
+    }
+    @media (max-width: 600px) {
+      .main-content { padding: 1rem 0.3rem 2.5rem 0.3rem; }
+      .blackjack-container { max-width: 97vw; }
+    }
+  </style>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
 <script>
@@ -18,9 +146,7 @@
 <body>
   <header class="header">
     <div class="logo">
-      <a href="index.html" style="color:inherit;text-decoration:none;">
-        <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
-      </a>
+      <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
     </div>
     <nav>
       <ul>
@@ -31,372 +157,210 @@
     </nav>
   </header>
   <main class="main-content">
-    <section class="blackjack">
-      <h1>Blackjack Oasis</h1>
-      <div class="notice">
-        <span>✨ For fun only! No real money, just chips and luck. ✨</span>
-      </div>
-      <div id="chip-bank">
-        <span>Chips: <span id="chip-balance">1000</span></span>
-        <button id="reset-chips" title="Reset chips to 1000">Reset</button>
+    <a href="index.html" class="back-link">&larr; Back to Menu</a>
+    <div class="blackjack-container">
+      <div class="blackjack-title">Blackjack Oasis</div>
+      <div class="balance-row">
+        <span>Balance: <span id="balance">1000</span></span>
+        <button class="reset-btn" onclick="setCasinoBalance(1000); window.location.reload();">Reset</button>
       </div>
       <div id="betting-area">
-        <label for="bet-amount">Bet:</label>
-        <input type="number" id="bet-amount" min="1" step="1" value="10" />
-        <button id="place-bet">Place Bet</button>
+        <span class="bet-label">Place your bet:</span>
+        <input type="number" id="bet-amount" min="1" value="10" step="1">
+        <button id="deal-btn">Deal</button>
       </div>
       <div id="game-area" style="display:none;">
-        <div id="dealer-area">
-          <h2>Dealer</h2>
-          <div id="dealer-cards" class="card-row"></div>
-          <div id="dealer-score"></div>
+        <div>
+          <div style="font-weight:bold;color:#ffe277;">Dealer</div>
+          <div class="card-row" id="dealer-cards"></div>
+          <div class="score-row" id="dealer-score"></div>
         </div>
-        <div id="player-hands"></div>
-        <div id="game-controls">
-          <button id="hit" disabled>Hit</button>
-          <button id="stand" disabled>Stand</button>
-          <button id="double" disabled>Double</button>
-          <button id="split" disabled>Split</button>
-          <button id="new-round" style="display:none;">New Round</button>
+        <div style="margin-top:1em;">
+          <div style="font-weight:bold;color:#ffe277;">You</div>
+          <div class="card-row" id="player-cards"></div>
+          <div class="score-row" id="player-score"></div>
         </div>
-        <div id="game-message"></div>
+        <div id="controls" style="margin-top:1.1em;">
+          <button id="hit-btn">Hit</button>
+          <button id="stand-btn">Stand</button>
+        </div>
+        <div class="result-msg" id="result-msg" style="display:none;"></div>
+        <button id="play-again-btn" style="display:none;">Play Again</button>
       </div>
-      <div class="rules">
-        <h3>How to Play</h3>
-        <ul>
-          <li>Click "Place Bet" to start a round.</li>
-          <li>You begin with 1,000 chips. No real money involved.</li>
-          <li>Blackjack pays 3:2. Dealer stands on all 17s.</li>
-          <li>Split once per round, double only as first move. No insurance/surrender.</li>
-          <li>Have fun and good luck!</li>
-        </ul>
-      </div>
-    </section>
+    </div>
   </main>
   <footer class="footer">
     Pyramid Casino &copy; <span id="year"></span>
   </footer>
   <script>
+    // Shared balance utilities (matches your site system)
+    function getCasinoBalance() {
+      let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+      if (isNaN(bal)) bal = 1000;
+      return bal;
+    }
+    function setCasinoBalance(newBalance) {
+      localStorage.setItem('pyramidCasinoBalance', newBalance);
+    }
+    function updateBalanceDisplay() {
+      document.getElementById('balance').textContent = getCasinoBalance();
+    }
+    updateBalanceDisplay();
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Blackjack logic (unchanged)
-    const SUITS = ["♠", "♥", "♦", "♣"];
-    const VALUES = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-    const CARD_VALUES = {
-      "A": 11, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6,
-      "7": 7, "8": 8, "9": 9, "10": 10, "J": 10, "Q": 10, "K": 10
-    };
+    // Blackjack logic
+    const suits = ['♠', '♥', '♦', '♣'];
+    const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+    let deck, playerHand, dealerHand, bet, gameOver, playerStands;
 
-    let deck, playerHands, dealerHand, activeHandIndex, bet, chips, inPlay, doubleUsed, splitUsed;
-
-    const chipBalanceEl = document.getElementById("chip-balance");
-    const resetChipsBtn = document.getElementById("reset-chips");
-    const betAmountEl = document.getElementById("bet-amount");
-    const placeBetBtn = document.getElementById("place-bet");
-    const gameArea = document.getElementById("game-area");
-    const dealerCardsEl = document.getElementById("dealer-cards");
-    const dealerScoreEl = document.getElementById("dealer-score");
-    const playerHandsEl = document.getElementById("player-hands");
-    const hitBtn = document.getElementById("hit");
-    const standBtn = document.getElementById("stand");
-    const doubleBtn = document.getElementById("double");
-    const splitBtn = document.getElementById("split");
-    const newRoundBtn = document.getElementById("new-round");
-    const gameMessageEl = document.getElementById("game-message");
-
-    function initialState() {
-      deck = [];
-      playerHands = [];
-      dealerHand = [];
-      activeHandIndex = 0;
-      bet = 10;
-      chips = typeof chips === "undefined" ? 1000 : chips;
-      inPlay = false;
-      doubleUsed = false;
-      splitUsed = false;
-    }
-
-    function render() {
-      chipBalanceEl.textContent = chips;
-      betAmountEl.max = chips;
-      betAmountEl.value = bet;
-      if (!inPlay) {
-        gameArea.style.display = "none";
-        betAmountEl.disabled = false;
-        placeBetBtn.disabled = false;
-      } else {
-        gameArea.style.display = "";
-        betAmountEl.disabled = true;
-        placeBetBtn.disabled = true;
-        if (dealerHand.length > 0) {
-          if (dealerHand.reveal) {
-            renderCards(dealerCardsEl, dealerHand, false);
-            dealerScoreEl.textContent = "Score: " + handValue(dealerHand);
-          } else {
-            renderCards(dealerCardsEl, dealerHand, true);
-            dealerScoreEl.textContent = "Score: ?";
-          }
+    function createDeck() {
+      let deck = [];
+      for (let suit of suits) {
+        for (let value of values) {
+          deck.push({suit, value});
         }
-        renderHands();
-        let activeHand = playerHands[activeHandIndex];
-        hitBtn.disabled = !inPlay;
-        standBtn.disabled = !inPlay;
-        doubleBtn.disabled = !inPlay || !canDouble(activeHand) || bet > chips;
-        splitBtn.disabled = !inPlay || !canSplitHand(activeHand) || bet > chips;
       }
-      newRoundBtn.style.display = (!inPlay && playerHands.length) ? "" : "none";
-    }
-
-    function renderCards(container, hand, hideFirst=false) {
-      container.innerHTML = "";
-      hand.forEach((card, i) => {
-        const cardDiv = document.createElement("span");
-        cardDiv.className = "card";
-        if (hideFirst && i === 0) {
-          cardDiv.classList.add("back");
-        } else {
-          cardDiv.innerHTML = `${card.v}${card.s}`;
-          if(card.s === "♥" || card.s === "♦") cardDiv.classList.add("red");
-        }
-        container.appendChild(cardDiv);
-      });
-    }
-
-    function renderHands() {
-      playerHandsEl.innerHTML = "";
-      playerHands.forEach((hand, idx) => {
-        const div = document.createElement("div");
-        div.className = "hand";
-        if (idx === activeHandIndex && inPlay) div.classList.add("active");
-        div.innerHTML = `<h2>Player ${playerHands.length > 1 ? ('Hand ' + (idx+1)) : ''}</h2>`;
-        const row = document.createElement("div");
-        row.className = "card-row";
-        hand.forEach(card => {
-          const cardDiv = document.createElement("span");
-          cardDiv.className = "card";
-          cardDiv.innerHTML = `${card.v}${card.s}`;
-          if(card.s === "♥" || card.s === "♦") cardDiv.classList.add("red");
-          row.appendChild(cardDiv);
-        });
-        div.appendChild(row);
-        const score = handValue(hand);
-        div.innerHTML += `<div class="score">Score: ${score}</div>`;
-        if (isBlackjack(hand) && hand.length == 2) {
-          div.innerHTML += `<div class="bj">Blackjack!</div>`;
-        }
-        playerHandsEl.appendChild(div);
-      });
-    }
-
-    function showMessage(msg, color="#f9d923") {
-      gameMessageEl.textContent = msg;
-      gameMessageEl.style.color = color;
-    }
-
-    function clearMessage() {
-      gameMessageEl.textContent = "";
-    }
-
-    function shuffleDeck() {
-      let d = [];
-      for (let s of SUITS) for (let v of VALUES) d.push({s, v});
-      d = Array(6).fill().flatMap(() => d.slice());
-      for (let i = d.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [d[i], d[j]] = [d[j], d[i]];
+      for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
       }
-      return d;
+      return deck;
     }
-
-    function cardValue(card) { return CARD_VALUES[card.v]; }
     function handValue(hand) {
-      let total = 0, aces = 0;
+      let val = 0, aces = 0;
       for (let card of hand) {
-        total += cardValue(card);
-        if (card.v === "A") aces++;
+        if (['J','Q','K'].includes(card.value)) val += 10;
+        else if (card.value === 'A') { val += 11; aces++; }
+        else val += parseInt(card.value);
       }
-      while (total > 21 && aces) { total -= 10; aces--; }
-      return total;
+      while (val > 21 && aces) { val -= 10; aces--; }
+      return val;
     }
-    function isBlackjack(hand) { return hand.length === 2 && handValue(hand) === 21; }
-    function canDouble(hand) { return hand.length === 2 && !doubleUsed; }
-    function canSplitHand(hand) { return hand.length === 2 && cardValue(hand[0]) === cardValue(hand[1]) && !splitUsed && playerHands.length === 1; }
+    function showHands(revealDealer=false) {
+      const playerDiv = document.getElementById('player-cards');
+      playerDiv.innerHTML = playerHand.map(card => renderCard(card)).join('');
+      document.getElementById('player-score').textContent = "Score: " + handValue(playerHand);
 
-    function startRound() {
-      if (inPlay) return;
-      bet = Math.max(1, Math.floor(parseInt(betAmountEl.value)));
-      if (bet > chips) bet = chips;
-      chips -= bet;
-      chipBalanceEl.textContent = chips;
-      deck = shuffleDeck();
-      playerHands = [[deck.pop(), deck.pop()]];
-      dealerHand = [deck.pop(), deck.pop()];
-      dealerHand.reveal = false;
-      activeHandIndex = 0;
-      doubleUsed = false;
-      splitUsed = false;
-      inPlay = true;
-      clearMessage();
-      render();
-      setTimeout(() => {
-        if (isBlackjack(playerHands[0])) {
-          dealerHand.reveal = true;
-          render();
-          if (isBlackjack(dealerHand)) {
-            showMessage("Both have Blackjack! Push.", "#ffe277");
-            chips += bet;
-          } else {
-            showMessage("Blackjack! You win 1.5x your bet.", "#87fc70");
-            chips += Math.floor(bet * 2.5);
-          }
-          inPlay = false;
-          render();
-        } else if (isBlackjack(dealerHand)) {
-          dealerHand.reveal = true;
-          render();
-          showMessage("Dealer has Blackjack. You lose.", "#f98262");
-          inPlay = false;
-          render();
-        }
-      }, 500);
-    }
-
-    function nextHandOrDealer() {
-      if (activeHandIndex + 1 < playerHands.length) {
-        activeHandIndex++;
-        render();
-        clearMessage();
+      const dealerDiv = document.getElementById('dealer-cards');
+      if (!revealDealer) {
+        dealerDiv.innerHTML = renderCard(dealerHand[0]) + '<div class="card back">?</div>';
+        document.getElementById('dealer-score').textContent = "Score: ?";
       } else {
-        dealerHand.reveal = true;
-        dealerPlay();
+        dealerDiv.innerHTML = dealerHand.map(card => renderCard(card)).join('');
+        document.getElementById('dealer-score').textContent = "Score: " + handValue(dealerHand);
       }
     }
-
-    function dealerPlay() {
-      render();
-      let dealerScore = handValue(dealerHand);
-      function doStep() {
-        dealerScore = handValue(dealerHand);
-        if (dealerScore < 17) {
-          dealerHand.push(deck.pop());
-          render();
-          setTimeout(doStep, 800);
-        } else {
-          settleHands();
-        }
-      }
-      setTimeout(doStep, 800);
+    function renderCard(card) {
+      let isRed = (card.suit === '♥' || card.suit === '♦');
+      return `<div class="card${isRed ? ' red' : ''}">${card.value}${card.suit}</div>`;
     }
-
-    function settleHands() {
-      let dealerScore = handValue(dealerHand);
-      let results = [];
-      playerHands.forEach((hand, idx) => {
-        let score = handValue(hand);
-        if (score > 21) {
-          results.push({msg: `Hand ${idx+1}: Bust!`, color: "#f98262"});
-        } else if (dealerScore > 21) {
-          results.push({msg: `Hand ${idx+1}: Dealer busts, you win!`, color: "#87fc70"});
-          chips += bet * 2;
-        } else if (score > dealerScore) {
-          results.push({msg: `Hand ${idx+1}: You win!`, color: "#87fc70"});
-          chips += bet * 2;
-        } else if (score === dealerScore) {
-          results.push({msg: `Hand ${idx+1}: Push.`, color: "#ffe277"});
-          chips += bet;
-        } else {
-          results.push({msg: `Hand ${idx+1}: You lose.`, color: "#f98262"});
-        }
-      });
-      showMessage(results.map(r => r.msg).join(" "), results[0].color);
-      inPlay = false;
-      render();
+    function setControls(state) {
+      document.getElementById('hit-btn').disabled = !state;
+      document.getElementById('stand-btn').disabled = !state;
     }
-
-    function hitHand() {
-      if (!inPlay) return;
-      playerHands[activeHandIndex].push(deck.pop());
-      render();
-      let score = handValue(playerHands[activeHandIndex]);
-      if (score > 21) {
-        showMessage("Bust! Over 21.", "#f98262");
-        setTimeout(nextHandOrDealer, 1000);
-      } else if (score === 21) {
-        standHand();
-      }
+    function endHand(msg) {
+      setControls(false);
+      showHands(true);
+      document.getElementById('result-msg').style.display = 'block';
+      document.getElementById('result-msg').textContent = msg;
+      document.getElementById('play-again-btn').style.display = '';
     }
-
-    function standHand() {
-      if (!inPlay) return;
-      nextHandOrDealer();
-    }
-
-    function doubleHand() {
-      if (!inPlay || doubleUsed || playerHands[activeHandIndex].length !== 2 || bet > chips) return;
-      chips -= bet;
-      chipBalanceEl.textContent = chips;
-      playerHands[activeHandIndex].push(deck.pop());
-      doubleUsed = true;
-      render();
-      let score = handValue(playerHands[activeHandIndex]);
-      if (score > 21) {
-        showMessage("Bust after double!", "#f98262");
-        setTimeout(nextHandOrDealer, 800);
-      } else {
-        setTimeout(standHand, 800);
-      }
-    }
-
-    function splitHand() {
-      if (!inPlay || splitUsed || !canSplitHand(playerHands[activeHandIndex]) || bet > chips) return;
-      chips -= bet;
-      chipBalanceEl.textContent = chips;
-      let hand = playerHands[activeHandIndex];
-      let card1 = hand[0], card2 = hand[1];
-      playerHands = [
-        [card1, deck.pop()],
-        [card2, deck.pop()]
-      ];
-      splitUsed = true;
-      activeHandIndex = 0;
-      render();
-    }
-
-    // --- RELOAD TAB ON RESET ---
-    resetChipsBtn.addEventListener("click", function() {
-      if (confirm("Reset your chips to 1000? This will restart the game.")) {
-        location.reload();
-      }
-    });
-
-    placeBetBtn.addEventListener("click", () => {
-      if (parseInt(betAmountEl.value) > chips) {
-        showMessage("Not enough chips for that bet!", "#f98262");
+    function startGame() {
+      bet = parseInt(document.getElementById('bet-amount').value, 10);
+      if (isNaN(bet) || bet < 1) {
+        alert("Invalid bet amount.");
         return;
       }
-      startRound();
-    });
-
-    hitBtn.addEventListener("click", hitHand);
-    standBtn.addEventListener("click", standHand);
-    doubleBtn.addEventListener("click", doubleHand);
-    splitBtn.addEventListener("click", splitHand);
-    newRoundBtn.addEventListener("click", function() {
-      location.reload();
-    });
-
-    function updateControls() {
-      let hand = playerHands[activeHandIndex];
-      hitBtn.disabled = !inPlay;
-      standBtn.disabled = !inPlay;
-      doubleBtn.disabled = !inPlay || !canDouble(hand) || bet > chips;
-      splitBtn.disabled = !inPlay || !canSplitHand(hand) || bet > chips;
+      if (bet > getCasinoBalance()) {
+        alert("You don't have enough chips!");
+        return;
+      }
+      setCasinoBalance(getCasinoBalance() - bet);
+      updateBalanceDisplay();
+      deck = createDeck();
+      playerHand = [deck.pop(), deck.pop()];
+      dealerHand = [deck.pop(), deck.pop()];
+      playerStands = false;
+      gameOver = false;
+      document.getElementById('betting-area').style.display = 'none';
+      document.getElementById('game-area').style.display = '';
+      document.getElementById('result-msg').style.display = 'none';
+      document.getElementById('play-again-btn').style.display = 'none';
+      setControls(true);
+      showHands();
+      // Check for initial blackjack
+      if (handValue(playerHand) === 21 && handValue(dealerHand) !== 21) {
+        setTimeout(() => {
+          setCasinoBalance(getCasinoBalance() + Math.floor(bet * 2.5));
+          updateBalanceDisplay();
+          endHand("Blackjack! You win 3:2 payout!");
+        }, 800);
+        return;
+      }
+      if (handValue(playerHand) === 21 && handValue(dealerHand) === 21) {
+        setTimeout(() => {
+          setCasinoBalance(getCasinoBalance() + bet);
+          updateBalanceDisplay();
+          endHand("Push! Both have Blackjack.");
+        }, 800);
+        return;
+      }
     }
-
-    new MutationObserver(updateControls).observe(playerHandsEl, {childList:true, subtree:true});
-
-    initialState();
-    render();
+    function playerHit() {
+      playerHand.push(deck.pop());
+      showHands();
+      let playerVal = handValue(playerHand);
+      if (playerVal > 21) {
+        endHand("Bust! You lose.");
+      }
+    }
+    function playerStand() {
+      setControls(false);
+      playerStands = true;
+      dealerTurn();
+    }
+    function dealerTurn() {
+      showHands(true);
+      let dealerVal = handValue(dealerHand);
+      let playerVal = handValue(playerHand);
+      let dealerAct = setInterval(() => {
+        dealerVal = handValue(dealerHand);
+        if (dealerVal < 17) {
+          dealerHand.push(deck.pop());
+          showHands(true);
+        } else {
+          clearInterval(dealerAct);
+          checkWinner();
+        }
+      }, 700);
+    }
+    function checkWinner() {
+      let playerVal = handValue(playerHand);
+      let dealerVal = handValue(dealerHand);
+      if (dealerVal > 21) {
+        setCasinoBalance(getCasinoBalance() + bet * 2);
+        updateBalanceDisplay();
+        endHand("Dealer busts! You win!");
+      } else if (dealerVal > playerVal) {
+        endHand("Dealer wins.");
+      } else if (dealerVal < playerVal) {
+        setCasinoBalance(getCasinoBalance() + bet * 2);
+        updateBalanceDisplay();
+        endHand("You win!");
+      } else {
+        setCasinoBalance(getCasinoBalance() + bet);
+        updateBalanceDisplay();
+        endHand("Push! It's a tie.");
+      }
+    }
+    document.getElementById('deal-btn').onclick = startGame;
+    document.getElementById('hit-btn').onclick = playerHit;
+    document.getElementById('stand-btn').onclick = playerStand;
+    document.getElementById('play-again-btn').onclick = function() {
+      document.getElementById('betting-area').style.display = '';
+      document.getElementById('game-area').style.display = 'none';
+      updateBalanceDisplay();
+    }
   </script>
 </body>
 </html>
