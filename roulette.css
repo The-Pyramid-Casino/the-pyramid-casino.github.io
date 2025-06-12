@@ -105,6 +105,17 @@ body {
   box-shadow: 0 0 8px 2px #18122b;
 }
 
+.chip-btn[data-chip="1000"] {
+  background: #231b36;
+  color: #f9d923;
+  border: 2px solid #f9d923;
+}
+.chip-btn[data-chip="1000"].selected {
+  background: #f9d923 !important;
+  color: #231b36 !important;
+  border: 3px solid #231b36 !important;
+}
+
 .roulette-layout {
   border-collapse: collapse;
   margin: 0 auto;
@@ -192,6 +203,7 @@ body {
 .roulette-layout .bet-chip-img.chip-5 { background: #f9d923; color: #18122b; border-color: #bda729; }
 .roulette-layout .bet-chip-img.chip-25 { background: #43c734; color: #fff; border-color: #218e1f; }
 .roulette-layout .bet-chip-img.chip-100 { background: #d7263d; color: #fff; border-color: #7c1123; }
+.roulette-layout .bet-chip-img.chip-1000 { background: #231b36; color: #f9d923; border-color: #f9d923;}
 .roulette-layout .bet-total-label {
   position: absolute;
   bottom: 2px;
