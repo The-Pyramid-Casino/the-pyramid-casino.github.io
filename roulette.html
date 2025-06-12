@@ -5,15 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Pyramid Casino – Sphinx Roulette</title>
   <link rel="stylesheet" href="roulette.css" />
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-
-  gtag("config", "G-V9DHVKBD85");
-</script>
 </head>
 <body>
 <header class="header">
@@ -42,10 +33,10 @@
     </div>
     <div id="betting-area">
       <div class="chips-row">
-        <button class="chip-btn" data-chip="1" aria-label="1 chip">1</button>
-        <button class="chip-btn" data-chip="5" aria-label="5 chip">5</button>
-        <button class="chip-btn" data-chip="25" aria-label="25 chip">25</button>
-        <button class="chip-btn" data-chip="100" aria-label="100 chip">100</button>
+        <button class="chip-btn" data-chip="1"><span>1</span></button>
+        <button class="chip-btn" data-chip="5"><span>5</span></button>
+        <button class="chip-btn" data-chip="25"><span>25</span></button>
+        <button class="chip-btn" data-chip="100"><span>100</span></button>
       </div>
       <div id="roulette-table"></div>
       <div id="bet-summary"></div>
@@ -68,14 +59,300 @@
         <li>Click "Spin" to play. Click "Clear Bets" to start over.</li>
       </ul>
     </div>
-    <div id="roulette-spin-overlay" style="display:none;"></div>
   </section>
 </main>
 <footer class="footer">
   Pyramid Casino &copy; <span id="year"></span>
 </footer>
 <script>
-/* ...The full JavaScript block from previous responses goes here (unchanged!)... */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+let chips = 1000;
+let selectedChip = 1;
+let bets = {}; // { betKey: {1: count, 5: count, 25: count, 100: count, total: sum} }
+let lastSpin = null;
+
+const COLORS = {
+  0: 'green',
+  1: 'red', 2: 'black', 3: 'red', 4: 'black', 5: 'red', 6: 'black',
+  7: 'red', 8: 'black', 9: 'red', 10: 'black',
+  11: 'black', 12: 'red', 13: 'black', 14: 'red', 15: 'black', 16: 'red', 17: 'black', 18: 'red',
+  19: 'red', 20: 'black', 21: 'red', 22: 'black', 23: 'red', 24: 'black', 25: 'red', 26: 'black',
+  27: 'red', 28: 'black', 29: 'black', 30: 'red', 31: 'black', 32: 'red', 33: 'black', 34: 'red', 35: 'black', 36: 'red'
+};
+const REDS = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+
+const chipBalanceEl = document.getElementById("chip-balance");
+const resetChipsBtn = document.getElementById("reset-chips");
+const rouletteTableEl = document.getElementById("roulette-table");
+const betSummaryEl = document.getElementById("bet-summary");
+const spinBtn = document.getElementById("spin-btn");
+const resultArea = document.getElementById("result-area");
+const spinResultEl = document.getElementById("spin-result");
+const payoutResultEl = document.getElementById("payout-result");
+const newRoundBtn = document.getElementById("new-round");
+const clearBetsBtn = document.getElementById("clear-bets");
+
+// Chip buttons
+document.querySelectorAll('.chip-btn').forEach(btn => {
+  btn.onclick = () => {
+    selectedChip = Number(btn.getAttribute('data-chip'));
+    document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  };
+});
+document.querySelector('.chip-btn[data-chip="1"]').classList.add('selected');
+
+// Reset chips: reload page for true reset
+resetChipsBtn.onclick = () => {
+  if (confirm("Reset your chips to 1000? This will restart the game.")) {
+    location.reload();
+  }
+};
+
+// Render the roulette table (European 0-36)
+function renderTable() {
+  const table = document.createElement('table');
+  table.className = 'roulette-layout';
+  // Number grid (3x12)
+  const tbody = document.createElement('tbody');
+  for (let row = 0; row < 3; row++) {
+    const tr = document.createElement('tr');
+    for (let col = 0; col < 12; col++) {
+      const n = 3*col + (3-row);
+      const td = document.createElement('td');
+      td.className = "num-cell";
+      td.textContent = n;
+      td.dataset.bet = `num_${n}`;
+      td.classList.add(COLORS[n]);
+      td.onclick = placeBet;
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+  // Zero
+  const zeroRow = document.createElement('tr');
+  const zeroTd = document.createElement('td');
+  zeroTd.rowSpan = 3;
+  zeroTd.className = "num-cell green zero";
+  zeroTd.textContent = "0";
+  zeroTd.dataset.bet = "num_0";
+  zeroTd.onclick = placeBet;
+  zeroRow.appendChild(zeroTd);
+  tbody.insertBefore(zeroRow, tbody.firstChild);
+  tbody.rows[0].insertBefore(zeroTd, tbody.rows[0].firstChild);
+
+  // Add outside bets row
+  const outsideTr = document.createElement('tr');
+  outsideTr.className = "outside-row";
+  for (let i = 1; i <= 3; i++) {
+    const td = document.createElement('td');
+    td.colSpan = 4;
+    td.className = "outside-cell";
+    td.textContent = `${i}st 12`;
+    td.dataset.bet = `dozen_${i}`;
+    td.onclick = placeBet;
+    outsideTr.appendChild(td);
+  }
+  tbody.appendChild(outsideTr);
+
+  // Even money bets
+  const evenTr = document.createElement('tr');
+  evenTr.className = "outside-row";
+  [
+    {label: "1-18", bet: "low"},
+    {label: "EVEN", bet: "even"},
+    {label: "RED", bet: "red"},
+    {label: "BLACK", bet: "black"},
+    {label: "ODD", bet: "odd"},
+    {label: "19-36", bet: "high"},
+  ].forEach(obj => {
+    const td = document.createElement('td');
+    td.colSpan = 2;
+    td.className = `outside-cell ${obj.bet}`;
+    td.textContent = obj.label;
+    td.dataset.bet = obj.bet;
+    td.onclick = placeBet;
+    evenTr.appendChild(td);
+  });
+  tbody.appendChild(evenTr);
+
+  // Columns
+  const colTr = document.createElement('tr');
+  colTr.className = "outside-row";
+  for(let c=1;c<=3;c++){
+    const td = document.createElement('td');
+    td.colSpan = 4;
+    td.className = "outside-cell";
+    td.textContent = `Column ${c}`;
+    td.dataset.bet = `column_${c}`;
+    td.onclick = placeBet;
+    colTr.appendChild(td);
+  }
+  tbody.appendChild(colTr);
+
+  table.appendChild(tbody);
+  rouletteTableEl.innerHTML = '';
+  rouletteTableEl.appendChild(table);
+}
+renderTable();
+
+// Place a bet
+function placeBet(e) {
+  const betKey = e.currentTarget.dataset.bet;
+  // Only allow betting if you have chips and haven't spun yet
+  if (chips < selectedChip || resultArea.style.display === '') return;
+  if (!bets[betKey]) bets[betKey] = {1:0,5:0,25:0,100:0,total:0};
+  bets[betKey][selectedChip] = (bets[betKey][selectedChip] || 0) + 1;
+  bets[betKey].total += selectedChip;
+  chips -= selectedChip;
+  chipBalanceEl.textContent = chips;
+  renderBets();
+  renderChipsOnTable();
+}
+
+// Show bets summary
+function renderBets() {
+  document.querySelectorAll('.num-cell, .outside-cell').forEach(td => td.classList.remove('bet-placed'));
+  let html = '<strong>Bets:</strong> ';
+  let any = false;
+  for (let key in bets) {
+    if (bets[key].total > 0) {
+      any = true;
+      html += `[${betDescription(key)}: ${bets[key].total}] `;
+      document.querySelectorAll(`[data-bet="${key}"]`).forEach(td => td.classList.add('bet-placed'));
+    }
+  }
+  betSummaryEl.innerHTML = any? html : 'No bets placed yet.';
+}
+renderBets();
+
+// Render chip icons on numbers and outside bets
+function renderChipsOnTable() {
+  // Remove any previous chips
+  document.querySelectorAll('.bet-chip').forEach(el => el.remove());
+  document.querySelectorAll('.bet-total-label').forEach(el => el.remove());
+  for (let key in bets) {
+    if (bets[key].total > 0) {
+      document.querySelectorAll(`[data-bet="${key}"]`).forEach(td => {
+        // Place chip icons for each chip type
+        const chipDiv = document.createElement('div');
+        chipDiv.className = 'bet-chip';
+        for (let chip of [1,5,25,100]) {
+          if (bets[key][chip] > 0) {
+            const img = document.createElement('div');
+            img.className = `bet-chip-img chip-${chip}`;
+            img.textContent = chip;
+            chipDiv.appendChild(img);
+          }
+        }
+        td.appendChild(chipDiv);
+        // Place total label
+        const totalLabel = document.createElement('div');
+        totalLabel.className = 'bet-total-label';
+        totalLabel.textContent = bets[key].total;
+        td.appendChild(totalLabel);
+      });
+    }
+  }
+}
+
+function betDescription(key) {
+  if (key.startsWith("num_")) return "Number " + key.slice(4);
+  if (key.startsWith("dozen_")) return `${key[6]}st 12`;
+  if (key.startsWith("column_")) return `Column ${key[7]}`;
+  if (key==="low") return "1-18";
+  if (key==="high") return "19-36";
+  if (key==="even" || key==="odd") return key.toUpperCase();
+  if (key==="red" || key==="black") return key.charAt(0).toUpperCase() + key.slice(1);
+  return key;
+}
+
+// Clear bets
+clearBetsBtn.onclick = () => {
+  for (let key in bets) {
+    chips += bets[key].total;
+  }
+  bets = {};
+  chipBalanceEl.textContent = chips;
+  renderBets();
+  renderChipsOnTable();
+};
+
+// Spin!
+spinBtn.onclick = () => {
+  if (Object.keys(bets).length === 0 || Object.values(bets).every(b=>b.total===0)) {
+    alert("Place at least one bet!");
+    return;
+  }
+  const spin = Math.floor(Math.random()*37);
+  lastSpin = spin;
+  showSpinResult(spin);
+  payout(spin);
+  resultArea.style.display = '';
+};
+
+// Show spin result
+function showSpinResult(spin) {
+  let color = COLORS[spin];
+  spinResultEl.innerHTML = `<div class="spin-ball ${color}">${spin}</div>
+    <div class="spin-label">${color.toUpperCase()}</div>`;
+}
+
+function payout(spin) {
+  let payoutMsg = '';
+  let totalWin = 0;
+  for (let key in bets) {
+    let chipsForBet = bets[key];
+    let amount = chipsForBet.total;
+    if (amount === 0) continue;
+    let win = 0, odds = 0;
+    if (key === `num_${spin}`) { win = amount * 36; odds = 35;}
+    else if (key.startsWith('dozen_')) {
+      let d = Number(key[6]);
+      if ((spin>=1 && spin<=12 && d===1) || (spin>=13 && spin<=24 && d===2) || (spin>=25 && spin<=36 && d===3)) {
+        win = amount * 3; odds = 2;
+      }
+    }
+    else if (key.startsWith('column_')) {
+      let c = Number(key[7]);
+      const colNums = [];
+      for(let n=1;n<=36;n++) if ((n-1)%3+1===c) colNums.push(n);
+      if (colNums.includes(spin)) { win = amount * 3; odds = 2; }
+    }
+    else if (key==="low" && spin>=1 && spin<=18) { win = amount * 2; odds = 1; }
+    else if (key==="high" && spin>=19 && spin<=36) { win = amount * 2; odds = 1; }
+    else if (key==="even" && spin!==0 && spin%2===0) { win = amount * 2; odds = 1; }
+    else if (key==="odd" && spin%2===1) { win = amount * 2; odds = 1; }
+    else if (key==="red" && REDS.includes(spin)) { win = amount * 2; odds = 1; }
+    else if (key==="black" && spin!==0 && !REDS.includes(spin)) { win = amount * 2; odds = 1; }
+    if (win > 0) {
+      payoutMsg += `<div>Bet on ${betDescription(key)}: +${win-amount} chips (Payout ${odds}:1)</div>`;
+      chips += win;
+      totalWin += (win-amount);
+    } else {
+      payoutMsg += `<div>Bet on ${betDescription(key)}: Lost (-${amount})</div>`;
+    }
+  }
+  chipBalanceEl.textContent = chips;
+  if (totalWin>0) {
+    payoutResultEl.innerHTML = `<div class="win">You won ${totalWin} chips!</div>${payoutMsg}`;
+  } else if (totalWin===0) {
+    payoutResultEl.innerHTML = `<div class="push">No net win/loss.</div>${payoutMsg}`;
+  } else {
+    payoutResultEl.innerHTML = `<div class="lose">You lost ${-totalWin} chips!</div>${payoutMsg}`;
+  }
+}
+
+// New round
+newRoundBtn.onclick = () => {
+  bets = {};
+  renderBets();
+  renderChipsOnTable();
+  resultArea.style.display = 'none';
+};
+
+renderChipsOnTable();
 </script>
 </body>
 </html>
