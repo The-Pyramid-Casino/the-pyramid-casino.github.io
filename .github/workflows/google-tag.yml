@@ -6,6 +6,9 @@ on:
       - '**/*.html'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   add-gtag:
     runs-on: ubuntu-latest
@@ -41,4 +44,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: add Google gtag.js snippet to HTML files"
-          branch: ${{ github.ref }}
+          file_pattern: .
