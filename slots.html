@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pyramid Slots | Pyramid Casino</title>
+  <meta name="description" content="Try your luck on Pyramid Slots at Pyramid Casino. Play for fun, with a shared balance across all games!" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: #18122b;
+      color: #f3e9dc;
+      min-height: 100vh;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #a0843a;
+      color: #fff;
+      padding: 1rem 2rem;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+    }
+    .header nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.2rem;
+      margin: 0;
+      padding: 0;
+    }
+    .header nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .header nav a:hover {
+      color: #f3e9dc;
+      text-shadow: 0 0 5px #f9d923;
+    }
+    .main-content {
+      padding: 2rem 1rem 3rem 1rem;
+      min-height: 60vh;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .slots-container {
+      background: #231b36;
+      border-radius: 18px;
+      box-shadow: 0 4px 12px #0005;
+      padding: 2.2rem 1.2rem 2rem 1.2rem;
+      max-width: 380px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .slots-title {
+      color: #f9d923;
+      font-size: 2.1rem;
+      margin-bottom: 0.7rem;
+      text-shadow: 0 2px 6px #0006;
+    }
+    .balance-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+      font-size: 1.1rem;
+      color: #ffe277;
+      font-weight: bold;
+    }
+    .bet-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    .bet-controls input[type="number"] {
+      width: 70px;
+      border-radius: 5px;
+      border: 1px solid #a0843a;
+      background: #18122b;
+      color: #f3e9dc;
+      font-size: 1.1rem;
+      padding: 0.3rem 0.5rem;
+      text-align: center;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .bet-controls button {
+      background: #a0843a;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 0.4rem 1.1rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .bet-controls button:hover {
+      background: #f9d923;
+      color: #18122b;
+    }
+    .reels {
+      display: flex;
+      justify-content: center;
+      margin: 1.5rem 0 1rem 0;
+      gap: 1.1rem;
+    }
+    .reel {
+      background: #18122b;
+      border: 2.5px solid #a0843a;
+      border-radius: 1em;
+      width: 66px;
+      height: 66px;
+      margin: 0;
+      font-size: 2.9em;
+      line-height: 66px;
+      box-shadow: 0 2px 8px #0007;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+    #spinBtn {
+      font-size: 1.23em;
+      padding: 0.6em 2.5em;
+      border-radius: 0.5em;
+      border: none;
+      background: #f9d923;
+      color: #18122b;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 0.2em;
+      box-shadow: 0 2px 7px #0002;
+      transition: background 0.2s;
+    }
+    #spinBtn:active {
+      background: #ffe277;
+    }
+    #spinBtn[disabled] {
+      background: #aaa;
+      cursor: not-allowed;
+      color: #eee;
+    }
+    #result {
+      font-size: 1.23em;
+      margin-top: 1.3em;
+      min-height: 1.6em;
+      font-weight: bold;
+      color: #f3e9dc;
+      text-shadow: 0 1px 4px #0008;
+      transition: color 0.2s;
+    }
+    .footer {
+      background: #231b36;
+      color: #f9d923;
+      text-align: center;
+      padding: 1rem 0;
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      width: 100vw;
+      font-size: 1rem;
+      z-index: 10;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      color: #ffe277;
+      background: transparent;
+      border: none;
+      font-size: 1.05em;
+      font-weight: bold;
+      text-decoration: underline;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: #f9d923;
+    }
+    .reset-btn {
+      margin-left: 10px;
+      background: #ffe277;
+      color: #18122b;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.97rem;
+      font-weight: bold;
+      padding: 0.28em 1.1em;
+      cursor: pointer;
+      box-shadow: 0 2px 6px #0002;
+      transition: background 0.15s;
+    }
+    .reset-btn:hover {
+      background: #f9d923;
+    }
+    @media (max-width: 600px) {
+      .main-content { padding: 1rem 0.3rem 2.5rem 0.3rem; }
+      .slots-container { max-width: 97vw; }
+      .reels { gap: 0.5rem; }
+      .reel { width: 52px; height: 52px; font-size: 2em; }
+    }
+  </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-V9DHVKBD85");
+</script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#games">Games</a></li>
+        <li><a href="index.html#about">About</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="main-content">
+    <a href="index.html" class="back-link">&larr; Back to Menu</a>
+    <div class="slots-container">
+      <div class="slots-title">Pyramid Slots</div>
+      <div class="balance-row">
+        <span>Balance:</span>
+        <span id="balance">1000</span>
+        <button class="reset-btn" onclick="setCasinoBalance(1000); window.location.reload();">Reset</button>
+      </div>
+      <div class="bet-controls">
+        <label for="bet" style="font-weight:bold;">Bet:</label>
+        <button type="button" id="bet-decrease">-</button>
+        <input type="number" id="bet" min="1" max="9999" value="10" step="1" />
+        <button type="button" id="bet-increase">+</button>
+      </div>
+      <div class="reels">
+        <div id="reel1" class="reel">🪙</div>
+        <div id="reel2" class="reel">🪙</div>
+        <div id="reel3" class="reel">🪙</div>
+      </div>
+      <button id="spinBtn">Spin</button>
+      <p id="result"></p>
+    </div>
+  </main>
+  <footer class="footer">
+    Pyramid Casino &copy; <span id="year"></span>
+  </footer>
+  <script>
+    // Shared balance utilities
+    function getCasinoBalance() {
+      let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+      if (isNaN(bal)) bal = 1000;
+      return bal;
+    }
+    function setCasinoBalance(newBalance) {
+      localStorage.setItem('pyramidCasinoBalance', newBalance);
+    }
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Slot Game Logic
+    const symbols = [
+      {emoji: "🔱", name: "Trident", payout: 30},
+      {emoji: "🐪", name: "Camel", payout: 12},
+      {emoji: "💎", name: "Gem", payout: 8},
+      {emoji: "🌴", name: "Palm", payout: 6},
+      {emoji: "🍋", name: "Lemon", payout: 4},
+      {emoji: "🍒", name: "Cherry", payout: 3},
+      {emoji: "🪙", name: "Coin", payout: 2}
+    ];
+
+    const reelEls = [
+      document.getElementById('reel1'),
+      document.getElementById('reel2'),
+      document.getElementById('reel3')
+    ];
+    const resultEl = document.getElementById('result');
+    const spinBtn = document.getElementById('spinBtn');
+    const balanceEl = document.getElementById('balance');
+    const betInput = document.getElementById('bet');
+    const betDecBtn = document.getElementById('bet-decrease');
+    const betIncBtn = document.getElementById('bet-increase');
+
+    let balance = getCasinoBalance();
+
+    function setBalance(val) {
+      balance = val;
+      setCasinoBalance(val);
+      balanceEl.textContent = balance;
+    }
+    function setBet(val) {
+      let min = 1, max = Math.max(1, balance);
+      val = Math.max(min, Math.min(max, val));
+      betInput.value = val;
+    }
+    betInput.addEventListener('input', () => {
+      setBet(Number(betInput.value));
+    });
+    betDecBtn.addEventListener('click', () => setBet(Number(betInput.value) - 1));
+    betIncBtn.addEventListener('click', () => setBet(Number(betInput.value) + 1));
+
+    function randomSymbol() {
+      // Weighted probability for rare symbols
+      const weights = [1, 3, 6, 8, 15, 20, 24]; // sum: 77
+      let total = weights.reduce((a,b)=>a+b,0);
+      let rnd = Math.floor(Math.random() * total);
+      for (let i=0; i<weights.length; ++i) {
+        if (rnd < weights[i]) return i;
+        rnd -= weights[i];
+      }
+      return weights.length-1;
+    }
+
+    function spinReels() {
+      return [randomSymbol(), randomSymbol(), randomSymbol()];
+    }
+
+    function displayReels(indices) {
+      for (let i = 0; i < 3; i++) {
+        reelEls[i].textContent = symbols[indices[i]].emoji;
+      }
+    }
+
+    function evaluate(reelIdxs, bet) {
+      // Three of a kind
+      if (reelIdxs[0] === reelIdxs[1] && reelIdxs[1] === reelIdxs[2]) {
+        const payout = bet * symbols[reelIdxs[0]].payout;
+        return {
+          win: true,
+          amount: payout,
+          msg: `🎉 JACKPOT! Three ${symbols[reelIdxs[0]].emoji} (${symbols[reelIdxs[0]].name}) — You win ${payout}!`,
+          color: "#f9d923"
+        };
+      }
+      // Two of a kind
+      if (reelIdxs[0] === reelIdxs[1] || reelIdxs[1] === reelIdxs[2] || reelIdxs[0] === reelIdxs[2]) {
+        let idx = reelIdxs[0] === reelIdxs[1] ? reelIdxs[0] : reelIdxs[2];
+        const payout = bet * Math.ceil(symbols[idx].payout / 2);
+        return {
+          win: true,
+          amount: payout,
+          msg: `Nice! Two ${symbols[idx].emoji} (${symbols[idx].name}) — You win ${payout}!`,
+          color: "#ffe277"
+        };
+      }
+      // No win
+      return {
+        win: false,
+        amount: 0,
+        msg: "No match, try again!",
+        color: "#f3e9dc"
+      };
+    }
+
+    function updateUI() {
+      setBalance(getCasinoBalance());
+      setBet(Number(betInput.value));
+      spinBtn.disabled = (balance <= 0 || Number(betInput.value) < 1 || Number(betInput.value) > balance);
+      if (balance <= 0) {
+        resultEl.textContent = "You're out of coins! Reset above to play again.";
+        resultEl.style.color = "#f9d923";
+      }
+    }
+
+    spinBtn.addEventListener('click', () => {
+      let bet = Number(betInput.value);
+      if (bet < 1 || bet > balance) {
+        resultEl.textContent = "Invalid bet!";
+        resultEl.style.color = "#f3e9dc";
+        return;
+      }
+      setBalance(balance - bet);
+      spinBtn.disabled = true;
+      resultEl.textContent = "Spinning...";
+      resultEl.style.color = "#f3e9dc";
+      // Animation: simulate spinning reels
+      let spins = 16, delay = 45, curr = 0;
+      let interval = setInterval(() => {
+        let fake = [randomSymbol(), randomSymbol(), randomSymbol()];
+        displayReels(fake);
+        curr++;
+        if (curr >= spins) {
+          clearInterval(interval);
+          let reelIdxs = spinReels();
+          displayReels(reelIdxs);
+          let res = evaluate(reelIdxs, bet);
+          if (res.win) setBalance(balance + res.amount);
+          resultEl.textContent = res.msg;
+          resultEl.style.color = res.color;
+          updateUI();
+        }
+      }, delay);
+    });
+
+    betInput.addEventListener('blur', updateUI);
+    betInput.addEventListener('change', updateUI);
+
+    // Set initial balance and year
+    balanceEl.textContent = getCasinoBalance();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    updateUI();
+  </script>
+</body>
+</html>
