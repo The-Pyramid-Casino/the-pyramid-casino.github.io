@@ -1,123 +1,279 @@
-/* ... (all your original Pyramid Casino styles here) ... */
-
-/* --- Pyramid Casino Styled Spinning Animation --- */
-.roulette-wheel-overlay {
-  position: fixed;
-  left: 0; top: 0; right: 0; bottom: 0;
-  background: rgba(24,18,43,0.93);
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  background: #18122b;
+  color: #f3e9dc;
+  min-height: 100vh;
+}
+.header {
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 100;
+  justify-content: space-between;
+  background: #a0843a;
+  color: #fff;
+  padding: 1rem 2rem;
+}
+.logo {
+  font-weight: bold;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+}
+.header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.2rem;
+  margin: 0;
+  padding: 0;
+}
+.header nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.header nav a:hover {
+  color: #f3e9dc;
+  text-shadow: 0 0 5px #f9d923;
+}
+.main-content {
+  padding: 2rem 1rem 3rem 1rem;
+  min-height: 60vh;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.roulette {
+  text-align: center;
+}
+.notice {
+  background: #f9d923;
+  color: #18122b;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem auto 2rem auto;
+  font-weight: bold;
+  max-width: 550px;
+  box-shadow: 0 2px 8px #0002;
+}
+#chip-bank {
+  background: #231b36;
+  padding: 0.7rem 1.4rem;
+  border-radius: 10px;
+  display: inline-block;
+  margin: 0 auto 1rem auto;
+  font-size: 1.2rem;
+}
+#chip-bank button {
+  margin-left: 1.2rem;
+  background: #f9d923;
+  color: #18122b;
+  border: none;
+  border-radius: 5px;
+  padding: 0.3rem 0.8rem;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+#chip-bank button:hover {
+  background: #ffe277;
+}
+.chips-row {
+  margin-bottom: 1rem;
+}
+.chip-btn {
+  background: #ffe277;
+  color: #18122b;
+  border: 2px solid #bdb76b;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0 0.3rem;
+  cursor: pointer;
+  transition: border 0.2s, background 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
-.animated-wheel-container {
-  background: linear-gradient(135deg, #231b36 78%, #f9d923 100%);
-  border-radius: 22px;
-  box-shadow: 0 8px 36px #000b, 0 0 0 6px #a0843a33;
-  padding: 2.5rem 2rem 2.2rem 2rem;
+.chip-btn.selected {
+  border: 3px solid #18122b !important;
+  background: #f9d923 !important;
+  color: #18122b !important;
+  box-shadow: 0 0 8px 2px #18122b;
+}
+
+.roulette-layout {
+  border-collapse: collapse;
+  margin: 0 auto;
+  background: #a0843a;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px #0003;
+  overflow: hidden;
+}
+.roulette-layout td {
+  width: 38px;
+  height: 38px;
+  border: 1px solid #a0843a;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  font-size: 1.06rem;
+  cursor: pointer;
+  position: relative;
+  background: #f3e9dc;
+  color: #231b36;
+  transition: box-shadow 0.2s;
+  z-index: 0;
+}
+.roulette-layout .red {
+  background: #d7263d;
+  color: #fff;
+}
+.roulette-layout .black {
+  background: #18122b;
+  color: #f3e9dc;
+}
+.roulette-layout .green {
+  background: #43c734;
+  color: #fff;
+}
+.roulette-layout .zero {
+  font-size: 1.2em;
+}
+.roulette-layout .bet-placed {
+  box-shadow: 0 0 0 3px #f9d923, 0 2px 8px #0006;
+  z-index: 1;
+}
+.roulette-layout .outside-row td {
+  background: #cbbd8b;
+  color: #18122b;
+  font-size: 0.98em;
+  cursor: pointer;
+}
+.roulette-layout .outside-cell.red { background:#d7263d;color:#fff;}
+.roulette-layout .outside-cell.black { background:#18122b;color:#fff;}
+.roulette-layout .outside-cell {
+  transition: background 0.2s, color 0.2s;
+}
+.roulette-layout .outside-cell:hover, .roulette-layout td:hover {
+  filter: brightness(1.1);
+}
+.roulette-layout .bet-chip {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -60%);
+  pointer-events: none;
+  font-size: 1.08em;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 360px;
-  border: 3px solid #f9d923;
 }
-
-.roulette-anim-wheel {
-  position: relative;
-  width: 260px; height: 260px;
+.roulette-layout .bet-chip-img {
+  width: 21px;
+  height: 21px;
   border-radius: 50%;
-  background: radial-gradient(circle at 54% 46%, #ffe277 68%, #a0843a 100%);
-  margin-bottom: 0.8em;
-  box-shadow: 0 2px 22px #0007, 0 0 0 8px #f9d92355;
-  overflow: visible;
-  border: 4px solid #a0843a;
-}
-
-.roulette-anim-numbers {
-  position: absolute;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.roulette-anim-number {
-  position: absolute;
-  width: 36px; height: 36px;
-  left: 50%; top: 50%;
-  transform-origin: 50% 110px;
-  text-align: center;
-  line-height: 36px;
-  font-size: 1.06em;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  border-radius: 50%;
-  font-weight: bold;
-  box-shadow: 0 2px 4px #0005;
-  color: #fff;
-  background: #3a2247;
-  border: 2.5px solid #ffe277;
-  user-select: none;
-  letter-spacing: 0.02em;
-}
-
-.roulette-anim-number.green { background: #43c734; color: #ffe277; border-color: #f9d923; }
-.roulette-anim-number.red { background: #d7263d; color: #ffe277; border-color: #f9d923; }
-.roulette-anim-number.black { background: #18122b; color: #ffe277; border-color: #f9d923; }
-.roulette-anim-number.zero { background: #43c734; border-color: #ffe277; color: #f9d923; }
-
-.roulette-pointer {
-  position: absolute;
-  left: 50%; top: -24px;
-  width: 0; height: 0;
-  border-left: 16px solid transparent;
-  border-right: 16px solid transparent;
-  border-bottom: 30px solid #f9d923;
-  transform: translateX(-50%);
-  z-index: 10;
-  filter: drop-shadow(0 2px 4px #0007);
-  border-radius: 0 0 10px 10px;
-  box-shadow: 0 0 0 2px #a0843a inset;
-}
-
-.roulette-spin-msg {
-  color: #ffe277;
-  margin-top: 1.4em;
-  font-size: 1.25em;
-  text-shadow: 0 1px 3px #a0843a, 0 0 10px #231b36;
-  font-weight: bold;
-  letter-spacing: 1px;
-  padding: 0.25em 0.5em;
-  background: rgba(36,30,60,0.14);
-  border-radius: 6px;
-  border: 1.5px solid #f9d92344;
-}
-
-.roulette-anim-ball {
-  position: absolute;
-  width: 22px; height: 22px;
-  left: 50%; top: 50%;
+  border: 2px solid #231b36;
+  display: inline-block;
   background: #ffe277;
-  border-radius: 50%;
-  border: 3px solid #a0843a;
-  box-shadow: 0 2px 8px #f9d92388, 0 1px 8px #0008;
-  z-index: 5;
-  transform: translate(-50%, -110px);
+  color: #18122b;
+  font-weight: bold;
+  font-size: 1em;
+  line-height: 21px;
+  text-align: center;
+  margin-bottom: 0.1em;
+  box-shadow: 0 0 6px #0002;
+}
+.roulette-layout .bet-chip-img.chip-1 { background: #eee; color: #333; border-color: #aaa; }
+.roulette-layout .bet-chip-img.chip-5 { background: #f9d923; color: #18122b; border-color: #bda729; }
+.roulette-layout .bet-chip-img.chip-25 { background: #43c734; color: #fff; border-color: #218e1f; }
+.roulette-layout .bet-chip-img.chip-100 { background: #d7263d; color: #fff; border-color: #7c1123; }
+.roulette-layout .bet-total-label {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 0.75em;
+  color: #231b36;
+  background: rgba(255,255,255,0.82);
+  border-radius: 6px;
+  padding: 0px 4px;
+  font-weight: bold;
+  z-index: 3;
   pointer-events: none;
-  transition: box-shadow 0.15s;
 }
-.roulette-anim-ball.hit {
+#bet-summary {
+  margin: 1.2rem auto 0.7rem auto;
+  font-size: 1.1rem;
+  min-height: 1.6em;
+}
+#spin-btn, #clear-bets, #new-round {
+  background: #a0843a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1.5rem;
+  font-size: 1.05rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0.7rem 0.4rem;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px #0002;
+}
+#spin-btn:hover, #clear-bets:hover, #new-round:hover {
   background: #f9d923;
-  border-color: #ffe277;
-  box-shadow: 0 0 16px #f98262, 0 2px 8px #000a;
+  color: #18122b;
 }
-
-@media (max-width: 700px) {
-  .animated-wheel-container { min-width: 95vw; padding: 5vw 0.5vw 4vw 0.5vw; }
-  .roulette-anim-wheel { width: 96vw; height: 96vw; min-width: 220px; min-height: 220px; max-width: 97vw; max-height: 97vw;}
-  .roulette-anim-number { width: 11vw; height: 11vw; font-size: 0.95em; min-width: 28px; min-height: 28px;}
-  .roulette-anim-ball { width: 6vw; height: 6vw; min-width: 15px; min-height: 15px;}
+#result-area {
+  margin: 2rem auto 2rem auto;
+  text-align: center;
 }
-
-/* ...rest of your Pyramid Casino CSS... */
+.spin-ball {
+  display: inline-block;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  font-size: 2em;
+  font-weight: bold;
+  line-height: 54px;
+  margin: 0.5em auto 0.2em auto;
+  background: #fff;
+  border: 3px solid #f9d923;
+  box-shadow: 0 0 12px #0002;
+}
+.spin-ball.red { background: #d7263d; color: #fff;}
+.spin-ball.black { background: #18122b; color: #fff;}
+.spin-ball.green { background: #43c734; color: #fff;}
+.spin-label { font-size: 1.1em; margin-bottom: 0.4em;}
+.win { color: #87fc70; font-weight: bold;}
+.lose { color: #f98262; font-weight: bold;}
+.push { color: #ffe277; font-weight: bold;}
+.rules {
+  background: #231b36;
+  margin: 2rem auto 0 auto;
+  border-radius: 10px;
+  padding: 1rem 2rem;
+  max-width: 500px;
+  font-size: 1rem;
+  color: #ffe277;
+  text-align: left;
+}
+.rules h3 { color: #f9d923; }
+.rules ul { margin: 0.7em 0 0 1.2em; }
+.footer {
+  background: #231b36;
+  color: #f9d923;
+  text-align: center;
+  padding: 1rem 0;
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  width: 100vw;
+  font-size: 1rem;
+}
+@media (max-width: 900px) {
+  .main-content { padding: 1rem 0.5rem 2.5rem 0.5rem; }
+  .rules { padding: 0.7rem 0.7rem; }
+}
