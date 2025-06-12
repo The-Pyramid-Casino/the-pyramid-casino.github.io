@@ -5,15 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Pyramid Casino – Sphinx Roulette</title>
   <link rel="stylesheet" href="roulette.css" />
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-
-  gtag("config", "G-V9DHVKBD85");
-</script>
 </head>
 <body>
 <header class="header">
@@ -46,6 +37,7 @@
         <button class="chip-btn" data-chip="5"><span>5</span></button>
         <button class="chip-btn" data-chip="25"><span>25</span></button>
         <button class="chip-btn" data-chip="100"><span>100</span></button>
+        <button class="chip-btn" data-chip="1000"><span>1000</span></button>
       </div>
       <div id="roulette-table"></div>
       <div id="bet-summary"></div>
@@ -78,7 +70,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 let chips = 1000;
 let selectedChip = 1;
-let bets = {}; // { betKey: {1: count, 5: count, 25: count, 100: count, total: sum} }
+let bets = {}; // { betKey: {1: count, 5: count, 25: count, 100: count, 1000: count, total: sum} }
 let lastSpin = null;
 
 const COLORS = {
@@ -211,7 +203,7 @@ function placeBet(e) {
   const betKey = e.currentTarget.dataset.bet;
   // Only allow betting if you have chips and haven't spun yet
   if (chips < selectedChip || resultArea.style.display === '') return;
-  if (!bets[betKey]) bets[betKey] = {1:0,5:0,25:0,100:0,total:0};
+  if (!bets[betKey]) bets[betKey] = {1:0,5:0,25:0,100:0,1000:0,total:0};
   bets[betKey][selectedChip] = (bets[betKey][selectedChip] || 0) + 1;
   bets[betKey].total += selectedChip;
   chips -= selectedChip;
@@ -247,7 +239,7 @@ function renderChipsOnTable() {
         // Place chip icons for each chip type
         const chipDiv = document.createElement('div');
         chipDiv.className = 'bet-chip';
-        for (let chip of [1,5,25,100]) {
+        for (let chip of [1,5,25,100,1000]) {
           if (bets[key][chip] > 0) {
             const img = document.createElement('div');
             img.className = `bet-chip-img chip-${chip}`;
