@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pyramid Casino Game Suggestions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Link to your main stylesheet for consistent styling -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Minimal extra styling to fit your site, but you can remove this if not needed */
+    .suggest-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: var(--form-bg, #fff);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px #0002;
+      padding: 32px 24px;
+    }
+    .suggest-container h1 {
+      text-align: center;
+      margin-bottom: 1.4em;
+    }
+    .form-group { margin-bottom: 1.5em; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; }
+    .required { color: #d93025; }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #aaa;
+      font-size: 1em;
+      background: #f1f1f1;
+      margin-top: 2px;
+    }
+    input:focus, textarea:focus { border-color: #4285f4; background: #fff; }
+    textarea { min-height: 60px; }
+    .radio-group { display: flex; flex-direction: column; gap: 8px; }
+    .checkbox-group { margin: 12px 0; }
+    .actions { text-align: right; }
+    button {
+      background: #fbbf24;
+      color: #222;
+      font-weight: bold;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-left: 12px;
+    }
+    button[type="reset"] { background: #eee; color: #555; }
+    button:hover { background: #f59e1a; }
+    .note { font-size: 0.95em; color: #555; margin-top: 18px; text-align: center;}
+    .footer { font-size: 0.87em; color: #bbb; text-align: center; margin-top: 24px;}
+  </style>
+</head>
+<body>
+  <div class="suggest-container">
+    <h1>Pyramid Casino Game Suggestions</h1>
+    <form id="casinoForm" autocomplete="off">
+      <div class="form-group">
+        <label for="email">Email <span class="required">*</span></label>
+        <input type="email" id="email" name="email" required placeholder="Your email" />
+      </div>
+      <div class="form-group">
+        <label for="name">Name <span class="required">*</span></label>
+        <input type="text" id="name" name="name" required placeholder="Your name" />
+      </div>
+      <div class="form-group">
+        <label for="game">What Game Are You Requesting? <span class="required">*</span></label>
+        <input type="text" id="game" name="game" required placeholder="Game name" />
+      </div>
+      <div class="form-group">
+        <label for="description">Can you describe the game? <span class="required">*</span></label>
+        <textarea id="description" name="description" required placeholder="Describe the game..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Do you consent to this information being used to improve the pyramid casino? <span class="required">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="consent" value="Yes" required> Yes</label>
+          <label><input type="radio" name="consent" value="No" required> No</label>
+          <label>
+            <input type="radio" name="consent" value="Other" required>
+            Other: <input type="text" name="consent_other" style="width:150px;display:inline-block;margin-left:8px;" placeholder="Other response" />
+          </label>
+        </div>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="copy" name="copy">
+        <label for="copy">Send me a copy of my responses.</label>
+      </div>
+      <div class="actions">
+        <button type="reset">Clear form</button>
+        <button type="submit">Submit</button>
+      </div>
+      <div class="note">* Indicates required question</div>
+    </form>
+    <div class="footer">Never submit passwords through this form.</div>
+  </div>
+  <script>
+    document.getElementById('casinoForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      alert('Thank you for your suggestion! (This is a demo form. Add backend/email logic for real submissions.)');
+      this.reset();
+    });
+    // Optional: Enable/disable Other text input
+    const radios = document.querySelectorAll('input[name="consent"]');
+    const consentOther = document.querySelector('input[name="consent_other"]');
+    function updateOther() {
+      consentOther.disabled = !document.querySelector('input[name="consent"][value="Other"]').checked;
+      if(consentOther.disabled) consentOther.value = '';
+    }
+    radios.forEach(r => r.addEventListener('change', updateOther));
+    updateOther();
+  </script>
+</body>
+</html>
