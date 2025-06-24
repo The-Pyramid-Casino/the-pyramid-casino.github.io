@@ -1,0 +1,245 @@
+<!-- BobSempleCheese Poker. Moving things from testing repo to testing branch under actual website -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>5 Card Poker | The Pyramid Casino</title>
+  <link rel="stylesheet" href="poker.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-V9DHVKBD85");
+</script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">The Pyramid Casino</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="blackjack.html">Blackjack</a></li>
+        <li><a href="roulette.html">Roulette</a></li>
+        <li><a href="poker.html">Poker</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <h2 style="text-align:center;">5 Card Poker</h2>
+    <div class="notice" id="message"></div>
+    <div id="chip-bank">
+      <span class="bet-info">Balance: $<span id="balance">500</span></span>
+      <span class="bet-info">Current Bet: $<span id="current-bet">0</span></span>
+      <button onclick="resetBalance()" style="float:right;">Reset</button>
+    </div>
+    <div id="betting-area" class="controls">
+      <input type="number" id="bet-amount" min="1" max="500" value="10" />
+      <button onclick="placeBet()">Place Bet</button>
+    </div>
+    <section class="poker-table">
+      <div class="dealer-label">Dealer's Hand</div>
+      <div class="hand-row" id="dealer-hand"></div>
+      <div class="player-label">Your Hand</div>
+      <div class="hand-row" id="player-hand"></div>
+      <div id="hold-instructions" class="controls" style="text-align:center; display:none;">
+        <span>Select cards to hold (tap/click), then:</span>
+        <button onclick="drawCards()">Draw</button>
+      </div>
+      <div class="controls" id="next-controls" style="text-align:center; display:none;">
+        <button onclick="nextRound()">Next Round</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Poker logic as before, with className updates for .poker-card and .held
+    const SUITS = ['♠', '♥', '♦', '♣'];
+    const RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+    let deck, playerHand, dealerHand, heldCards, playerBalance = 500, currentBet = 0;
+    let gameState = 'bet';
+
+    function createDeck() {
+      const cards = [];
+      for (let suit = 0; suit < 4; suit++) {
+        for (let rank = 0; rank < 13; rank++) {
+          cards.push({ suit, rank, str: RANKS[rank] + SUITS[suit] });
+        }
+      }
+      for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+      }
+      return cards;
+    }
+    function dealHand() {
+      return [deck.pop(), deck.pop(), deck.pop(), deck.pop(), deck.pop()];
+    }
+    function evaluateHand(hand) {
+      const counts = Array(13).fill(0);
+      const suits = Array(4).fill(0);
+      for (const card of hand) {
+        counts[card.rank]++;
+        suits[card.suit]++;
+      }
+      const countVals = counts.filter(v => v > 0).sort((a, b) => b - a);
+      const isFlush = suits.some(c => c === 5);
+      let sortedRanks = hand.map(c => c.rank).sort((a, b) => a - b);
+      let isStraight = false;
+      if (sortedRanks[4] - sortedRanks[0] === 4 && new Set(sortedRanks).size === 5) isStraight = true;
+      else if (JSON.stringify(sortedRanks) === JSON.stringify([0,1,2,3,12])) isStraight = true;
+      if (isFlush && isStraight && sortedRanks[0] === 8) return {rank:9, name:"Royal Flush"};
+      if (isFlush && isStraight) return {rank:8, name:"Straight Flush"};
+      if (countVals[0] === 4) return {rank:7, name:"Four of a Kind"};
+      if (countVals[0] === 3 && countVals[1] === 2) return {rank:6, name:"Full House"};
+      if (isFlush) return {rank:5, name:"Flush"};
+      if (isStraight) return {rank:4, name:"Straight"};
+      if (countVals[0] === 3) return {rank:3, name:"Three of a Kind"};
+      if (countVals[0] === 2 && countVals[1] === 2) return {rank:2, name:"Two Pair"};
+      if (countVals[0] === 2) return {rank:1, name:"One Pair"};
+      return {rank:0, name:"High Card"};
+    }
+    const PAYOUTS = [1, 1, 2, 3, 5, 10, 20, 50, 100, 250];
+
+    function renderHand(hand, containerId, selectable=false) {
+      const div = document.getElementById(containerId);
+      div.innerHTML = '';
+      hand.forEach((card, idx) => {
+        let held = heldCards && heldCards[idx];
+        let cardDiv = document.createElement('div');
+        cardDiv.className = 'poker-card' + (held ? ' held' : '') + (card.faceDown ? ' face-down' : '');
+        cardDiv.textContent = card.faceDown ? '' : card.str;
+        if (selectable && !card.faceDown) {
+          cardDiv.onclick = () => {
+            heldCards[idx] = !heldCards[idx];
+            renderHand(playerHand, 'player-hand', true);
+          };
+        }
+        div.appendChild(cardDiv);
+      });
+    }
+
+    function renderDealerHand(faceDown = true) {
+      const div = document.getElementById('dealer-hand');
+      div.innerHTML = '';
+      dealerHand.forEach((card, idx) => {
+        let cardDiv = document.createElement('div');
+        cardDiv.className = 'poker-card' + (faceDown && idx > 0 ? ' face-down' : '');
+        cardDiv.textContent = faceDown && idx > 0 ? '' : card.str;
+        div.appendChild(cardDiv);
+      });
+    }
+
+    function setMessage(msg) {
+      document.getElementById('message').textContent = msg;
+    }
+    function updateBalances() {
+      document.getElementById('balance').textContent = playerBalance;
+      document.getElementById('current-bet').textContent = currentBet;
+    }
+    function resetBalance() {
+      playerBalance = 500;
+      currentBet = 0;
+      updateBalances();
+      setMessage("Balance reset. Place your bet to begin.");
+      nextRound();
+    }
+
+    function placeBet() {
+      let betInput = document.getElementById('bet-amount');
+      let bet = parseInt(betInput.value, 10);
+      if (isNaN(bet) || bet < 1) bet = 1;
+      if (bet > playerBalance) bet = playerBalance;
+      currentBet = bet;
+      playerBalance -= bet;
+      updateBalances();
+      deck = createDeck();
+      playerHand = dealHand();
+      dealerHand = dealHand();
+      heldCards = [false, false, false, false, false];
+      gameState = 'draw';
+      document.getElementById('betting-area').style.display = 'none';
+      document.getElementById('hold-instructions').style.display = '';
+      document.getElementById('next-controls').style.display = 'none';
+      setMessage('Select cards to hold and click Draw.');
+      renderHand(playerHand, 'player-hand', true);
+      renderDealerHand(true);
+    }
+
+    function drawCards() {
+      for (let i = 0; i < 5; i++) {
+        if (!heldCards[i]) playerHand[i] = deck.pop();
+      }
+      // Dealer AI: hold pairs or better, else hold highest card
+      let dealerEval = evaluateHand(dealerHand);
+      let dealerHeld = [false, false, false, false, false];
+      let dCounts = Array(13).fill(0);
+      dealerHand.forEach(card => dCounts[card.rank]++);
+      for (let i = 0; i < 5; i++) {
+        if (dCounts[dealerHand[i].rank] > 1) dealerHeld[i] = true;
+      }
+      if (dealerEval.rank === 0) {
+        let maxRank = Math.max(...dealerHand.map(c => c.rank));
+        let idx = dealerHand.findIndex(c => c.rank === maxRank);
+        dealerHeld[idx] = true;
+      }
+      for (let i = 0; i < 5; i++) {
+        if (!dealerHeld[i]) dealerHand[i] = deck.pop();
+      }
+      renderHand(playerHand, 'player-hand', false);
+      renderDealerHand(false);
+      let playerScore = evaluateHand(playerHand);
+      let dealerScore = evaluateHand(dealerHand);
+      let resultMsg = `Your Hand: ${playerScore.name} | Dealer: ${dealerScore.name}. `;
+      let win = false, push = false;
+      if (playerScore.rank > dealerScore.rank) win = true;
+      else if (playerScore.rank === dealerScore.rank) {
+        let pRanks = playerHand.map(c => c.rank).sort((a,b)=>b-a);
+        let dRanks = dealerHand.map(c => c.rank).sort((a,b)=>b-a);
+        for (let i = 0; i < 5; i++) {
+          if (pRanks[i] > dRanks[i]) { win = true; break; }
+          if (pRanks[i] < dRanks[i]) { win = false; break; }
+        }
+        if (!win) push = true;
+      }
+      if (win) {
+        let payout = currentBet * PAYOUTS[Math.max(playerScore.rank,1)];
+        playerBalance += currentBet + payout;
+        resultMsg += `You win! Payout: $${payout}`;
+      } else if (push) {
+        playerBalance += currentBet;
+        resultMsg += "It's a tie. Bet returned.";
+      } else {
+        resultMsg += "Dealer wins. You lose your bet.";
+      }
+      currentBet = 0;
+      updateBalances();
+      setMessage(resultMsg);
+      gameState = 'finished';
+      document.getElementById('hold-instructions').style.display = 'none';
+      document.getElementById('next-controls').style.display = '';
+    }
+    function nextRound() {
+      if (playerBalance < 1) {
+        setMessage("You're out of balance! Refresh or reset to play again.");
+        document.getElementById('betting-area').style.display = 'none';
+        document.getElementById('hold-instructions').style.display = 'none';
+        document.getElementById('next-controls').style.display = 'none';
+        return;
+      }
+      document.getElementById('bet-amount').max = playerBalance;
+      document.getElementById('betting-area').style.display = '';
+      document.getElementById('hold-instructions').style.display = 'none';
+      document.getElementById('next-controls').style.display = 'none';
+      setMessage("Place your bet to begin.");
+      document.getElementById('player-hand').innerHTML = '';
+      document.getElementById('dealer-hand').innerHTML = '';
+    }
+    nextRound();
+  </script>
+</body>
+</html>
