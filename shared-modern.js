@@ -51,6 +51,12 @@ function createInstructionsModal(gameTitle, instructions) {
 function showInstructions(gameTitle, instructions) {
     const modal = createInstructionsModal(gameTitle, instructions);
     modal.style.display = 'block';
+    
+    // Force a reflow then start animation
+    modal.offsetHeight;
+    const modalContent = modal.querySelector('.modal-content');
+    modalContent.style.opacity = '1';
+    modalContent.style.transform = 'scale(1) translateY(0)';
 }
 
 // Enhanced animations
@@ -235,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Game instruction content for each game
 const GAME_INSTRUCTIONS = {
-    'Blackjack Oasis': `
+    'Blackjack': `
         <h3>🃏 How to Play Blackjack</h3>
         <ul>
             <li><strong>Goal:</strong> Get cards totaling closer to 21 than the dealer without going over</li>
@@ -266,7 +272,7 @@ const GAME_INSTRUCTIONS = {
         <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
     `,
     
-    'Pyramid Slots': `
+    'Slots': `
         <h3>🎰 How to Play Slots</h3>
         <ul>
             <li><strong>Goal:</strong> Match symbols across paylines to win chips</li>
@@ -298,7 +304,7 @@ const GAME_INSTRUCTIONS = {
         <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
     `,
     
-    'Sphinx Roulette': `
+    'Roulette': `
         <h3>🎯 How to Play Roulette</h3>
         <ul>
             <li><strong>Goal:</strong> Predict where the ball will land on the spinning wheel</li>
@@ -330,7 +336,7 @@ const GAME_INSTRUCTIONS = {
         <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
     `,
 
-    'Pharaoh\'s Poker': `
+    'Poker': `
         <h3>🃏 How to Play Five-Card Draw Poker</h3>
         <ul>
             <li><strong>Goal:</strong> Make the best 5-card poker hand</li>
@@ -361,7 +367,7 @@ const GAME_INSTRUCTIONS = {
         <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
     `,
 
-    'Anubis Dice': `
+    'Dice': `
         <h3>🎲 How to Play Dice</h3>
         <ul>
             <li><strong>Goal:</strong> Predict the outcome of rolling two dice</li>
@@ -392,7 +398,7 @@ const GAME_INSTRUCTIONS = {
         <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
     `,
 
-    'Cleopatra\'s Baccarat': `
+    'Baccarat': `
         <h3>👑 How to Play Baccarat</h3>
         <ul>
             <li><strong>Goal:</strong> Bet on which hand (Player or Banker) will be closer to 9</li>
@@ -423,7 +429,7 @@ const GAME_INSTRUCTIONS = {
         <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
     `,
 
-    'Mummy\'s Keno': `
+    'Keno': `
         <h3>🔢 How to Play Keno</h3>
         <ul>
             <li><strong>Goal:</strong> Pick numbers and hope they match the drawn numbers</li>
@@ -454,10 +460,10 @@ const GAME_INSTRUCTIONS = {
         <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
     `,
 
-    'Pyramid Coin Flip': `
+    'Coin Flip': `
         <h3>🪙 How to Play Coin Flip</h3>
         <ul>
-            <li><strong>Goal:</strong> Predict whether the ancient pyramid coin will land on heads or tails</li>
+            <li><strong>Goal:</strong> Predict whether the coin will land on heads or tails</li>
             <li><strong>How to Play:</strong>
                 <ol>
                     <li>Set your bet amount</li>

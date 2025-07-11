@@ -41,6 +41,17 @@
   100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
 
+@keyframes modal-fade-in {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.9) translateY(-20px);
+  }
+  100% { 
+    opacity: 1; 
+    transform: scale(1) translateY(0);
+  }
+}
+
 @keyframes slide-up {
   from { transform: translateY(30px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
@@ -266,9 +277,11 @@ body::before {
   max-width: 600px;
   max-height: 80vh;
   overflow-y: auto;
-  animation: bounce-in 0.5s ease-out;
+  animation: modal-fade-in 0.3s ease-out;
   box-shadow: 0 20px 60px var(--shadow-heavy);
   position: relative;
+  opacity: 0;
+  transform: scale(0.9);
 }
 
 .modal-content::before {

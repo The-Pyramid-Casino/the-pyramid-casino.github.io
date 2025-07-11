@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pyramid Casino – Sphinx Roulette</title>
+  <title>Roulette | Pyramid Casino</title>
   <link rel="stylesheet" href="roulette.css" />
   <link rel="stylesheet" href="shared-modern.css" />
   <!-- Google tag (gtag.js) -->
@@ -33,8 +33,8 @@
 </header>
 <main class="main-content">
   <section class="roulette">
-    <h1>🎯 Sphinx Roulette</h1>
-    <button class="instructions-btn" onclick="showInstructions('Sphinx Roulette', GAME_INSTRUCTIONS['Sphinx Roulette'])" style="margin-bottom: 15px;">ℹ️ How to Play</button>
+    <h1>🎯 Roulette</h1>
+    <button class="instructions-btn" onclick="showInstructions('Roulette', GAME_INSTRUCTIONS['Roulette'])" style="margin-bottom: 15px;">ℹ️ How to Play</button>
     <div class="notice">
       <span>✨ For fun only! No real money, just chips and luck. ✨</span>
     </div>
@@ -322,6 +322,12 @@ clearBetsBtn.onclick = () => {
 
 // Spin!
 spinBtn.onclick = () => {
+  // Check if result area is already shown (previous spin not cleared)
+  if (resultArea.style.display === '') {
+    alert("Please start a new round before spinning again!");
+    return;
+  }
+  
   if (Object.keys(bets).length === 0 || Object.values(bets).every(b=>b.total===0)) {
     alert("Place at least one bet!");
     return;
