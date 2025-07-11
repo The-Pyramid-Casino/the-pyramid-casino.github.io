@@ -19,6 +19,7 @@
   <meta name="twitter:description" content="Pyramid Casino is a free, fun Ancient Egypt-themed casino. No real money, just entertainment!" />
   <meta name="twitter:image" content="https://the-pyramid-casino.github.io/assets/pyramid-casino-og-image.png" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="shared-modern.css" />
   <style>
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -216,7 +217,9 @@
       <button class="reset-btn" onclick="setCasinoBalance(1000); window.location.reload();">Reset</button>
     </div>
     <div class="notice">
-      <span>✨ Pyramid Casino is a <b>free, fun experiment</b>. No real money is involved and no payments are accepted. Enjoy playing for entertainment only! ✨</span>
+      <span>✨ <strong>FOR ENTERTAINMENT ONLY!</strong> ✨<br>
+      Pyramid Casino is a <b>FREE, FUN EXPERIMENT</b> - No real money involved and no payments accepted!<br>
+      🎮 Enjoy playing for entertainment only! 🎮</span>
     </div>
     <section class="home">
       <h1>Welcome to Pyramid Casino</h1>
@@ -233,41 +236,49 @@
         <div class="game-card">
           <h3>Pyramid Slots</h3>
           <p>Spin the reels and match ancient Egyptian symbols to win treasures.</p>
+          <button class="instructions-btn" onclick="showInstructions('Pyramid Slots', GAME_INSTRUCTIONS['Pyramid Slots'])">ℹ️ How to Play</button>
           <a href="slots.html">Play Slots</a>
         </div>
         <div class="game-card">
           <h3>Blackjack Oasis</h3>
           <p>Beat the dealer in our classic blackjack with a desert twist.</p>
+          <button class="instructions-btn" onclick="showInstructions('Blackjack Oasis', GAME_INSTRUCTIONS['Blackjack Oasis'])">ℹ️ How to Play</button>
           <a href="blackjack.html">Play Blackjack</a>
         </div>
         <div class="game-card">
           <h3>Sphinx Roulette</h3>
           <p>Place your bets on the lucky numbers guarded by the Sphinx.</p>
+          <button class="instructions-btn" onclick="showInstructions('Sphinx Roulette', GAME_INSTRUCTIONS['Sphinx Roulette'])">ℹ️ How to Play</button>
           <a href="roulette.html">Play Roulette</a>
         </div>
         <div class="game-card">
           <h3>Pharaoh's Poker</h3>
           <p>Five-card draw poker with Egyptian royal payouts and ancient symbols.</p>
+          <button class="instructions-btn" onclick="showInstructions('Pharaoh\\'s Poker', GAME_INSTRUCTIONS['Pharaoh\\'s Poker'])">ℹ️ How to Play</button>
           <a href="poker.html">Play Poker</a>
         </div>
         <div class="game-card">
           <h3>Anubis Dice</h3>
           <p>Roll the sacred dice and bet on outcomes blessed by Anubis.</p>
+          <button class="instructions-btn" onclick="showInstructions('Anubis Dice', GAME_INSTRUCTIONS['Anubis Dice'])">ℹ️ How to Play</button>
           <a href="dice.html">Play Dice</a>
         </div>
         <div class="game-card">
           <h3>Cleopatra's Baccarat</h3>
           <p>Classic baccarat with the elegance and wisdom of Cleopatra.</p>
+          <button class="instructions-btn" onclick="showInstructions('Cleopatra\\'s Baccarat', GAME_INSTRUCTIONS['Cleopatra\\'s Baccarat'])">ℹ️ How to Play</button>
           <a href="baccarat.html">Play Baccarat</a>
         </div>
         <div class="game-card">
           <h3>Mummy's Keno</h3>
           <p>Pick your lucky numbers in this ancient Egyptian lottery game.</p>
+          <button class="instructions-btn" onclick="showInstructions('Mummy\\'s Keno', GAME_INSTRUCTIONS['Mummy\\'s Keno'])">ℹ️ How to Play</button>
           <a href="keno.html">Play Keno</a>
         </div>
         <div class="game-card">
           <h3>Pyramid Coin Flip</h3>
           <p>Flip the ancient pyramid coin and trust your instincts to double your bet.</p>
+          <button class="instructions-btn" onclick="showInstructions('Pyramid Coin Flip', GAME_INSTRUCTIONS['Pyramid Coin Flip'])">ℹ️ How to Play</button>
           <a href="coinflip.html">Play Coin Flip</a>
         </div>
       </div>
@@ -286,9 +297,18 @@
     </section>
   </main>
   <footer class="footer">
-    <p>Pyramid Casino &copy; <span id="year"></span></p>
-    <p>Contact us at <a href="mailto:casino.the.pyramid@gmail.com">casino.the.pyramid@gmail.com</a></p>
+    <div style="padding: 10px 0;">
+      <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
+      <p style="margin: 5px 0; font-size: 1.1rem;">
+        📧 <strong>Contact us:</strong> 
+        <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;">casino.the.pyramid@gmail.com</a>
+      </p>
+      <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
+        💰 No real money gambling | 🔞 18+ for entertainment
+      </p>
+    </div>
   </footer>
+  <script src="shared-modern.js"></script>
   <script>
     function getCasinoBalance() {
       let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
