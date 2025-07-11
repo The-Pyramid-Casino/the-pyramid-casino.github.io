@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Pyramid Casino – Sphinx Roulette</title>
   <link rel="stylesheet" href="roulette.css" />
+  <link rel="stylesheet" href="shared-modern.css" />
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
   <script>
@@ -32,7 +33,8 @@
 </header>
 <main class="main-content">
   <section class="roulette">
-    <h1>Sphinx Roulette</h1>
+    <h1>🎯 Sphinx Roulette</h1>
+    <button class="instructions-btn" onclick="showInstructions('Sphinx Roulette', GAME_INSTRUCTIONS['Sphinx Roulette'])" style="margin-bottom: 15px;">ℹ️ How to Play</button>
     <div class="notice">
       <span>✨ For fun only! No real money, just chips and luck. ✨</span>
     </div>
@@ -72,9 +74,18 @@
   </section>
 </main>
 <footer class="footer">
-    <p>Pyramid Casino &copy; <span id="year"></span></p>
-    <p>Contact us at <a href="mailto:casino.the.pyramid@gmail.com">casino.the.pyramid@gmail.com</a></p>
-  </footer>
+  <div style="padding: 10px 0;">
+    <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
+    <p style="margin: 5px 0; font-size: 1.1rem;">
+      📧 <strong>Contact us:</strong> 
+      <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;">casino.the.pyramid@gmail.com</a>
+    </p>
+    <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
+      💰 No real money gambling | 🔞 18+ for entertainment
+    </p>
+  </div>
+</footer>
+<script src="shared-modern.js"></script>
 <script>
 // Shared balance utilities
 function getCasinoBalance() {

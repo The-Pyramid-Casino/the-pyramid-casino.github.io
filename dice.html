@@ -7,6 +7,7 @@
   <title>Anubis Dice | Pyramid Casino</title>
   <meta name="description" content="Roll the dice in Anubis Dice at Pyramid Casino. Ancient Egyptian dice game with exciting payouts!" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="shared-modern.css" />
   <style>
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -296,7 +297,8 @@
   <main class="main-content">
     <a href="index.html" class="back-link">&larr; Back to Menu</a>
     <div class="dice-container">
-      <div class="dice-title">Anubis Dice</div>
+      <div class="dice-title">🎲 Anubis Dice</div>
+      <button class="instructions-btn" onclick="showInstructions('Anubis Dice', GAME_INSTRUCTIONS['Anubis Dice'])" style="margin-bottom: 15px;">ℹ️ How to Play</button>
       <div class="balance-row">
         <span>Balance:</span>
         <span id="balance">1000</span>
@@ -358,9 +360,17 @@
     </div>
   </main>
   <footer class="footer">
-    <p>Pyramid Casino &copy; <span id="year"></span></p>
-    <p>Contact us at <a href="mailto:casino.the.pyramid@gmail.com">casino.the.pyramid@gmail.com</a></p>
-  </footer>
+  <div style="padding: 10px 0;">
+    <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
+    <p style="margin: 5px 0; font-size: 1.1rem;">
+      📧 <strong>Contact us:</strong> 
+      <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;">casino.the.pyramid@gmail.com</a>
+    </p>
+    <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
+      💰 No real money gambling | 🔞 18+ for entertainment
+    </p>
+  </div>
+</footer>
   <script>
     // Shared balance utilities
     function getCasinoBalance() {
@@ -487,5 +497,6 @@
       }
     }
   </script>
+<script src="shared-modern.js"></script>
 </body>
 </html>
