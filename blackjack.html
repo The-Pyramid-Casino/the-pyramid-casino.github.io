@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Blackjack Oasis - Pyramid Casino</title>
+  <title>Blackjack | Pyramid Casino</title>
   <link rel="stylesheet" href="blackjack.css">
+  <link rel="stylesheet" href="shared-modern.css">
   <style>
     .blackjack-container {
       background: #231b36;
@@ -160,7 +161,8 @@
   <main class="main-content">
     <a href="index.html" class="back-link">&larr; Back to Menu</a>
     <div class="blackjack-container">
-      <div class="blackjack-title">Blackjack Oasis</div>
+      <div class="blackjack-title">🃏 Blackjack</div>
+      <button class="instructions-btn" onclick="showInstructions('Blackjack', GAME_INSTRUCTIONS['Blackjack'])" style="margin-bottom: 15px;">ℹ️ How to Play</button>
       <div class="balance-row">
         <span>Balance: <span id="balance">1000</span></span>
         <button class="reset-btn" onclick="setCasinoBalance(1000); window.location.reload();">Reset</button>
@@ -191,9 +193,18 @@
     </div>
   </main>
   <footer class="footer">
-    <p>Pyramid Casino &copy; <span id="year"></span></p>
-    <p>Contact us at <a href="mailto:casino.the.pyramid@gmail.com">casino.the.pyramid@gmail.com</a></p>
+    <div style="padding: 10px 0;">
+      <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
+      <p style="margin: 5px 0; font-size: 1.1rem;">
+        📧 <strong>Contact us:</strong> 
+        <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;">casino.the.pyramid@gmail.com</a>
+      </p>
+      <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
+        💰 No real money gambling | 🔞 18+ for entertainment
+      </p>
+    </div>
   </footer>
+  <script src="shared-modern.js"></script>
   <script>
     // Shared balance utilities (matches your site system)
     function getCasinoBalance() {
@@ -205,7 +216,13 @@
       localStorage.setItem('pyramidCasinoBalance', newBalance);
     }
     function updateBalanceDisplay() {
-      document.getElementById('balance').textContent = getCasinoBalance();
+      const balanceElement = document.getElementById('balance');
+      const currentBalance = getCasinoBalance();
+      if (typeof updateBalanceWithAnimation === 'function') {
+        updateBalanceWithAnimation(balanceElement, currentBalance);
+      } else {
+        balanceElement.textContent = currentBalance;
+      }
     }
     updateBalanceDisplay();
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -251,6 +268,11 @@
         dealerDiv.innerHTML = dealerHand.map(card => renderCard(card)).join('');
         document.getElementById('dealer-score').textContent = "Score: " + handValue(dealerHand);
       }
+      
+      // Add animation to new cards
+      setTimeout(() => {
+        document.querySelectorAll('.card').forEach(addCardFlipAnimation);
+      }, 100);
     }
     function renderCard(card) {
       let isRed = (card.suit === '♥' || card.suit === '♦');
@@ -295,7 +317,10 @@
         setTimeout(() => {
           setCasinoBalance(getCasinoBalance() + Math.floor(bet * 2.5));
           updateBalanceDisplay();
-          endHand("Blackjack! You win 3:2 payout!");
+          endHand("🎉 Blackjack! You win 3:2 payout!");
+          if (typeof showNotification === 'function') {
+            showNotification("🎉 BLACKJACK! Amazing win!", 'win');
+          }
         }, 800);
         return;
       }
@@ -303,7 +328,10 @@
         setTimeout(() => {
           setCasinoBalance(getCasinoBalance() + bet);
           updateBalanceDisplay();
-          endHand("Push! Both have Blackjack.");
+          endHand("🤝 Push! Both have Blackjack.");
+          if (typeof showNotification === 'function') {
+            showNotification("Push - Both have Blackjack", 'info');
+          }
         }, 800);
         return;
       }
@@ -313,7 +341,10 @@
       showHands();
       let playerVal = handValue(playerHand);
       if (playerVal > 21) {
-        endHand("Bust! You lose.");
+        if (typeof showNotification === 'function') {
+          showNotification("💥 Bust! Over 21", 'lose');
+        }
+        endHand("💥 Bust! You lose.");
       }
     }
     function playerStand() {
@@ -342,17 +373,29 @@
       if (dealerVal > 21) {
         setCasinoBalance(getCasinoBalance() + bet * 2);
         updateBalanceDisplay();
-        endHand("Dealer busts! You win!");
+        if (typeof showNotification === 'function') {
+          showNotification("🎉 Dealer Busts! You Win!", 'win');
+        }
+        endHand("🎉 Dealer busts! You win!");
       } else if (dealerVal > playerVal) {
-        endHand("Dealer wins.");
+        if (typeof showNotification === 'function') {
+          showNotification("😔 Dealer Wins", 'lose');
+        }
+        endHand("😔 Dealer wins.");
       } else if (dealerVal < playerVal) {
         setCasinoBalance(getCasinoBalance() + bet * 2);
         updateBalanceDisplay();
-        endHand("You win!");
+        if (typeof showNotification === 'function') {
+          showNotification("🎉 You Win!", 'win');
+        }
+        endHand("🎉 You win!");
       } else {
         setCasinoBalance(getCasinoBalance() + bet);
         updateBalanceDisplay();
-        endHand("Push! It's a tie.");
+        if (typeof showNotification === 'function') {
+          showNotification("🤝 Push - It's a Tie", 'info');
+        }
+        endHand("🤝 Push! It's a tie.");
       }
     }
     document.getElementById('deal-btn').onclick = startGame;

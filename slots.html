@@ -4,9 +4,10 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pyramid Slots | Pyramid Casino</title>
+  <title>Slots | Pyramid Casino</title>
   <meta name="description" content="Try your luck on Pyramid Slots at Pyramid Casino. Play for fun, with a shared balance across all games!" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="shared-modern.css" />
   <style>
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -160,15 +161,7 @@
       transition: color 0.2s;
     }
     .footer {
-      background: #231b36;
-      color: #f9d923;
-      text-align: center;
-      padding: 1rem 0;
-      position: fixed;
-      left: 0; right: 0; bottom: 0;
-      width: 100vw;
-      font-size: 1rem;
-      z-index: 10;
+      margin-top: 3rem;
     }
     .back-link {
       display: inline-block;
@@ -235,7 +228,8 @@
   <main class="main-content">
     <a href="index.html" class="back-link">&larr; Back to Menu</a>
     <div class="slots-container">
-      <div class="slots-title">Pyramid Slots</div>
+      <div class="slots-title">🎰 Slots</div>
+      <button class="instructions-btn" onclick="showInstructions('Slots', GAME_INSTRUCTIONS['Slots'])" style="margin-bottom: 15px;">ℹ️ How to Play</button>
       <div class="balance-row">
         <span>Balance:</span>
         <span id="balance">1000</span>
@@ -257,9 +251,18 @@
     </div>
   </main>
   <footer class="footer">
-    <p>Pyramid Casino &copy; <span id="year"></span></p>
-    <p>Contact us at <a href="mailto:casino.the.pyramid@gmail.com">casino.the.pyramid@gmail.com</a></p>
+    <div style="padding: 10px 0;">
+      <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
+      <p style="margin: 5px 0; font-size: 1.1rem;">
+        📧 <strong>Contact us:</strong> 
+        <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;">casino.the.pyramid@gmail.com</a>
+      </p>
+      <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
+        💰 No real money gambling | 🔞 18+ for entertainment
+      </p>
+    </div>
   </footer>
+  <script src="shared-modern.js"></script>
   <script>
     // Shared balance utilities
     function getCasinoBalance() {
