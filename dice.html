@@ -366,17 +366,8 @@
     </p>
   </div>
 </footer>
+  <script src="shared-modern.js"></script>
   <script>
-    // Shared balance utilities
-    function getCasinoBalance() {
-      let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-      if (isNaN(bal)) bal = 1000;
-      return bal;
-    }
-    function setCasinoBalance(newBalance) {
-      localStorage.setItem('pyramidCasinoBalance', newBalance);
-    }
-
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Dice Game Logic
@@ -423,9 +414,10 @@
         return;
       }
       
-      balance -= bet;
+      // Record the bet transaction
+      recordGameBet('Dice', bet);
+      balance = getCasinoBalance(); // Update local balance
       balanceEl.textContent = balance;
-      setCasinoBalance(balance);
       
       rollBtn.disabled = true;
       die1El.classList.add('rolling');
@@ -458,9 +450,10 @@
           
           if (won) {
             const winnings = bet * (selectedPayout + 1);
-            balance += winnings;
+            const betDescription = getBetDescription(selectedBet);
+            recordGameWin('Dice', winnings, `${betDescription}, total: ${total}`);
+            balance = getCasinoBalance(); // Update local balance
             balanceEl.textContent = balance;
-            setCasinoBalance(balance);
             resultEl.textContent = `🎉 Winner! +${winnings} chips`;
             resultEl.className = 'result winning';
           } else {
@@ -491,7 +484,25 @@
           return false;
       }
     }
+    
+    function getBetDescription(betType) {
+      switch (betType) {
+        case 'sum7':
+          return 'Sum equals 7';
+        case 'sum11':
+          return 'Sum equals 11';
+        case 'doubles':
+          return 'Double roll';
+        case 'high':
+          return 'High (8-12)';
+        case 'low':
+          return 'Low (2-6)';
+        case 'even':
+          return 'Even total';
+        default:
+          return betType;
+      }
+    }
   </script>
-<script src="shared-modern.js"></script>
 </body>
 </html>

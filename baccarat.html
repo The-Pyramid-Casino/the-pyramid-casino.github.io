@@ -392,17 +392,8 @@
     </p>
   </div>
 </footer>
+  <script src="shared-modern.js"></script>
   <script>
-    // Shared balance utilities
-    function getCasinoBalance() {
-      let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-      if (isNaN(bal)) bal = 1000;
-      return bal;
-    }
-    function setCasinoBalance(newBalance) {
-      localStorage.setItem('pyramidCasinoBalance', newBalance);
-    }
-
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Baccarat Game Logic
@@ -452,9 +443,9 @@
         
         // Add bet
         currentBets[betType] += betAmount;
-        balance -= betAmount;
+        recordGameBet('Baccarat', betAmount);
+        balance = getCasinoBalance(); // Update local balance
         balanceEl.textContent = balance;
-        setCasinoBalance(balance);
         
         updateBetDisplay();
         
@@ -599,9 +590,10 @@
       }
       
       if (totalWinnings > 0) {
-        balance += Math.floor(totalWinnings);
+        const resultDetails = `${bankerTotal} vs ${playerTotal}`;
+        recordGameWin('Baccarat', Math.floor(totalWinnings), resultDetails);
+        balance = getCasinoBalance(); // Update local balance
         balanceEl.textContent = balance;
-        setCasinoBalance(balance);
         resultEl.textContent = `${resultText} Won ${Math.floor(totalWinnings)} chips!`;
         resultEl.className = 'result winning';
       } else {
@@ -628,6 +620,5 @@
     // Start with deal button disabled
     dealBtn.disabled = true;
   </script>
-<script src="shared-modern.js"></script>
 </body>
 </html>

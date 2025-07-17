@@ -404,17 +404,8 @@
     </p>
   </div>
 </footer>
+  <script src="shared-modern.js"></script>
   <script>
-    // Shared balance utilities
-    function getCasinoBalance() {
-      let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-      if (isNaN(bal)) bal = 1000;
-      return bal;
-    }
-    function setCasinoBalance(newBalance) {
-      localStorage.setItem('pyramidCasinoBalance', newBalance);
-    }
-
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Keno Game Logic
@@ -532,9 +523,10 @@
         return;
       }
       
-      balance -= bet;
+      // Record the bet transaction
+      recordGameBet('Keno', bet);
+      balance = getCasinoBalance(); // Update local balance
       balanceEl.textContent = balance;
-      setCasinoBalance(balance);
       
       gameActive = true;
       drawnNumbers = [];
@@ -591,9 +583,9 @@
       const winnings = bet * multiplier;
       
       if (winnings > 0) {
-        balance += winnings;
+        recordGameWin('Keno', winnings, `${hits}/${selected} hits, multiplier ${multiplier}x`);
+        balance = getCasinoBalance(); // Update local balance
         balanceEl.textContent = balance;
-        setCasinoBalance(balance);
         resultEl.textContent = `🎉 ${hits}/${selected} hits! Won ${winnings} chips!`;
         resultEl.className = 'result winning';
       } else {
@@ -621,6 +613,5 @@
     initializeGrid();
     updateDisplay();
   </script>
-<script src="shared-modern.js"></script>
 </body>
 </html>
