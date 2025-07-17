@@ -379,7 +379,7 @@
   
   <script src="shared-modern.js"></script>
   <script>
-    let allTransactions = [];
+    var allTransactions = [];
     
     function initHistory() {
       document.getElementById('balance').textContent = getCasinoBalance();
@@ -394,7 +394,7 @@
     }
     
     function displayTransactions(transactions) {
-      const listElement = document.getElementById('transaction-list');
+      var listElement = document.getElementById('transaction-list');
       
       if (transactions.length === 0) {
         listElement.innerHTML = '<div class="no-transactions">📝 No transactions found.<br><br>Start playing games to see your transaction history!</div>';
@@ -402,72 +402,112 @@
       }
       
       // Sort by newest first
-      const sortedTransactions = [...transactions].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      var sortedTransactions = transactions.slice().sort(function(a, b) { 
+        return new Date(b.timestamp) - new Date(a.timestamp); 
+      });
       
-      listElement.innerHTML = sortedTransactions.map(transaction => {
-        const typeClass = `type-${transaction.type}`;
-        const amountClass = transaction.amount > 0 ? 'amount-positive' : 
-                           transaction.amount < 0 ? 'amount-negative' : 'amount-neutral';
-        const amountDisplay = transaction.amount > 0 ? `+${formatCurrency(transaction.amount)}` :
-                             transaction.amount < 0 ? formatCurrency(transaction.amount) :
-                             formatCurrency(Math.abs(transaction.amount));
+      var transactionHTML = '';
+      for (var i = 0; i < sortedTransactions.length; i++) {
+        var transaction = sortedTransactions[i];
+        var typeClass = 'type-' + transaction.type;
+        var amountClass = transaction.amount > 0 ? 'amount-positive' : 
+                         transaction.amount < 0 ? 'amount-negative' : 'amount-neutral';
+        var amountDisplay = transaction.amount > 0 ? '+' + formatCurrency(transaction.amount) :
+                           transaction.amount < 0 ? formatCurrency(transaction.amount) :
+                           formatCurrency(Math.abs(transaction.amount));
         
-        return `
-          <div class="transaction-row">
-            <div data-label="Date & Time:">${formatDate(transaction.timestamp)}</div>
-            <div data-label="Type:"><span class="transaction-type ${typeClass}">${formatTransactionType(transaction.type)}</span></div>
-            <div data-label="Amount:" class="${amountClass}">${amountDisplay}</div>
-            <div data-label="Old Balance:">${formatCurrency(transaction.oldBalance)}</div>
-            <div data-label="New Balance:">${formatCurrency(transaction.newBalance)}</div>
-            <div data-label="Description:">${transaction.description || '-'}</div>
-          </div>
-        `;
-      }).join('');
+        transactionHTML += 
+          '<div class="transaction-row">' +
+            '<div data-label="Date & Time:">' + formatDate(transaction.timestamp) + '</div>' +
+            '<div data-label="Type:"><span class="transaction-type ' + typeClass + '">' + formatTransactionType(transaction.type) + '</span></div>' +
+            '<div data-label="Amount:" class="' + amountClass + '">' + amountDisplay + '</div>' +
+            '<div data-label="Old Balance:">' + formatCurrency(transaction.oldBalance) + '</div>' +
+            '<div data-label="New Balance:">' + formatCurrency(transaction.newBalance) + '</div>' +
+            '<div data-label="Description:">' + (transaction.description || '-') + '</div>' +
+          '</div>';
+      }
+      
+      listElement.innerHTML = transactionHTML;
     }
     
     function updateStats() {
-      const transactions = allTransactions;
-      const totalTransactions = transactions.length;
+      var transactions = allTransactions;
+      var totalTransactions = transactions.length;
       
-      const wins = transactions.filter(t => t.type === 'win');
-      const losses = transactions.filter(t => t.type === 'loss');
-      const topups = transactions.filter(t => t.type === 'topup');
+      var wins = [];
+      var losses = [];
+      var topups = [];
       
-      const totalWinnings = wins.reduce((sum, t) => sum + t.amount, 0);
-      const totalLosses = Math.abs(losses.reduce((sum, t) => sum + t.amount, 0));
-      const totalTopupAmount = topups.reduce((sum, t) => sum + t.amount, 0);
+      for (var i = 0; i < transactions.length; i++) {
+        if (transactions[i].type === 'win') wins.push(transactions[i]);
+        if (transactions[i].type === 'loss') losses.push(transactions[i]);
+        if (transactions[i].type === 'topup') topups.push(transactions[i]);
+      }
+      
+      var totalWinnings = 0;
+      for (var i = 0; i < wins.length; i++) {
+        totalWinnings += wins[i].amount;
+      }
+      
+      var totalLosses = 0;
+      for (var i = 0; i < losses.length; i++) {
+        totalLosses += losses[i].amount;
+      }
+      totalLosses = Math.abs(totalLosses);
+      
+      var totalTopupAmount = 0;
+      for (var i = 0; i < topups.length; i++) {
+        totalTopupAmount += topups[i].amount;
+      }
       
       document.getElementById('total-transactions').textContent = totalTransactions;
       document.getElementById('total-winnings').textContent = formatCurrency(totalWinnings);
       document.getElementById('total-losses').textContent = formatCurrency(totalLosses);
       document.getElementById('total-topups').textContent = formatCurrency(totalTopupAmount);
-      document.getElementById('today-topups').textContent = `${getTodayTopupCount()}/${MAX_DAILY_TOPUPS}`;
+      document.getElementById('today-topups').textContent = getTodayTopupCount() + '/' + MAX_DAILY_TOPUPS;
     }
     
     function filterTransactions() {
-      const typeFilter = document.getElementById('filter-type').value;
-      const daysFilter = document.getElementById('filter-days').value;
-      const searchFilter = document.getElementById('search-desc').value.toLowerCase();
+      var typeFilter = document.getElementById('filter-type').value;
+      var daysFilter = document.getElementById('filter-days').value;
+      var searchFilter = document.getElementById('search-desc').value.toLowerCase();
       
-      let filtered = [...allTransactions];
+      var filtered = allTransactions.slice(); // Copy array
       
       // Filter by type
       if (typeFilter !== 'all') {
-        filtered = filtered.filter(t => t.type === typeFilter);
+        var newFiltered = [];
+        for (var i = 0; i < filtered.length; i++) {
+          if (filtered[i].type === typeFilter) {
+            newFiltered.push(filtered[i]);
+          }
+        }
+        filtered = newFiltered;
       }
       
       // Filter by days
       if (daysFilter !== 'all') {
-        const daysAgo = new Date();
+        var daysAgo = new Date();
         daysAgo.setDate(daysAgo.getDate() - parseInt(daysFilter));
-        filtered = filtered.filter(t => new Date(t.timestamp) >= daysAgo);
+        var newFiltered = [];
+        for (var i = 0; i < filtered.length; i++) {
+          if (new Date(filtered[i].timestamp) >= daysAgo) {
+            newFiltered.push(filtered[i]);
+          }
+        }
+        filtered = newFiltered;
       }
       
       // Filter by search term
       if (searchFilter) {
-        filtered = filtered.filter(t => 
-          (t.description || '').toLowerCase().includes(searchFilter)
-        );
+        var newFiltered = [];
+        for (var i = 0; i < filtered.length; i++) {
+          var desc = (filtered[i].description || '').toLowerCase();
+          if (desc.indexOf(searchFilter) !== -1) {
+            newFiltered.push(filtered[i]);
+          }
+        }
+        filtered = newFiltered;
       }
       
       displayTransactions(filtered);
@@ -485,25 +525,29 @@
         return;
       }
       
-      const csvContent = "data:text/csv;charset=utf-8," + 
-        "Date,Time,Type,Amount,Old Balance,New Balance,Description\n" +
-        allTransactions.map(t => {
-          const date = new Date(t.timestamp);
-          return [
-            date.toLocaleDateString(),
-            date.toLocaleTimeString(),
-            t.type,
-            t.amount,
-            t.oldBalance,
-            t.newBalance,
-            `"${(t.description || '').replace(/"/g, '""')}"`
-          ].join(',');
-        }).join('\n');
+      var csvRows = ['Date,Time,Type,Amount,Old Balance,New Balance,Description'];
       
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement('a');
+      for (var i = 0; i < allTransactions.length; i++) {
+        var t = allTransactions[i];
+        var date = new Date(t.timestamp);
+        var description = (t.description || '').replace(/"/g, '""');
+        var row = [
+          date.toLocaleDateString(),
+          date.toLocaleTimeString(),
+          t.type,
+          t.amount,
+          t.oldBalance,
+          t.newBalance,
+          '"' + description + '"'
+        ].join(',');
+        csvRows.push(row);
+      }
+      
+      var csvContent = "data:text/csv;charset=utf-8," + csvRows.join('\n');
+      var encodedUri = encodeURI(csvContent);
+      var link = document.createElement('a');
       link.setAttribute('href', encodedUri);
-      link.setAttribute('download', `pyramid-casino-history-${new Date().toISOString().split('T')[0]}.csv`);
+      link.setAttribute('download', 'pyramid-casino-history-' + new Date().toISOString().split('T')[0] + '.csv');
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

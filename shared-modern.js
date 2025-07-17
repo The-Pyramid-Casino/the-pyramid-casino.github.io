@@ -28,18 +28,18 @@ function createInstructionsModal(gameTitle, instructions) {
     document.body.appendChild(modal);
     
     // Add event listeners
-    const closeBtn = modal.querySelector('.close');
-    closeBtn.onclick = () => modal.style.display = 'none';
+    var closeBtn = modal.querySelector('.close');
+    closeBtn.onclick = function() { modal.style.display = 'none'; };
     
     // Close when clicking outside the modal
-    modal.onclick = (event) => {
+    modal.onclick = function(event) {
         if (event.target === modal) {
             modal.style.display = 'none';
         }
     };
     
     // Close with Escape key
-    document.addEventListener('keydown', (event) => {
+    document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape' && modal.style.display === 'block') {
             modal.style.display = 'none';
         }
@@ -49,12 +49,12 @@ function createInstructionsModal(gameTitle, instructions) {
 }
 
 function showInstructions(gameTitle, instructions) {
-    const modal = createInstructionsModal(gameTitle, instructions);
+    var modal = createInstructionsModal(gameTitle, instructions);
     modal.style.display = 'block';
     
     // Force a reflow then start animation
     modal.offsetHeight;
-    const modalContent = modal.querySelector('.modal-content');
+    var modalContent = modal.querySelector('.modal-content');
     modalContent.style.opacity = '1';
     modalContent.style.transform = 'scale(1) translateY(0)';
 }
@@ -62,22 +62,22 @@ function showInstructions(gameTitle, instructions) {
 // Enhanced animations
 function addCardFlipAnimation(cardElement) {
     cardElement.classList.add('new-card');
-    setTimeout(() => {
+    setTimeout(function() {
         cardElement.classList.remove('new-card');
     }, 600);
 }
 
 function addChipDropAnimation(chipElement) {
     chipElement.classList.add('chip-drop');
-    setTimeout(() => {
+    setTimeout(function() {
         chipElement.classList.remove('chip-drop');
     }, 800);
 }
 
 // Enhanced balance update with animation
 function updateBalanceWithAnimation(balanceElement, newBalance) {
-    const currentBalance = parseInt(balanceElement.textContent);
-    const difference = newBalance - currentBalance;
+    var currentBalance = parseInt(balanceElement.textContent);
+    var difference = newBalance - currentBalance;
     
     // Add visual feedback for wins/losses
     if (difference > 0) {
@@ -89,14 +89,14 @@ function updateBalanceWithAnimation(balanceElement, newBalance) {
     }
     
     // Animate the number change
-    const duration = 500;
-    const steps = 20;
-    const stepValue = difference / steps;
-    let currentStep = 0;
+    var duration = 500;
+    var steps = 20;
+    var stepValue = difference / steps;
+    var currentStep = 0;
     
-    const interval = setInterval(() => {
+    var interval = setInterval(function() {
         currentStep++;
-        const displayValue = Math.round(currentBalance + (stepValue * currentStep));
+        var displayValue = Math.round(currentBalance + (stepValue * currentStep));
         balanceElement.textContent = displayValue;
         
         if (currentStep >= steps) {
@@ -104,7 +104,7 @@ function updateBalanceWithAnimation(balanceElement, newBalance) {
             balanceElement.textContent = newBalance;
             
             // Reset color after animation
-            setTimeout(() => {
+            setTimeout(function() {
                 balanceElement.style.color = '';
                 balanceElement.style.textShadow = '';
             }, 1000);
@@ -113,16 +113,21 @@ function updateBalanceWithAnimation(balanceElement, newBalance) {
 }
 
 // Enhanced notification system
-function showNotification(message, type = 'info', duration = 3000) {
-    // Remove existing notifications
-    const existingNotifications = document.querySelectorAll('.game-notification');
-    existingNotifications.forEach(notif => notif.remove());
+function showNotification(message, type, duration) {
+    if (typeof type === 'undefined') type = 'info';
+    if (typeof duration === 'undefined') duration = 3000;
     
-    const notification = document.createElement('div');
-    notification.className = `game-notification notification-${type}`;
+    // Remove existing notifications
+    var existingNotifications = document.querySelectorAll('.game-notification');
+    for (var i = 0; i < existingNotifications.length; i++) {
+        existingNotifications[i].remove();
+    }
+    
+    var notification = document.createElement('div');
+    notification.className = 'game-notification notification-' + type;
     notification.innerHTML = message;
     
-    const styles = {
+    var styles = {
         position: 'fixed',
         top: '20px',
         right: '20px',
@@ -161,46 +166,46 @@ function showNotification(message, type = 'info', duration = 3000) {
     document.body.appendChild(notification);
     
     // Auto remove after duration
-    setTimeout(() => {
+    setTimeout(function() {
         notification.style.animation = 'slide-up 0.5s ease-out reverse';
-        setTimeout(() => notification.remove(), 500);
+        setTimeout(function() { 
+            notification.remove(); 
+        }, 500);
     }, duration);
 }
 
 // Enhanced button click effects
 function addButtonClickEffect(button) {
     button.addEventListener('click', function(e) {
-        const ripple = document.createElement('span');
-        const rect = button.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
+        var ripple = document.createElement('span');
+        var rect = button.getBoundingClientRect();
+        var size = Math.max(rect.width, rect.height);
+        var x = e.clientX - rect.left - size / 2;
+        var y = e.clientY - rect.top - size / 2;
         
-        ripple.style.cssText = `
-            position: absolute;
-            width: ${size}px;
-            height: ${size}px;
-            left: ${x}px;
-            top: ${y}px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: scale(0);
-            animation: ripple 0.6s ease-out;
-            pointer-events: none;
-        `;
+        ripple.style.cssText = 
+            'position: absolute;' +
+            'width: ' + size + 'px;' +
+            'height: ' + size + 'px;' +
+            'left: ' + x + 'px;' +
+            'top: ' + y + 'px;' +
+            'background: rgba(255, 255, 255, 0.3);' +
+            'border-radius: 50%;' +
+            'transform: scale(0);' +
+            'animation: ripple 0.6s ease-out;' +
+            'pointer-events: none;';
         
         // Add ripple animation CSS if not exists
         if (!document.querySelector('#ripple-style')) {
-            const style = document.createElement('style');
+            var style = document.createElement('style');
             style.id = 'ripple-style';
-            style.textContent = `
-                @keyframes ripple {
-                    to {
-                        transform: scale(2);
-                        opacity: 0;
-                    }
-                }
-            `;
+            style.textContent = 
+                '@keyframes ripple {' +
+                    'to {' +
+                        'transform: scale(2);' +
+                        'opacity: 0;' +
+                    '}' +
+                '}';
             document.head.appendChild(style);
         }
         
@@ -208,35 +213,42 @@ function addButtonClickEffect(button) {
         button.style.overflow = 'hidden';
         button.appendChild(ripple);
         
-        setTimeout(() => ripple.remove(), 600);
+        setTimeout(function() { 
+            ripple.remove(); 
+        }, 600);
     });
 }
 
 // Initialize common functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Add click effects to all buttons
-    document.querySelectorAll('button, .primary-btn, .game-card a').forEach(addButtonClickEffect);
+    var buttons = document.querySelectorAll('button, .primary-btn, .game-card a');
+    for (var i = 0; i < buttons.length; i++) {
+        addButtonClickEffect(buttons[i]);
+    }
     
     // Add smooth scroll behavior
     document.documentElement.style.scrollBehavior = 'smooth';
     
     // Add loading animation to game cards
-    document.querySelectorAll('.game-card').forEach((card, index) => {
-        card.style.animation = `slide-up 0.6s ease-out ${index * 0.1}s both`;
-    });
+    var gameCards = document.querySelectorAll('.game-card');
+    for (var i = 0; i < gameCards.length; i++) {
+        gameCards[i].style.animation = 'slide-up 0.6s ease-out ' + (i * 0.1) + 's both';
+    }
     
     // Enhance form inputs with focus effects
-    document.querySelectorAll('input[type="number"], input[type="text"]').forEach(input => {
-        input.addEventListener('focus', function() {
+    var inputs = document.querySelectorAll('input[type="number"], input[type="text"]');
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener('focus', function() {
             this.style.boxShadow = '0 0 10px rgba(249, 217, 35, 0.3)';
             this.style.borderColor = '#f9d923';
         });
         
-        input.addEventListener('blur', function() {
+        inputs[i].addEventListener('blur', function() {
             this.style.boxShadow = '';
             this.style.borderColor = '';
         });
-    });
+    }
 });
 
 // Game instruction content for each game
@@ -493,10 +505,10 @@ const GAME_INSTRUCTIONS = {
 };
 
 // Transaction System
-const TRANSACTION_STORAGE_KEY = 'pyramidCasinoTransactions';
-const DAILY_TOPUP_KEY = 'pyramidCasinoDailyTopups';
-const MAX_DAILY_TOPUPS = 5;
-const MAX_TOPUP_AMOUNT = 10000;
+var TRANSACTION_STORAGE_KEY = 'pyramidCasinoTransactions';
+var DAILY_TOPUP_KEY = 'pyramidCasinoDailyTopups';
+var MAX_DAILY_TOPUPS = 5;
+var MAX_TOPUP_AMOUNT = 10000;
 
 // Enhanced balance functions with transaction recording
 function getCasinoBalance() {
@@ -505,8 +517,12 @@ function getCasinoBalance() {
     return bal;
 }
 
-function setCasinoBalance(newBalance, transactionType = 'unknown', amount = 0, description = '') {
-    const oldBalance = getCasinoBalance();
+function setCasinoBalance(newBalance, transactionType, amount, description) {
+    if (typeof transactionType === 'undefined') transactionType = 'unknown';
+    if (typeof amount === 'undefined') amount = 0;
+    if (typeof description === 'undefined') description = '';
+    
+    var oldBalance = getCasinoBalance();
     localStorage.setItem('pyramidCasinoBalance', newBalance);
     
     // Record transaction if there's a change
@@ -516,9 +532,11 @@ function setCasinoBalance(newBalance, transactionType = 'unknown', amount = 0, d
 }
 
 // Transaction recording system
-function recordTransaction(type, amount, oldBalance, newBalance, description = '') {
-    const transactions = getTransactionHistory();
-    const transaction = {
+function recordTransaction(type, amount, oldBalance, newBalance, description) {
+    if (typeof description === 'undefined') description = '';
+    
+    var transactions = getTransactionHistory();
+    var transaction = {
         id: Date.now() + Math.random(), // Unique ID
         timestamp: new Date().toISOString(),
         type: type, // 'win', 'loss', 'topup', 'reset'
@@ -562,9 +580,9 @@ function clearTransactionHistory() {
 // Daily top-up limit system
 function getTodayTopupCount() {
     try {
-        const today = new Date().toDateString();
-        const stored = localStorage.getItem(DAILY_TOPUP_KEY);
-        const dailyData = stored ? JSON.parse(stored) : {};
+        var today = new Date().toDateString();
+        var stored = localStorage.getItem(DAILY_TOPUP_KEY);
+        var dailyData = stored ? JSON.parse(stored) : {};
         
         return dailyData[today] || 0;
     } catch (e) {
@@ -575,21 +593,22 @@ function getTodayTopupCount() {
 
 function incrementTodayTopupCount() {
     try {
-        const today = new Date().toDateString();
-        const stored = localStorage.getItem(DAILY_TOPUP_KEY);
-        const dailyData = stored ? JSON.parse(stored) : {};
+        var today = new Date().toDateString();
+        var stored = localStorage.getItem(DAILY_TOPUP_KEY);
+        var dailyData = stored ? JSON.parse(stored) : {};
         
         dailyData[today] = (dailyData[today] || 0) + 1;
         
         // Clean old data (keep only last 30 days)
-        const thirtyDaysAgo = new Date();
+        var thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         
-        Object.keys(dailyData).forEach(date => {
-            if (new Date(date) < thirtyDaysAgo) {
-                delete dailyData[date];
+        var dates = Object.keys(dailyData);
+        for (var i = 0; i < dates.length; i++) {
+            if (new Date(dates[i]) < thirtyDaysAgo) {
+                delete dailyData[dates[i]];
             }
-        });
+        }
         
         localStorage.setItem(DAILY_TOPUP_KEY, JSON.stringify(dailyData));
         return dailyData[today];
@@ -604,13 +623,15 @@ function canTopUpToday() {
 }
 
 // Enhanced balance update with transaction recording
-function updateBalance(amount, type, description = '') {
-    const currentBalance = getCasinoBalance();
-    const newBalance = Math.max(0, currentBalance + amount);
+function updateBalance(amount, type, description) {
+    if (typeof description === 'undefined') description = '';
+    
+    var currentBalance = getCasinoBalance();
+    var newBalance = Math.max(0, currentBalance + amount);
     setCasinoBalance(newBalance, type, Math.abs(amount), description);
     
     // Update UI if balance element exists
-    const balanceEl = document.getElementById('balance');
+    var balanceEl = document.getElementById('balance');
     if (balanceEl) {
         if (typeof updateBalanceWithAnimation === 'function') {
             updateBalanceWithAnimation(balanceEl, newBalance);
@@ -624,12 +645,12 @@ function updateBalance(amount, type, description = '') {
 
 // Game-specific transaction recording functions
 function recordGameBet(gameName, betAmount) {
-    const currentBalance = getCasinoBalance();
-    const newBalance = Math.max(0, currentBalance - betAmount);
-    setCasinoBalance(newBalance, 'loss', betAmount, `${gameName} bet: ${betAmount} chips`);
+    var currentBalance = getCasinoBalance();
+    var newBalance = Math.max(0, currentBalance - betAmount);
+    setCasinoBalance(newBalance, 'loss', -betAmount, gameName + ' bet: ' + betAmount + ' chips');
     
     // Update UI if balance element exists
-    const balanceEl = document.getElementById('balance');
+    var balanceEl = document.getElementById('balance');
     if (balanceEl) {
         if (typeof updateBalanceWithAnimation === 'function') {
             updateBalanceWithAnimation(balanceEl, newBalance);
@@ -641,14 +662,16 @@ function recordGameBet(gameName, betAmount) {
     return newBalance;
 }
 
-function recordGameWin(gameName, winAmount, details = '') {
-    const currentBalance = getCasinoBalance();
-    const newBalance = currentBalance + winAmount;
-    const description = details ? `${gameName} win: ${winAmount} chips (${details})` : `${gameName} win: ${winAmount} chips`;
+function recordGameWin(gameName, winAmount, details) {
+    if (typeof details === 'undefined') details = '';
+    
+    var currentBalance = getCasinoBalance();
+    var newBalance = currentBalance + winAmount;
+    var description = details ? gameName + ' win: ' + winAmount + ' chips (' + details + ')' : gameName + ' win: ' + winAmount + ' chips';
     setCasinoBalance(newBalance, 'win', winAmount, description);
     
     // Update UI if balance element exists
-    const balanceEl = document.getElementById('balance');
+    var balanceEl = document.getElementById('balance');
     if (balanceEl) {
         if (typeof updateBalanceWithAnimation === 'function') {
             updateBalanceWithAnimation(balanceEl, newBalance);
@@ -660,14 +683,16 @@ function recordGameWin(gameName, winAmount, details = '') {
     return newBalance;
 }
 
-function recordGamePush(gameName, amount, details = '') {
-    const currentBalance = getCasinoBalance();
-    const newBalance = currentBalance + amount;
-    const description = details ? `${gameName} push: ${amount} chips returned (${details})` : `${gameName} push: ${amount} chips returned`;
+function recordGamePush(gameName, amount, details) {
+    if (typeof details === 'undefined') details = '';
+    
+    var currentBalance = getCasinoBalance();
+    var newBalance = currentBalance + amount;
+    var description = details ? gameName + ' push: ' + amount + ' chips returned (' + details + ')' : gameName + ' push: ' + amount + ' chips returned';
     setCasinoBalance(newBalance, 'win', amount, description);
     
     // Update UI if balance element exists
-    const balanceEl = document.getElementById('balance');
+    var balanceEl = document.getElementById('balance');
     if (balanceEl) {
         if (typeof updateBalanceWithAnimation === 'function') {
             updateBalanceWithAnimation(balanceEl, newBalance);
@@ -680,7 +705,9 @@ function recordGamePush(gameName, amount, details = '') {
 }
 
 // Top-up functionality
-function performTopUp(amount, showConfirmation = true) {
+function performTopUp(amount, showConfirmation) {
+    if (typeof showConfirmation === 'undefined') showConfirmation = true;
+    
     // Validation
     if (!amount || amount <= 0) {
         showNotification('❌ Please enter a valid amount!', 'lose');
@@ -688,38 +715,38 @@ function performTopUp(amount, showConfirmation = true) {
     }
     
     if (amount > MAX_TOPUP_AMOUNT) {
-        showNotification(`❌ Maximum top-up amount is ${MAX_TOPUP_AMOUNT} chips!`, 'lose');
+        showNotification('❌ Maximum top-up amount is ' + MAX_TOPUP_AMOUNT + ' chips!', 'lose');
         return false;
     }
     
     if (!canTopUpToday()) {
-        const remaining = MAX_DAILY_TOPUPS - getTodayTopupCount();
-        showNotification(`❌ Daily top-up limit reached! (${MAX_DAILY_TOPUPS}/day)\nTry again tomorrow!`, 'lose');
+        var remaining = MAX_DAILY_TOPUPS - getTodayTopupCount();
+        showNotification('❌ Daily top-up limit reached! (' + MAX_DAILY_TOPUPS + '/day)\nTry again tomorrow!', 'lose');
         return false;
     }
     
     // Confirmation popup
     if (showConfirmation) {
-        const remainingTopups = MAX_DAILY_TOPUPS - getTodayTopupCount();
-        if (!confirm(`💰 Top up ${amount} chips?\n\n📊 Current Balance: ${getCasinoBalance()}\n📈 New Balance: ${getCasinoBalance() + amount}\n\n🔄 Remaining top-ups today: ${remainingTopups - 1}/5\n\nProceed with top-up?`)) {
+        var remainingTopups = MAX_DAILY_TOPUPS - getTodayTopupCount();
+        if (!confirm('💰 Top up ' + amount + ' chips?\n\n📊 Current Balance: ' + getCasinoBalance() + '\n📈 New Balance: ' + (getCasinoBalance() + amount) + '\n\n🔄 Remaining top-ups today: ' + (remainingTopups - 1) + '/5\n\nProceed with top-up?')) {
             return false;
         }
     }
     
     // Perform top-up
-    const oldBalance = getCasinoBalance();
-    const newBalance = updateBalance(amount, 'topup', `Top-up of ${amount} chips`);
+    var oldBalance = getCasinoBalance();
+    var newBalance = updateBalance(amount, 'topup', 'Top-up of ' + amount + ' chips');
     incrementTodayTopupCount();
     
-    const remainingTopups = MAX_DAILY_TOPUPS - getTodayTopupCount();
-    showNotification(`✨ Successfully topped up ${amount} chips!\n💰 New Balance: ${newBalance}\n🔄 Remaining top-ups today: ${remainingTopups}`, 'win', 4000);
+    var remainingTopups = MAX_DAILY_TOPUPS - getTodayTopupCount();
+    showNotification('✨ Successfully topped up ' + amount + ' chips!\n💰 New Balance: ' + newBalance + '\n🔄 Remaining top-ups today: ' + remainingTopups, 'win', 4000);
     
     return true;
 }
 
 // Utility functions for transaction display
 function formatTransactionType(type) {
-    const types = {
+    var types = {
         'win': '🎉 Win',
         'loss': '💸 Loss', 
         'topup': '💰 Top-up',
@@ -734,13 +761,14 @@ function formatCurrency(amount) {
 }
 
 function formatDate(isoString) {
-    const date = new Date(isoString);
+    var date = new Date(isoString);
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
 }
 
 // Confirmation dialog helper
-function confirmAction(message, title = 'Confirm Action') {
-    return confirm(`${title}\n\n${message}`);
+function confirmAction(message, title) {
+    if (typeof title === 'undefined') title = 'Confirm Action';
+    return confirm(title + '\n\n' + message);
 }
 
 // Export for use in other scripts
