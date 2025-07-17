@@ -622,6 +622,63 @@ function updateBalance(amount, type, description = '') {
     return newBalance;
 }
 
+// Game-specific transaction recording functions
+function recordGameBet(gameName, betAmount) {
+    const currentBalance = getCasinoBalance();
+    const newBalance = Math.max(0, currentBalance - betAmount);
+    setCasinoBalance(newBalance, 'loss', betAmount, `${gameName} bet: ${betAmount} chips`);
+    
+    // Update UI if balance element exists
+    const balanceEl = document.getElementById('balance');
+    if (balanceEl) {
+        if (typeof updateBalanceWithAnimation === 'function') {
+            updateBalanceWithAnimation(balanceEl, newBalance);
+        } else {
+            balanceEl.textContent = newBalance;
+        }
+    }
+    
+    return newBalance;
+}
+
+function recordGameWin(gameName, winAmount, details = '') {
+    const currentBalance = getCasinoBalance();
+    const newBalance = currentBalance + winAmount;
+    const description = details ? `${gameName} win: ${winAmount} chips (${details})` : `${gameName} win: ${winAmount} chips`;
+    setCasinoBalance(newBalance, 'win', winAmount, description);
+    
+    // Update UI if balance element exists
+    const balanceEl = document.getElementById('balance');
+    if (balanceEl) {
+        if (typeof updateBalanceWithAnimation === 'function') {
+            updateBalanceWithAnimation(balanceEl, newBalance);
+        } else {
+            balanceEl.textContent = newBalance;
+        }
+    }
+    
+    return newBalance;
+}
+
+function recordGamePush(gameName, amount, details = '') {
+    const currentBalance = getCasinoBalance();
+    const newBalance = currentBalance + amount;
+    const description = details ? `${gameName} push: ${amount} chips returned (${details})` : `${gameName} push: ${amount} chips returned`;
+    setCasinoBalance(newBalance, 'win', amount, description);
+    
+    // Update UI if balance element exists
+    const balanceEl = document.getElementById('balance');
+    if (balanceEl) {
+        if (typeof updateBalanceWithAnimation === 'function') {
+            updateBalanceWithAnimation(balanceEl, newBalance);
+        } else {
+            balanceEl.textContent = newBalance;
+        }
+    }
+    
+    return newBalance;
+}
+
 // Top-up functionality
 function performTopUp(amount, showConfirmation = true) {
     // Validation
@@ -699,6 +756,9 @@ if (typeof module !== 'undefined' && module.exports) {
         getCasinoBalance,
         setCasinoBalance,
         updateBalance,
+        recordGameBet,
+        recordGameWin,
+        recordGamePush,
         performTopUp,
         getTransactionHistory,
         clearTransactionHistory,

@@ -404,17 +404,8 @@
     </p>
   </div>
 </footer>
+  <script src="shared-modern.js"></script>
   <script>
-    // Shared balance utilities
-    function getCasinoBalance() {
-      let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-      if (isNaN(bal)) bal = 1000;
-      return bal;
-    }
-    function setCasinoBalance(newBalance) {
-      localStorage.setItem('pyramidCasinoBalance', newBalance);
-    }
-
     // Game statistics utilities
     function getGameStats() {
       const stats = localStorage.getItem('pyramidCoinStats');
@@ -508,9 +499,10 @@
         return;
       }
       
-      balance -= bet;
+      // Record the bet transaction
+      recordGameBet('Coin Flip', bet);
+      balance = getCasinoBalance(); // Update local balance
       balanceEl.textContent = balance;
-      setCasinoBalance(balance);
       
       flipBtn.disabled = true;
       coinEl.classList.add('flipping');
@@ -530,9 +522,9 @@
         if (result === selectedSide) {
           // Win
           const winnings = bet * 2;
-          balance += winnings;
+          recordGameWin('Coin Flip', winnings, `${result} side`);
+          balance = getCasinoBalance(); // Update local balance
           balanceEl.textContent = balance;
-          setCasinoBalance(balance);
           
           gameStats.wins++;
           
@@ -568,6 +560,5 @@
       }, 1000);
     };
   </script>
-<script src="shared-modern.js"></script>
 </body>
 </html>

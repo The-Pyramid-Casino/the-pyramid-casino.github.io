@@ -294,7 +294,7 @@
         alert("You don't have enough chips!");
         return;
       }
-      updateBalance(-bet, 'loss', `Blackjack bet: ${bet} chips`);
+      recordGameBet('Blackjack', bet);
       updateBalanceDisplay();
       deck = createDeck();
       playerHand = [deck.pop(), deck.pop()];
@@ -311,7 +311,7 @@
       if (handValue(playerHand) === 21 && handValue(dealerHand) !== 21) {
         setTimeout(() => {
           const winAmount = Math.floor(bet * 2.5);
-          updateBalance(winAmount, 'win', `Blackjack! 3:2 payout: ${winAmount} chips`);
+          recordGameWin('Blackjack', winAmount, '3:2 payout');
           updateBalanceDisplay();
           endHand("🎉 Blackjack! You win 3:2 payout!");
           if (typeof showNotification === 'function') {
@@ -322,7 +322,7 @@
       }
       if (handValue(playerHand) === 21 && handValue(dealerHand) === 21) {
         setTimeout(() => {
-          updateBalance(bet, 'win', `Push - both have Blackjack, bet returned: ${bet} chips`);
+          recordGamePush('Blackjack', bet, 'both have Blackjack');
           updateBalanceDisplay();
           endHand("🤝 Push! Both have Blackjack.");
           if (typeof showNotification === 'function') {
@@ -368,7 +368,7 @@
       let dealerVal = handValue(dealerHand);
       if (dealerVal > 21) {
         const winAmount = bet * 2;
-        updateBalance(winAmount, 'win', `Dealer busts! Win: ${winAmount} chips`);
+        recordGameWin('Blackjack', winAmount, 'dealer busts');
         updateBalanceDisplay();
         if (typeof showNotification === 'function') {
           showNotification("🎉 Dealer Busts! You Win!", 'win');
@@ -382,14 +382,14 @@
         endHand("😔 Dealer wins.");
       } else if (dealerVal < playerVal) {
         const winAmount = bet * 2;
-        updateBalance(winAmount, 'win', `Blackjack win: ${winAmount} chips`);
+        recordGameWin('Blackjack', winAmount, 'player wins');
         updateBalanceDisplay();
         if (typeof showNotification === 'function') {
           showNotification("🎉 You Win!", 'win');
         }
         endHand("🎉 You win!");
       } else {
-        updateBalance(bet, 'win', `Push - tie, bet returned: ${bet} chips`);
+        recordGamePush('Blackjack', bet, 'tie');
         updateBalanceDisplay();
         if (typeof showNotification === 'function') {
           showNotification("🤝 Push - It's a Tie", 'info');

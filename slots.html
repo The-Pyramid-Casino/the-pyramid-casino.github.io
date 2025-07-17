@@ -267,16 +267,6 @@
   </footer>
   <script src="shared-modern.js"></script>
   <script>
-    // Shared balance utilities
-    function getCasinoBalance() {
-      let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-      if (isNaN(bal)) bal = 1000;
-      return bal;
-    }
-    function setCasinoBalance(newBalance) {
-      localStorage.setItem('pyramidCasinoBalance', newBalance);
-    }
-
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Slot Game Logic
@@ -304,9 +294,8 @@
 
     let balance = getCasinoBalance();
 
-    function setBalance(val) {
-      balance = val;
-      setCasinoBalance(val);
+    function updateBalanceDisplay() {
+      balance = getCasinoBalance();
       balanceEl.textContent = balance;
     }
     function setBet(val) {
@@ -374,7 +363,7 @@
     }
 
     function updateUI() {
-      setBalance(getCasinoBalance());
+      updateBalanceDisplay();
       setBet(Number(betInput.value));
       spinBtn.disabled = (balance <= 0 || Number(betInput.value) < 1 || Number(betInput.value) > balance);
       if (balance <= 0) {
@@ -390,7 +379,11 @@
         resultEl.style.color = "#f3e9dc";
         return;
       }
-      setBalance(balance - bet);
+      
+      // Record the bet transaction
+      recordGameBet('Slots', bet);
+      balance = getCasinoBalance(); // Update local balance variable
+      
       spinBtn.disabled = true;
       resultEl.textContent = "Spinning...";
       resultEl.style.color = "#f3e9dc";
@@ -405,7 +398,14 @@
           let reelIdxs = spinReels();
           displayReels(reelIdxs);
           let res = evaluate(reelIdxs, bet);
-          if (res.win) setBalance(balance + res.amount);
+          
+          // Record win transaction if player wins
+          if (res.win) {
+            const winDetails = `${symbols[reelIdxs[0]].name} symbols, payout ${res.amount}`;
+            recordGameWin('Slots', res.amount, winDetails);
+            balance = getCasinoBalance(); // Update local balance variable
+          }
+          
           resultEl.textContent = res.msg;
           resultEl.style.color = res.color;
           updateUI();
