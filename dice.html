@@ -117,12 +117,12 @@
       transition: background 0.2s;
     }
     .bet-controls button:hover {
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
     }
     .reset-btn {
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
       border-radius: 8px;
       border: none;
       font-size: 0.97rem;
@@ -131,9 +131,11 @@
       cursor: pointer;
       box-shadow: 0 2px 6px #0002;
       transition: background 0.15s;
+      text-decoration: none;
+      display: inline-block;
     }
     .reset-btn:hover {
-      background: #ffe277;
+      background: #43c734;
     }
     .bet-types {
       display: grid;
@@ -156,8 +158,8 @@
     }
     .bet-option.selected {
       border-color: #f9d923;
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
     }
     .dice-area {
       margin: 2rem 0;
@@ -179,7 +181,7 @@
       justify-content: center;
       font-size: 2rem;
       font-weight: bold;
-      color: #18122b;
+      color: #fff;
       box-shadow: 0 4px 8px #0003;
       transition: transform 0.3s;
     }
@@ -204,8 +206,8 @@
       margin: 1rem 0;
     }
     .roll-btn:hover:not(:disabled) {
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
     }
     .roll-btn:disabled {
       opacity: 0.5;
@@ -281,7 +283,8 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="index.html#games">Games</a></li>
-        <li><a href="index.html#about">About</a></li>
+        <li><a href="topup.html">Top Up</a></li>
+        <li><a href="history.html">History</a></li>
         <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
       </ul>
     </nav>
@@ -294,7 +297,7 @@
       <div class="balance-row">
         <span>Balance:</span>
         <span id="balance">1000</span>
-        <button class="reset-btn" onclick="setCasinoBalance(1000); window.location.reload();">Reset</button>
+        <a href="topup.html" class="reset-btn">💳 Top Up</a>
       </div>
       <div class="bet-controls">
         <label for="bet" style="font-weight:bold;">Bet:</label>
