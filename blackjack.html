@@ -29,8 +29,8 @@
       margin-bottom: 1.2em;
     }
     .reset-btn {
-      background: #f9d923;
-      color: #18122b;
+      background: #43c734;
+      color: #fff;
       border-radius: 8px;
       border: none;
       font-size: 0.97rem;
@@ -39,9 +39,11 @@
       cursor: pointer;
       box-shadow: 0 2px 6px #0002;
       transition: background 0.15s;
+      text-decoration: none;
+      display: inline-block;
     }
     .reset-btn:hover {
-      background: #ffd924;
+      background: #2ea827;
     }
     #betting-area input[type=number] {
       background: #f3e9dc;
@@ -153,7 +155,8 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="index.html#games">Games</a></li>
-        <li><a href="index.html#about">About</a></li>       
+        <li><a href="topup.html">Top Up</a></li>
+        <li><a href="history.html">History</a></li>       
         <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
       </ul>
     </nav>
@@ -165,7 +168,7 @@
       <button class="instructions-btn" onclick="showInstructions('Blackjack', GAME_INSTRUCTIONS['Blackjack'])" style="margin-bottom: 15px;">ℹ️ How to Play</button>
       <div class="balance-row">
         <span>Balance: <span id="balance">1000</span></span>
-        <button class="reset-btn" onclick="setCasinoBalance(1000); window.location.reload();">Reset</button>
+        <a href="topup.html" class="reset-btn">💳 Top Up</a>
       </div>
       <div id="betting-area">
         <span class="bet-label">Place your bet:</span>
@@ -206,15 +209,7 @@
   </footer>
   <script src="shared-modern.js"></script>
   <script>
-    // Shared balance utilities (matches your site system)
-    function getCasinoBalance() {
-      let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-      if (isNaN(bal)) bal = 1000;
-      return bal;
-    }
-    function setCasinoBalance(newBalance) {
-      localStorage.setItem('pyramidCasinoBalance', newBalance);
-    }
+    // Use shared transaction system
     function updateBalanceDisplay() {
       const balanceElement = document.getElementById('balance');
       const currentBalance = getCasinoBalance();
@@ -299,7 +294,7 @@
         alert("You don't have enough chips!");
         return;
       }
-      setCasinoBalance(getCasinoBalance() - bet);
+      updateBalance(-bet, 'loss', `Blackjack bet: ${bet} chips`);
       updateBalanceDisplay();
       deck = createDeck();
       playerHand = [deck.pop(), deck.pop()];
@@ -315,7 +310,8 @@
       // Check for initial blackjack
       if (handValue(playerHand) === 21 && handValue(dealerHand) !== 21) {
         setTimeout(() => {
-          setCasinoBalance(getCasinoBalance() + Math.floor(bet * 2.5));
+          const winAmount = Math.floor(bet * 2.5);
+          updateBalance(winAmount, 'win', `Blackjack! 3:2 payout: ${winAmount} chips`);
           updateBalanceDisplay();
           endHand("🎉 Blackjack! You win 3:2 payout!");
           if (typeof showNotification === 'function') {
@@ -326,7 +322,7 @@
       }
       if (handValue(playerHand) === 21 && handValue(dealerHand) === 21) {
         setTimeout(() => {
-          setCasinoBalance(getCasinoBalance() + bet);
+          updateBalance(bet, 'win', `Push - both have Blackjack, bet returned: ${bet} chips`);
           updateBalanceDisplay();
           endHand("🤝 Push! Both have Blackjack.");
           if (typeof showNotification === 'function') {
@@ -371,26 +367,29 @@
       let playerVal = handValue(playerHand);
       let dealerVal = handValue(dealerHand);
       if (dealerVal > 21) {
-        setCasinoBalance(getCasinoBalance() + bet * 2);
+        const winAmount = bet * 2;
+        updateBalance(winAmount, 'win', `Dealer busts! Win: ${winAmount} chips`);
         updateBalanceDisplay();
         if (typeof showNotification === 'function') {
           showNotification("🎉 Dealer Busts! You Win!", 'win');
         }
         endHand("🎉 Dealer busts! You win!");
       } else if (dealerVal > playerVal) {
+        // Player already lost the bet when it was placed
         if (typeof showNotification === 'function') {
           showNotification("😔 Dealer Wins", 'lose');
         }
         endHand("😔 Dealer wins.");
       } else if (dealerVal < playerVal) {
-        setCasinoBalance(getCasinoBalance() + bet * 2);
+        const winAmount = bet * 2;
+        updateBalance(winAmount, 'win', `Blackjack win: ${winAmount} chips`);
         updateBalanceDisplay();
         if (typeof showNotification === 'function') {
           showNotification("🎉 You Win!", 'win');
         }
         endHand("🎉 You win!");
       } else {
-        setCasinoBalance(getCasinoBalance() + bet);
+        updateBalance(bet, 'win', `Push - tie, bet returned: ${bet} chips`);
         updateBalanceDisplay();
         if (typeof showNotification === 'function') {
           showNotification("🤝 Push - It's a Tie", 'info');

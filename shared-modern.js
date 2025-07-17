@@ -492,6 +492,200 @@ const GAME_INSTRUCTIONS = {
     `
 };
 
+// Transaction System
+const TRANSACTION_STORAGE_KEY = 'pyramidCasinoTransactions';
+const DAILY_TOPUP_KEY = 'pyramidCasinoDailyTopups';
+const MAX_DAILY_TOPUPS = 5;
+const MAX_TOPUP_AMOUNT = 10000;
+
+// Enhanced balance functions with transaction recording
+function getCasinoBalance() {
+    let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+    if (isNaN(bal)) bal = 1000;
+    return bal;
+}
+
+function setCasinoBalance(newBalance, transactionType = 'unknown', amount = 0, description = '') {
+    const oldBalance = getCasinoBalance();
+    localStorage.setItem('pyramidCasinoBalance', newBalance);
+    
+    // Record transaction if there's a change
+    if (oldBalance !== newBalance && transactionType !== 'unknown') {
+        recordTransaction(transactionType, amount, oldBalance, newBalance, description);
+    }
+}
+
+// Transaction recording system
+function recordTransaction(type, amount, oldBalance, newBalance, description = '') {
+    const transactions = getTransactionHistory();
+    const transaction = {
+        id: Date.now() + Math.random(), // Unique ID
+        timestamp: new Date().toISOString(),
+        type: type, // 'win', 'loss', 'topup', 'reset'
+        amount: amount,
+        oldBalance: oldBalance,
+        newBalance: newBalance,
+        description: description
+    };
+    
+    transactions.push(transaction);
+    
+    // Keep only last 1000 transactions to prevent storage bloat
+    if (transactions.length > 1000) {
+        transactions.splice(0, transactions.length - 1000);
+    }
+    
+    localStorage.setItem(TRANSACTION_STORAGE_KEY, JSON.stringify(transactions));
+}
+
+function getTransactionHistory() {
+    try {
+        const stored = localStorage.getItem(TRANSACTION_STORAGE_KEY);
+        return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+        console.error('Error loading transaction history:', e);
+        return [];
+    }
+}
+
+function clearTransactionHistory() {
+    if (confirm('🗑️ Are you sure you want to clear ALL transaction history?\n\n⚠️ This action cannot be undone!')) {
+        if (confirm('🚨 FINAL WARNING: This will permanently delete your entire transaction history!\n\nClick OK to proceed or Cancel to keep your history.')) {
+            localStorage.removeItem(TRANSACTION_STORAGE_KEY);
+            showNotification('🗑️ Transaction history cleared!', 'info');
+            return true;
+        }
+    }
+    return false;
+}
+
+// Daily top-up limit system
+function getTodayTopupCount() {
+    try {
+        const today = new Date().toDateString();
+        const stored = localStorage.getItem(DAILY_TOPUP_KEY);
+        const dailyData = stored ? JSON.parse(stored) : {};
+        
+        return dailyData[today] || 0;
+    } catch (e) {
+        console.error('Error loading daily topup count:', e);
+        return 0;
+    }
+}
+
+function incrementTodayTopupCount() {
+    try {
+        const today = new Date().toDateString();
+        const stored = localStorage.getItem(DAILY_TOPUP_KEY);
+        const dailyData = stored ? JSON.parse(stored) : {};
+        
+        dailyData[today] = (dailyData[today] || 0) + 1;
+        
+        // Clean old data (keep only last 30 days)
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        
+        Object.keys(dailyData).forEach(date => {
+            if (new Date(date) < thirtyDaysAgo) {
+                delete dailyData[date];
+            }
+        });
+        
+        localStorage.setItem(DAILY_TOPUP_KEY, JSON.stringify(dailyData));
+        return dailyData[today];
+    } catch (e) {
+        console.error('Error incrementing daily topup count:', e);
+        return 1;
+    }
+}
+
+function canTopUpToday() {
+    return getTodayTopupCount() < MAX_DAILY_TOPUPS;
+}
+
+// Enhanced balance update with transaction recording
+function updateBalance(amount, type, description = '') {
+    const currentBalance = getCasinoBalance();
+    const newBalance = Math.max(0, currentBalance + amount);
+    setCasinoBalance(newBalance, type, Math.abs(amount), description);
+    
+    // Update UI if balance element exists
+    const balanceEl = document.getElementById('balance');
+    if (balanceEl) {
+        if (typeof updateBalanceWithAnimation === 'function') {
+            updateBalanceWithAnimation(balanceEl, newBalance);
+        } else {
+            balanceEl.textContent = newBalance;
+        }
+    }
+    
+    return newBalance;
+}
+
+// Top-up functionality
+function performTopUp(amount, showConfirmation = true) {
+    // Validation
+    if (!amount || amount <= 0) {
+        showNotification('❌ Please enter a valid amount!', 'lose');
+        return false;
+    }
+    
+    if (amount > MAX_TOPUP_AMOUNT) {
+        showNotification(`❌ Maximum top-up amount is ${MAX_TOPUP_AMOUNT} chips!`, 'lose');
+        return false;
+    }
+    
+    if (!canTopUpToday()) {
+        const remaining = MAX_DAILY_TOPUPS - getTodayTopupCount();
+        showNotification(`❌ Daily top-up limit reached! (${MAX_DAILY_TOPUPS}/day)\nTry again tomorrow!`, 'lose');
+        return false;
+    }
+    
+    // Confirmation popup
+    if (showConfirmation) {
+        const remainingTopups = MAX_DAILY_TOPUPS - getTodayTopupCount();
+        if (!confirm(`💰 Top up ${amount} chips?\n\n📊 Current Balance: ${getCasinoBalance()}\n📈 New Balance: ${getCasinoBalance() + amount}\n\n🔄 Remaining top-ups today: ${remainingTopups - 1}/5\n\nProceed with top-up?`)) {
+            return false;
+        }
+    }
+    
+    // Perform top-up
+    const oldBalance = getCasinoBalance();
+    const newBalance = updateBalance(amount, 'topup', `Top-up of ${amount} chips`);
+    incrementTodayTopupCount();
+    
+    const remainingTopups = MAX_DAILY_TOPUPS - getTodayTopupCount();
+    showNotification(`✨ Successfully topped up ${amount} chips!\n💰 New Balance: ${newBalance}\n🔄 Remaining top-ups today: ${remainingTopups}`, 'win', 4000);
+    
+    return true;
+}
+
+// Utility functions for transaction display
+function formatTransactionType(type) {
+    const types = {
+        'win': '🎉 Win',
+        'loss': '💸 Loss', 
+        'topup': '💰 Top-up',
+        'reset': '🔄 Reset',
+        'bonus': '🎁 Bonus'
+    };
+    return types[type] || type;
+}
+
+function formatCurrency(amount) {
+    return amount.toLocaleString();
+}
+
+function formatDate(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+}
+
+// Confirmation dialog helper
+function confirmAction(message, title = 'Confirm Action') {
+    return confirm(`${title}\n\n${message}`);
+}
+
 // Export for use in other scripts
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
@@ -501,6 +695,20 @@ if (typeof module !== 'undefined' && module.exports) {
         updateBalanceWithAnimation,
         showNotification,
         addButtonClickEffect,
-        GAME_INSTRUCTIONS
+        GAME_INSTRUCTIONS,
+        getCasinoBalance,
+        setCasinoBalance,
+        updateBalance,
+        performTopUp,
+        getTransactionHistory,
+        clearTransactionHistory,
+        canTopUpToday,
+        getTodayTopupCount,
+        formatTransactionType,
+        formatCurrency,
+        formatDate,
+        confirmAction,
+        MAX_DAILY_TOPUPS,
+        MAX_TOPUP_AMOUNT
     };
 }
