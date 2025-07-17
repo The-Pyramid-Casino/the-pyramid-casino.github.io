@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Transaction History | Pyramid Casino</title>
+  <meta name="description" content="View your transaction history at Pyramid Casino - track your wins, losses, and top-ups." />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="shared-modern.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: #18122b;
+      color: #f3e9dc;
+      min-height: 100vh;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #a0843a;
+      color: #fff;
+      padding: 1rem 2rem;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+    }
+    .header nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.2rem;
+      margin: 0;
+      padding: 0;
+    }
+    .header nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .header nav a:hover {
+      color: #f3e9dc;
+      text-shadow: 0 0 5px #f9d923;
+    }
+    .main-content {
+      padding: 2rem 1rem 3rem 1rem;
+      min-height: 60vh;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .balance-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 1.12rem;
+      color: #ffe277;
+      font-weight: bold;
+      background: rgba(35, 27, 54, 0.8);
+      padding: 10px 20px;
+      border-radius: 25px;
+      border: 1px solid #f9d923;
+    }
+    .topup-btn {
+      background: #43c734;
+      color: #fff;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.97rem;
+      font-weight: bold;
+      padding: 0.28em 1.1em;
+      cursor: pointer;
+      box-shadow: 0 2px 6px #0002;
+      transition: background 0.15s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .topup-btn:hover {
+      background: #2ea827;
+    }
+    .page-title {
+      text-align: center;
+      color: #f9d923;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      text-shadow: 0 0 10px rgba(249, 217, 35, 0.3);
+    }
+    .stats-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .stat-card {
+      background: #231b36;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+      min-width: 140px;
+      border: 1px solid rgba(249, 217, 35, 0.2);
+    }
+    .stat-card h3 {
+      color: #f9d923;
+      margin: 0 0 0.5rem 0;
+      font-size: 0.9rem;
+    }
+    .stat-card .stat-value {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #ffe277;
+    }
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .control-btn {
+      background: #a0843a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .control-btn:hover {
+      background: #f9d923;
+      color: #18122b;
+    }
+    .control-btn.clear-btn {
+      background: #d7263d;
+    }
+    .control-btn.clear-btn:hover {
+      background: #b91c2e;
+    }
+    .filter-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+    .filter-row select, .filter-row input {
+      background: #231b36;
+      color: #f3e9dc;
+      border: 1px solid #a0843a;
+      border-radius: 6px;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .transaction-table {
+      background: #231b36;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px #0005;
+      border: 1px solid rgba(249, 217, 35, 0.2);
+    }
+    .table-header {
+      background: #a0843a;
+      color: #fff;
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 2fr;
+      gap: 1rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    .transaction-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 2fr;
+      gap: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid rgba(160, 132, 58, 0.2);
+      align-items: center;
+      text-align: center;
+    }
+    .transaction-row:last-child {
+      border-bottom: none;
+    }
+    .transaction-row:nth-child(even) {
+      background: rgba(24, 18, 43, 0.5);
+    }
+    .transaction-type {
+      font-weight: bold;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+    .type-win {
+      background: rgba(67, 199, 52, 0.2);
+      color: #43c734;
+      border: 1px solid #43c734;
+    }
+    .type-loss {
+      background: rgba(215, 38, 61, 0.2);
+      color: #d7263d;
+      border: 1px solid #d7263d;
+    }
+    .type-topup {
+      background: rgba(249, 217, 35, 0.2);
+      color: #f9d923;
+      border: 1px solid #f9d923;
+    }
+    .type-reset {
+      background: rgba(160, 132, 58, 0.2);
+      color: #a0843a;
+      border: 1px solid #a0843a;
+    }
+    .amount-positive {
+      color: #43c734;
+      font-weight: bold;
+    }
+    .amount-negative {
+      color: #d7263d;
+      font-weight: bold;
+    }
+    .amount-neutral {
+      color: #f9d923;
+      font-weight: bold;
+    }
+    .no-transactions {
+      text-align: center;
+      padding: 3rem;
+      color: #a0843a;
+      font-size: 1.1rem;
+    }
+    .footer {
+      margin-top: 3rem;
+      background: linear-gradient(135deg, #231b36 0%, #0f0a1a 50%, #231b36 100%);
+      border-top: 2px solid #f9d923;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      padding: 15px 20px;
+    }
+    @media (max-width: 768px) {
+      .table-header, .transaction-row {
+        grid-template-columns: 1fr;
+        text-align: left;
+      }
+      .table-header {
+        display: none;
+      }
+      .transaction-row {
+        display: block;
+        padding: 1.5rem;
+      }
+      .transaction-row > div {
+        margin-bottom: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .transaction-row > div::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #f9d923;
+        margin-right: 1rem;
+      }
+      .stats-row {
+        flex-direction: column;
+        align-items: center;
+      }
+      .stat-card {
+        width: 100%;
+        max-width: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="topup.html">Top Up</a></li>
+        <li><a href="history.html">History</a></li>
+        <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <main class="main-content">
+    <div class="balance-row">
+      <span>💰 Current Balance: <span id="balance">1000</span> chips</span>
+      <a href="topup.html" class="topup-btn">💳 Top Up</a>
+    </div>
+    
+    <h1 class="page-title">📊 Transaction History</h1>
+    
+    <div class="stats-row">
+      <div class="stat-card">
+        <h3>Total Transactions</h3>
+        <div class="stat-value" id="total-transactions">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Total Winnings</h3>
+        <div class="stat-value" id="total-winnings">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Total Losses</h3>
+        <div class="stat-value" id="total-losses">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Total Top-ups</h3>
+        <div class="stat-value" id="total-topups">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Today's Top-ups</h3>
+        <div class="stat-value" id="today-topups">0/5</div>
+      </div>
+    </div>
+    
+    <div class="controls">
+      <button class="control-btn" onclick="refreshHistory()">🔄 Refresh</button>
+      <button class="control-btn" onclick="exportHistory()">📥 Export</button>
+      <button class="control-btn clear-btn" onclick="clearHistory()">🗑️ Clear History</button>
+    </div>
+    
+    <div class="filter-row">
+      <label for="filter-type">Filter by Type:</label>
+      <select id="filter-type" onchange="filterTransactions()">
+        <option value="all">All Types</option>
+        <option value="win">Wins</option>
+        <option value="loss">Losses</option>
+        <option value="topup">Top-ups</option>
+        <option value="reset">Resets</option>
+      </select>
+      
+      <label for="filter-days">Last:</label>
+      <select id="filter-days" onchange="filterTransactions()">
+        <option value="all">All Time</option>
+        <option value="1">24 Hours</option>
+        <option value="7">7 Days</option>
+        <option value="30">30 Days</option>
+      </select>
+      
+      <label for="search-desc">Search:</label>
+      <input type="text" id="search-desc" placeholder="Search description..." onkeyup="filterTransactions()">
+    </div>
+    
+    <div class="transaction-table">
+      <div class="table-header">
+        <div>Date & Time</div>
+        <div>Type</div>
+        <div>Amount</div>
+        <div>Old Balance</div>
+        <div>New Balance</div>
+        <div>Description</div>
+      </div>
+      <div id="transaction-list"></div>
+    </div>
+  </main>
+  
+  <footer class="footer">
+    <div style="padding: 10px 0;">
+      <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
+      <p style="margin: 5px 0; font-size: 1.1rem;">
+        📧 <strong>Contact us:</strong> 
+        <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;">casino.the.pyramid@gmail.com</a>
+      </p>
+      <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
+        💰 No real money gambling | 🔞 18+ for entertainment
+      </p>
+    </div>
+  </footer>
+  
+  <script src="shared-modern.js"></script>
+  <script>
+    var allTransactions = [];
+    
+    function initHistory() {
+      document.getElementById('balance').textContent = getCasinoBalance();
+      document.getElementById('year').textContent = new Date().getFullYear();
+      loadTransactions();
+      updateStats();
+    }
+    
+    function loadTransactions() {
+      allTransactions = getTransactionHistory();
+      displayTransactions(allTransactions);
+    }
+    
+    function displayTransactions(transactions) {
+      var listElement = document.getElementById('transaction-list');
+      
+      if (transactions.length === 0) {
+        listElement.innerHTML = '<div class="no-transactions">📝 No transactions found.<br><br>Start playing games to see your transaction history!</div>';
+        return;
+      }
+      
+      // Sort by newest first
+      var sortedTransactions = transactions.slice().sort(function(a, b) { 
+        return new Date(b.timestamp) - new Date(a.timestamp); 
+      });
+      
+      var transactionHTML = '';
+      for (var i = 0; i < sortedTransactions.length; i++) {
+        var transaction = sortedTransactions[i];
+        var typeClass = 'type-' + transaction.type;
+        var amountClass = transaction.amount > 0 ? 'amount-positive' : 
+                         transaction.amount < 0 ? 'amount-negative' : 'amount-neutral';
+        var amountDisplay = transaction.amount > 0 ? '+' + formatCurrency(transaction.amount) :
+                           transaction.amount < 0 ? formatCurrency(transaction.amount) :
+                           formatCurrency(Math.abs(transaction.amount));
+        
+        transactionHTML += 
+          '<div class="transaction-row">' +
+            '<div data-label="Date & Time:">' + formatDate(transaction.timestamp) + '</div>' +
+            '<div data-label="Type:"><span class="transaction-type ' + typeClass + '">' + formatTransactionType(transaction.type) + '</span></div>' +
+            '<div data-label="Amount:" class="' + amountClass + '">' + amountDisplay + '</div>' +
+            '<div data-label="Old Balance:">' + formatCurrency(transaction.oldBalance) + '</div>' +
+            '<div data-label="New Balance:">' + formatCurrency(transaction.newBalance) + '</div>' +
+            '<div data-label="Description:">' + (transaction.description || '-') + '</div>' +
+          '</div>';
+      }
+      
+      listElement.innerHTML = transactionHTML;
+    }
+    
+    function updateStats() {
+      var transactions = allTransactions;
+      var totalTransactions = transactions.length;
+      
+      var wins = [];
+      var losses = [];
+      var topups = [];
+      
+      for (var i = 0; i < transactions.length; i++) {
+        if (transactions[i].type === 'win') wins.push(transactions[i]);
+        if (transactions[i].type === 'loss') losses.push(transactions[i]);
+        if (transactions[i].type === 'topup') topups.push(transactions[i]);
+      }
+      
+      var totalWinnings = 0;
+      for (var i = 0; i < wins.length; i++) {
+        totalWinnings += wins[i].amount;
+      }
+      
+      var totalLosses = 0;
+      for (var i = 0; i < losses.length; i++) {
+        totalLosses += losses[i].amount;
+      }
+      totalLosses = Math.abs(totalLosses);
+      
+      var totalTopupAmount = 0;
+      for (var i = 0; i < topups.length; i++) {
+        totalTopupAmount += topups[i].amount;
+      }
+      
+      document.getElementById('total-transactions').textContent = totalTransactions;
+      document.getElementById('total-winnings').textContent = formatCurrency(totalWinnings);
+      document.getElementById('total-losses').textContent = formatCurrency(totalLosses);
+      document.getElementById('total-topups').textContent = formatCurrency(totalTopupAmount);
+      document.getElementById('today-topups').textContent = getTodayTopupCount() + '/' + MAX_DAILY_TOPUPS;
+    }
+    
+    function filterTransactions() {
+      var typeFilter = document.getElementById('filter-type').value;
+      var daysFilter = document.getElementById('filter-days').value;
+      var searchFilter = document.getElementById('search-desc').value.toLowerCase();
+      
+      var filtered = allTransactions.slice(); // Copy array
+      
+      // Filter by type
+      if (typeFilter !== 'all') {
+        var newFiltered = [];
+        for (var i = 0; i < filtered.length; i++) {
+          if (filtered[i].type === typeFilter) {
+            newFiltered.push(filtered[i]);
+          }
+        }
+        filtered = newFiltered;
+      }
+      
+      // Filter by days
+      if (daysFilter !== 'all') {
+        var daysAgo = new Date();
+        daysAgo.setDate(daysAgo.getDate() - parseInt(daysFilter));
+        var newFiltered = [];
+        for (var i = 0; i < filtered.length; i++) {
+          if (new Date(filtered[i].timestamp) >= daysAgo) {
+            newFiltered.push(filtered[i]);
+          }
+        }
+        filtered = newFiltered;
+      }
+      
+      // Filter by search term
+      if (searchFilter) {
+        var newFiltered = [];
+        for (var i = 0; i < filtered.length; i++) {
+          var desc = (filtered[i].description || '').toLowerCase();
+          if (desc.indexOf(searchFilter) !== -1) {
+            newFiltered.push(filtered[i]);
+          }
+        }
+        filtered = newFiltered;
+      }
+      
+      displayTransactions(filtered);
+    }
+    
+    function refreshHistory() {
+      loadTransactions();
+      updateStats();
+      showNotification('🔄 Transaction history refreshed!', 'info');
+    }
+    
+    function exportHistory() {
+      if (allTransactions.length === 0) {
+        showNotification('❌ No transactions to export!', 'lose');
+        return;
+      }
+      
+      var csvRows = ['Date,Time,Type,Amount,Old Balance,New Balance,Description'];
+      
+      for (var i = 0; i < allTransactions.length; i++) {
+        var t = allTransactions[i];
+        var date = new Date(t.timestamp);
+        var description = (t.description || '').replace(/"/g, '""');
+        var row = [
+          date.toLocaleDateString(),
+          date.toLocaleTimeString(),
+          t.type,
+          t.amount,
+          t.oldBalance,
+          t.newBalance,
+          '"' + description + '"'
+        ].join(',');
+        csvRows.push(row);
+      }
+      
+      var csvContent = "data:text/csv;charset=utf-8," + csvRows.join('\n');
+      var encodedUri = encodeURI(csvContent);
+      var link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', 'pyramid-casino-history-' + new Date().toISOString().split('T')[0] + '.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      showNotification('📥 Transaction history exported!', 'win');
+    }
+    
+    function clearHistory() {
+      if (clearTransactionHistory()) {
+        loadTransactions();
+        updateStats();
+      }
+    }
+    
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', initHistory);
+  </script>
+</body>
+</html>

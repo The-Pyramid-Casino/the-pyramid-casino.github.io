@@ -117,12 +117,12 @@
       transition: background 0.2s;
     }
     .bet-controls button:hover {
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
     }
     .reset-btn {
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
       border-radius: 8px;
       border: none;
       font-size: 0.97rem;
@@ -131,9 +131,11 @@
       cursor: pointer;
       box-shadow: 0 2px 6px #0002;
       transition: background 0.15s;
+      text-decoration: none;
+      display: inline-block;
     }
     .reset-btn:hover {
-      background: #ffe277;
+      background: #43c734;
     }
     .hand {
       display: flex;
@@ -154,7 +156,7 @@
       justify-content: center;
       font-size: 0.8rem;
       font-weight: bold;
-      color: #18122b;
+      color: #fff;
       cursor: pointer;
       transition: all 0.2s;
       position: relative;
@@ -172,7 +174,7 @@
       color: #d7263d;
     }
     .card.black {
-      color: #18122b;
+      color: #fff;
     }
     .card.empty {
       background: #18122b;
@@ -207,8 +209,8 @@
       transition: background 0.2s;
     }
     .game-btn:hover:not(:disabled) {
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
     }
     .game-btn:disabled {
       opacity: 0.5;
@@ -268,7 +270,8 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="index.html#games">Games</a></li>
-        <li><a href="index.html#about">About</a></li>
+        <li><a href="topup.html">Top Up</a></li>
+        <li><a href="history.html">History</a></li>
         <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
       </ul>
     </nav>
@@ -281,7 +284,7 @@
       <div class="balance-row">
         <span>Balance:</span>
         <span id="balance">1000</span>
-        <button class="reset-btn" onclick="setCasinoBalance(1000); window.location.reload();">Reset</button>
+        <a href="topup.html" class="reset-btn">💳 Top Up</a>
       </div>
       <div class="bet-controls">
         <label for="bet" style="font-weight:bold;">Bet:</label>
@@ -327,17 +330,8 @@
     </p>
   </div>
 </footer>
+  <script src="shared-modern.js"></script>
   <script>
-    // Shared balance utilities
-    function getCasinoBalance() {
-      let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-      if (isNaN(bal)) bal = 1000;
-      return bal;
-    }
-    function setCasinoBalance(newBalance) {
-      localStorage.setItem('pyramidCasinoBalance', newBalance);
-    }
-
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Poker Game Logic
@@ -397,9 +391,10 @@
         return;
       }
       
-      balance -= bet;
+      // Record the bet transaction
+      recordGameBet('Poker', bet);
+      balance = getCasinoBalance(); // Update local balance
       balanceEl.textContent = balance;
-      setCasinoBalance(balance);
       
       const deck = shuffleDeck(createDeck());
       currentHand = deck.slice(0, 5);
@@ -433,9 +428,9 @@
       const winnings = bet * result.multiplier;
       
       if (winnings > 0) {
-        balance += winnings;
+        recordGameWin('Poker', winnings, `${result.name}`);
+        balance = getCasinoBalance(); // Update local balance
         balanceEl.textContent = balance;
-        setCasinoBalance(balance);
         handResultEl.textContent = `${result.name} - Won ${winnings} chips!`;
         handResultEl.className = 'winning';
       } else {
@@ -532,6 +527,5 @@
       return { name: 'High Card', multiplier: 0 };
     }
   </script>
-<script src="shared-modern.js"></script>
 </body>
 </html>

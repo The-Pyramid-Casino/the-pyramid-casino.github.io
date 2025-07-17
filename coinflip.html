@@ -117,12 +117,12 @@
       transition: background 0.2s;
     }
     .bet-controls button:hover {
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
     }
     .reset-btn {
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
       border-radius: 8px;
       border: none;
       font-size: 0.97rem;
@@ -131,9 +131,11 @@
       cursor: pointer;
       box-shadow: 0 2px 6px #0002;
       transition: background 0.15s;
+      text-decoration: none;
+      display: inline-block;
     }
     .reset-btn:hover {
-      background: #ffe277;
+      background: #43c734;
     }
     .side-selection {
       display: flex;
@@ -159,8 +161,8 @@
     }
     .side-btn.selected {
       border-color: #f9d923;
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
     }
     .side-btn .emoji {
       font-size: 2rem;
@@ -173,7 +175,7 @@
     .coin {
       width: 120px;
       height: 120px;
-      background: #f9d923;
+      background: #2ea827;
       border: 4px solid #a0843a;
       border-radius: 50%;
       margin: 0 auto 1rem auto;
@@ -182,7 +184,7 @@
       justify-content: center;
       font-size: 3rem;
       font-weight: bold;
-      color: #18122b;
+      color: #fff;
       box-shadow: 0 8px 16px #0005;
       transition: transform 0.3s;
     }
@@ -209,8 +211,8 @@
       margin: 1rem 0;
     }
     .flip-btn:hover:not(:disabled) {
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
     }
     .flip-btn:disabled {
       opacity: 0.5;
@@ -317,7 +319,8 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="index.html#games">Games</a></li>
-        <li><a href="index.html#about">About</a></li>
+        <li><a href="topup.html">Top Up</a></li>
+        <li><a href="history.html">History</a></li>
         <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
       </ul>
     </nav>
@@ -330,7 +333,7 @@
       <div class="balance-row">
         <span>Balance:</span>
         <span id="balance">1000</span>
-        <button class="reset-btn" onclick="setCasinoBalance(1000); window.location.reload();">Reset</button>
+        <a href="topup.html" class="reset-btn">💳 Top Up</a>
       </div>
       <div class="bet-controls">
         <label for="bet" style="font-weight:bold;">Bet:</label>
@@ -401,17 +404,8 @@
     </p>
   </div>
 </footer>
+  <script src="shared-modern.js"></script>
   <script>
-    // Shared balance utilities
-    function getCasinoBalance() {
-      let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-      if (isNaN(bal)) bal = 1000;
-      return bal;
-    }
-    function setCasinoBalance(newBalance) {
-      localStorage.setItem('pyramidCasinoBalance', newBalance);
-    }
-
     // Game statistics utilities
     function getGameStats() {
       const stats = localStorage.getItem('pyramidCoinStats');
@@ -505,9 +499,10 @@
         return;
       }
       
-      balance -= bet;
+      // Record the bet transaction
+      recordGameBet('Coin Flip', bet);
+      balance = getCasinoBalance(); // Update local balance
       balanceEl.textContent = balance;
-      setCasinoBalance(balance);
       
       flipBtn.disabled = true;
       coinEl.classList.add('flipping');
@@ -527,9 +522,9 @@
         if (result === selectedSide) {
           // Win
           const winnings = bet * 2;
-          balance += winnings;
+          recordGameWin('Coin Flip', winnings, `${result} side`);
+          balance = getCasinoBalance(); // Update local balance
           balanceEl.textContent = balance;
-          setCasinoBalance(balance);
           
           gameStats.wins++;
           
@@ -565,6 +560,5 @@
       }, 1000);
     };
   </script>
-<script src="shared-modern.js"></script>
 </body>
 </html>

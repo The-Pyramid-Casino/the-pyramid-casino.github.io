@@ -76,8 +76,8 @@
     }
     .reset-btn {
       margin-left: 10px;
-      background: #ffe277;
-      color: #18122b;
+      background: #43c734;
+      color: #fff;
       border-radius: 8px;
       border: none;
       font-size: 0.97rem;
@@ -86,9 +86,11 @@
       cursor: pointer;
       box-shadow: 0 2px 6px #0002;
       transition: background 0.15s;
+      text-decoration: none;
+      display: inline-block;
     }
     .reset-btn:hover {
-      background: #f9d923;
+      background: #2ea827;
     }
     .home {
       text-align: center;
@@ -198,7 +200,8 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="#games">Games</a></li>
-        <li><a href="#about">About</a></li>
+        <li><a href="topup.html">Top Up</a></li>
+        <li><a href="history.html">History</a></li>
         <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
       </ul>
     </nav>
@@ -206,7 +209,7 @@
   <main class="main-content">
     <div class="balance-row">
       <span>Chips: <span id="balance">1000</span></span>
-      <button class="reset-btn" onclick="setCasinoBalance(1000); window.location.reload();">Reset</button>
+      <a href="topup.html" class="reset-btn">💳 Top Up</a>
     </div>
     <div class="notice">
       <span>✨ <strong>FOR ENTERTAINMENT ONLY!</strong> ✨<br>

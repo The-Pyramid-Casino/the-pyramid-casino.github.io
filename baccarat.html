@@ -117,12 +117,12 @@
       transition: background 0.2s;
     }
     .bet-controls button:hover {
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
     }
     .reset-btn {
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
       border-radius: 8px;
       border: none;
       font-size: 0.97rem;
@@ -131,9 +131,11 @@
       cursor: pointer;
       box-shadow: 0 2px 6px #0002;
       transition: background 0.15s;
+      text-decoration: none;
+      display: inline-block;
     }
     .reset-btn:hover {
-      background: #ffe277;
+      background: #43c734;
     }
     .betting-section {
       display: grid;
@@ -160,8 +162,8 @@
     }
     .bet-option.selected {
       border-color: #f9d923;
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
     }
     .bet-amount {
       font-size: 0.9rem;
@@ -169,7 +171,7 @@
       color: #ffe277;
     }
     .bet-option.selected .bet-amount {
-      color: #18122b;
+      color: #fff;
     }
     .game-area {
       margin: 2rem 0;
@@ -204,13 +206,13 @@
       justify-content: center;
       font-size: 0.8rem;
       font-weight: bold;
-      color: #18122b;
+      color: #fff;
     }
     .card.red {
       color: #d7263d;
     }
     .card.black {
-      color: #18122b;
+      color: #fff;
     }
     .card .suit {
       font-size: 1rem;
@@ -235,8 +237,8 @@
       margin: 1rem 0;
     }
     .deal-btn:hover:not(:disabled) {
-      background: #f9d923;
-      color: #18122b;
+      background: #2ea827;
+      color: #fff;
     }
     .deal-btn:disabled {
       opacity: 0.5;
@@ -310,7 +312,8 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="index.html#games">Games</a></li>
-        <li><a href="index.html#about">About</a></li>
+        <li><a href="topup.html">Top Up</a></li>
+        <li><a href="history.html">History</a></li>
         <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
       </ul>
     </nav>
@@ -323,7 +326,7 @@
       <div class="balance-row">
         <span>Balance:</span>
         <span id="balance">1000</span>
-        <button class="reset-btn" onclick="setCasinoBalance(1000); window.location.reload();">Reset</button>
+        <a href="topup.html" class="reset-btn">💳 Top Up</a>
       </div>
       <div class="bet-controls">
         <label for="bet" style="font-weight:bold;">Bet:</label>
@@ -389,17 +392,8 @@
     </p>
   </div>
 </footer>
+  <script src="shared-modern.js"></script>
   <script>
-    // Shared balance utilities
-    function getCasinoBalance() {
-      let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-      if (isNaN(bal)) bal = 1000;
-      return bal;
-    }
-    function setCasinoBalance(newBalance) {
-      localStorage.setItem('pyramidCasinoBalance', newBalance);
-    }
-
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Baccarat Game Logic
@@ -449,9 +443,9 @@
         
         // Add bet
         currentBets[betType] += betAmount;
-        balance -= betAmount;
+        recordGameBet('Baccarat', betAmount);
+        balance = getCasinoBalance(); // Update local balance
         balanceEl.textContent = balance;
-        setCasinoBalance(balance);
         
         updateBetDisplay();
         
@@ -596,9 +590,10 @@
       }
       
       if (totalWinnings > 0) {
-        balance += Math.floor(totalWinnings);
+        const resultDetails = `${bankerTotal} vs ${playerTotal}`;
+        recordGameWin('Baccarat', Math.floor(totalWinnings), resultDetails);
+        balance = getCasinoBalance(); // Update local balance
         balanceEl.textContent = balance;
-        setCasinoBalance(balance);
         resultEl.textContent = `${resultText} Won ${Math.floor(totalWinnings)} chips!`;
         resultEl.className = 'result winning';
       } else {
@@ -625,6 +620,5 @@
     // Start with deal button disabled
     dealBtn.disabled = true;
   </script>
-<script src="shared-modern.js"></script>
 </body>
 </html>
