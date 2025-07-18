@@ -501,6 +501,106 @@ const GAME_INSTRUCTIONS = {
             </li>
         </ul>
         <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
+    `,
+
+    'Plinko': `
+        <h3>🎯 How to Play Plinko</h3>
+        <ul>
+            <li><strong>Goal:</strong> Drop a ball through pegs to land in high-value prize slots</li>
+            <li><strong>How to Play:</strong>
+                <ol>
+                    <li>Set your bet amount</li>
+                    <li>Click "Drop Ball" or the drop zone</li>
+                    <li>Watch the ball bounce through the pegs</li>
+                    <li>Win chips based on which slot the ball lands in</li>
+                </ol>
+            </li>
+            <li><strong>Prize Multipliers:</strong>
+                <ul>
+                    <li><strong>5x Jackpot:</strong> Center slot (highest payout)</li>
+                    <li><strong>2x Multiplier:</strong> Near center slots</li>
+                    <li><strong>1x Even:</strong> Return your bet</li>
+                    <li><strong>0.5x Small:</strong> Half your bet back</li>
+                    <li><strong>0.1x Tiny:</strong> Small consolation prize</li>
+                </ul>
+            </li>
+            <li><strong>Tips:</strong>
+                <ul>
+                    <li>The ball's path is random - pure chance!</li>
+                    <li>Center slots have higher payouts but are harder to hit</li>
+                    <li>Start with smaller bets to learn the game</li>
+                    <li>Watch for the satisfying ball bounce animations</li>
+                </ul>
+            </li>
+        </ul>
+        <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
+    `,
+
+    'Solitaire': `
+        <h3>♠️ How to Play Solitaire (Klondike)</h3>
+        <ul>
+            <li><strong>Goal:</strong> Move all cards to foundation piles, organized by suit from Ace to King</li>
+            <li><strong>How to Play:</strong>
+                <ol>
+                    <li>Set your bet and click "New Game"</li>
+                    <li>Build sequences in the tableau (King down to Ace, alternating colors)</li>
+                    <li>Move Aces to foundation piles when available</li>
+                    <li>Build foundation piles up by suit (A, 2, 3...K)</li>
+                    <li>Flip face-down cards by uncovering them</li>
+                </ol>
+            </li>
+            <li><strong>Scoring & Winning:</strong>
+                <ul>
+                    <li><strong>Complete Game:</strong> Win bet + time/move bonuses</li>
+                    <li><strong>Time Bonus:</strong> Faster completion = higher multiplier</li>
+                    <li><strong>Move Bonus:</strong> Fewer moves = higher multiplier</li>
+                    <li><strong>Best Strategy:</strong> Complete quickly with minimal moves</li>
+                </ul>
+            </li>
+            <li><strong>Tips:</strong>
+                <ul>
+                    <li>Always move Aces to foundations when possible</li>
+                    <li>Uncover face-down cards as priority</li>
+                    <li>Plan moves to create empty columns for Kings</li>
+                    <li>Use the hint button if you get stuck</li>
+                </ul>
+            </li>
+        </ul>
+        <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
+    `,
+
+    'Go Fish': `
+        <h3>🐟 How to Play Go Fish</h3>
+        <ul>
+            <li><strong>Goal:</strong> Collect the most "books" (sets of 4 cards of the same value)</li>
+            <li><strong>How to Play:</strong>
+                <ol>
+                    <li>Set your bet and start a new game</li>
+                    <li>You and the computer each get 7 cards</li>
+                    <li>On your turn, ask the computer for cards of a specific value</li>
+                    <li>If they have any, they give them to you and you continue</li>
+                    <li>If not, they say "Go Fish!" and you draw from the deck</li>
+                    <li>When you collect 4 of the same value, they become a "book"</li>
+                </ol>
+            </li>
+            <li><strong>Winning & Payouts:</strong>
+                <ul>
+                    <li><strong>Most Books Wins:</strong> Get more books than computer</li>
+                    <li><strong>Victory Bonus:</strong> Larger winning margin = higher payout</li>
+                    <li><strong>Tie Game:</strong> Get your bet back</li>
+                    <li><strong>Loss:</strong> Computer gets more books</li>
+                </ul>
+            </li>
+            <li><strong>Strategy Tips:</strong>
+                <ul>
+                    <li>Remember what cards the computer asks for</li>
+                    <li>Ask for values you have multiple of</li>
+                    <li>Pay attention to what cards are played</li>
+                    <li>Try to complete books quickly</li>
+                </ul>
+            </li>
+        </ul>
+        <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
     `
 };
 
