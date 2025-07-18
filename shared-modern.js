@@ -601,6 +601,39 @@ const GAME_INSTRUCTIONS = {
             </li>
         </ul>
         <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
+    `,
+    
+    'Coin Pusher': `
+        <h3>🪙 How to Play Coin Pusher</h3>
+        <ul>
+            <li><strong>Goal:</strong> Push coins over the edge to collect them and win prizes</li>
+            <li><strong>How to Play:</strong>
+                <ol>
+                    <li>Set how many coins you want to drop (1-50)</li>
+                    <li>Click "Drop Coins" to release them from the top</li>
+                    <li>Watch as coins fall and push existing coins forward</li>
+                    <li>Collect coins that fall into the collection zone</li>
+                    <li>Find bonus prizes for extra multipliers!</li>
+                </ol>
+            </li>
+            <li><strong>Winning & Payouts:</strong>
+                <ul>
+                    <li><strong>Collected Coins:</strong> 1 chip per coin collected</li>
+                    <li><strong>Bonus Prizes:</strong> Special red tokens worth 5 chips each</li>
+                    <li><strong>Pusher Action:</strong> Automatic pusher blade moves coins forward</li>
+                    <li><strong>Physics:</strong> Realistic coin dropping and collision mechanics</li>
+                </ul>
+            </li>
+            <li><strong>Strategy Tips:</strong>
+                <ul>
+                    <li>Drop coins when the platform is full for better pushes</li>
+                    <li>Watch for bonus prizes near the edge</li>
+                    <li>Be patient - coins build up over time</li>
+                    <li>Use the automatic pusher to your advantage</li>
+                </ul>
+            </li>
+        </ul>
+        <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
     `
 };
 

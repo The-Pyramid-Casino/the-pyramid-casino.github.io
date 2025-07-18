@@ -174,11 +174,12 @@
       position: absolute;
       width: 12px;
       height: 12px;
-      background: radial-gradient(circle, #ff6b6b, #d63031);
+      background: radial-gradient(circle at 30% 30%, #ff8a80, #ff6b6b, #d63031);
       border-radius: 50%;
-      box-shadow: 0 0 8px rgba(255, 107, 107, 0.6);
-      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.8), 0 0 12px rgba(255, 107, 107, 0.4);
+      transition: transform 0.1s ease-out;
       z-index: 10;
+      transform: translateX(-50%);
     }
     .prize-slots {
       display: flex;
@@ -413,41 +414,98 @@
       ball.style.top = '40px';
       ball.style.transform = 'translateX(-50%)';
       
-      // Animate ball dropping through pegs
-      let currentX = board.offsetWidth / 2;
-      let currentY = 40;
-      const bounces = 12;
+      // Initialize physics simulation
+      const physics = {
+        x: board.offsetWidth / 2,
+        y: 40,
+        vx: 0,
+        vy: 0,
+        gravity: 0.5,
+        bounce: 0.7,
+        friction: 0.98,
+        radius: 6
+      };
       
-      function animateBounce(bounceCount) {
-        if (bounceCount >= bounces) {
-          // Ball reaches bottom - determine prize
-          landInSlot(currentX, betAmount);
+      // Get all peg positions
+      const pegs = Array.from(document.querySelectorAll('.peg')).map(peg => ({
+        x: peg.offsetLeft + 4,
+        y: peg.offsetTop + 4,
+        radius: 4
+      }));
+      
+      let animationId;
+      
+      function physicsLoop() {
+        // Apply gravity
+        physics.vy += physics.gravity;
+        
+        // Apply friction
+        physics.vx *= physics.friction;
+        physics.vy *= physics.friction;
+        
+        // Update position
+        physics.x += physics.vx;
+        physics.y += physics.vy;
+        
+        // Check collision with pegs
+        pegs.forEach(peg => {
+          const dx = physics.x - peg.x;
+          const dy = physics.y - peg.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < physics.radius + peg.radius) {
+            // Collision detected - calculate bounce
+            const angle = Math.atan2(dy, dx);
+            const speed = Math.sqrt(physics.vx * physics.vx + physics.vy * physics.vy);
+            
+            // Separate ball from peg
+            const overlap = physics.radius + peg.radius - distance;
+            physics.x += Math.cos(angle) * overlap * 0.5;
+            physics.y += Math.sin(angle) * overlap * 0.5;
+            
+            // Bounce velocity
+            physics.vx = Math.cos(angle) * speed * physics.bounce;
+            physics.vy = Math.sin(angle) * speed * physics.bounce;
+            
+            // Add some randomness for more realistic bouncing
+            physics.vx += (Math.random() - 0.5) * 2;
+            physics.vy += (Math.random() - 0.5) * 1;
+            
+            // Visual bounce effect
+            ball.style.transform = 'translateX(-50%) scale(1.3)';
+            setTimeout(() => {
+              ball.style.transform = 'translateX(-50%) scale(1)';
+            }, 100);
+          }
+        });
+        
+        // Boundary collision
+        if (physics.x - physics.radius < 20) {
+          physics.x = 20 + physics.radius;
+          physics.vx = Math.abs(physics.vx) * physics.bounce;
+        }
+        if (physics.x + physics.radius > board.offsetWidth - 20) {
+          physics.x = board.offsetWidth - 20 - physics.radius;
+          physics.vx = -Math.abs(physics.vx) * physics.bounce;
+        }
+        
+        // Update ball position
+        ball.style.left = physics.x + 'px';
+        ball.style.top = physics.y + 'px';
+        
+        // Check if ball reached bottom
+        if (physics.y > 340) {
+          cancelAnimationFrame(animationId);
+          landInSlot(physics.x, betAmount);
           return;
         }
         
-        // Random left or right bounce
-        const direction = Math.random() < 0.5 ? -1 : 1;
-        currentX += direction * (15 + Math.random() * 10);
-        currentY += 25;
-        
-        // Keep ball within bounds
-        currentX = Math.max(20, Math.min(currentX, board.offsetWidth - 20));
-        
-        setTimeout(() => {
-          ball.style.left = currentX + 'px';
-          ball.style.top = currentY + 'px';
-          
-          // Add bounce effect
-          ball.style.transform = 'translateX(-50%) scale(1.2)';
-          setTimeout(() => {
-            ball.style.transform = 'translateX(-50%) scale(1)';
-          }, 100);
-          
-          setTimeout(() => animateBounce(bounceCount + 1), 200);
-        }, 150);
+        // Continue animation
+        animationId = requestAnimationFrame(physicsLoop);
       }
       
-      setTimeout(() => animateBounce(0), 200);
+      // Start physics simulation
+      animationId = requestAnimationFrame(physicsLoop);
     }
 
     function landInSlot(ballX, betAmount) {

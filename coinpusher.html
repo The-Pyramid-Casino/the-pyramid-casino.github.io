@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Coin Pusher | Pyramid Casino</title>
+  <meta name="description" content="Push coins to win big prizes and bonuses at Pyramid Casino!" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="shared-modern.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: #18122b;
+      color: #f3e9dc;
+      min-height: 100vh;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #a0843a;
+      color: #fff;
+      padding: 1rem 2rem;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+    }
+    .header nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.2rem;
+      margin: 0;
+      padding: 0;
+    }
+    .header nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .header nav a:hover {
+      color: #f3e9dc;
+      text-shadow: 0 0 5px #f9d923;
+    }
+    .main-content {
+      padding: 2rem 1rem 3rem 1rem;
+      min-height: 60vh;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .back-link {
+      color: #f9d923;
+      text-decoration: none;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      display: inline-block;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: #ffe277;
+      text-shadow: 0 0 5px #f9d923;
+    }
+    .pusher-container {
+      background: #231b36;
+      border-radius: 18px;
+      box-shadow: 0 4px 12px #0005;
+      padding: 2.2rem 1.2rem 2rem 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .pusher-title {
+      color: #f9d923;
+      font-size: 2.1rem;
+      margin-bottom: 0.7rem;
+      text-shadow: 0 2px 6px #0006;
+    }
+    .balance-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      font-size: 1.1rem;
+      color: #ffe277;
+      font-weight: bold;
+      background: rgba(35, 27, 54, 0.8);
+      padding: 10px 20px;
+      border-radius: 25px;
+      border: 1px solid #f9d923;
+    }
+    .topup-btn {
+      background: #43c734;
+      color: #fff;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.97rem;
+      font-weight: bold;
+      padding: 0.28em 1.1em;
+      cursor: pointer;
+      box-shadow: 0 2px 6px #0002;
+      transition: background 0.15s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .topup-btn:hover {
+      background: #2ea827;
+    }
+    .game-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .game-controls input[type="number"] {
+      width: 80px;
+      border-radius: 5px;
+      border: 1px solid #a0843a;
+      background: #f3e9dc;
+      color: #18122b;
+      padding: 0.4rem;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    .game-controls button {
+      background: #a0843a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.15s;
+    }
+    .game-controls button:hover:not(:disabled) {
+      background: #f9d923;
+      color: #18122b;
+    }
+    .game-controls button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .pusher-machine {
+      background: linear-gradient(135deg, #2a1f3d 0%, #1e1530 100%);
+      border: 4px solid #f9d923;
+      border-radius: 20px;
+      padding: 20px;
+      margin: 1.5rem 0;
+      position: relative;
+      height: 500px;
+      overflow: hidden;
+    }
+    .coin-dropper {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 40px;
+      background: linear-gradient(135deg, #a0843a, #8a6f2e);
+      border-radius: 10px;
+      border: 2px solid #f9d923;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .coin-dropper:hover {
+      background: linear-gradient(135deg, #f9d923, #eed920);
+      color: #18122b;
+    }
+    .platform-area {
+      position: absolute;
+      bottom: 100px;
+      left: 20px;
+      right: 20px;
+      height: 200px;
+      background: rgba(160, 132, 58, 0.2);
+      border: 2px solid #a0843a;
+      border-radius: 10px;
+    }
+    .pusher-blade {
+      position: absolute;
+      bottom: 140px;
+      left: 20px;
+      right: 20px;
+      height: 8px;
+      background: linear-gradient(135deg, #8a6f2e, #a0843a);
+      border-radius: 4px;
+      transition: transform 0.8s ease-in-out;
+    }
+    .pusher-blade.pushing {
+      transform: translateY(60px);
+    }
+    .coin-collection {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      height: 60px;
+      background: linear-gradient(135deg, #43c734, #2ea827);
+      border-radius: 15px;
+      border: 2px solid #f9d923;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #fff;
+    }
+    .coin {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle at 30% 30%, #ffe277, #f9d923, #a0843a);
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(249, 217, 35, 0.6);
+      transition: all 0.3s ease;
+      z-index: 5;
+    }
+    .bonus-prize {
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      background: radial-gradient(circle at 30% 30%, #ff6b6b, #d63031);
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.8);
+      animation: pulse-glow 2s ease-in-out infinite;
+      z-index: 6;
+    }
+    .game-stats {
+      display: flex;
+      justify-content: space-around;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: rgba(160, 132, 58, 0.2);
+      border-radius: 10px;
+      border: 1px solid #a0843a;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #f9d923;
+    }
+    .instructions {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: rgba(249, 217, 35, 0.1);
+      border-radius: 10px;
+      border: 1px solid #f9d923;
+      font-size: 0.9rem;
+    }
+    .footer {
+      margin-top: 3rem;
+      background: linear-gradient(135deg, #231b36 0%, #0f0a1a 50%, #231b36 100%);
+      border-top: 2px solid #f9d923;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      padding: 15px 20px;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 2px 8px rgba(255, 107, 107, 0.8); }
+      50% { box-shadow: 0 4px 16px rgba(255, 107, 107, 1); }
+    }
+    @media (max-width: 768px) {
+      .pusher-container {
+        padding: 1.5rem 1rem;
+      }
+      .pusher-machine {
+        height: 450px;
+      }
+      .game-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-V9DHVKBD85");
+  </script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="topup.html">Top Up</a></li>
+        <li><a href="history.html">History</a></li>
+        <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <a href="index.html" class="back-link">← Back to Games</a>
+
+    <div class="pusher-container">
+      <h1 class="pusher-title">🪙 Coin Pusher</h1>
+      
+      <div class="balance-row">
+        <span>💰 Balance: <span id="balance">1000</span> chips</span>
+        <a href="topup.html" class="topup-btn">💳 Top Up</a>
+      </div>
+
+      <div class="game-controls">
+        <label>
+          <span>💰 Coins to Drop:</span>
+          <input type="number" id="coin-amount" min="1" max="50" value="5" />
+        </label>
+        <button id="drop-btn" onclick="dropCoins()">🪙 Drop Coins</button>
+        <button onclick="showInstructions('Coin Pusher', GAME_INSTRUCTIONS['Coin Pusher'])">ℹ️ How to Play</button>
+      </div>
+
+      <div class="pusher-machine" id="pusher-machine">
+        <div class="coin-dropper" id="coin-dropper" onclick="dropCoins()">💰</div>
+        <div class="platform-area" id="platform-area"></div>
+        <div class="pusher-blade" id="pusher-blade"></div>
+        <div class="coin-collection" id="coin-collection">
+          💰 Collection Zone 💰
+        </div>
+      </div>
+
+      <div class="game-stats">
+        <div class="stat-item">
+          <div class="stat-value" id="coins-dropped">0</div>
+          <div>Coins Dropped</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="coins-collected">0</div>
+          <div>Coins Collected</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="bonus-prizes">0</div>
+          <div>Bonus Prizes</div>
+        </div>
+      </div>
+
+      <div class="instructions">
+        <strong>🎮 Quick Start:</strong> Set how many coins to drop, click "Drop Coins" and watch them push other coins toward the collection zone!
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div style="padding: 10px 0;">
+      <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
+      <p style="margin: 5px 0; font-size: 1.1rem;">
+        📧 <strong>Contact us:</strong> 
+        <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;">casino.the.pyramid@gmail.com</a>
+      </p>
+      <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
+        💰 No real money gambling | 🔞 18+ for entertainment
+      </p>
+    </div>
+  </footer>
+
+  <script src="shared-modern.js"></script>
+  <script>
+    let isDropping = false;
+    let coins = [];
+    let bonusPrizes = [];
+    let gameStats = { dropped: 0, collected: 0, bonuses: 0 };
+    
+    function initCoinPusher() {
+      document.getElementById('year').textContent = new Date().getFullYear();
+      document.getElementById('balance').textContent = getCasinoBalance();
+      setupInitialCoins();
+      
+      // Add input validation
+      const coinInput = document.getElementById('coin-amount');
+      coinInput.addEventListener('input', function() {
+        const maxCoins = Math.min(50, getCasinoBalance());
+        if (parseInt(this.value) > maxCoins) {
+          this.value = maxCoins;
+        }
+      });
+      
+      // Start pusher animation
+      startPusherAnimation();
+    }
+
+    function setupInitialCoins() {
+      const platformArea = document.getElementById('platform-area');
+      const machine = document.getElementById('pusher-machine');
+      
+      // Add some initial coins on the platform
+      for (let i = 0; i < 15; i++) {
+        const coin = document.createElement('div');
+        coin.className = 'coin';
+        coin.style.left = (Math.random() * (machine.offsetWidth - 40) + 20) + 'px';
+        coin.style.bottom = (120 + Math.random() * 180) + 'px';
+        machine.appendChild(coin);
+        coins.push({
+          element: coin,
+          x: parseInt(coin.style.left),
+          y: parseInt(coin.style.bottom),
+          vx: 0,
+          vy: 0,
+          collected: false
+        });
+      }
+      
+      // Add bonus prizes
+      for (let i = 0; i < 3; i++) {
+        const bonus = document.createElement('div');
+        bonus.className = 'bonus-prize';
+        bonus.style.left = (Math.random() * (machine.offsetWidth - 50) + 25) + 'px';
+        bonus.style.bottom = (120 + Math.random() * 180) + 'px';
+        machine.appendChild(bonus);
+        bonusPrizes.push({
+          element: bonus,
+          x: parseInt(bonus.style.left),
+          y: parseInt(bonus.style.bottom),
+          vx: 0,
+          vy: 0,
+          collected: false
+        });
+      }
+    }
+
+    function startPusherAnimation() {
+      const blade = document.getElementById('pusher-blade');
+      setInterval(() => {
+        if (!isDropping) {
+          blade.classList.add('pushing');
+          setTimeout(() => {
+            blade.classList.remove('pushing');
+            pushCoins();
+          }, 400);
+        }
+      }, 3000);
+    }
+
+    function dropCoins() {
+      if (isDropping) return;
+      
+      const coinAmount = parseInt(document.getElementById('coin-amount').value);
+      const currentBalance = getCasinoBalance();
+      
+      if (!coinAmount || coinAmount <= 0) {
+        showNotification('❌ Please enter a valid number of coins!', 'lose');
+        return;
+      }
+      
+      if (coinAmount > currentBalance) {
+        showNotification('❌ Insufficient chips! Your balance is ' + currentBalance, 'lose');
+        return;
+      }
+      
+      // Record the bet
+      recordGameBet('Coin Pusher', coinAmount);
+      updateBalanceDisplay();
+      
+      isDropping = true;
+      document.getElementById('drop-btn').disabled = true;
+      
+      const machine = document.getElementById('pusher-machine');
+      const dropper = document.getElementById('coin-dropper');
+      
+      // Drop coins one by one
+      let droppedCount = 0;
+      
+      function dropSingleCoin() {
+        if (droppedCount >= coinAmount) {
+          setTimeout(() => {
+            isDropping = false;
+            document.getElementById('drop-btn').disabled = false;
+            checkWinnings();
+          }, 2000);
+          return;
+        }
+        
+        const coin = document.createElement('div');
+        coin.className = 'coin';
+        const dropperRect = dropper.getBoundingClientRect();
+        const machineRect = machine.getBoundingClientRect();
+        
+        coin.style.left = (dropperRect.left - machineRect.left + 20) + 'px';
+        coin.style.bottom = (machine.offsetHeight - 60) + 'px';
+        machine.appendChild(coin);
+        
+        const coinData = {
+          element: coin,
+          x: parseInt(coin.style.left),
+          y: parseInt(coin.style.bottom),
+          vx: (Math.random() - 0.5) * 2,
+          vy: -3,
+          collected: false
+        };
+        
+        coins.push(coinData);
+        gameStats.dropped++;
+        updateStats();
+        
+        // Physics simulation for falling coin
+        animateCoin(coinData);
+        
+        droppedCount++;
+        setTimeout(dropSingleCoin, 200);
+      }
+      
+      dropSingleCoin();
+    }
+
+    function animateCoin(coinData) {
+      const machine = document.getElementById('pusher-machine');
+      let animationId;
+      
+      function physics() {
+        // Apply gravity
+        coinData.vy -= 0.5;
+        
+        // Update position
+        coinData.x += coinData.vx;
+        coinData.y += coinData.vy;
+        
+        // Boundary collision
+        if (coinData.x < 20) {
+          coinData.x = 20;
+          coinData.vx = Math.abs(coinData.vx) * 0.7;
+        }
+        if (coinData.x > machine.offsetWidth - 40) {
+          coinData.x = machine.offsetWidth - 40;
+          coinData.vx = -Math.abs(coinData.vx) * 0.7;
+        }
+        
+        // Platform collision
+        if (coinData.y <= 120 && coinData.vy < 0) {
+          coinData.y = 120;
+          coinData.vy = Math.abs(coinData.vy) * 0.3;
+          coinData.vx *= 0.8;
+        }
+        
+        // Collection zone
+        if (coinData.y <= 80 && !coinData.collected) {
+          coinData.collected = true;
+          coinData.element.remove();
+          gameStats.collected++;
+          updateStats();
+          cancelAnimationFrame(animationId);
+          return;
+        }
+        
+        // Update visual position
+        coinData.element.style.left = coinData.x + 'px';
+        coinData.element.style.bottom = coinData.y + 'px';
+        
+        // Continue if coin is still moving
+        if (Math.abs(coinData.vx) > 0.1 || Math.abs(coinData.vy) > 0.1 || coinData.y > 120) {
+          animationId = requestAnimationFrame(physics);
+        }
+      }
+      
+      animationId = requestAnimationFrame(physics);
+    }
+
+    function pushCoins() {
+      // Push all coins forward
+      coins.forEach(coin => {
+        if (!coin.collected && coin.y > 80) {
+          coin.vx += 1.5;
+          coin.vy += (Math.random() - 0.5) * 0.5;
+          animateCoin(coin);
+        }
+      });
+      
+      // Push bonus prizes
+      bonusPrizes.forEach(bonus => {
+        if (!bonus.collected && bonus.y > 80) {
+          bonus.vx += 1.5;
+          bonus.vy += (Math.random() - 0.5) * 0.5;
+          animateBonus(bonus);
+        }
+      });
+    }
+
+    function animateBonus(bonusData) {
+      const machine = document.getElementById('pusher-machine');
+      let animationId;
+      
+      function physics() {
+        // Apply gravity
+        bonusData.vy -= 0.5;
+        
+        // Update position
+        bonusData.x += bonusData.vx;
+        bonusData.y += bonusData.vy;
+        
+        // Boundary collision
+        if (bonusData.x < 25) {
+          bonusData.x = 25;
+          bonusData.vx = Math.abs(bonusData.vx) * 0.7;
+        }
+        if (bonusData.x > machine.offsetWidth - 45) {
+          bonusData.x = machine.offsetWidth - 45;
+          bonusData.vx = -Math.abs(bonusData.vx) * 0.7;
+        }
+        
+        // Platform collision
+        if (bonusData.y <= 120 && bonusData.vy < 0) {
+          bonusData.y = 120;
+          bonusData.vy = Math.abs(bonusData.vy) * 0.3;
+          bonusData.vx *= 0.8;
+        }
+        
+        // Collection zone
+        if (bonusData.y <= 80 && !bonusData.collected) {
+          bonusData.collected = true;
+          bonusData.element.remove();
+          gameStats.bonuses++;
+          updateStats();
+          cancelAnimationFrame(animationId);
+          return;
+        }
+        
+        // Update visual position
+        bonusData.element.style.left = bonusData.x + 'px';
+        bonusData.element.style.bottom = bonusData.y + 'px';
+        
+        // Continue if bonus is still moving
+        if (Math.abs(bonusData.vx) > 0.1 || Math.abs(bonusData.vy) > 0.1 || bonusData.y > 120) {
+          animationId = requestAnimationFrame(physics);
+        }
+      }
+      
+      animationId = requestAnimationFrame(physics);
+    }
+
+    function updateStats() {
+      document.getElementById('coins-dropped').textContent = gameStats.dropped;
+      document.getElementById('coins-collected').textContent = gameStats.collected;
+      document.getElementById('bonus-prizes').textContent = gameStats.bonuses;
+    }
+
+    function checkWinnings() {
+      const coinsWon = gameStats.collected;
+      const bonusMultiplier = gameStats.bonuses * 5;
+      const totalWin = coinsWon + bonusMultiplier;
+      
+      if (totalWin > 0) {
+        recordGameWin('Coin Pusher', totalWin, 
+          coinsWon + ' coins' + (bonusMultiplier > 0 ? ' + ' + bonusMultiplier + ' bonus' : ''));
+        updateBalanceDisplay();
+        
+        if (bonusMultiplier > 0) {
+          showNotification('🎉 Amazing! You collected ' + coinsWon + ' coins and ' + 
+            gameStats.bonuses + ' bonus prizes for ' + totalWin + ' total chips!', 'win', 4000);
+        } else if (coinsWon > 0) {
+          showNotification('💰 You collected ' + coinsWon + ' coins!', 'win');
+        }
+      }
+      
+      // Reset collected counts for next round
+      gameStats.collected = 0;
+      gameStats.bonuses = 0;
+    }
+
+    function updateBalanceDisplay() {
+      document.getElementById('balance').textContent = getCasinoBalance();
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', initCoinPusher);
+  </script>
+</body>
+</html>
