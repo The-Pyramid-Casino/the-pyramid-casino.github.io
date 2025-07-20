@@ -206,6 +206,10 @@
       background: linear-gradient(135deg, #43c734, #2ea827);
       animation: pulse-glow 2s ease-in-out infinite;
     }
+    .prize-slot[data-multiplier="0"] {
+      background: linear-gradient(135deg, #d7263d, #b91c2e);
+      color: #fff;
+    }
     .drop-zone {
       position: absolute;
       top: 10px;
@@ -310,15 +314,17 @@
         <div class="pegs-container" id="pegs-container"></div>
         <div class="ball" id="ball" style="display: none;"></div>
         <div class="prize-slots">
-          <div class="prize-slot" data-multiplier="0.1">0.1x</div>
+          <div class="prize-slot" data-multiplier="0">0x</div>
+          <div class="prize-slot" data-multiplier="0.2">0.2x</div>
           <div class="prize-slot" data-multiplier="0.5">0.5x</div>
-          <div class="prize-slot" data-multiplier="1">1x</div>
-          <div class="prize-slot" data-multiplier="2">2x</div>
-          <div class="prize-slot jackpot" data-multiplier="5">5x</div>
-          <div class="prize-slot" data-multiplier="2">2x</div>
-          <div class="prize-slot" data-multiplier="1">1x</div>
+          <div class="prize-slot" data-multiplier="0.8">0.8x</div>
+          <div class="prize-slot" data-multiplier="1.2">1.2x</div>
+          <div class="prize-slot jackpot" data-multiplier="2.5">2.5x</div>
+          <div class="prize-slot" data-multiplier="1.2">1.2x</div>
+          <div class="prize-slot" data-multiplier="0.8">0.8x</div>
           <div class="prize-slot" data-multiplier="0.5">0.5x</div>
-          <div class="prize-slot" data-multiplier="0.1">0.1x</div>
+          <div class="prize-slot" data-multiplier="0.2">0.2x</div>
+          <div class="prize-slot" data-multiplier="0">0x</div>
         </div>
       </div>
 
@@ -533,12 +539,10 @@
           recordGameWin('Plinko', winAmount, multiplier + 'x multiplier');
           updateBalanceDisplay();
           
-          if (multiplier >= 5) {
+          if (multiplier >= 2) {
             showNotification('🎉 JACKPOT! You won ' + winAmount + ' chips with ' + multiplier + 'x multiplier!', 'win', 5000);
-          } else if (multiplier >= 2) {
-            showNotification('🎯 Great hit! You won ' + winAmount + ' chips with ' + multiplier + 'x multiplier!', 'win');
           } else if (multiplier >= 1) {
-            showNotification('✨ You won ' + winAmount + ' chips with ' + multiplier + 'x multiplier!', 'win');
+            showNotification('🎯 Good hit! You won ' + winAmount + ' chips with ' + multiplier + 'x multiplier!', 'win');
           } else {
             showNotification('💸 Small win: ' + winAmount + ' chips with ' + multiplier + 'x multiplier', 'info');
           }

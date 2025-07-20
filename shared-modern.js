@@ -517,17 +517,18 @@ const GAME_INSTRUCTIONS = {
             </li>
             <li><strong>Prize Multipliers:</strong>
                 <ul>
-                    <li><strong>5x Jackpot:</strong> Center slot (highest payout)</li>
-                    <li><strong>2x Multiplier:</strong> Near center slots</li>
-                    <li><strong>1x Even:</strong> Return your bet</li>
-                    <li><strong>0.5x Small:</strong> Half your bet back</li>
-                    <li><strong>0.1x Tiny:</strong> Small consolation prize</li>
+                    <li><strong>2.5x Jackpot:</strong> Center slot (highest payout)</li>
+                    <li><strong>1.2x Good:</strong> Near center slots</li>
+                    <li><strong>0.8x & 0.5x:</strong> Partial returns</li>
+                    <li><strong>0.2x Small:</strong> Small consolation prize</li>
+                    <li><strong>0x Loss:</strong> Lose your bet - try again!</li>
                 </ul>
             </li>
             <li><strong>Tips:</strong>
                 <ul>
                     <li>The ball's path is random - pure chance!</li>
                     <li>Center slots have higher payouts but are harder to hit</li>
+                    <li>Be careful of the 0x loss slots on the edges</li>
                     <li>Start with smaller bets to learn the game</li>
                     <li>Watch for the satisfying ball bounce animations</li>
                 </ul>

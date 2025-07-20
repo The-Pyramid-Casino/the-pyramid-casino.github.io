@@ -191,15 +191,21 @@
     .pusher-blade {
       position: absolute;
       bottom: 140px;
-      left: 20px;
-      right: 20px;
-      height: 8px;
-      background: linear-gradient(135deg, #8a6f2e, #a0843a);
-      border-radius: 4px;
-      transition: transform 0.8s ease-in-out;
+      left: 15px;
+      right: 15px;
+      height: 12px;
+      background: linear-gradient(135deg, #8a6f2e, #a0843a, #f9d923);
+      border-radius: 6px;
+      border: 2px solid #f9d923;
+      box-shadow: 0 4px 12px rgba(249, 217, 35, 0.4),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.3);
+      transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: 3;
     }
     .pusher-blade.pushing {
-      transform: translateY(60px);
+      transform: translateY(80px);
+      box-shadow: 0 8px 20px rgba(249, 217, 35, 0.6),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.3);
     }
     .coin-collection {
       position: absolute;
@@ -219,23 +225,60 @@
     }
     .coin {
       position: absolute;
-      width: 20px;
-      height: 20px;
-      background: radial-gradient(circle at 30% 30%, #ffe277, #f9d923, #a0843a);
+      width: 22px;
+      height: 22px;
+      background: radial-gradient(circle at 35% 30%, #fff3a0, #f9d923, #d4af00, #a0843a);
       border-radius: 50%;
-      box-shadow: 0 2px 6px rgba(249, 217, 35, 0.6);
-      transition: all 0.3s ease;
+      border: 2px solid #8a6f2e;
+      box-shadow: 0 3px 8px rgba(249, 217, 35, 0.6), 
+                  inset 0 2px 4px rgba(255, 255, 255, 0.4),
+                  inset 0 -2px 4px rgba(160, 132, 58, 0.6);
+      transition: all 0.2s ease;
       z-index: 5;
+    }
+    .coin::before {
+      content: '💰';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 10px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
     .bonus-prize {
       position: absolute;
-      width: 25px;
-      height: 25px;
-      background: radial-gradient(circle at 30% 30%, #ff6b6b, #d63031);
+      width: 26px;
+      height: 26px;
+      background: radial-gradient(circle at 35% 30%, #ff9999, #ff6b6b, #e74c3c, #d63031);
       border-radius: 50%;
-      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.8);
-      animation: pulse-glow 2s ease-in-out infinite;
+      border: 2px solid #a93226;
+      box-shadow: 0 4px 12px rgba(231, 76, 60, 0.8),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                  inset 0 -2px 4px rgba(169, 50, 38, 0.6);
+      animation: bonus-pulse 2s ease-in-out infinite;
       z-index: 6;
+    }
+    .bonus-prize::before {
+      content: '🎁';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 12px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    }
+    @keyframes bonus-pulse {
+      0%, 100% { 
+        box-shadow: 0 4px 12px rgba(231, 76, 60, 0.8),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                    inset 0 -2px 4px rgba(169, 50, 38, 0.6);
+      }
+      50% { 
+        box-shadow: 0 6px 16px rgba(231, 76, 60, 1),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                    inset 0 -2px 4px rgba(169, 50, 38, 0.6);
+        transform: scale(1.05);
+      }
     }
     .game-stats {
       display: flex;
@@ -273,6 +316,19 @@
     @keyframes pulse-glow {
       0%, 100% { box-shadow: 0 2px 8px rgba(255, 107, 107, 0.8); }
       50% { box-shadow: 0 4px 16px rgba(255, 107, 107, 1); }
+    }
+    @keyframes bonus-pulse {
+      0%, 100% { 
+        box-shadow: 0 4px 12px rgba(231, 76, 60, 0.8),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                    inset 0 -2px 4px rgba(169, 50, 38, 0.6);
+      }
+      50% { 
+        box-shadow: 0 6px 16px rgba(231, 76, 60, 1),
+                    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                    inset 0 -2px 4px rgba(169, 50, 38, 0.6);
+        transform: scale(1.05);
+      }
     }
     @media (max-width: 768px) {
       .pusher-container {
@@ -400,40 +456,52 @@
     }
 
     function setupInitialCoins() {
-      const platformArea = document.getElementById('platform-area');
       const machine = document.getElementById('pusher-machine');
       
-      // Add some initial coins on the platform
-      for (let i = 0; i < 15; i++) {
-        const coin = document.createElement('div');
-        coin.className = 'coin';
-        coin.style.left = (Math.random() * (machine.offsetWidth - 40) + 20) + 'px';
-        coin.style.bottom = (120 + Math.random() * 180) + 'px';
-        machine.appendChild(coin);
-        coins.push({
-          element: coin,
-          x: parseInt(coin.style.left),
-          y: parseInt(coin.style.bottom),
-          vx: 0,
-          vy: 0,
-          collected: false
-        });
+      // Clear any existing coins
+      machine.querySelectorAll('.coin, .bonus-prize').forEach(el => el.remove());
+      coins = [];
+      bonusPrizes = [];
+      
+      // Add initial coins on the platform in multiple layers
+      for (let layer = 0; layer < 3; layer++) {
+        for (let i = 0; i < 8; i++) {
+          const coin = document.createElement('div');
+          coin.className = 'coin';
+          const x = 30 + (machine.offsetWidth - 80) * (i / 7);
+          const y = 140 + layer * 25;
+          coin.style.left = x + 'px';
+          coin.style.bottom = y + 'px';
+          machine.appendChild(coin);
+          coins.push({
+            element: coin,
+            x: x,
+            y: y,
+            vx: 0,
+            vy: 0,
+            collected: false,
+            resting: true
+          });
+        }
       }
       
-      // Add bonus prizes
-      for (let i = 0; i < 3; i++) {
+      // Add bonus prizes scattered throughout
+      for (let i = 0; i < 4; i++) {
         const bonus = document.createElement('div');
         bonus.className = 'bonus-prize';
-        bonus.style.left = (Math.random() * (machine.offsetWidth - 50) + 25) + 'px';
-        bonus.style.bottom = (120 + Math.random() * 180) + 'px';
+        const x = 40 + Math.random() * (machine.offsetWidth - 100);
+        const y = 150 + Math.random() * 150;
+        bonus.style.left = x + 'px';
+        bonus.style.bottom = y + 'px';
         machine.appendChild(bonus);
         bonusPrizes.push({
           element: bonus,
-          x: parseInt(bonus.style.left),
-          y: parseInt(bonus.style.bottom),
+          x: x,
+          y: y,
           vx: 0,
           vy: 0,
-          collected: false
+          collected: false,
+          resting: true
         });
       }
     }
@@ -486,37 +554,39 @@
             isDropping = false;
             document.getElementById('drop-btn').disabled = false;
             checkWinnings();
-          }, 2000);
+          }, 3000);
           return;
         }
         
         const coin = document.createElement('div');
         coin.className = 'coin';
-        const dropperRect = dropper.getBoundingClientRect();
-        const machineRect = machine.getBoundingClientRect();
         
-        coin.style.left = (dropperRect.left - machineRect.left + 20) + 'px';
-        coin.style.bottom = (machine.offsetHeight - 60) + 'px';
+        // Position coin at dropper location
+        const x = machine.offsetWidth / 2;
+        const y = machine.offsetHeight - 60;
+        coin.style.left = x + 'px';
+        coin.style.bottom = y + 'px';
         machine.appendChild(coin);
         
         const coinData = {
           element: coin,
-          x: parseInt(coin.style.left),
-          y: parseInt(coin.style.bottom),
-          vx: (Math.random() - 0.5) * 2,
-          vy: -3,
-          collected: false
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 3,
+          vy: 0,
+          collected: false,
+          resting: false
         };
         
         coins.push(coinData);
         gameStats.dropped++;
         updateStats();
         
-        // Physics simulation for falling coin
+        // Start physics simulation for falling coin
         animateCoin(coinData);
         
         droppedCount++;
-        setTimeout(dropSingleCoin, 200);
+        setTimeout(dropSingleCoin, 300);
       }
       
       dropSingleCoin();
@@ -527,34 +597,64 @@
       let animationId;
       
       function physics() {
-        // Apply gravity
-        coinData.vy -= 0.5;
+        if (coinData.collected) {
+          cancelAnimationFrame(animationId);
+          return;
+        }
+        
+        // Apply gravity when falling
+        if (!coinData.resting) {
+          coinData.vy -= 0.8;
+        }
+        
+        // Apply friction to horizontal movement
+        coinData.vx *= 0.95;
         
         // Update position
         coinData.x += coinData.vx;
         coinData.y += coinData.vy;
         
         // Boundary collision
-        if (coinData.x < 20) {
-          coinData.x = 20;
-          coinData.vx = Math.abs(coinData.vx) * 0.7;
+        if (coinData.x < 25) {
+          coinData.x = 25;
+          coinData.vx = Math.abs(coinData.vx) * 0.6;
         }
-        if (coinData.x > machine.offsetWidth - 40) {
-          coinData.x = machine.offsetWidth - 40;
-          coinData.vx = -Math.abs(coinData.vx) * 0.7;
-        }
-        
-        // Platform collision
-        if (coinData.y <= 120 && coinData.vy < 0) {
-          coinData.y = 120;
-          coinData.vy = Math.abs(coinData.vy) * 0.3;
-          coinData.vx *= 0.8;
+        if (coinData.x > machine.offsetWidth - 45) {
+          coinData.x = machine.offsetWidth - 45;
+          coinData.vx = -Math.abs(coinData.vx) * 0.6;
         }
         
-        // Collection zone
+        // Platform/stacking collision
+        if (coinData.y <= 120 && coinData.vy <= 0) {
+          // Check for collision with other coins for stacking
+          let stackHeight = 120;
+          coins.forEach(otherCoin => {
+            if (otherCoin !== coinData && !otherCoin.collected) {
+              const dx = Math.abs(otherCoin.x - coinData.x);
+              if (dx < 22 && otherCoin.y >= stackHeight) {
+                stackHeight = Math.max(stackHeight, otherCoin.y + 22);
+              }
+            }
+          });
+          
+          if (coinData.y <= stackHeight + 5) {
+            coinData.y = stackHeight;
+            coinData.vy = 0;
+            coinData.vx *= 0.7;
+            coinData.resting = true;
+          }
+        }
+        
+        // Collection zone check
         if (coinData.y <= 80 && !coinData.collected) {
           coinData.collected = true;
-          coinData.element.remove();
+          coinData.element.style.transition = 'opacity 0.5s ease-out';
+          coinData.element.style.opacity = '0';
+          setTimeout(() => {
+            if (coinData.element.parentNode) {
+              coinData.element.remove();
+            }
+          }, 500);
           gameStats.collected++;
           updateStats();
           cancelAnimationFrame(animationId);
@@ -565,9 +665,14 @@
         coinData.element.style.left = coinData.x + 'px';
         coinData.element.style.bottom = coinData.y + 'px';
         
-        // Continue if coin is still moving
-        if (Math.abs(coinData.vx) > 0.1 || Math.abs(coinData.vy) > 0.1 || coinData.y > 120) {
+        // Continue animation if coin is moving or not yet at rest
+        if (!coinData.resting || Math.abs(coinData.vx) > 0.2 || Math.abs(coinData.vy) > 0.2) {
           animationId = requestAnimationFrame(physics);
+        } else {
+          // Coin has come to rest
+          coinData.vx = 0;
+          coinData.vy = 0;
+          coinData.resting = true;
         }
       }
       
@@ -575,20 +680,23 @@
     }
 
     function pushCoins() {
-      // Push all coins forward
+      // Push all coins forward with more realistic force
       coins.forEach(coin => {
-        if (!coin.collected && coin.y > 80) {
-          coin.vx += 1.5;
-          coin.vy += (Math.random() - 0.5) * 0.5;
+        if (!coin.collected && coin.y >= 120 && coin.resting) {
+          // Only push coins that are on the platform and at rest
+          coin.vx += 2.5 + (Math.random() * 1); // Stronger, more variable push
+          coin.vy += (Math.random() - 0.5) * 1; // Small vertical variation
+          coin.resting = false; // Make coin active again
           animateCoin(coin);
         }
       });
       
       // Push bonus prizes
       bonusPrizes.forEach(bonus => {
-        if (!bonus.collected && bonus.y > 80) {
-          bonus.vx += 1.5;
-          bonus.vy += (Math.random() - 0.5) * 0.5;
+        if (!bonus.collected && bonus.y >= 120 && bonus.resting) {
+          bonus.vx += 2.5 + (Math.random() * 1);
+          bonus.vy += (Math.random() - 0.5) * 1;
+          bonus.resting = false;
           animateBonus(bonus);
         }
       });
@@ -599,36 +707,55 @@
       let animationId;
       
       function physics() {
-        // Apply gravity
-        bonusData.vy -= 0.5;
+        if (bonusData.collected) {
+          cancelAnimationFrame(animationId);
+          return;
+        }
+        
+        // Apply gravity when falling
+        if (!bonusData.resting) {
+          bonusData.vy -= 0.8;
+        }
+        
+        // Apply friction
+        bonusData.vx *= 0.95;
         
         // Update position
         bonusData.x += bonusData.vx;
         bonusData.y += bonusData.vy;
         
         // Boundary collision
-        if (bonusData.x < 25) {
-          bonusData.x = 25;
-          bonusData.vx = Math.abs(bonusData.vx) * 0.7;
+        if (bonusData.x < 30) {
+          bonusData.x = 30;
+          bonusData.vx = Math.abs(bonusData.vx) * 0.6;
         }
-        if (bonusData.x > machine.offsetWidth - 45) {
-          bonusData.x = machine.offsetWidth - 45;
-          bonusData.vx = -Math.abs(bonusData.vx) * 0.7;
+        if (bonusData.x > machine.offsetWidth - 50) {
+          bonusData.x = machine.offsetWidth - 50;
+          bonusData.vx = -Math.abs(bonusData.vx) * 0.6;
         }
         
         // Platform collision
-        if (bonusData.y <= 120 && bonusData.vy < 0) {
+        if (bonusData.y <= 120 && bonusData.vy <= 0) {
           bonusData.y = 120;
-          bonusData.vy = Math.abs(bonusData.vy) * 0.3;
-          bonusData.vx *= 0.8;
+          bonusData.vy = 0;
+          bonusData.vx *= 0.7;
+          bonusData.resting = true;
         }
         
         // Collection zone
         if (bonusData.y <= 80 && !bonusData.collected) {
           bonusData.collected = true;
-          bonusData.element.remove();
+          bonusData.element.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+          bonusData.element.style.opacity = '0';
+          bonusData.element.style.transform = 'scale(1.5)';
+          setTimeout(() => {
+            if (bonusData.element.parentNode) {
+              bonusData.element.remove();
+            }
+          }, 500);
           gameStats.bonuses++;
           updateStats();
+          showNotification('🎁 Bonus Prize Collected!', 'win', 2000);
           cancelAnimationFrame(animationId);
           return;
         }
@@ -637,9 +764,13 @@
         bonusData.element.style.left = bonusData.x + 'px';
         bonusData.element.style.bottom = bonusData.y + 'px';
         
-        // Continue if bonus is still moving
-        if (Math.abs(bonusData.vx) > 0.1 || Math.abs(bonusData.vy) > 0.1 || bonusData.y > 120) {
+        // Continue animation if moving or not at rest
+        if (!bonusData.resting || Math.abs(bonusData.vx) > 0.2 || Math.abs(bonusData.vy) > 0.2) {
           animationId = requestAnimationFrame(physics);
+        } else {
+          bonusData.vx = 0;
+          bonusData.vy = 0;
+          bonusData.resting = true;
         }
       }
       
