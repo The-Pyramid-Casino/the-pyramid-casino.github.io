@@ -741,7 +741,7 @@ function getCasinoBalance() {
             if (isNaN(balance)) balance = 1000;
         } else {
             // Data corrupted or tampered - reset to default without calling setCasinoBalance
-            console.warn('Balance data corrupted, resetting to default');
+            console.warn('Balance data corrupted or tampered with, resetting to default');
             localStorage.setItem('pyramidCasinoBalance', encryptData('1000'));
             balance = 1000;
         }
@@ -1153,6 +1153,8 @@ function validateGameData(data, dataType) {
     try {
         switch(dataType) {
             case 'balance':
+                // Check if it's a valid number string
+                if (!/^\d+$/.test(data)) return false;
                 var balance = parseInt(data);
                 // Reasonable balance check - no more than 10 million chips
                 return !isNaN(balance) && balance >= 0 && balance <= 10000000;
