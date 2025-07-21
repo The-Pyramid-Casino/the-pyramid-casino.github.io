@@ -473,9 +473,9 @@
             physics.vx = Math.cos(angle) * speed * physics.bounce;
             physics.vy = Math.sin(angle) * speed * physics.bounce;
             
-            // Add some randomness for more realistic bouncing
-            physics.vx += (Math.random() - 0.5) * 2;
-            physics.vy += (Math.random() - 0.5) * 1;
+            // Add subtle bias towards less favorable slots for house edge
+            physics.vx += (riggedRandom(2.5) - 0.5) * 2;
+            physics.vy += (riggedRandom(2.5) - 0.5) * 1;
             
             // Visual bounce effect
             ball.style.transform = 'translateX(-50%) scale(1.3)';

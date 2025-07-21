@@ -1,5 +1,47 @@
 /* Shared Modern JavaScript for Pyramid Casino */
 
+// House Edge System - Subtle rigging for entertainment
+// Simple house-biased random number generator
+function riggedRandom(houseEdgePercentage = 2.5) {
+    // Generate base random number
+    let random = Math.random();
+    
+    // Apply subtle house bias by shifting the distribution slightly
+    // This reduces player's favorable outcomes by the house edge percentage
+    const bias = houseEdgePercentage / 100;
+    
+    // Shift the random number slightly towards values that favor the house
+    // For most games, lower random numbers tend to be less favorable to players
+    random = random * (1 - bias) + (random * random * bias);
+    
+    return random;
+}
+
+// Rigged random for integer ranges with house bias
+function riggedRandomInt(min, max, houseEdgePercentage = 2.5) {
+    const random = riggedRandom(houseEdgePercentage);
+    return Math.floor(random * (max - min + 1)) + min;
+}
+
+// Rigged coin flip - slightly favors house  
+function riggedCoinFlip(houseEdgePercentage = 3.0) {
+    // Simple bias: make it slightly less than 50% chance for player win
+    return riggedRandom(houseEdgePercentage) < (0.5 - houseEdgePercentage / 200);
+}
+
+// Array shuffle with subtle house bias
+function riggedShuffle(array, houseEdgePercentage = 1.5) {
+    const shuffled = [...array];
+    
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        // Use rigged random for Fisher-Yates shuffle
+        const j = Math.floor(riggedRandom(houseEdgePercentage) * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    
+    return shuffled;
+}
+
 // WCAG Compliant Instructions modal functionality
 function createInstructionsModal(gameTitle, instructions) {
     // Remove existing modal if any
