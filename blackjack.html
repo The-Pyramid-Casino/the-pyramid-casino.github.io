@@ -236,7 +236,7 @@
         }
       }
       for (let i = deck.length - 1; i > 0; i--) {
-        const j = Math.floor(riggedRandom(1.5) * (i + 1)); // Subtle shuffle bias
+        const j = Math.floor(riggedRandom(null, 'blackjack') * (i + 1)); // Configurable shuffle bias
         [deck[i], deck[j]] = [deck[j], deck[i]];
       }
       return deck;

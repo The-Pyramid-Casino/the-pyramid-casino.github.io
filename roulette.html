@@ -342,7 +342,7 @@ spinBtn.onclick = () => {
     chips = getCasinoBalance(); // Update local chips variable
   }
   
-  const spin = riggedRandomInt(0, 36, 2.5); // Subtle house edge on roulette spin
+  const spin = riggedRandomInt(0, 36, null, 'roulette'); // Configurable house edge on roulette spin
   lastSpin = spin;
   showSpinResult(spin);
   payout(spin);

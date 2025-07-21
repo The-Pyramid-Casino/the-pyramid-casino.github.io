@@ -502,9 +502,9 @@
       if (gameActive) return;
       selectedNumbers.clear();
       
-      const count = riggedRandomInt(1, 10, 2.5); // Subtle bias in random quick pick count
+      const count = riggedRandomInt(1, 10, null, 'keno'); // Configurable bias in random quick pick count
       while (selectedNumbers.size < count) {
-        const num = riggedRandomInt(1, 80, 2.5); // Subtle bias in number selection
+        const num = riggedRandomInt(1, 80, null, 'keno'); // Configurable bias in number selection
         selectedNumbers.add(num);
       }
       
@@ -546,7 +546,7 @@
         }
         
         // Pick a random number
-        const randomIndex = Math.floor(riggedRandom(3.0) * availableNumbers.length); // House edge in drawing
+        const randomIndex = Math.floor(riggedRandom(null, 'keno') * availableNumbers.length); // Configurable house edge in drawing
         const drawnNumber = availableNumbers.splice(randomIndex, 1)[0];
         drawnNumbers.push(drawnNumber);
         

@@ -435,8 +435,8 @@
           clearInterval(rollInterval);
           
           // Final roll with subtle house edge
-          const die1Value = riggedRandomInt(1, 6, 2.0);
-          const die2Value = riggedRandomInt(1, 6, 2.0);
+          const die1Value = riggedRandomInt(1, 6, null, 'dice');
+          const die2Value = riggedRandomInt(1, 6, null, 'dice');
           const total = die1Value + die2Value;
           
           die1El.textContent = die1Value;

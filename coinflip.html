@@ -509,7 +509,7 @@
       coinEl.classList.add('flipping');
       
       // Determine result with subtle house edge - about 47% win rate for player
-      const isWin = riggedCoinFlip(3.0);
+      const isWin = riggedCoinFlip(null, 'coinflip');
       const result = isWin ? selectedSide : (selectedSide === 'pyramid' ? 'pharaoh' : 'pyramid');
       
       // Animate coin flip

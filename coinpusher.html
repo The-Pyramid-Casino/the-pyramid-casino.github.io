@@ -1195,8 +1195,8 @@
 
       pushAllObjects() {
         // Enhanced pushing with more realistic force distribution
-        const pushForce = 8 + riggedRandom(2.0) * 4; // Slightly less effective pushing
-        const pushAngle = (riggedRandom(2.0) - 0.5) * 0.3; // Subtle bias in angle
+        const pushForce = 8 + riggedRandom(null, 'coinpusher') * 4; // Configurable pusher effectiveness
+        const pushAngle = (riggedRandom(null, 'coinpusher') - 0.5) * 0.3; // Configurable bias in angle
         
         [...this.coins, ...this.bonusPrizes].forEach(obj => {
           if (!obj.collected && obj.y >= 140) { // Only push objects on the platform
@@ -1205,8 +1205,8 @@
             const distance = Math.abs(obj.x - this.machine.offsetWidth / 2);
             const positionMultiplier = 1 + (distance / this.machine.offsetWidth) * 0.5;
             
-            obj.vx += (pushForce * forceMultiplier * positionMultiplier) + (riggedRandom(2.0) - 0.5) * 2;
-            obj.vy += Math.sin(pushAngle) * pushForce * 0.3 + (riggedRandom(2.0) - 0.5) * 1.5;
+            obj.vx += (pushForce * forceMultiplier * positionMultiplier) + (riggedRandom(null, 'coinpusher') - 0.5) * 2;
+            obj.vy += Math.sin(pushAngle) * pushForce * 0.3 + (riggedRandom(null, 'coinpusher') - 0.5) * 1.5;
             obj.resting = false; // Wake up the object
             
             // Add some rotation for visual appeal

@@ -475,8 +475,8 @@
             physics.vy = Math.sin(angle) * speed * physics.bounce;
             
             // Add subtle bias towards less favorable slots for house edge
-            physics.vx += (riggedRandom(2.5) - 0.5) * 2;
-            physics.vy += (riggedRandom(2.5) - 0.5) * 1;
+            physics.vx += (riggedRandom(null, 'plinko') - 0.5) * 2;
+            physics.vy += (riggedRandom(null, 'plinko') - 0.5) * 1;
             
             // Visual bounce effect
             ball.style.transform = 'translateX(-50%) scale(1.3)';
