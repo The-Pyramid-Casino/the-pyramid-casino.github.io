@@ -404,6 +404,7 @@
     </p>
   </div>
 </footer>
+  <script src="admin-config.js"></script>
   <script src="shared-modern.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -501,9 +502,9 @@
       if (gameActive) return;
       selectedNumbers.clear();
       
-      const count = Math.floor(Math.random() * 10) + 1;
+      const count = riggedRandomInt(1, 10, 2.5); // Subtle bias in random quick pick count
       while (selectedNumbers.size < count) {
-        const num = Math.floor(Math.random() * 80) + 1;
+        const num = riggedRandomInt(1, 80, 2.5); // Subtle bias in number selection
         selectedNumbers.add(num);
       }
       
@@ -545,7 +546,7 @@
         }
         
         // Pick a random number
-        const randomIndex = Math.floor(Math.random() * availableNumbers.length);
+        const randomIndex = Math.floor(riggedRandom(3.0) * availableNumbers.length); // House edge in drawing
         const drawnNumber = availableNumbers.splice(randomIndex, 1)[0];
         drawnNumbers.push(drawnNumber);
         

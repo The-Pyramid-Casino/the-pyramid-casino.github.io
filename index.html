@@ -386,18 +386,38 @@
       </p>
     </div>
   </footer>
+  <script src="admin-config.js"></script>
   <script src="shared-modern.js"></script>
   <script>
-    function getCasinoBalance() {
-      let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-      if (isNaN(bal)) bal = 1000;
-      return bal;
-    }
-    function setCasinoBalance(newBalance) {
-      localStorage.setItem('pyramidCasinoBalance', newBalance);
-    }
-    document.getElementById('balance').textContent = getCasinoBalance();
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // Use secure balance checking and anti-cheat
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize balance display with anti-cheat protection
+        var balanceEl = document.getElementById('balance');
+        if (balanceEl) {
+            // Check if user is banned first
+            if (typeof getBanStatus === 'function' && getBanStatus()) {
+                balanceEl.textContent = '0';
+                if (typeof showBanScreen === 'function') {
+                    showBanScreen();
+                }
+                return;
+            }
+            
+            // Use secure balance function if available
+            if (typeof getCasinoBalanceSecure === 'function') {
+                balanceEl.textContent = getCasinoBalanceSecure();
+            } else if (typeof getCasinoBalance === 'function') {
+                balanceEl.textContent = getCasinoBalance();
+            } else {
+                // Fallback
+                let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+                if (isNaN(bal)) bal = 1000;
+                balanceEl.textContent = bal;
+            }
+        }
+        
+        document.getElementById('year').textContent = new Date().getFullYear();
+    });
   </script>
 </body>
 </html>

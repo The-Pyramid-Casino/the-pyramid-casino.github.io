@@ -366,6 +366,7 @@
     </p>
   </div>
 </footer>
+  <script src="admin-config.js"></script>
   <script src="shared-modern.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -426,16 +427,16 @@
       // Animate rolling
       let rollCount = 0;
       const rollInterval = setInterval(() => {
-        die1El.textContent = Math.floor(Math.random() * 6) + 1;
-        die2El.textContent = Math.floor(Math.random() * 6) + 1;
+        die1El.textContent = Math.floor(Math.random() * 6) + 1; // Keep animation random
+        die2El.textContent = Math.floor(Math.random() * 6) + 1; // Keep animation random
         rollCount++;
         
         if (rollCount >= 10) {
           clearInterval(rollInterval);
           
-          // Final roll
-          const die1Value = Math.floor(Math.random() * 6) + 1;
-          const die2Value = Math.floor(Math.random() * 6) + 1;
+          // Final roll with subtle house edge
+          const die1Value = riggedRandomInt(1, 6, 2.0);
+          const die2Value = riggedRandomInt(1, 6, 2.0);
           const total = die1Value + die2Value;
           
           die1El.textContent = die1Value;

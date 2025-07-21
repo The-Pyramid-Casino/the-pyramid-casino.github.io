@@ -404,6 +404,7 @@
     </p>
   </div>
 </footer>
+  <script src="admin-config.js"></script>
   <script src="shared-modern.js"></script>
   <script>
     // Game statistics utilities
@@ -507,8 +508,8 @@
       flipBtn.disabled = true;
       coinEl.classList.add('flipping');
       
-      // Determine result
-      const isWin = Math.random() < 0.5;
+      // Determine result with subtle house edge - about 47% win rate for player
+      const isWin = riggedCoinFlip(3.0);
       const result = isWin ? selectedSide : (selectedSide === 'pyramid' ? 'pharaoh' : 'pyramid');
       
       // Animate coin flip

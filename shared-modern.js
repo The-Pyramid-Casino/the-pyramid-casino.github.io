@@ -1,5 +1,47 @@
 /* Shared Modern JavaScript for Pyramid Casino */
 
+// House Edge System - Subtle rigging for entertainment
+// Simple house-biased random number generator
+function riggedRandom(houseEdgePercentage = 2.5) {
+    // Generate base random number
+    let random = Math.random();
+    
+    // Apply subtle house bias by shifting the distribution slightly
+    // This reduces player's favorable outcomes by the house edge percentage
+    const bias = houseEdgePercentage / 100;
+    
+    // Shift the random number slightly towards values that favor the house
+    // For most games, lower random numbers tend to be less favorable to players
+    random = random * (1 - bias) + (random * random * bias);
+    
+    return random;
+}
+
+// Rigged random for integer ranges with house bias
+function riggedRandomInt(min, max, houseEdgePercentage = 2.5) {
+    const random = riggedRandom(houseEdgePercentage);
+    return Math.floor(random * (max - min + 1)) + min;
+}
+
+// Rigged coin flip - slightly favors house  
+function riggedCoinFlip(houseEdgePercentage = 3.0) {
+    // Simple bias: make it slightly less than 50% chance for player win
+    return riggedRandom(houseEdgePercentage) < (0.5 - houseEdgePercentage / 200);
+}
+
+// Array shuffle with subtle house bias
+function riggedShuffle(array, houseEdgePercentage = 1.5) {
+    const shuffled = [...array];
+    
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        // Use rigged random for Fisher-Yates shuffle
+        const j = Math.floor(riggedRandom(houseEdgePercentage) * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    
+    return shuffled;
+}
+
 // WCAG Compliant Instructions modal functionality
 function createInstructionsModal(gameTitle, instructions) {
     // Remove existing modal if any
@@ -293,8 +335,44 @@ function addButtonClickEffect(button) {
     });
 }
 
+// Load admin configuration if available
+function loadAdminConfig() {
+    try {
+        // Try to load admin-config.js dynamically
+        var script = document.createElement('script');
+        script.src = 'admin-config.js';
+        script.async = false;
+        script.onload = function() {
+            console.log('Admin configuration loaded successfully');
+            
+            // Check if there's a stored admin session
+            if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+                console.log('Previous admin session detected');
+                if (typeof showAdminModeIndicator !== 'undefined') {
+                    showAdminModeIndicator();
+                }
+            }
+        };
+        script.onerror = function() {
+            // Admin config not available - this is fine for regular users
+            console.log('Admin configuration not available');
+        };
+        document.head.appendChild(script);
+    } catch (e) {
+        console.log('Could not load admin configuration:', e.message);
+    }
+}
+
 // Initialize common functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Load admin config if available
+    loadAdminConfig();
+    
+    // Initialize anti-cheat system first
+    if (!initializeAntiCheat()) {
+        return; // Stop initialization if user is banned
+    }
+    
     // Add click effects to all buttons
     var buttons = document.querySelectorAll('button, .primary-btn, .game-card a');
     for (var i = 0; i < buttons.length; i++) {
@@ -651,11 +729,29 @@ var DAILY_TOPUP_KEY = 'pyramidCasinoDailyTopups';
 var MAX_DAILY_TOPUPS = 5;
 var MAX_TOPUP_AMOUNT = 10000;
 
-// Enhanced balance functions with transaction recording
+// Enhanced balance functions with encrypted storage
 function getCasinoBalance() {
-    let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-    if (isNaN(bal)) bal = 1000;
-    return bal;
+    var encryptedBalance = localStorage.getItem('pyramidCasinoBalance');
+    var balance = 1000; // default
+    
+    if (encryptedBalance) {
+        var decryptedBalance = decryptData(encryptedBalance);
+        if (decryptedBalance && validateGameData(decryptedBalance, 'balance')) {
+            balance = parseInt(decryptedBalance, 10);
+            if (isNaN(balance)) balance = 1000;
+        } else {
+            // Data corrupted or tampered - reset to default without calling setCasinoBalance
+            console.warn('Balance data corrupted or tampered with, resetting to default');
+            localStorage.setItem('pyramidCasinoBalance', encryptData('1000'));
+            balance = 1000;
+        }
+    } else {
+        // First time - set default encrypted balance directly
+        localStorage.setItem('pyramidCasinoBalance', encryptData('1000'));
+        balance = 1000;
+    }
+    
+    return balance;
 }
 
 function setCasinoBalance(newBalance, transactionType, amount, description) {
@@ -663,8 +759,21 @@ function setCasinoBalance(newBalance, transactionType, amount, description) {
     if (typeof amount === 'undefined') amount = 0;
     if (typeof description === 'undefined') description = '';
     
-    var oldBalance = getCasinoBalance();
-    localStorage.setItem('pyramidCasinoBalance', newBalance);
+    // Get old balance without triggering recursion
+    var oldBalance = 1000; // default
+    var encryptedBalance = localStorage.getItem('pyramidCasinoBalance');
+    if (encryptedBalance) {
+        var decryptedBalance = decryptData(encryptedBalance);
+        if (decryptedBalance && validateGameData(decryptedBalance, 'balance')) {
+            var parsedBalance = parseInt(decryptedBalance, 10);
+            if (!isNaN(parsedBalance)) {
+                oldBalance = parsedBalance;
+            }
+        }
+    }
+    
+    // Store balance encrypted
+    localStorage.setItem('pyramidCasinoBalance', encryptData(newBalance.toString()));
     
     // Record transaction if there's a change
     if (oldBalance !== newBalance && transactionType !== 'unknown') {
@@ -672,7 +781,7 @@ function setCasinoBalance(newBalance, transactionType, amount, description) {
     }
 }
 
-// Transaction recording system
+// Transaction recording system with encryption
 function recordTransaction(type, amount, oldBalance, newBalance, description) {
     if (typeof description === 'undefined') description = '';
     
@@ -694,13 +803,24 @@ function recordTransaction(type, amount, oldBalance, newBalance, description) {
         transactions.splice(0, transactions.length - 1000);
     }
     
-    localStorage.setItem(TRANSACTION_STORAGE_KEY, JSON.stringify(transactions));
+    // Store encrypted transactions
+    localStorage.setItem(TRANSACTION_STORAGE_KEY, encryptData(JSON.stringify(transactions)));
 }
 
 function getTransactionHistory() {
     try {
-        const stored = localStorage.getItem(TRANSACTION_STORAGE_KEY);
-        return stored ? JSON.parse(stored) : [];
+        var encryptedTransactions = localStorage.getItem(TRANSACTION_STORAGE_KEY);
+        if (encryptedTransactions) {
+            var decryptedData = decryptData(encryptedTransactions);
+            if (decryptedData && validateGameData(decryptedData, 'transactions')) {
+                return JSON.parse(decryptedData);
+            } else {
+                console.warn('Transaction history corrupted, resetting');
+                localStorage.removeItem(TRANSACTION_STORAGE_KEY);
+                return [];
+            }
+        }
+        return [];
     } catch (e) {
         console.error('Error loading transaction history:', e);
         return [];
@@ -718,12 +838,22 @@ function clearTransactionHistory() {
     return false;
 }
 
-// Daily top-up limit system
+// Daily top-up limit system with encryption
 function getTodayTopupCount() {
     try {
         var today = new Date().toDateString();
-        var stored = localStorage.getItem(DAILY_TOPUP_KEY);
-        var dailyData = stored ? JSON.parse(stored) : {};
+        var encryptedData = localStorage.getItem(DAILY_TOPUP_KEY);
+        var dailyData = {};
+        
+        if (encryptedData) {
+            var decryptedData = decryptData(encryptedData);
+            if (decryptedData && validateGameData(decryptedData, 'topups')) {
+                dailyData = JSON.parse(decryptedData);
+            } else {
+                console.warn('Daily topup data corrupted, resetting');
+                localStorage.removeItem(DAILY_TOPUP_KEY);
+            }
+        }
         
         return dailyData[today] || 0;
     } catch (e) {
@@ -735,8 +865,15 @@ function getTodayTopupCount() {
 function incrementTodayTopupCount() {
     try {
         var today = new Date().toDateString();
-        var stored = localStorage.getItem(DAILY_TOPUP_KEY);
-        var dailyData = stored ? JSON.parse(stored) : {};
+        var encryptedData = localStorage.getItem(DAILY_TOPUP_KEY);
+        var dailyData = {};
+        
+        if (encryptedData) {
+            var decryptedData = decryptData(encryptedData);
+            if (decryptedData && validateGameData(decryptedData, 'topups')) {
+                dailyData = JSON.parse(decryptedData);
+            }
+        }
         
         dailyData[today] = (dailyData[today] || 0) + 1;
         
@@ -751,7 +888,8 @@ function incrementTodayTopupCount() {
             }
         }
         
-        localStorage.setItem(DAILY_TOPUP_KEY, JSON.stringify(dailyData));
+        // Store encrypted daily data
+        localStorage.setItem(DAILY_TOPUP_KEY, encryptData(JSON.stringify(dailyData)));
         return dailyData[today];
     } catch (e) {
         console.error('Error incrementing daily topup count:', e);
@@ -763,13 +901,30 @@ function canTopUpToday() {
     return getTodayTopupCount() < MAX_DAILY_TOPUPS;
 }
 
-// Enhanced balance update with transaction recording
+// Enhanced balance update with transaction recording and anti-cheat
 function updateBalance(amount, type, description) {
     if (typeof description === 'undefined') description = '';
     
-    var currentBalance = getCasinoBalance();
-    var newBalance = Math.max(0, currentBalance + amount);
-    setCasinoBalance(newBalance, type, Math.abs(amount), description);
+    // Check for admin mode or legitimate actions
+    if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+        // Admin mode bypasses anti-cheat checks
+        var currentBalance = getCasinoBalance();
+        var newBalance = Math.max(0, currentBalance + amount);
+        setCasinoBalanceSecure(newBalance, type, Math.abs(amount), description);
+    } else if (typeof isLegitimateAction !== 'undefined' && !isLegitimateAction('balance_change', {type: type, amount: amount})) {
+        // Legitimate action check failed
+        console.warn('Balance update blocked by anti-cheat system');
+        return 0;
+    } else {
+        // Perform standard anti-cheat check for non-admin users
+        if (!performAntiCheatCheck()) {
+            return 0;
+        }
+        
+        var currentBalance = getCasinoBalance();
+        var newBalance = Math.max(0, currentBalance + amount);
+        setCasinoBalanceSecure(newBalance, type, Math.abs(amount), description);
+    }
     
     // Update UI if balance element exists
     var balanceEl = document.getElementById('balance');
@@ -784,11 +939,16 @@ function updateBalance(amount, type, description) {
     return newBalance;
 }
 
-// Game-specific transaction recording functions
+// Game-specific transaction recording functions with anti-cheat
 function recordGameBet(gameName, betAmount) {
+    // Perform anti-cheat check first
+    if (!performAntiCheatCheck()) {
+        return 0;
+    }
+    
     var currentBalance = getCasinoBalance();
     var newBalance = Math.max(0, currentBalance - betAmount);
-    setCasinoBalance(newBalance, 'loss', -betAmount, gameName + ' bet: ' + betAmount + ' chips');
+    setCasinoBalanceSecure(newBalance, 'loss', -betAmount, gameName + ' bet: ' + betAmount + ' chips');
     
     // Update UI if balance element exists
     var balanceEl = document.getElementById('balance');
@@ -806,10 +966,15 @@ function recordGameBet(gameName, betAmount) {
 function recordGameWin(gameName, winAmount, details) {
     if (typeof details === 'undefined') details = '';
     
+    // Perform anti-cheat check first
+    if (!performAntiCheatCheck()) {
+        return 0;
+    }
+    
     var currentBalance = getCasinoBalance();
     var newBalance = currentBalance + winAmount;
     var description = details ? gameName + ' win: ' + winAmount + ' chips (' + details + ')' : gameName + ' win: ' + winAmount + ' chips';
-    setCasinoBalance(newBalance, 'win', winAmount, description);
+    setCasinoBalanceSecure(newBalance, 'win', winAmount, description);
     
     // Update UI if balance element exists
     var balanceEl = document.getElementById('balance');
@@ -827,10 +992,15 @@ function recordGameWin(gameName, winAmount, details) {
 function recordGamePush(gameName, amount, details) {
     if (typeof details === 'undefined') details = '';
     
+    // Perform anti-cheat check first
+    if (!performAntiCheatCheck()) {
+        return 0;
+    }
+    
     var currentBalance = getCasinoBalance();
     var newBalance = currentBalance + amount;
     var description = details ? gameName + ' push: ' + amount + ' chips returned (' + details + ')' : gameName + ' push: ' + amount + ' chips returned';
-    setCasinoBalance(newBalance, 'win', amount, description);
+    setCasinoBalanceSecure(newBalance, 'win', amount, description);
     
     // Update UI if balance element exists
     var balanceEl = document.getElementById('balance');
@@ -845,9 +1015,29 @@ function recordGamePush(gameName, amount, details) {
     return newBalance;
 }
 
-// Top-up functionality
+// Top-up functionality with anti-cheat and admin overrides
 function performTopUp(amount, showConfirmation) {
     if (typeof showConfirmation === 'undefined') showConfirmation = true;
+    
+    // Check for admin mode first
+    if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+        // Admin mode bypasses all restrictions
+        var oldBalance = getCasinoBalance();
+        var newBalance = updateBalance(amount, 'topup', 'Admin top-up of ' + amount + ' chips');
+        showNotification('✨ Admin top-up of ' + amount + ' chips!\n💰 New Balance: ' + newBalance, 'win', 4000);
+        return true;
+    }
+    
+    // Check if topup is legitimate
+    if (typeof isLegitimateAction !== 'undefined' && !isLegitimateAction('topup', {amount: amount})) {
+        showNotification('❌ Top-up temporarily unavailable. Please try again later.', 'lose');
+        return false;
+    }
+    
+    // Perform standard anti-cheat check for non-admin users
+    if (!performAntiCheatCheck()) {
+        return false;
+    }
     
     // Validation
     if (!amount || amount <= 0) {
@@ -912,6 +1102,472 @@ function confirmAction(message, title) {
     return confirm(title + '\n\n' + message);
 }
 
+// Encrypted Data Security System
+var BAN_STATUS_KEY = 'pyramidCasinoBanStatus';
+var BAN_DURATION_HOURS = 48;
+var ENCRYPTION_KEY = 'PyramidCasino2024Security'; // Simple key for client-side obfuscation
+
+// Simple encryption for client-side data protection (obfuscation)
+function encryptData(data) {
+    var dataStr = typeof data === 'string' ? data : JSON.stringify(data);
+    var encrypted = '';
+    var keyLength = ENCRYPTION_KEY.length;
+    
+    for (var i = 0; i < dataStr.length; i++) {
+        var char = dataStr.charCodeAt(i);
+        var keyChar = ENCRYPTION_KEY.charCodeAt(i % keyLength);
+        encrypted += String.fromCharCode(char ^ keyChar);
+    }
+    
+    // Base64 encode to make it look more obscure
+    return btoa(encrypted);
+}
+
+// Simple decryption for client-side data protection
+function decryptData(encryptedData) {
+    if (!encryptedData) return null;
+    
+    try {
+        // Base64 decode first
+        var encrypted = atob(encryptedData);
+        var decrypted = '';
+        var keyLength = ENCRYPTION_KEY.length;
+        
+        for (var i = 0; i < encrypted.length; i++) {
+            var char = encrypted.charCodeAt(i);
+            var keyChar = ENCRYPTION_KEY.charCodeAt(i % keyLength);
+            decrypted += String.fromCharCode(char ^ keyChar);
+        }
+        
+        return decrypted;
+    } catch (e) {
+        console.warn('Data decryption failed, may be corrupted');
+        return null;
+    }
+}
+
+// Validate if data looks reasonable (basic anti-cheat without aggressive checking)
+function validateGameData(data, dataType) {
+    if (!data) return false;
+    
+    try {
+        switch(dataType) {
+            case 'balance':
+                // Check if it's a valid number string
+                if (!/^\d+$/.test(data)) return false;
+                var balance = parseInt(data);
+                // Reasonable balance check - no more than 10 million chips
+                return !isNaN(balance) && balance >= 0 && balance <= 10000000;
+                
+            case 'transactions':
+                var transactions = JSON.parse(data);
+                return Array.isArray(transactions) && transactions.length <= 1000;
+                
+            case 'topups':
+                var topups = JSON.parse(data);
+                return typeof topups === 'object' && topups !== null;
+                
+            default:
+                return true;
+        }
+    } catch (e) {
+        return false;
+    }
+}
+
+// Ban management functions
+function getBanStatus() {
+    try {
+        var banData = localStorage.getItem(BAN_STATUS_KEY);
+        if (!banData) return null;
+        
+        var ban = JSON.parse(banData);
+        var now = Date.now();
+        
+        // Check if ban has expired
+        if (now > ban.expiresAt) {
+            localStorage.removeItem(BAN_STATUS_KEY);
+            return null;
+        }
+        
+        return ban;
+    } catch (e) {
+        console.error('Error loading ban status:', e);
+        return null;
+    }
+}
+
+function setBanStatus(reason) {
+    var now = Date.now();
+    var expiresAt = now + (BAN_DURATION_HOURS * 60 * 60 * 1000);
+    
+    var banData = {
+        bannedAt: now,
+        expiresAt: expiresAt,
+        reason: reason || 'Attempting to manipulate casino data',
+        duration: BAN_DURATION_HOURS
+    };
+    
+    localStorage.setItem(BAN_STATUS_KEY, JSON.stringify(banData));
+    return banData;
+}
+
+function clearBan() {
+    localStorage.removeItem(BAN_STATUS_KEY);
+}
+
+// Check for obvious cheating attempts and handle ban
+function handleCheatDetection(reason) {
+    // Set balance to zero (encrypted)
+    localStorage.setItem('pyramidCasinoBalance', encryptData('0'));
+    
+    // Clear sensitive data
+    localStorage.removeItem(TRANSACTION_STORAGE_KEY);
+    localStorage.removeItem(DAILY_TOPUP_KEY);
+    
+    // Set ban status
+    setBanStatus(reason);
+    
+    // Show ban screen
+    showBanScreen();
+}
+
+// Show ban screen with countdown
+function showBanScreen() {
+    var banStatus = getBanStatus();
+    if (!banStatus) return;
+    
+    // Create ban screen overlay
+    var banScreen = document.createElement('div');
+    banScreen.id = 'ban-screen';
+    banScreen.innerHTML = `
+        <div class="ban-overlay">
+            <div class="ban-modal">
+                <div class="ban-header">
+                    <h1>🚫 Account Temporarily Banned</h1>
+                </div>
+                <div class="ban-content">
+                    <div class="ban-icon">⚠️</div>
+                    <h2>Anti-Cheat System Triggered</h2>
+                    <p><strong>Reason:</strong> ${banStatus.reason}</p>
+                    <p>Your account has been temporarily suspended for attempting to manipulate casino data.</p>
+                    
+                    <div class="ban-details">
+                        <h3>What happened?</h3>
+                        <ul>
+                            <li>Our system detected unauthorized changes to your chip balance, transaction history, or daily topup data</li>
+                            <li>Your chip balance has been reset to zero as a security measure</li>
+                            <li>This ban will automatically expire in <strong id="countdown-timer">--:--:--</strong></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="ban-actions">
+                        <p><strong>When the ban expires:</strong></p>
+                        <ul>
+                            <li>You will receive 1000 starting chips</li>
+                            <li>You can resume playing all casino games</li>
+                            <li>Your daily topup allowance will be restored</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="ban-timer">
+                        <h3>Time Remaining:</h3>
+                        <div class="countdown-display" id="countdown-display">
+                            <div class="time-unit">
+                                <span id="hours">00</span>
+                                <label>Hours</label>
+                            </div>
+                            <div class="time-unit">
+                                <span id="minutes">00</span>
+                                <label>Minutes</label>
+                            </div>
+                            <div class="time-unit">
+                                <span id="seconds">00</span>
+                                <label>Seconds</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ban-footer">
+                        <p><em>Please play fairly and enjoy the games responsibly!</em></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add CSS styles
+    var style = document.createElement('style');
+    style.textContent = `
+        #ban-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        
+        .ban-modal {
+            background: linear-gradient(135deg, #231b36 0%, #18122b 100%);
+            border: 3px solid #d7263d;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(215, 38, 61, 0.3);
+            animation: banModalSlide 0.5s ease-out;
+        }
+        
+        @keyframes banModalSlide {
+            from {
+                transform: scale(0.7) translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .ban-header {
+            background: #d7263d;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 17px 17px 0 0;
+        }
+        
+        .ban-header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .ban-content {
+            padding: 2rem;
+            color: #f3e9dc;
+            text-align: center;
+        }
+        
+        .ban-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .ban-content h2 {
+            color: #d7263d;
+            margin: 1rem 0;
+            font-size: 1.5rem;
+        }
+        
+        .ban-content h3 {
+            color: #f9d923;
+            margin: 1.5rem 0 1rem 0;
+        }
+        
+        .ban-details, .ban-actions {
+            background: rgba(249, 217, 35, 0.1);
+            border: 1px solid #f9d923;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        
+        .ban-details ul, .ban-actions ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .ban-details li, .ban-actions li {
+            margin: 0.5rem 0;
+            line-height: 1.4;
+        }
+        
+        .countdown-display {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1rem 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .time-unit {
+            text-align: center;
+        }
+        
+        .time-unit span {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #d7263d;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(215, 38, 61, 0.5);
+        }
+        
+        .time-unit label {
+            color: #a0843a;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        
+        .ban-footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #a0843a;
+            color: #a0843a;
+            font-style: italic;
+        }
+        
+        @media (max-width: 600px) {
+            .ban-modal {
+                margin: 1rem;
+                width: calc(100% - 2rem);
+            }
+            
+            .ban-content {
+                padding: 1.5rem;
+            }
+            
+            .countdown-display {
+                gap: 1rem;
+            }
+            
+            .time-unit span {
+                font-size: 2rem;
+            }
+        }
+    `;
+    
+    document.head.appendChild(style);
+    document.body.appendChild(banScreen);
+    
+    // Start countdown
+    updateCountdown(banStatus.expiresAt);
+    var countdownInterval = setInterval(function() {
+        if (updateCountdown(banStatus.expiresAt)) {
+            clearInterval(countdownInterval);
+            // Ban expired, reload page
+            window.location.reload();
+        }
+    }, 1000);
+}
+
+// Update countdown display
+function updateCountdown(expiresAt) {
+    var now = Date.now();
+    var remaining = expiresAt - now;
+    
+    if (remaining <= 0) {
+        // Ban expired
+        clearBan();
+        return true;
+    }
+    
+    var hours = Math.floor(remaining / (1000 * 60 * 60));
+    var minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+    
+    var hoursEl = document.getElementById('hours');
+    var minutesEl = document.getElementById('minutes');
+    var secondsEl = document.getElementById('seconds');
+    
+    if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
+    if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
+    if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
+    
+    return false;
+}
+
+// Enhanced balance functions with encrypted storage
+function getCasinoBalanceSecure() {
+    // Check if user is banned
+    var banStatus = getBanStatus();
+    if (banStatus) {
+        showBanScreen();
+        return 0;
+    }
+    
+    return getCasinoBalance();
+}
+
+function setCasinoBalanceSecure(newBalance, transactionType, amount, description) {
+    // Check if user is banned
+    var banStatus = getBanStatus();
+    if (banStatus) {
+        showBanScreen();
+        return;
+    }
+    
+    // Basic validation to prevent extreme values
+    if (typeof newBalance === 'number' && newBalance > 10000000) {
+        handleCheatDetection('Attempted to set unreasonably high balance: ' + newBalance);
+        return;
+    }
+    
+    // Set balance using encrypted storage
+    setCasinoBalance(newBalance, transactionType, amount, description);
+}
+
+// Lightweight anti-cheat check (much less aggressive than before)
+function performAntiCheatCheck() {
+    // Admin mode bypasses all checks
+    if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+        return true;
+    }
+    
+    // Check if user is banned
+    var banStatus = getBanStatus();
+    if (banStatus) {
+        showBanScreen();
+        return false;
+    }
+    
+    // Only check for extreme values that indicate obvious tampering
+    var currentBalance = getCasinoBalance();
+    if (currentBalance > 10000000) {
+        handleCheatDetection('Balance exceeds reasonable limits: ' + currentBalance);
+        return false;
+    }
+    
+    return true;
+}
+
+// Initialize lightweight anti-cheat system
+function initializeAntiCheat() {
+    // Check ban status first
+    var banStatus = getBanStatus();
+    if (banStatus) {
+        showBanScreen();
+        return false;
+    }
+    
+    // Admin mode can bypass all checks
+    if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+        console.log('Admin mode active - anti-cheat checks minimal');
+        return true;
+    }
+    
+    // Only check for obvious tampering (no more periodic integrity checks)
+    var currentBalance = getCasinoBalance();
+    if (currentBalance > 10000000) {
+        handleCheatDetection('Initial check: Balance exceeds reasonable limits');
+        return false;
+    }
+    
+    return true;
+}
+
 // Export for use in other scripts
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
@@ -938,6 +1594,13 @@ if (typeof module !== 'undefined' && module.exports) {
         formatDate,
         confirmAction,
         MAX_DAILY_TOPUPS,
-        MAX_TOPUP_AMOUNT
+        MAX_TOPUP_AMOUNT,
+        // Anti-cheat functions
+        performAntiCheatCheck,
+        initializeAntiCheat,
+        getCasinoBalanceSecure,
+        setCasinoBalanceSecure,
+        getBanStatus,
+        showBanScreen
     };
 }
