@@ -509,14 +509,12 @@
     function startPusherAnimation() {
       const blade = document.getElementById('pusher-blade');
       setInterval(() => {
-        if (!isDropping) {
-          blade.classList.add('pushing');
-          setTimeout(() => {
-            blade.classList.remove('pushing');
-            pushCoins();
-          }, 400);
-        }
-      }, 3000);
+        blade.classList.add('pushing');
+        setTimeout(() => {
+          blade.classList.remove('pushing');
+          pushCoins();
+        }, 400);
+      }, 2000); // Reduced from 3000 to 2000ms for more frequent pushing
     }
 
     function dropCoins() {
@@ -645,8 +643,8 @@
           }
         }
         
-        // Collection zone check
-        if (coinData.y <= 80 && !coinData.collected) {
+        // Collection zone check - made more generous
+        if (coinData.y <= 100 && !coinData.collected) {
           coinData.collected = true;
           coinData.element.style.transition = 'opacity 0.5s ease-out';
           coinData.element.style.opacity = '0';
@@ -684,8 +682,8 @@
       coins.forEach(coin => {
         if (!coin.collected && coin.y >= 120 && coin.resting) {
           // Only push coins that are on the platform and at rest
-          coin.vx += 2.5 + (Math.random() * 1); // Stronger, more variable push
-          coin.vy += (Math.random() - 0.5) * 1; // Small vertical variation
+          coin.vx += 3.5 + (Math.random() * 2); // Stronger push force
+          coin.vy += (Math.random() - 0.5) * 1.5; // More vertical variation
           coin.resting = false; // Make coin active again
           animateCoin(coin);
         }
@@ -694,8 +692,8 @@
       // Push bonus prizes
       bonusPrizes.forEach(bonus => {
         if (!bonus.collected && bonus.y >= 120 && bonus.resting) {
-          bonus.vx += 2.5 + (Math.random() * 1);
-          bonus.vy += (Math.random() - 0.5) * 1;
+          bonus.vx += 3.5 + (Math.random() * 2); // Match coin push force
+          bonus.vy += (Math.random() - 0.5) * 1.5;
           bonus.resting = false;
           animateBonus(bonus);
         }
@@ -742,8 +740,8 @@
           bonusData.resting = true;
         }
         
-        // Collection zone
-        if (bonusData.y <= 80 && !bonusData.collected) {
+        // Collection zone - made more generous
+        if (bonusData.y <= 100 && !bonusData.collected) {
           bonusData.collected = true;
           bonusData.element.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
           bonusData.element.style.opacity = '0';
