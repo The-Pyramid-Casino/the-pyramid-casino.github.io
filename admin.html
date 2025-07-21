@@ -240,6 +240,30 @@
           <button onclick="resetToDefaults()" class="admin-btn danger">Reset to Defaults</button>
         </div>
 
+        <!-- Game Odds Management -->
+        <div class="admin-section">
+          <h3>🎲 Game Odds Control</h3>
+          <select id="game-select" class="admin-input">
+            <option value="">Select a game...</option>
+            <option value="blackjack">Blackjack</option>
+            <option value="slots">Slots</option>
+            <option value="roulette">Roulette</option>
+            <option value="poker">Poker</option>
+            <option value="dice">Dice</option>
+            <option value="baccarat">Baccarat</option>
+            <option value="keno">Keno</option>
+            <option value="coinflip">Coin Flip</option>
+            <option value="plinko">Plinko</option>
+            <option value="coinpusher">Coin Pusher</option>
+          </select>
+          <input type="number" id="odds-input" class="admin-input" placeholder="House edge %" min="0" max="50" step="0.1">
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button onclick="setGameOdds()" class="admin-btn">Set Odds</button>
+            <button onclick="viewAllOdds()" class="admin-btn">View All Odds</button>
+            <button onclick="resetAllOdds()" class="admin-btn danger">Reset to Defaults</button>
+          </div>
+        </div>
+
         <!-- Console Output -->
         <div class="admin-section" style="grid-column: 1 / -1;">
           <h3>💻 Console Output</h3>
@@ -541,6 +565,64 @@
         disableAdminMode();
         sessionStorage.removeItem('pyramidCasinoDirectAdminAccess');
         window.location.href = 'index.html';
+      }
+    }
+
+    // Game Odds Management Functions
+    function setGameOdds() {
+      const gameName = document.getElementById('game-select').value;
+      const houseEdge = parseFloat(document.getElementById('odds-input').value);
+      
+      if (!gameName) {
+        alert('Please select a game');
+        logToConsole('Game odds change failed: No game selected', 'error');
+        return;
+      }
+      
+      if (isNaN(houseEdge) || houseEdge < 0 || houseEdge > 50) {
+        alert('Please enter a valid house edge between 0 and 50 percent');
+        logToConsole('Game odds change failed: Invalid house edge value', 'error');
+        return;
+      }
+      
+      if (confirm(`Set house edge for ${gameName} to ${houseEdge}%?`)) {
+        if (adminSetGameOdds(gameName, houseEdge)) {
+          logToConsole(`House edge for ${gameName} set to ${houseEdge}%`, 'success');
+          document.getElementById('odds-input').value = '';
+          document.getElementById('game-select').value = '';
+        } else {
+          logToConsole(`Failed to set house edge for ${gameName}`, 'error');
+        }
+      }
+    }
+
+    function viewAllOdds() {
+      if (adminViewGameOdds()) {
+        // Also display in the admin interface
+        const gameSettings = getAdminGameSettings();
+        const defaultOdds = {
+          'blackjack': 2.5, 'slots': 3.0, 'roulette': 2.7, 'poker': 2.2, 'dice': 1.4,
+          'baccarat': 1.2, 'keno': 4.0, 'coinflip': 3.0, 'plinko': 2.8, 'coinpusher': 2.0
+        };
+        
+        let oddsDisplay = 'Current Game Odds (House Edge %):\n';
+        for (const game in defaultOdds) {
+          const currentEdge = gameSettings[game] || defaultOdds[game];
+          const status = gameSettings[game] ? ' (CUSTOM)' : ' (default)';
+          oddsDisplay += `${game}: ${currentEdge}%${status}\n`;
+        }
+        
+        logToConsole(oddsDisplay, 'info');
+      }
+    }
+
+    function resetAllOdds() {
+      if (confirm('⚠️ Reset ALL game odds to default values?\n\nThis will remove all custom odds settings.')) {
+        if (adminResetGameOdds('CONFIRM_RESET_ODDS')) {
+          logToConsole('All game odds reset to default values', 'success');
+        } else {
+          logToConsole('Failed to reset game odds', 'error');
+        }
       }
     }
 

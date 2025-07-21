@@ -295,15 +295,76 @@ function adminStatus() {
     console.log('Admin Mode:', isAdminMode());
     console.log('Current Balance:', getCasinoBalance());
     console.log('Today\'s Topups:', getTodayTopupCount(), '/', MAX_DAILY_TOPUPS);
-    console.log('Ban Status:', getBanStatus() ? 'BANNED' : 'Active');
-    console.log('Data Security: Encrypted storage system active');
+    console.log('Ban Status:', getBanStatus() ? 'BANNED (24hr duration)' : 'Active');
+    console.log('Data Security: Enhanced encryption system active');
+    console.log('Game Odds (House Edge %):');
+    var gameSettings = getAdminGameSettings();
+    for (var game in GAME_ODDS_CONFIG) {
+        var currentEdge = gameSettings[game] || GAME_ODDS_CONFIG[game];
+        console.log('  - ' + game + ': ' + currentEdge + '%');
+    }
     console.log('Available Commands:');
     console.log('  - adminUnban("CONFIRM_UNBAN")');
     console.log('  - adminSetBalance(amount, "CONFIRM_SET_BALANCE")');
     console.log('  - adminClearTransactions("CONFIRM_CLEAR_TRANSACTIONS")');
     console.log('  - adminResetTopups("CONFIRM_RESET_TOPUPS")');
+    console.log('  - adminSetGameOdds(gameName, houseEdgePercent)');
+    console.log('  - adminViewGameOdds()');
+    console.log('  - adminResetGameOdds("CONFIRM_RESET_ODDS")');
     console.log('  - enableAdminMode("OVERRIDE_CODE")');
     console.log('  - disableAdminMode()');
+}
+
+function adminSetGameOdds(gameName, houseEdgePercent) {
+    if (!isAdminMode()) {
+        console.error('Admin mode required for this action');
+        return false;
+    }
+    
+    var validGames = ['blackjack', 'slots', 'roulette', 'poker', 'dice', 'baccarat', 'keno', 'coinflip', 'plinko', 'coinpusher'];
+    if (!validGames.includes(gameName)) {
+        console.error('Invalid game name. Valid games:', validGames.join(', '));
+        return false;
+    }
+    
+    if (typeof houseEdgePercent !== 'number' || houseEdgePercent < 0 || houseEdgePercent > 50) {
+        console.error('Invalid house edge. Must be between 0 and 50 percent.');
+        return false;
+    }
+    
+    return setAdminGameOdds(gameName, houseEdgePercent);
+}
+
+function adminViewGameOdds() {
+    if (!isAdminMode()) {
+        console.error('Admin mode required for this action');
+        return false;
+    }
+    
+    console.log('=== CURRENT GAME ODDS (House Edge %) ===');
+    var gameSettings = getAdminGameSettings();
+    for (var game in GAME_ODDS_CONFIG) {
+        var currentEdge = gameSettings[game] || GAME_ODDS_CONFIG[game];
+        var isCustom = gameSettings[game] ? ' (CUSTOM)' : ' (default)';
+        console.log(game + ': ' + currentEdge + '%' + isCustom);
+    }
+    return true;
+}
+
+function adminResetGameOdds(confirmation) {
+    if (!isAdminMode()) {
+        console.error('Admin mode required for this action');
+        return false;
+    }
+    
+    if (confirmation !== 'CONFIRM_RESET_ODDS') {
+        console.log('To reset all game odds to defaults, call: adminResetGameOdds("CONFIRM_RESET_ODDS")');
+        return false;
+    }
+    
+    localStorage.removeItem('pyramidCasinoAdminGameSettings');
+    console.log('All game odds reset to default values');
+    return true;
 }
 
 // Enhanced Console Access
@@ -337,6 +398,10 @@ if (typeof window !== 'undefined') {
     window.adminResetTopups = adminResetTopups;
     window.adminStatus = adminStatus;
     window.pyramidConsole = pyramidConsole;
+    // New game odds admin functions
+    window.adminSetGameOdds = adminSetGameOdds;
+    window.adminViewGameOdds = adminViewGameOdds;
+    window.adminResetGameOdds = adminResetGameOdds;
 }
 
 // Export functions for use in other scripts
@@ -353,6 +418,10 @@ if (typeof module !== 'undefined' && module.exports) {
         adminClearTransactions,
         adminResetTopups,
         adminStatus,
-        pyramidConsole
+        pyramidConsole,
+        // New game odds functions
+        adminSetGameOdds,
+        adminViewGameOdds,
+        adminResetGameOdds
     };
 }

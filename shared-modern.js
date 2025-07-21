@@ -1,8 +1,71 @@
 /* Shared Modern JavaScript for Pyramid Casino */
 
-// House Edge System - Subtle rigging for entertainment
-// Simple house-biased random number generator
-function riggedRandom(houseEdgePercentage = 2.5) {
+// House Edge System - Configurable rigging for entertainment with admin controls
+var GAME_ODDS_CONFIG = {
+    'blackjack': 2.5,
+    'slots': 3.0,
+    'roulette': 2.7,
+    'poker': 2.2,
+    'dice': 1.4,
+    'baccarat': 1.2,
+    'keno': 4.0,
+    'coinflip': 3.0,
+    'plinko': 2.8,
+    'coinpusher': 2.0
+};
+
+// Get configurable house edge for a specific game
+function getGameHouseEdge(gameName) {
+    // Admin can override house edges
+    if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+        var adminSettings = getAdminGameSettings();
+        if (adminSettings[gameName]) {
+            return adminSettings[gameName];
+        }
+    }
+    
+    return GAME_ODDS_CONFIG[gameName] || 2.5; // Default 2.5%
+}
+
+// Admin function to get game settings
+function getAdminGameSettings() {
+    try {
+        var settings = localStorage.getItem('pyramidCasinoAdminGameSettings');
+        return settings ? JSON.parse(settings) : {};
+    } catch (e) {
+        return {};
+    }
+}
+
+// Admin function to set game odds
+function setAdminGameOdds(gameName, houseEdge) {
+    if (typeof isAdminMode !== 'undefined' && !isAdminMode()) {
+        console.error('Admin mode required to modify game odds');
+        return false;
+    }
+    
+    if (typeof houseEdge !== 'number' || houseEdge < 0 || houseEdge > 50) {
+        console.error('Invalid house edge. Must be between 0 and 50 percent.');
+        return false;
+    }
+    
+    var settings = getAdminGameSettings();
+    settings[gameName] = houseEdge;
+    localStorage.setItem('pyramidCasinoAdminGameSettings', JSON.stringify(settings));
+    
+    console.log('Set house edge for', gameName, 'to', houseEdge + '%');
+    return true;
+}
+
+// Simple house-biased random number generator with configurable edge
+function riggedRandom(houseEdgePercentage, gameName) {
+    // Use game-specific house edge if available
+    if (gameName && !houseEdgePercentage) {
+        houseEdgePercentage = getGameHouseEdge(gameName);
+    } else if (!houseEdgePercentage) {
+        houseEdgePercentage = 2.5; // Default
+    }
+    
     // Generate base random number
     let random = Math.random();
     
@@ -17,25 +80,37 @@ function riggedRandom(houseEdgePercentage = 2.5) {
     return random;
 }
 
-// Rigged random for integer ranges with house bias
-function riggedRandomInt(min, max, houseEdgePercentage = 2.5) {
-    const random = riggedRandom(houseEdgePercentage);
+// Rigged random for integer ranges with configurable house bias
+function riggedRandomInt(min, max, houseEdgePercentage, gameName) {
+    const random = riggedRandom(houseEdgePercentage, gameName);
     return Math.floor(random * (max - min + 1)) + min;
 }
 
-// Rigged coin flip - slightly favors house  
-function riggedCoinFlip(houseEdgePercentage = 3.0) {
+// Rigged coin flip with configurable house bias  
+function riggedCoinFlip(houseEdgePercentage, gameName) {
+    if (!houseEdgePercentage && gameName) {
+        houseEdgePercentage = getGameHouseEdge(gameName);
+    } else if (!houseEdgePercentage) {
+        houseEdgePercentage = 3.0; // Default for coin flip
+    }
+    
     // Simple bias: make it slightly less than 50% chance for player win
-    return riggedRandom(houseEdgePercentage) < (0.5 - houseEdgePercentage / 200);
+    return riggedRandom(houseEdgePercentage, gameName) < (0.5 - houseEdgePercentage / 200);
 }
 
-// Array shuffle with subtle house bias
-function riggedShuffle(array, houseEdgePercentage = 1.5) {
+// Array shuffle with configurable subtle house bias
+function riggedShuffle(array, houseEdgePercentage, gameName) {
+    if (!houseEdgePercentage && gameName) {
+        houseEdgePercentage = getGameHouseEdge(gameName);
+    } else if (!houseEdgePercentage) {
+        houseEdgePercentage = 1.5; // Default shuffle bias
+    }
+    
     const shuffled = [...array];
     
     for (let i = shuffled.length - 1; i > 0; i--) {
         // Use rigged random for Fisher-Yates shuffle
-        const j = Math.floor(riggedRandom(houseEdgePercentage) * (i + 1));
+        const j = Math.floor(riggedRandom(houseEdgePercentage, gameName) * (i + 1));
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     
@@ -1102,75 +1177,179 @@ function confirmAction(message, title) {
     return confirm(title + '\n\n' + message);
 }
 
-// Encrypted Data Security System
+// Enhanced Security System
 var BAN_STATUS_KEY = 'pyramidCasinoBanStatus';
-var BAN_DURATION_HOURS = 48;
-var ENCRYPTION_KEY = 'PyramidCasino2024Security'; // Simple key for client-side obfuscation
+var BAN_DURATION_HOURS = 24; // Fixed to 24 hours as requested
+var SECURITY_CONFIG = {
+    // Dynamic keys based on timestamp to make reverse engineering harder
+    BASE_SEEDS: ['PyramidCasino', '2024Security', 'EgyptianSecrets', 'AntiCheat'],
+    VALIDATION_PATTERNS: [0x5A, 0x3C, 0x7E, 0x2F, 0x91, 0x4B, 0x66, 0x8D],
+    CHECKSUM_MULTIPLIER: 0x1F4A,
+    MAX_REASONABLE_BALANCE: 10000000
+};
 
-// Simple encryption for client-side data protection (obfuscation)
-function encryptData(data) {
-    var dataStr = typeof data === 'string' ? data : JSON.stringify(data);
-    var encrypted = '';
-    var keyLength = ENCRYPTION_KEY.length;
+// Enhanced encryption with dynamic keys and validation
+function generateSessionKey() {
+    var timestamp = Math.floor(Date.now() / (1000 * 60 * 15)); // Changes every 15 minutes
+    var userAgent = navigator.userAgent.length;
+    var screenData = screen.width + screen.height;
+    var combined = timestamp + userAgent + screenData;
     
-    for (var i = 0; i < dataStr.length; i++) {
-        var char = dataStr.charCodeAt(i);
-        var keyChar = ENCRYPTION_KEY.charCodeAt(i % keyLength);
-        encrypted += String.fromCharCode(char ^ keyChar);
+    var key = '';
+    for (var i = 0; i < SECURITY_CONFIG.BASE_SEEDS.length; i++) {
+        key += SECURITY_CONFIG.BASE_SEEDS[i] + combined.toString(16);
     }
-    
-    // Base64 encode to make it look more obscure
-    return btoa(encrypted);
+    return key.slice(0, 64); // Fixed length key
 }
 
-// Simple decryption for client-side data protection
+function createDataChecksum(data) {
+    var checksum = 0;
+    for (var i = 0; i < data.length; i++) {
+        checksum = ((checksum << 5) - checksum + data.charCodeAt(i)) & 0xffffffff;
+    }
+    return (checksum * SECURITY_CONFIG.CHECKSUM_MULTIPLIER) & 0xffffffff;
+}
+
+function encryptData(data) {
+    var dataStr = typeof data === 'string' ? data : JSON.stringify(data);
+    var sessionKey = generateSessionKey();
+    var encrypted = '';
+    var keyLength = sessionKey.length;
+    
+    // Add timestamp and checksum for validation
+    var timestamp = Date.now().toString(36);
+    var checksum = createDataChecksum(dataStr).toString(36);
+    var payload = timestamp + '|' + checksum + '|' + dataStr;
+    
+    // Multi-layer encryption with XOR and bit manipulation
+    for (var i = 0; i < payload.length; i++) {
+        var char = payload.charCodeAt(i);
+        var keyChar = sessionKey.charCodeAt(i % keyLength);
+        var pattern = SECURITY_CONFIG.VALIDATION_PATTERNS[i % SECURITY_CONFIG.VALIDATION_PATTERNS.length];
+        
+        // Apply multiple transformations
+        var transformed = char ^ keyChar ^ pattern;
+        transformed = ((transformed << 3) | (transformed >> 5)) & 0xFF; // Rotate bits
+        encrypted += String.fromCharCode(transformed);
+    }
+    
+    // Base64 encode with padding
+    return btoa(encrypted + '==PYRAMID==');
+}
+
 function decryptData(encryptedData) {
     if (!encryptedData) return null;
     
     try {
-        // Base64 decode first
-        var encrypted = atob(encryptedData);
-        var decrypted = '';
-        var keyLength = ENCRYPTION_KEY.length;
+        // Remove padding and base64 decode
+        var decoded = atob(encryptedData);
+        if (!decoded.endsWith('==PYRAMID==')) return null;
+        var encrypted = decoded.slice(0, -11);
         
+        var sessionKey = generateSessionKey();
+        var decrypted = '';
+        var keyLength = sessionKey.length;
+        
+        // Reverse the encryption process
         for (var i = 0; i < encrypted.length; i++) {
             var char = encrypted.charCodeAt(i);
-            var keyChar = ENCRYPTION_KEY.charCodeAt(i % keyLength);
-            decrypted += String.fromCharCode(char ^ keyChar);
+            // Reverse bit rotation
+            char = ((char >> 3) | (char << 5)) & 0xFF;
+            
+            var keyChar = sessionKey.charCodeAt(i % keyLength);
+            var pattern = SECURITY_CONFIG.VALIDATION_PATTERNS[i % SECURITY_CONFIG.VALIDATION_PATTERNS.length];
+            
+            // Reverse XOR operations
+            decrypted += String.fromCharCode(char ^ keyChar ^ pattern);
         }
         
-        return decrypted;
+        // Parse and validate payload
+        var parts = decrypted.split('|');
+        if (parts.length !== 3) return null;
+        
+        var storedTimestamp = parseInt(parts[0], 36);
+        var storedChecksum = parseInt(parts[1], 36);
+        var data = parts[2];
+        
+        // Verify checksum
+        var calculatedChecksum = createDataChecksum(data);
+        if (storedChecksum !== calculatedChecksum) {
+            console.warn('Data integrity check failed - possible tampering detected');
+            return null;
+        }
+        
+        // Check if data is too old (prevents replay attacks)
+        var age = Date.now() - storedTimestamp;
+        if (age > 24 * 60 * 60 * 1000) { // 24 hours max age
+            console.warn('Data too old, rejecting for security');
+            return null;
+        }
+        
+        return data;
     } catch (e) {
-        console.warn('Data decryption failed, may be corrupted');
+        console.warn('Data decryption failed:', e.message);
         return null;
     }
 }
 
-// Validate if data looks reasonable (basic anti-cheat without aggressive checking)
+// Validate if data looks reasonable with enhanced security checks
 function validateGameData(data, dataType) {
     if (!data) return false;
     
     try {
         switch(dataType) {
             case 'balance':
-                // Check if it's a valid number string
+                // More restrictive balance validation
                 if (!/^\d+$/.test(data)) return false;
                 var balance = parseInt(data);
-                // Reasonable balance check - no more than 10 million chips
-                return !isNaN(balance) && balance >= 0 && balance <= 10000000;
+                
+                // Enhanced balance validation - flag suspicious amounts
+                if (isNaN(balance) || balance < 0) return false;
+                if (balance > SECURITY_CONFIG.MAX_REASONABLE_BALANCE) return false;
+                
+                // Additional check for common cheating patterns
+                var balanceStr = balance.toString();
+                var suspiciousPatterns = ['999999', '123456', '777777', '888888'];
+                for (var i = 0; i < suspiciousPatterns.length; i++) {
+                    if (balanceStr.includes(suspiciousPatterns[i])) {
+                        console.warn('Suspicious balance pattern detected:', balanceStr);
+                        return false;
+                    }
+                }
+                
+                return true;
                 
             case 'transactions':
                 var transactions = JSON.parse(data);
-                return Array.isArray(transactions) && transactions.length <= 1000;
+                if (!Array.isArray(transactions) || transactions.length > 1000) return false;
+                
+                // Validate transaction structure
+                for (var i = 0; i < Math.min(transactions.length, 10); i++) {
+                    var tx = transactions[i];
+                    if (!tx.timestamp || !tx.type || typeof tx.amount !== 'number') {
+                        return false;
+                    }
+                }
+                return true;
                 
             case 'topups':
                 var topups = JSON.parse(data);
-                return typeof topups === 'object' && topups !== null;
+                if (typeof topups !== 'object' || topups === null) return false;
+                
+                // Validate topup data structure
+                var dates = Object.keys(topups);
+                for (var i = 0; i < dates.length; i++) {
+                    if (typeof topups[dates[i]] !== 'number' || topups[dates[i]] < 0) {
+                        return false;
+                    }
+                }
+                return true;
                 
             default:
                 return true;
         }
     } catch (e) {
+        console.warn('Data validation error:', e.message);
         return false;
     }
 }
@@ -1257,15 +1436,16 @@ function showBanScreen() {
                         <ul>
                             <li>Our system detected unauthorized changes to your chip balance, transaction history, or daily topup data</li>
                             <li>Your chip balance has been reset to zero as a security measure</li>
-                            <li>This ban will automatically expire in <strong id="countdown-timer">--:--:--</strong></li>
+                            <li>This ban will automatically expire in <strong id="countdown-timer">--:--:--</strong> (24 hours maximum)</li>
                         </ul>
                     </div>
                     
                     <div class="ban-actions">
-                        <p><strong>When the ban expires:</strong></p>
+                        <p><strong>When the ban expires (24 hours):</strong></p>
                         <ul>
-                            <li>You will receive 1000 starting chips</li>
+                            <li>Your balance will remain at 0 chips (no free restoration)</li>
                             <li>You can resume playing all casino games</li>
+                            <li>You can use topups to add chips if available</li>
                             <li>Your daily topup allowance will be restored</li>
                         </ul>
                     </div>
@@ -1463,14 +1643,16 @@ function showBanScreen() {
     }, 1000);
 }
 
-// Update countdown display
+// Update countdown display and handle ban expiration
 function updateCountdown(expiresAt) {
     var now = Date.now();
     var remaining = expiresAt - now;
     
     if (remaining <= 0) {
-        // Ban expired
+        // Ban expired - reset balance to 0 as requested
         clearBan();
+        localStorage.setItem('pyramidCasinoBalance', encryptData('0')); // Reset to 0, not 1000
+        console.log('Ban expired, balance reset to 0');
         return true;
     }
     
@@ -1601,6 +1783,15 @@ if (typeof module !== 'undefined' && module.exports) {
         getCasinoBalanceSecure,
         setCasinoBalanceSecure,
         getBanStatus,
-        showBanScreen
+        showBanScreen,
+        // Game odds and rigging functions
+        GAME_ODDS_CONFIG,
+        getGameHouseEdge,
+        getAdminGameSettings,
+        setAdminGameOdds,
+        riggedRandom,
+        riggedRandomInt,
+        riggedCoinFlip,
+        riggedShuffle
     };
 }
