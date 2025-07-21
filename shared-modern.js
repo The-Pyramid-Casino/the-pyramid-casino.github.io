@@ -335,8 +335,39 @@ function addButtonClickEffect(button) {
     });
 }
 
+// Load admin configuration if available
+function loadAdminConfig() {
+    try {
+        // Try to load admin-config.js dynamically
+        var script = document.createElement('script');
+        script.src = 'admin-config.js';
+        script.async = false;
+        script.onload = function() {
+            console.log('Admin configuration loaded successfully');
+            
+            // Check if there's a stored admin session
+            if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+                console.log('Previous admin session detected');
+                if (typeof showAdminModeIndicator !== 'undefined') {
+                    showAdminModeIndicator();
+                }
+            }
+        };
+        script.onerror = function() {
+            // Admin config not available - this is fine for regular users
+            console.log('Admin configuration not available');
+        };
+        document.head.appendChild(script);
+    } catch (e) {
+        console.log('Could not load admin configuration:', e.message);
+    }
+}
+
 // Initialize common functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Load admin config if available
+    loadAdminConfig();
+    
     // Initialize anti-cheat system first
     if (!initializeAntiCheat()) {
         return; // Stop initialization if user is banned
@@ -814,14 +845,26 @@ function canTopUpToday() {
 function updateBalance(amount, type, description) {
     if (typeof description === 'undefined') description = '';
     
-    // Perform anti-cheat check first
-    if (!performAntiCheatCheck()) {
+    // Check for admin mode or legitimate actions
+    if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+        // Admin mode bypasses anti-cheat checks
+        var currentBalance = getCasinoBalance();
+        var newBalance = Math.max(0, currentBalance + amount);
+        setCasinoBalanceSecure(newBalance, type, Math.abs(amount), description);
+    } else if (typeof isLegitimateAction !== 'undefined' && !isLegitimateAction('balance_change', {type: type, amount: amount})) {
+        // Legitimate action check failed
+        console.warn('Balance update blocked by anti-cheat system');
         return 0;
+    } else {
+        // Perform standard anti-cheat check for non-admin users
+        if (!performAntiCheatCheck()) {
+            return 0;
+        }
+        
+        var currentBalance = getCasinoBalance();
+        var newBalance = Math.max(0, currentBalance + amount);
+        setCasinoBalanceSecure(newBalance, type, Math.abs(amount), description);
     }
-    
-    var currentBalance = getCasinoBalance();
-    var newBalance = Math.max(0, currentBalance + amount);
-    setCasinoBalanceSecure(newBalance, type, Math.abs(amount), description);
     
     // Update UI if balance element exists
     var balanceEl = document.getElementById('balance');
@@ -912,11 +955,26 @@ function recordGamePush(gameName, amount, details) {
     return newBalance;
 }
 
-// Top-up functionality with anti-cheat
+// Top-up functionality with anti-cheat and admin overrides
 function performTopUp(amount, showConfirmation) {
     if (typeof showConfirmation === 'undefined') showConfirmation = true;
     
-    // Perform anti-cheat check first
+    // Check for admin mode first
+    if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+        // Admin mode bypasses all restrictions
+        var oldBalance = getCasinoBalance();
+        var newBalance = updateBalance(amount, 'topup', 'Admin top-up of ' + amount + ' chips');
+        showNotification('✨ Admin top-up of ' + amount + ' chips!\n💰 New Balance: ' + newBalance, 'win', 4000);
+        return true;
+    }
+    
+    // Check if topup is legitimate
+    if (typeof isLegitimateAction !== 'undefined' && !isLegitimateAction('topup', {amount: amount})) {
+        showNotification('❌ Top-up temporarily unavailable. Please try again later.', 'lose');
+        return false;
+    }
+    
+    // Perform standard anti-cheat check for non-admin users
     if (!performAntiCheatCheck()) {
         return false;
     }
@@ -1378,8 +1436,13 @@ function setCasinoBalanceSecure(newBalance, transactionType, amount, description
     storeIntegrityHash();
 }
 
-// Perform comprehensive anti-cheat check
+// Perform comprehensive anti-cheat check with admin overrides
 function performAntiCheatCheck() {
+    // Admin mode bypasses all checks
+    if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+        return true;
+    }
+    
     // Check if user is banned
     var banStatus = getBanStatus();
     if (banStatus) {
@@ -1387,8 +1450,13 @@ function performAntiCheatCheck() {
         return false;
     }
     
-    // Verify data integrity
-    if (!verifyIntegrity()) {
+    // Verify data integrity (only if not disabled by admin config)
+    var disableChecks = false;
+    if (typeof ADMIN_CONFIG !== 'undefined' && ADMIN_CONFIG.ANTICHEAT_SETTINGS) {
+        disableChecks = ADMIN_CONFIG.ANTICHEAT_SETTINGS.DISABLE_INTEGRITY_CHECKS;
+    }
+    
+    if (!disableChecks && !verifyIntegrity()) {
         handleCheatDetection('Data integrity violation detected');
         return false;
     }
@@ -1396,7 +1464,7 @@ function performAntiCheatCheck() {
     return true;
 }
 
-// Initialize anti-cheat system
+// Initialize anti-cheat system with admin support
 function initializeAntiCheat() {
     // Check ban status first
     var banStatus = getBanStatus();
@@ -1405,14 +1473,36 @@ function initializeAntiCheat() {
         return false;
     }
     
-    // Perform integrity check
-    if (!verifyIntegrity()) {
+    // Admin mode can bypass initial checks
+    if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+        console.log('Admin mode active - anti-cheat checks relaxed');
+        return true;
+    }
+    
+    // Perform integrity check (unless disabled by admin config)
+    var disableChecks = false;
+    if (typeof ADMIN_CONFIG !== 'undefined' && ADMIN_CONFIG.ANTICHEAT_SETTINGS) {
+        disableChecks = ADMIN_CONFIG.ANTICHEAT_SETTINGS.DISABLE_INTEGRITY_CHECKS;
+    }
+    
+    if (!disableChecks && !verifyIntegrity()) {
         handleCheatDetection('Initial integrity check failed - possible data tampering');
         return false;
     }
     
-    // Set up periodic integrity checks
+    // Set up periodic integrity checks (but respect admin settings)
     setInterval(function() {
+        // Skip checks if admin mode is active or disabled by config
+        if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+            return;
+        }
+        
+        if (typeof ADMIN_CONFIG !== 'undefined' && 
+            ADMIN_CONFIG.ANTICHEAT_SETTINGS && 
+            ADMIN_CONFIG.ANTICHEAT_SETTINGS.DISABLE_INTEGRITY_CHECKS) {
+            return;
+        }
+        
         if (!verifyIntegrity() && !getBanStatus()) {
             handleCheatDetection('Real-time integrity check failed - ongoing tampering detected');
         }
