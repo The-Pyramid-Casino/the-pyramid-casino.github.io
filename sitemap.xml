@@ -20,13 +20,13 @@
   </url>
   <url>
     <loc>https://the-pyramid-casino.github.io/poker.html</loc>
-    <lastmod>2025-07-17T22:26:04Z</lastmod>
+    <lastmod>2025-07-21T01:07:45Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://the-pyramid-casino.github.io/</loc>
-    <lastmod>2025-07-17T03:20:50Z</lastmod>
+    <lastmod>2025-07-21T01:07:45Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -37,8 +37,20 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://the-pyramid-casino.github.io/plinko.html</loc>
+    <lastmod>2025-07-21T00:44:04Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://the-pyramid-casino.github.io/roulette.html</loc>
     <lastmod>2025-07-17T22:26:04Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://the-pyramid-casino.github.io/coinpusher.html</loc>
+    <lastmod>2025-07-21T01:07:45Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -74,7 +86,7 @@
   </url>
   <url>
     <loc>https://the-pyramid-casino.github.io/</loc>
-    <lastmod>2025-07-17T03:20:50Z</lastmod>
+    <lastmod>2025-07-21T01:07:45Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
