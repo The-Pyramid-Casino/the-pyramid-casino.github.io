@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pyramid Casino</title>
+  <title>Pyramid Casino - Free Online Entertainment Casino Games</title>
   <meta name="description" content="Pyramid Casino is a free, fun experiment—an Ancient Egypt-themed online casino for entertainment only. No real money or payments involved." />
   <meta name="keywords" content="Pyramid Casino, free online casino, ancient Egypt, slots, blackjack, roulette, entertainment, play for fun" />
   <meta name="author" content="Pyramid Casino Team" />
@@ -21,12 +21,67 @@
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="shared-modern.css" />
   <style>
+    /* Accessibility base styles */
+    * {
+      box-sizing: border-box;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Screen reader only content */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    
+    /* Focus indicators - WCAG compliant */
+    *:focus {
+      outline: 3px solid #f9d923;
+      outline-offset: 2px;
+    }
+    
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+      .header {
+        border-bottom: 3px solid #fff;
+      }
+      .game-card {
+        border: 2px solid #fff;
+      }
+      .primary-btn, .game-card button, .game-card a {
+        border: 2px solid #000;
+      }
+    }
+    
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      html {
+        scroll-behavior: auto;
+      }
+    }
+    
+    /* Color contrast improvements */
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       margin: 0;
       background: #18122b;
       color: #f3e9dc;
       min-height: 100vh;
+      line-height: 1.6;
     }
     .header {
       display: flex;
@@ -54,7 +109,8 @@
       font-weight: 500;
       transition: color 0.2s;
     }
-    .header nav a:hover {
+    .header nav a:hover,
+    .header nav a:focus {
       color: #f3e9dc;
       text-shadow: 0 0 5px #f9d923;
     }
@@ -89,8 +145,11 @@
       text-decoration: none;
       display: inline-block;
     }
-    .reset-btn:hover {
+    .reset-btn:hover,
+    .reset-btn:focus {
       background: #2ea827;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(46, 168, 39, 0.3);
     }
     .home {
       text-align: center;
@@ -109,8 +168,11 @@
       transition: background 0.2s;
       box-shadow: 0 4px 8px #0003;
     }
-    .primary-btn:hover {
+    .primary-btn:hover,
+    .primary-btn:focus {
       background: #ffe277;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.4);
     }
     .games-list {
       display: flex;
@@ -150,9 +212,14 @@
       cursor: not-allowed;
       opacity: 0.7;
     }
-    .game-card a:hover {
+    .game-card a:hover,
+    .game-card a:focus,
+    .game-card button:hover,
+    .game-card button:focus {
       background: #f9d923;
       color: #18122b;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(249, 217, 35, 0.3);
     }
     .notice {
       background: #f9d923;
@@ -192,26 +259,27 @@
 </script>
 </head>
 <body>
-  <header class="header">
+  <header class="header" role="banner">
     <div class="logo">
       <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
     </div>
-    <nav>
+    <nav role="navigation" aria-label="Main navigation">
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="#games">Games</a></li>
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="#games" aria-describedby="games-section">Games</a></li>
         <li><a href="topup.html">Top Up</a></li>
         <li><a href="history.html">History</a></li>
-        <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
+        <li><a href="https://forms.gle/QYQqh72sSuweCue49" target="_blank" rel="noopener" aria-label="Suggest A Game - opens in new window">Suggest A Game</a></li>
       </ul>
     </nav>
   </header>
-  <main class="main-content">
-    <div class="balance-row">
-      <span>Chips: <span id="balance">1000</span></span>
-      <a href="topup.html" class="reset-btn">💳 Top Up</a>
+  <main class="main-content" role="main">
+    <div class="balance-row" role="group" aria-labelledby="balance-heading">
+      <h2 id="balance-heading" class="sr-only">Account Balance</h2>
+      <span>Chips: <span id="balance" aria-live="polite">1000</span></span>
+      <a href="topup.html" class="reset-btn" aria-label="Go to top up page to add more chips">💳 Top Up</a>
     </div>
-    <div class="notice">
+    <div class="notice" role="alert">
       <span>✨ <strong>FOR ENTERTAINMENT ONLY!</strong> ✨<br>
       Pyramid Casino is a <b>FREE, FUN EXPERIMENT</b> - No real money involved and no payments accepted!<br>
       🎮 Enjoy playing for entertainment only! 🎮</span>
@@ -221,95 +289,97 @@
       <p>
         Experience the thrill of ancient Egypt with our exclusive online casino! Play exciting games, win big, and discover the secrets of the pyramid.
       </p>
-      <a class="primary-btn" href="#games">
+      <a class="primary-btn" href="#games" aria-describedby="play-now-help">
         Play Now
       </a>
+      <div id="play-now-help" class="sr-only">Skip to games section to start playing</div>
     </section>
-    <section id="games">
-      <h2 style="text-align:center;margin-top:3rem;">Our Games</h2>
-      <div class="games-list">
+    <section id="games" aria-labelledby="games-heading">
+      <h2 id="games-heading" style="text-align:center;margin-top:3rem;">Our Games</h2>
+      <div class="games-list" role="group" aria-labelledby="games-list-heading">
+        <h3 id="games-list-heading" class="sr-only">Available casino games</h3>
         <div class="game-card">
           <h3>Slots</h3>
           <p>Spin the reels and match ancient Egyptian symbols to win treasures.</p>
-          <button class="instructions-btn" onclick="showInstructions('Slots', GAME_INSTRUCTIONS['Slots'])">ℹ️ How to Play</button>
-          <a href="slots.html">Play Slots</a>
+          <button class="instructions-btn" onclick="showInstructions('Slots', GAME_INSTRUCTIONS['Slots'])" aria-label="Show instructions for Slots game">ℹ️ How to Play</button>
+          <a href="slots.html" aria-label="Play Slots game">Play Slots</a>
         </div>
         <div class="game-card">
           <h3>Blackjack</h3>
           <p>Beat the dealer in our classic blackjack game.</p>
-          <button class="instructions-btn" onclick="showInstructions('Blackjack', GAME_INSTRUCTIONS['Blackjack'])">ℹ️ How to Play</button>
-          <a href="blackjack.html">Play Blackjack</a>
+          <button class="instructions-btn" onclick="showInstructions('Blackjack', GAME_INSTRUCTIONS['Blackjack'])" aria-label="Show instructions for Blackjack game">ℹ️ How to Play</button>
+          <a href="blackjack.html" aria-label="Play Blackjack game">Play Blackjack</a>
         </div>
         <div class="game-card">
           <h3>Roulette</h3>
           <p>Place your bets on the lucky numbers and spin the wheel.</p>
-          <button class="instructions-btn" onclick="showInstructions('Roulette', GAME_INSTRUCTIONS['Roulette'])">ℹ️ How to Play</button>
-          <a href="roulette.html">Play Roulette</a>
+          <button class="instructions-btn" onclick="showInstructions('Roulette', GAME_INSTRUCTIONS['Roulette'])" aria-label="Show instructions for Roulette game">ℹ️ How to Play</button>
+          <a href="roulette.html" aria-label="Play Roulette game">Play Roulette</a>
         </div>
         <div class="game-card">
           <h3>Poker</h3>
           <p>Five-card draw poker with royal payouts and classic gameplay.</p>
-          <button class="instructions-btn" onclick="showInstructions('Poker', GAME_INSTRUCTIONS['Poker'])">ℹ️ How to Play</button>
-          <a href="poker.html">Play Poker</a>
+          <button class="instructions-btn" onclick="showInstructions('Poker', GAME_INSTRUCTIONS['Poker'])" aria-label="Show instructions for Poker game">ℹ️ How to Play</button>
+          <a href="poker.html" aria-label="Play Poker game">Play Poker</a>
         </div>
         <div class="game-card">
           <h3>Dice</h3>
           <p>Roll the dice and bet on outcomes for exciting wins.</p>
-          <button class="instructions-btn" onclick="showInstructions('Dice', GAME_INSTRUCTIONS['Dice'])">ℹ️ How to Play</button>
-          <a href="dice.html">Play Dice</a>
+          <button class="instructions-btn" onclick="showInstructions('Dice', GAME_INSTRUCTIONS['Dice'])" aria-label="Show instructions for Dice game">ℹ️ How to Play</button>
+          <a href="dice.html" aria-label="Play Dice game">Play Dice</a>
         </div>
         <div class="game-card">
           <h3>Baccarat</h3>
           <p>Classic baccarat with elegant gameplay and simple rules.</p>
-          <button class="instructions-btn" onclick="showInstructions('Baccarat', GAME_INSTRUCTIONS['Baccarat'])">ℹ️ How to Play</button>
-          <a href="baccarat.html">Play Baccarat</a>
+          <button class="instructions-btn" onclick="showInstructions('Baccarat', GAME_INSTRUCTIONS['Baccarat'])" aria-label="Show instructions for Baccarat game">ℹ️ How to Play</button>
+          <a href="baccarat.html" aria-label="Play Baccarat game">Play Baccarat</a>
         </div>
         <div class="game-card">
           <h3>Keno</h3>
           <p>Pick your lucky numbers in this classic lottery-style game.</p>
-          <button class="instructions-btn" onclick="showInstructions('Keno', GAME_INSTRUCTIONS['Keno'])">ℹ️ How to Play</button>
-          <a href="keno.html">Play Keno</a>
+          <button class="instructions-btn" onclick="showInstructions('Keno', GAME_INSTRUCTIONS['Keno'])" aria-label="Show instructions for Keno game">ℹ️ How to Play</button>
+          <a href="keno.html" aria-label="Play Keno game">Play Keno</a>
         </div>
         <div class="game-card">
           <h3>Coin Flip</h3>
           <p>Flip the coin and trust your instincts to double your bet.</p>
-          <button class="instructions-btn" onclick="showInstructions('Coin Flip', GAME_INSTRUCTIONS['Coin Flip'])">ℹ️ How to Play</button>
-          <a href="coinflip.html">Play Coin Flip</a>
+          <button class="instructions-btn" onclick="showInstructions('Coin Flip', GAME_INSTRUCTIONS['Coin Flip'])" aria-label="Show instructions for Coin Flip game">ℹ️ How to Play</button>
+          <a href="coinflip.html" aria-label="Play Coin Flip game">Play Coin Flip</a>
         </div>
         <div class="game-card">
           <h3>Plinko</h3>
           <p>Drop the ball through pegs and win big in the prize slots!</p>
-          <button class="instructions-btn" onclick="showInstructions('Plinko', GAME_INSTRUCTIONS['Plinko'])">ℹ️ How to Play</button>
-          <a href="plinko.html">Play Plinko</a>
+          <button class="instructions-btn" onclick="showInstructions('Plinko', GAME_INSTRUCTIONS['Plinko'])" aria-label="Show instructions for Plinko game">ℹ️ How to Play</button>
+          <a href="plinko.html" aria-label="Play Plinko game">Play Plinko</a>
         </div>
 
         <div class="game-card">
           <h3>Coin Pusher</h3>
           <p>Push coins to win big prizes and bonus rewards!</p>
-          <button class="instructions-btn" onclick="showInstructions('Coin Pusher', GAME_INSTRUCTIONS['Coin Pusher'])">ℹ️ How to Play</button>
-          <a href="coinpusher.html">Play Coin Pusher</a>
+          <button class="instructions-btn" onclick="showInstructions('Coin Pusher', GAME_INSTRUCTIONS['Coin Pusher'])" aria-label="Show instructions for Coin Pusher game">ℹ️ How to Play</button>
+          <a href="coinpusher.html" aria-label="Play Coin Pusher game">Play Coin Pusher</a>
         </div>
       </div>
     </section>
-    <section id="about" style="margin-top:3rem;text-align:center;">
-      <h2>About Pyramid Casino</h2>
+    <section id="about" style="margin-top:3rem;text-align:center;" aria-labelledby="about-heading">
+      <h2 id="about-heading">About Pyramid Casino</h2>
       <p>
         Pyramid Casino offers a unique online gaming experience inspired by the wonders of ancient Egypt.<br>
-        <b>This is a fun project - not a real casino.</b>
+        <strong>This is a fun project - not a real casino.</strong>
       </p>
-      <ul style="display:inline-block;text-align:left;margin-top:1.2rem;">
+      <ul style="display:inline-block;text-align:left;margin-top:1.2rem;" aria-label="Casino features">
         <li>Safe & Secure</li>
         <li>No money or prizes involved</li>
         <li>For entertainment only</li>
       </ul>
     </section>
   </main>
-  <footer class="footer">
+  <footer class="footer" role="contentinfo">
     <div style="padding: 10px 0;">
       <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
       <p style="margin: 5px 0; font-size: 1.1rem;">
         📧 <strong>Contact us:</strong> 
-        <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;">casino.the.pyramid@gmail.com</a>
+        <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;" aria-label="Send email to casino.the.pyramid@gmail.com">casino.the.pyramid@gmail.com</a>
       </p>
       <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
         💰 No real money gambling | 🔞 18+ for entertainment
