@@ -729,11 +729,29 @@ var DAILY_TOPUP_KEY = 'pyramidCasinoDailyTopups';
 var MAX_DAILY_TOPUPS = 5;
 var MAX_TOPUP_AMOUNT = 10000;
 
-// Enhanced balance functions with transaction recording
+// Enhanced balance functions with encrypted storage
 function getCasinoBalance() {
-    let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-    if (isNaN(bal)) bal = 1000;
-    return bal;
+    var encryptedBalance = localStorage.getItem('pyramidCasinoBalance');
+    var balance = 1000; // default
+    
+    if (encryptedBalance) {
+        var decryptedBalance = decryptData(encryptedBalance);
+        if (decryptedBalance && validateGameData(decryptedBalance, 'balance')) {
+            balance = parseInt(decryptedBalance, 10);
+            if (isNaN(balance)) balance = 1000;
+        } else {
+            // Data corrupted or tampered - reset to default without calling setCasinoBalance
+            console.warn('Balance data corrupted, resetting to default');
+            localStorage.setItem('pyramidCasinoBalance', encryptData('1000'));
+            balance = 1000;
+        }
+    } else {
+        // First time - set default encrypted balance directly
+        localStorage.setItem('pyramidCasinoBalance', encryptData('1000'));
+        balance = 1000;
+    }
+    
+    return balance;
 }
 
 function setCasinoBalance(newBalance, transactionType, amount, description) {
@@ -741,8 +759,21 @@ function setCasinoBalance(newBalance, transactionType, amount, description) {
     if (typeof amount === 'undefined') amount = 0;
     if (typeof description === 'undefined') description = '';
     
-    var oldBalance = getCasinoBalance();
-    localStorage.setItem('pyramidCasinoBalance', newBalance);
+    // Get old balance without triggering recursion
+    var oldBalance = 1000; // default
+    var encryptedBalance = localStorage.getItem('pyramidCasinoBalance');
+    if (encryptedBalance) {
+        var decryptedBalance = decryptData(encryptedBalance);
+        if (decryptedBalance && validateGameData(decryptedBalance, 'balance')) {
+            var parsedBalance = parseInt(decryptedBalance, 10);
+            if (!isNaN(parsedBalance)) {
+                oldBalance = parsedBalance;
+            }
+        }
+    }
+    
+    // Store balance encrypted
+    localStorage.setItem('pyramidCasinoBalance', encryptData(newBalance.toString()));
     
     // Record transaction if there's a change
     if (oldBalance !== newBalance && transactionType !== 'unknown') {
@@ -750,7 +781,7 @@ function setCasinoBalance(newBalance, transactionType, amount, description) {
     }
 }
 
-// Transaction recording system
+// Transaction recording system with encryption
 function recordTransaction(type, amount, oldBalance, newBalance, description) {
     if (typeof description === 'undefined') description = '';
     
@@ -772,13 +803,24 @@ function recordTransaction(type, amount, oldBalance, newBalance, description) {
         transactions.splice(0, transactions.length - 1000);
     }
     
-    localStorage.setItem(TRANSACTION_STORAGE_KEY, JSON.stringify(transactions));
+    // Store encrypted transactions
+    localStorage.setItem(TRANSACTION_STORAGE_KEY, encryptData(JSON.stringify(transactions)));
 }
 
 function getTransactionHistory() {
     try {
-        const stored = localStorage.getItem(TRANSACTION_STORAGE_KEY);
-        return stored ? JSON.parse(stored) : [];
+        var encryptedTransactions = localStorage.getItem(TRANSACTION_STORAGE_KEY);
+        if (encryptedTransactions) {
+            var decryptedData = decryptData(encryptedTransactions);
+            if (decryptedData && validateGameData(decryptedData, 'transactions')) {
+                return JSON.parse(decryptedData);
+            } else {
+                console.warn('Transaction history corrupted, resetting');
+                localStorage.removeItem(TRANSACTION_STORAGE_KEY);
+                return [];
+            }
+        }
+        return [];
     } catch (e) {
         console.error('Error loading transaction history:', e);
         return [];
@@ -796,12 +838,22 @@ function clearTransactionHistory() {
     return false;
 }
 
-// Daily top-up limit system
+// Daily top-up limit system with encryption
 function getTodayTopupCount() {
     try {
         var today = new Date().toDateString();
-        var stored = localStorage.getItem(DAILY_TOPUP_KEY);
-        var dailyData = stored ? JSON.parse(stored) : {};
+        var encryptedData = localStorage.getItem(DAILY_TOPUP_KEY);
+        var dailyData = {};
+        
+        if (encryptedData) {
+            var decryptedData = decryptData(encryptedData);
+            if (decryptedData && validateGameData(decryptedData, 'topups')) {
+                dailyData = JSON.parse(decryptedData);
+            } else {
+                console.warn('Daily topup data corrupted, resetting');
+                localStorage.removeItem(DAILY_TOPUP_KEY);
+            }
+        }
         
         return dailyData[today] || 0;
     } catch (e) {
@@ -813,8 +865,15 @@ function getTodayTopupCount() {
 function incrementTodayTopupCount() {
     try {
         var today = new Date().toDateString();
-        var stored = localStorage.getItem(DAILY_TOPUP_KEY);
-        var dailyData = stored ? JSON.parse(stored) : {};
+        var encryptedData = localStorage.getItem(DAILY_TOPUP_KEY);
+        var dailyData = {};
+        
+        if (encryptedData) {
+            var decryptedData = decryptData(encryptedData);
+            if (decryptedData && validateGameData(decryptedData, 'topups')) {
+                dailyData = JSON.parse(decryptedData);
+            }
+        }
         
         dailyData[today] = (dailyData[today] || 0) + 1;
         
@@ -829,7 +888,8 @@ function incrementTodayTopupCount() {
             }
         }
         
-        localStorage.setItem(DAILY_TOPUP_KEY, JSON.stringify(dailyData));
+        // Store encrypted daily data
+        localStorage.setItem(DAILY_TOPUP_KEY, encryptData(JSON.stringify(dailyData)));
         return dailyData[today];
     } catch (e) {
         console.error('Error incrementing daily topup count:', e);
@@ -1042,50 +1102,75 @@ function confirmAction(message, title) {
     return confirm(title + '\n\n' + message);
 }
 
-// Anti-Cheat Verification System
-var INTEGRITY_KEY = 'pyramidCasinoIntegrity';
+// Encrypted Data Security System
 var BAN_STATUS_KEY = 'pyramidCasinoBanStatus';
 var BAN_DURATION_HOURS = 48;
+var ENCRYPTION_KEY = 'PyramidCasino2024Security'; // Simple key for client-side obfuscation
 
-// Simple hash function for integrity checking
-function simpleHash(str) {
-    var hash = 0;
-    if (str.length === 0) return hash;
-    for (var i = 0; i < str.length; i++) {
-        var char = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    return Math.abs(hash).toString(16);
-}
-
-// Generate integrity hash for sensitive data
-function generateIntegrityHash() {
-    var balance = localStorage.getItem('pyramidCasinoBalance') || '1000';
-    var transactions = localStorage.getItem(TRANSACTION_STORAGE_KEY) || '[]';
-    var dailyTopups = localStorage.getItem(DAILY_TOPUP_KEY) || '{}';
+// Simple encryption for client-side data protection (obfuscation)
+function encryptData(data) {
+    var dataStr = typeof data === 'string' ? data : JSON.stringify(data);
+    var encrypted = '';
+    var keyLength = ENCRYPTION_KEY.length;
     
-    var combinedData = balance + '|' + transactions + '|' + dailyTopups;
-    return simpleHash(combinedData);
-}
-
-// Store integrity hash
-function storeIntegrityHash() {
-    var hash = generateIntegrityHash();
-    localStorage.setItem(INTEGRITY_KEY, hash);
-}
-
-// Verify data integrity
-function verifyIntegrity() {
-    var storedHash = localStorage.getItem(INTEGRITY_KEY);
-    if (!storedHash) {
-        // First time - store hash
-        storeIntegrityHash();
-        return true;
+    for (var i = 0; i < dataStr.length; i++) {
+        var char = dataStr.charCodeAt(i);
+        var keyChar = ENCRYPTION_KEY.charCodeAt(i % keyLength);
+        encrypted += String.fromCharCode(char ^ keyChar);
     }
     
-    var currentHash = generateIntegrityHash();
-    return storedHash === currentHash;
+    // Base64 encode to make it look more obscure
+    return btoa(encrypted);
+}
+
+// Simple decryption for client-side data protection
+function decryptData(encryptedData) {
+    if (!encryptedData) return null;
+    
+    try {
+        // Base64 decode first
+        var encrypted = atob(encryptedData);
+        var decrypted = '';
+        var keyLength = ENCRYPTION_KEY.length;
+        
+        for (var i = 0; i < encrypted.length; i++) {
+            var char = encrypted.charCodeAt(i);
+            var keyChar = ENCRYPTION_KEY.charCodeAt(i % keyLength);
+            decrypted += String.fromCharCode(char ^ keyChar);
+        }
+        
+        return decrypted;
+    } catch (e) {
+        console.warn('Data decryption failed, may be corrupted');
+        return null;
+    }
+}
+
+// Validate if data looks reasonable (basic anti-cheat without aggressive checking)
+function validateGameData(data, dataType) {
+    if (!data) return false;
+    
+    try {
+        switch(dataType) {
+            case 'balance':
+                var balance = parseInt(data);
+                // Reasonable balance check - no more than 10 million chips
+                return !isNaN(balance) && balance >= 0 && balance <= 10000000;
+                
+            case 'transactions':
+                var transactions = JSON.parse(data);
+                return Array.isArray(transactions) && transactions.length <= 1000;
+                
+            case 'topups':
+                var topups = JSON.parse(data);
+                return typeof topups === 'object' && topups !== null;
+                
+            default:
+                return true;
+        }
+    } catch (e) {
+        return false;
+    }
 }
 
 // Ban management functions
@@ -1129,15 +1214,14 @@ function clearBan() {
     localStorage.removeItem(BAN_STATUS_KEY);
 }
 
-// Check for cheating and handle ban
+// Check for obvious cheating attempts and handle ban
 function handleCheatDetection(reason) {
-    // Set balance to zero
-    localStorage.setItem('pyramidCasinoBalance', '0');
+    // Set balance to zero (encrypted)
+    localStorage.setItem('pyramidCasinoBalance', encryptData('0'));
     
     // Clear sensitive data
     localStorage.removeItem(TRANSACTION_STORAGE_KEY);
     localStorage.removeItem(DAILY_TOPUP_KEY);
-    localStorage.removeItem(INTEGRITY_KEY);
     
     // Set ban status
     setBanStatus(reason);
@@ -1403,18 +1487,12 @@ function updateCountdown(expiresAt) {
     return false;
 }
 
-// Enhanced balance functions with anti-cheat verification
+// Enhanced balance functions with encrypted storage
 function getCasinoBalanceSecure() {
     // Check if user is banned
     var banStatus = getBanStatus();
     if (banStatus) {
         showBanScreen();
-        return 0;
-    }
-    
-    // Verify integrity before returning balance
-    if (!verifyIntegrity()) {
-        handleCheatDetection('Unauthorized modification of casino data detected');
         return 0;
     }
     
@@ -1429,14 +1507,17 @@ function setCasinoBalanceSecure(newBalance, transactionType, amount, description
         return;
     }
     
-    // Set balance using original function
-    setCasinoBalance(newBalance, transactionType, amount, description);
+    // Basic validation to prevent extreme values
+    if (typeof newBalance === 'number' && newBalance > 10000000) {
+        handleCheatDetection('Attempted to set unreasonably high balance: ' + newBalance);
+        return;
+    }
     
-    // Update integrity hash after legitimate change
-    storeIntegrityHash();
+    // Set balance using encrypted storage
+    setCasinoBalance(newBalance, transactionType, amount, description);
 }
 
-// Perform comprehensive anti-cheat check with admin overrides
+// Lightweight anti-cheat check (much less aggressive than before)
 function performAntiCheatCheck() {
     // Admin mode bypasses all checks
     if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
@@ -1450,21 +1531,17 @@ function performAntiCheatCheck() {
         return false;
     }
     
-    // Verify data integrity (only if not disabled by admin config)
-    var disableChecks = false;
-    if (typeof ADMIN_CONFIG !== 'undefined' && ADMIN_CONFIG.ANTICHEAT_SETTINGS) {
-        disableChecks = ADMIN_CONFIG.ANTICHEAT_SETTINGS.DISABLE_INTEGRITY_CHECKS;
-    }
-    
-    if (!disableChecks && !verifyIntegrity()) {
-        handleCheatDetection('Data integrity violation detected');
+    // Only check for extreme values that indicate obvious tampering
+    var currentBalance = getCasinoBalance();
+    if (currentBalance > 10000000) {
+        handleCheatDetection('Balance exceeds reasonable limits: ' + currentBalance);
         return false;
     }
     
     return true;
 }
 
-// Initialize anti-cheat system with admin support
+// Initialize lightweight anti-cheat system
 function initializeAntiCheat() {
     // Check ban status first
     var banStatus = getBanStatus();
@@ -1473,40 +1550,18 @@ function initializeAntiCheat() {
         return false;
     }
     
-    // Admin mode can bypass initial checks
+    // Admin mode can bypass all checks
     if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
-        console.log('Admin mode active - anti-cheat checks relaxed');
+        console.log('Admin mode active - anti-cheat checks minimal');
         return true;
     }
     
-    // Perform integrity check (unless disabled by admin config)
-    var disableChecks = false;
-    if (typeof ADMIN_CONFIG !== 'undefined' && ADMIN_CONFIG.ANTICHEAT_SETTINGS) {
-        disableChecks = ADMIN_CONFIG.ANTICHEAT_SETTINGS.DISABLE_INTEGRITY_CHECKS;
-    }
-    
-    if (!disableChecks && !verifyIntegrity()) {
-        handleCheatDetection('Initial integrity check failed - possible data tampering');
+    // Only check for obvious tampering (no more periodic integrity checks)
+    var currentBalance = getCasinoBalance();
+    if (currentBalance > 10000000) {
+        handleCheatDetection('Initial check: Balance exceeds reasonable limits');
         return false;
     }
-    
-    // Set up periodic integrity checks (but respect admin settings)
-    setInterval(function() {
-        // Skip checks if admin mode is active or disabled by config
-        if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
-            return;
-        }
-        
-        if (typeof ADMIN_CONFIG !== 'undefined' && 
-            ADMIN_CONFIG.ANTICHEAT_SETTINGS && 
-            ADMIN_CONFIG.ANTICHEAT_SETTINGS.DISABLE_INTEGRITY_CHECKS) {
-            return;
-        }
-        
-        if (!verifyIntegrity() && !getBanStatus()) {
-            handleCheatDetection('Real-time integrity check failed - ongoing tampering detected');
-        }
-    }, 30000); // Check every 30 seconds
     
     return true;
 }

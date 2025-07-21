@@ -231,8 +231,7 @@ function adminUnban(confirmation) {
     }
     
     clearBan();
-    localStorage.setItem('pyramidCasinoBalance', '1000'); // Restore starting balance
-    storeIntegrityHash(); // Reset integrity hash
+    setCasinoBalanceSecure(1000, 'admin', 1000, 'Admin unban - balance restored'); // Use encrypted storage
     
     console.log('User unbanned and balance restored to 1000 chips');
     return true;
@@ -271,7 +270,6 @@ function adminClearTransactions(confirmation) {
     }
     
     localStorage.removeItem(TRANSACTION_STORAGE_KEY);
-    storeIntegrityHash(); // Update integrity hash
     console.log('All transactions cleared');
     return true;
 }
@@ -288,7 +286,6 @@ function adminResetTopups(confirmation) {
     }
     
     localStorage.removeItem(DAILY_TOPUP_KEY);
-    storeIntegrityHash(); // Update integrity hash
     console.log('Daily topup counters reset');
     return true;
 }
@@ -299,7 +296,7 @@ function adminStatus() {
     console.log('Current Balance:', getCasinoBalance());
     console.log('Today\'s Topups:', getTodayTopupCount(), '/', MAX_DAILY_TOPUPS);
     console.log('Ban Status:', getBanStatus() ? 'BANNED' : 'Active');
-    console.log('Integrity Check:', verifyIntegrity() ? 'PASSED' : 'FAILED');
+    console.log('Data Security: Encrypted storage system active');
     console.log('Available Commands:');
     console.log('  - adminUnban("CONFIRM_UNBAN")');
     console.log('  - adminSetBalance(amount, "CONFIRM_SET_BALANCE")');
