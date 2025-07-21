@@ -1,7 +1,7 @@
 /* Modern Pyramid Casino Shared Styles */
-/* Enhanced animations, gradients, and modern UI elements */
+/* Enhanced animations, gradients, and modern UI elements with WCAG compliance */
 
-/* Modern CSS Variables for consistent theming */
+/* Modern CSS Variables for consistent theming with improved contrast */
 :root {
   --primary-gold: #f9d923;
   --secondary-gold: #ffe277;
@@ -9,12 +9,108 @@
   --medium-purple: #231b36;
   --bronze: #a0843a;
   --cream: #f3e9dc;
-  --success-green: #43c734;
+  --success-green: #2ea827;
   --danger-red: #d7263d;
   --shadow-light: rgba(0, 0, 0, 0.1);
   --shadow-medium: rgba(0, 0, 0, 0.2);
   --shadow-heavy: rgba(0, 0, 0, 0.4);
   --glow-gold: rgba(249, 217, 35, 0.3);
+  --focus-outline: 3px solid #f9d923;
+  --focus-outline-offset: 2px;
+}
+
+/* Accessibility base styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* WCAG compliant focus indicators */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+a:focus,
+[tabindex]:focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--primary-gold);
+  color: var(--dark-purple);
+  padding: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 10000;
+  border-radius: 4px;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --primary-gold: #ffff00;
+    --danger-red: #ff0000;
+    --success-green: #00ff00;
+  }
+  
+  .header {
+    border-bottom: 3px solid #fff;
+  }
+  
+  .game-card,
+  .modal-content,
+  .notification {
+    border: 2px solid #fff !important;
+  }
+  
+  button,
+  .btn,
+  a {
+    border: 2px solid currentColor !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* Enhanced animations */
@@ -254,7 +350,7 @@ body::before {
   border-color: var(--primary-gold);
 }
 
-/* Instruction popup modal styles */
+/* WCAG compliant Instruction popup modal styles */
 .modal {
   display: none;
   position: fixed;
@@ -263,15 +359,15 @@ body::before {
   top: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(5px);
 }
 
 .modal-content {
-  background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+  background: #ffffff;
   margin: 5% auto;
   padding: 2rem;
-  border: none;
+  border: 3px solid var(--primary-gold);
   border-radius: 15px;
   width: 90%;
   max-width: 600px;
@@ -283,18 +379,8 @@ body::before {
   opacity: 0;
   transform: scale(0.9);
   box-sizing: border-box;
-}
-
-.modal-content::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold), var(--primary-gold));
-  border-radius: 15px;
-  z-index: -1;
+  color: #333;
+  line-height: 1.6;
 }
 
 .modal-header {
@@ -302,30 +388,41 @@ body::before {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid var(--primary-gold);
   padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
 }
 
 .modal-header h2 {
   color: var(--dark-purple);
   margin: 0;
-  text-shadow: 0 0 10px var(--glow-gold);
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .close {
+  background: transparent;
+  border: 2px solid var(--dark-purple);
   color: var(--dark-purple);
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: 5px 10px;
-  border-radius: 50%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  line-height: 1;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.close:hover {
-  background: var(--primary-gold);
-  color: var(--dark-purple);
-  transform: rotate(90deg);
+.close:hover,
+.close:focus {
+  background: var(--danger-red);
+  color: white;
+  border-color: var(--danger-red);
+  transform: scale(1.1);
 }
 
 /* Modal body text styling for better contrast and accessibility */

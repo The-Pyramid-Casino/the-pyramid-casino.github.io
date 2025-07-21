@@ -1,6 +1,6 @@
 /* Shared Modern JavaScript for Pyramid Casino */
 
-// Instructions modal functionality
+// WCAG Compliant Instructions modal functionality
 function createInstructionsModal(gameTitle, instructions) {
     // Remove existing modal if any
     const existingModal = document.getElementById('instructions-modal');
@@ -8,18 +8,25 @@ function createInstructionsModal(gameTitle, instructions) {
         existingModal.remove();
     }
 
-    // Create modal HTML
+    // Store the focused element before opening modal
+    const previouslyFocusedElement = document.activeElement;
+
+    // Create modal HTML with WCAG compliance
     const modal = document.createElement('div');
     modal.id = 'instructions-modal';
     modal.className = 'modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'modal-title');
+    modal.setAttribute('aria-describedby', 'modal-body');
     
     modal.innerHTML = `
         <div class="modal-content">
             <div class="modal-header">
-                <h2>🎯 ${gameTitle} Instructions</h2>
-                <span class="close">&times;</span>
+                <h2 id="modal-title">🎯 ${gameTitle} Instructions</h2>
+                <button class="close" aria-label="Close instructions dialog">&times;</button>
             </div>
-            <div class="modal-body">
+            <div id="modal-body" class="modal-body">
                 ${instructions}
             </div>
         </div>
@@ -27,36 +34,96 @@ function createInstructionsModal(gameTitle, instructions) {
     
     document.body.appendChild(modal);
     
+    // Trap focus within modal for accessibility
+    const focusableElements = modal.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstFocusableElement = focusableElements[0];
+    const lastFocusableElement = focusableElements[focusableElements.length - 1];
+    
+    function trapFocus(e) {
+        if (e.key === 'Tab') {
+            if (e.shiftKey) { // Shift + Tab
+                if (document.activeElement === firstFocusableElement) {
+                    lastFocusableElement.focus();
+                    e.preventDefault();
+                }
+            } else { // Tab
+                if (document.activeElement === lastFocusableElement) {
+                    firstFocusableElement.focus();
+                    e.preventDefault();
+                }
+            }
+        }
+    }
+    
+    function closeModal() {
+        modal.style.display = 'none';
+        modal.removeEventListener('keydown', trapFocus);
+        document.removeEventListener('keydown', handleEscape);
+        // Return focus to previously focused element
+        if (previouslyFocusedElement) {
+            previouslyFocusedElement.focus();
+        }
+    }
+    
+    function handleEscape(event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    }
+    
     // Add event listeners
-    var closeBtn = modal.querySelector('.close');
-    closeBtn.onclick = function() { modal.style.display = 'none'; };
+    const closeBtn = modal.querySelector('.close');
+    closeBtn.onclick = closeModal;
+    closeBtn.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            closeModal();
+        }
+    });
     
     // Close when clicking outside the modal
     modal.onclick = function(event) {
         if (event.target === modal) {
-            modal.style.display = 'none';
+            closeModal();
         }
     };
     
-    // Close with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && modal.style.display === 'block') {
-            modal.style.display = 'none';
-        }
-    });
+    // Add event listeners for accessibility
+    modal.addEventListener('keydown', trapFocus);
+    document.addEventListener('keydown', handleEscape);
     
     return modal;
 }
 
 function showInstructions(gameTitle, instructions) {
-    var modal = createInstructionsModal(gameTitle, instructions);
+    const modal = createInstructionsModal(gameTitle, instructions);
     modal.style.display = 'block';
     
     // Force a reflow then start animation
     modal.offsetHeight;
-    var modalContent = modal.querySelector('.modal-content');
+    const modalContent = modal.querySelector('.modal-content');
     modalContent.style.opacity = '1';
     modalContent.style.transform = 'scale(1) translateY(0)';
+    
+    // Focus the close button for accessibility
+    const closeBtn = modal.querySelector('.close');
+    closeBtn.focus();
+    
+    // Announce modal opening to screen readers
+    const announcement = document.createElement('div');
+    announcement.setAttribute('aria-live', 'polite');
+    announcement.setAttribute('aria-atomic', 'true');
+    announcement.className = 'sr-only';
+    announcement.textContent = `${gameTitle} instructions dialog opened`;
+    document.body.appendChild(announcement);
+    
+    setTimeout(() => {
+        if (announcement.parentNode) {
+            announcement.remove();
+        }
+    }, 1000);
 }
 
 // Enhanced animations
@@ -112,22 +179,25 @@ function updateBalanceWithAnimation(balanceElement, newBalance) {
     }, duration / steps);
 }
 
-// Enhanced notification system
+// Enhanced notification system with WCAG compliance
 function showNotification(message, type, duration) {
     if (typeof type === 'undefined') type = 'info';
     if (typeof duration === 'undefined') duration = 3000;
     
     // Remove existing notifications
-    var existingNotifications = document.querySelectorAll('.game-notification');
-    for (var i = 0; i < existingNotifications.length; i++) {
+    const existingNotifications = document.querySelectorAll('.game-notification');
+    for (let i = 0; i < existingNotifications.length; i++) {
         existingNotifications[i].remove();
     }
     
-    var notification = document.createElement('div');
+    const notification = document.createElement('div');
     notification.className = 'game-notification notification-' + type;
     notification.innerHTML = message;
+    notification.setAttribute('role', 'alert');
+    notification.setAttribute('aria-live', 'assertive');
+    notification.setAttribute('aria-atomic', 'true');
     
-    var styles = {
+    const styles = {
         position: 'fixed',
         top: '20px',
         right: '20px',
@@ -139,27 +209,31 @@ function showNotification(message, type, duration) {
         minWidth: '200px',
         textAlign: 'center',
         animation: 'slide-up 0.5s ease-out',
-        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)'
+        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+        border: '2px solid transparent'
     };
     
-    // Type-specific styling
+    // Type-specific styling with improved contrast
     switch(type) {
         case 'win':
-            styles.background = 'linear-gradient(135deg, #43c734, #2ea827)';
-            styles.color = 'white';
+            styles.background = '#2ea827'; // Solid color for better contrast
+            styles.color = '#ffffff';
+            styles.border = '2px solid #43c734';
             break;
         case 'lose':
-            styles.background = 'linear-gradient(135deg, #d7263d, #b91c2e)';
-            styles.color = 'white';
+            styles.background = '#d7263d'; // Solid color for better contrast
+            styles.color = '#ffffff';
+            styles.border = '2px solid #ff4757';
             break;
         case 'info':
-            styles.background = 'linear-gradient(135deg, #f9d923, #eed920)';
-            styles.color = '#18122b';
+            styles.background = '#f9d923'; // High contrast yellow
+            styles.color = '#18122b'; // Dark text on yellow
+            styles.border = '2px solid #eed920';
             break;
         default:
-            styles.background = 'linear-gradient(135deg, #231b36, #18122b)';
+            styles.background = '#231b36';
             styles.color = '#f3e9dc';
-            styles.border = '1px solid #f9d923';
+            styles.border = '2px solid #f9d923';
     }
     
     Object.assign(notification.style, styles);
@@ -497,6 +571,73 @@ const GAME_INSTRUCTIONS = {
                     <li>Pure chance - no strategy needed!</li>
                     <li>Great for quick, simple bets</li>
                     <li>Trust your instincts or pick your lucky side</li>
+                </ul>
+            </li>
+        </ul>
+        <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
+    `,
+
+    'Plinko': `
+        <h3>🎯 How to Play Plinko</h3>
+        <ul>
+            <li><strong>Goal:</strong> Drop a ball through pegs to land in high-value prize slots</li>
+            <li><strong>How to Play:</strong>
+                <ol>
+                    <li>Set your bet amount</li>
+                    <li>Click "Drop Ball" or the drop zone</li>
+                    <li>Watch the ball bounce through the pegs</li>
+                    <li>Win chips based on which slot the ball lands in</li>
+                </ol>
+            </li>
+            <li><strong>Prize Multipliers:</strong>
+                <ul>
+                    <li><strong>2.5x Jackpot:</strong> Center slot (highest payout)</li>
+                    <li><strong>1.2x Good:</strong> Near center slots</li>
+                    <li><strong>0.8x & 0.5x:</strong> Partial returns</li>
+                    <li><strong>0.2x Small:</strong> Small consolation prize</li>
+                    <li><strong>0x Loss:</strong> Lose your bet - try again!</li>
+                </ul>
+            </li>
+            <li><strong>Tips:</strong>
+                <ul>
+                    <li>The ball's path is random - pure chance!</li>
+                    <li>Center slots have higher payouts but are harder to hit</li>
+                    <li>Be careful of the 0x loss slots on the edges</li>
+                    <li>Start with smaller bets to learn the game</li>
+                    <li>Watch for the satisfying ball bounce animations</li>
+                </ul>
+            </li>
+        </ul>
+        <p><strong>💰 Remember: This is for fun only - no real money involved!</strong></p>
+    `,
+    
+    'Coin Pusher': `
+        <h3>🪙 How to Play Coin Pusher</h3>
+        <ul>
+            <li><strong>Goal:</strong> Push coins over the edge to collect them and win prizes</li>
+            <li><strong>How to Play:</strong>
+                <ol>
+                    <li>Set how many coins you want to drop (1-50)</li>
+                    <li>Click "Drop Coins" to release them from the top</li>
+                    <li>Watch as coins fall and push existing coins forward</li>
+                    <li>Collect coins that fall into the collection zone</li>
+                    <li>Find bonus prizes for extra multipliers!</li>
+                </ol>
+            </li>
+            <li><strong>Winning & Payouts:</strong>
+                <ul>
+                    <li><strong>Collected Coins:</strong> 1 chip per coin collected</li>
+                    <li><strong>Bonus Prizes:</strong> Special red tokens worth 5 chips each</li>
+                    <li><strong>Pusher Action:</strong> Automatic pusher blade moves coins forward</li>
+                    <li><strong>Physics:</strong> Realistic coin dropping and collision mechanics</li>
+                </ul>
+            </li>
+            <li><strong>Strategy Tips:</strong>
+                <ul>
+                    <li>Drop coins when the platform is full for better pushes</li>
+                    <li>Watch for bonus prizes near the edge</li>
+                    <li>Be patient - coins build up over time</li>
+                    <li>Use the automatic pusher to your advantage</li>
                 </ul>
             </li>
         </ul>

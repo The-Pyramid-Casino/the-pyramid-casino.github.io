@@ -145,36 +145,40 @@
       flex-wrap: wrap;
     }
     .card {
-      width: 60px;
-      height: 84px;
-      background: #f3e9dc;
-      border: 2px solid #a0843a;
-      border-radius: 8px;
+      width: 70px;
+      height: 98px;
+      background: #ffffff;
+      border: 3px solid #2c2c2c;
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
-      font-weight: bold;
-      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #000;
       cursor: pointer;
       transition: all 0.2s;
       position: relative;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
     .card.held {
       border-color: #f9d923;
-      box-shadow: 0 0 8px #f9d923;
+      box-shadow: 0 0 12px #f9d923, 0 4px 8px rgba(0,0,0,0.3);
       transform: translateY(-5px);
     }
     .card .suit {
-      font-size: 1.2rem;
-      margin-top: 2px;
+      font-size: 1.6rem;
+      margin-top: 4px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
     .card.red {
-      color: #d7263d;
+      color: #cc0000;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
     .card.black {
-      color: #fff;
+      color: #000000;
+      text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
     }
     .card.empty {
       background: #18122b;
@@ -246,9 +250,12 @@
         gap: 0.3rem;
       }
       .card {
-        width: 50px;
-        height: 70px;
-        font-size: 0.7rem;
+        width: 60px;
+        height: 84px;
+        font-size: 1rem;
+      }
+      .card .suit {
+        font-size: 1.4rem;
       }
     }
   </style>
