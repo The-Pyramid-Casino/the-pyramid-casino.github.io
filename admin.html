@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Panel - Pyramid Casino</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="shared-modern.css" />
+  <style>
+    /* Admin specific styles */
+    .admin-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--medium-purple) 0%, #1a0f2a 50%, var(--medium-purple) 100%);
+      border: 2px solid var(--primary-gold);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px var(--shadow-heavy);
+    }
+
+    .login-form {
+      text-align: center;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .admin-panel {
+      display: none;
+    }
+
+    .admin-section {
+      background: rgba(35, 27, 54, 0.8);
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      border-radius: 10px;
+      border: 1px solid rgba(249, 217, 35, 0.3);
+    }
+
+    .admin-section h3 {
+      color: var(--primary-gold);
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .admin-input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--bronze);
+      border-radius: 8px;
+      background: rgba(24, 18, 43, 0.9);
+      color: var(--cream);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .admin-input:focus {
+      border-color: var(--primary-gold);
+      outline: none;
+      box-shadow: 0 0 10px var(--glow-gold);
+    }
+
+    .admin-btn {
+      background: linear-gradient(135deg, var(--primary-gold) 0%, #eed920 100%);
+      color: var(--dark-purple);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 0.5rem;
+      min-width: 120px;
+    }
+
+    .admin-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--glow-gold);
+    }
+
+    .admin-btn.danger {
+      background: linear-gradient(135deg, var(--danger-red) 0%, #ff4757 100%);
+      color: white;
+    }
+
+    .admin-btn.success {
+      background: linear-gradient(135deg, var(--success-green) 0%, #43c734 100%);
+      color: white;
+    }
+
+    .status-display {
+      background: rgba(24, 18, 43, 0.9);
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      border-left: 4px solid var(--primary-gold);
+    }
+
+    .status-display pre {
+      margin: 0;
+      color: var(--cream);
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+    }
+
+    .warning-notice {
+      background: linear-gradient(135deg, var(--danger-red) 0%, #ff4757 100%);
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .admin-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .admin-header h1 {
+      color: var(--primary-gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .admin-mode-indicator {
+      display: inline-block;
+      background: linear-gradient(45deg, #d7263d, #ff6b7a);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .admin-container {
+        margin: 1rem;
+        padding: 1rem;
+      }
+      
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Admin access warning -->
+  <div id="unauthorized-access" class="warning-notice">
+    ⚠️ UNAUTHORIZED ACCESS DETECTED ⚠️<br>
+    This page is restricted to authorized administrators only.<br>
+    All access attempts are logged and monitored.
+  </div>
+
+  <div class="admin-container">
+    <!-- Login Form -->
+    <div id="login-section" class="login-form">
+      <h1>🏛️ Pyramid Casino</h1>
+      <h2>Admin Access</h2>
+      <div class="warning-notice">
+        🔐 Restricted Area - Admin Access Only
+      </div>
+      
+      <input type="password" id="admin-password" class="admin-input" placeholder="Enter Admin Password" autocomplete="off">
+      <br>
+      <button onclick="attemptLogin()" class="admin-btn">Access Admin Panel</button>
+      
+      <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.7;">
+        💡 Hint: Use the console to enable admin mode first
+      </p>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="admin-panel">
+      <div class="admin-header">
+        <h1>🏛️ Pyramid Casino Admin Panel</h1>
+        <div class="admin-mode-indicator">
+          🛡️ ADMIN MODE ACTIVE
+        </div>
+        <p>Welcome to the administrative interface for Pyramid Casino</p>
+      </div>
+
+      <div class="admin-grid">
+        <!-- System Status -->
+        <div class="admin-section">
+          <h3>📊 System Status</h3>
+          <div id="system-status" class="status-display">
+            <pre>Loading system status...</pre>
+          </div>
+          <button onclick="refreshStatus()" class="admin-btn">Refresh Status</button>
+        </div>
+
+        <!-- User Management -->
+        <div class="admin-section">
+          <h3>👤 User Management</h3>
+          <button onclick="unbanUser()" class="admin-btn success">Unban User</button>
+          <button onclick="clearUserData()" class="admin-btn danger">Clear User Data</button>
+          <button onclick="resetDailyLimits()" class="admin-btn">Reset Daily Limits</button>
+        </div>
+
+        <!-- Balance Management -->
+        <div class="admin-section">
+          <h3>💰 Balance Management</h3>
+          <input type="number" id="balance-amount" class="admin-input" placeholder="Enter balance amount" min="0" max="999999">
+          <button onclick="setUserBalance()" class="admin-btn">Set Balance</button>
+          <button onclick="addBalance()" class="admin-btn success">Add Balance</button>
+        </div>
+
+        <!-- Transaction Management -->
+        <div class="admin-section">
+          <h3>📈 Transaction Management</h3>
+          <button onclick="clearTransactions()" class="admin-btn danger">Clear All Transactions</button>
+          <button onclick="viewTransactions()" class="admin-btn">View Transaction Log</button>
+          <button onclick="exportData()" class="admin-btn">Export User Data</button>
+        </div>
+
+        <!-- System Controls -->
+        <div class="admin-section">
+          <h3>🔧 System Controls</h3>
+          <button onclick="toggleMaintenanceMode()" class="admin-btn" id="maintenance-btn">Enable Maintenance</button>
+          <button onclick="clearAllCache()" class="admin-btn danger">Clear All Cache</button>
+          <button onclick="resetToDefaults()" class="admin-btn danger">Reset to Defaults</button>
+        </div>
+
+        <!-- Console Output -->
+        <div class="admin-section" style="grid-column: 1 / -1;">
+          <h3>💻 Console Output</h3>
+          <div id="console-output" class="status-display">
+            <pre>Admin panel ready. Use the buttons above to perform administrative tasks.</pre>
+          </div>
+          <button onclick="clearConsole()" class="admin-btn">Clear Console</button>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 2rem;">
+        <button onclick="exitAdminMode()" class="admin-btn danger">🚪 Exit Admin Mode</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="admin-config.js"></script>
+  <script src="shared-modern.js"></script>
+  <script>
+    let maintenanceMode = false;
+    
+    // Check if user should have access to this page
+    function checkAccess() {
+      const isAdmin = isAdminMode();
+      const hasDirectAccess = sessionStorage.getItem('pyramidCasinoDirectAdminAccess') === 'true';
+      
+      if (!isAdmin && !hasDirectAccess) {
+        document.getElementById('unauthorized-access').style.display = 'block';
+        logToConsole('Unauthorized access attempt detected', 'error');
+        return false;
+      }
+      
+      document.getElementById('unauthorized-access').style.display = 'none';
+      return true;
+    }
+
+    function attemptLogin() {
+      const password = document.getElementById('admin-password').value;
+      
+      // Check if password matches any admin override codes
+      if (checkAdminOverride(password)) {
+        enableAdminMode(password);
+        sessionStorage.setItem('pyramidCasinoDirectAdminAccess', 'true');
+        showAdminPanel();
+        logToConsole('Admin access granted successfully', 'success');
+      } else {
+        alert('❌ Invalid admin password');
+        logToConsole('Failed login attempt with password: ' + password, 'error');
+        document.getElementById('admin-password').value = '';
+      }
+    }
+
+    function showAdminPanel() {
+      if (!checkAccess()) return;
+      
+      document.getElementById('login-section').style.display = 'none';
+      document.getElementById('admin-panel').style.display = 'block';
+      refreshStatus();
+      logToConsole('Admin panel loaded successfully', 'success');
+    }
+
+    function refreshStatus() {
+      const status = {
+        'Admin Mode': isAdminMode() ? 'ACTIVE' : 'INACTIVE',
+        'Current Balance': getCasinoBalance ? getCasinoBalance() : 'N/A',
+        'Ban Status': (typeof getBanStatus === 'function' && getBanStatus()) ? 'BANNED' : 'ACTIVE',
+        'Today\'s Topups': typeof getTodayTopupCount === 'function' ? getTodayTopupCount() : 'N/A',
+        'Maintenance Mode': maintenanceMode ? 'ENABLED' : 'DISABLED',
+        'Local Storage Size': getStorageSize(),
+        'Session Active Since': new Date().toLocaleString()
+      };
+
+      const statusText = Object.entries(status)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join('\n');
+
+      document.getElementById('system-status').innerHTML = `<pre>${statusText}</pre>`;
+      logToConsole('System status refreshed', 'info');
+    }
+
+    function getStorageSize() {
+      let total = 0;
+      for (let key in localStorage) {
+        if (localStorage.hasOwnProperty(key)) {
+          total += localStorage[key].length + key.length;
+        }
+      }
+      return (total / 1024).toFixed(2) + ' KB';
+    }
+
+    function unbanUser() {
+      if (confirm('Are you sure you want to unban the current user and restore their balance?')) {
+        if (typeof adminUnban === 'function') {
+          const result = adminUnban('CONFIRM_UNBAN');
+          if (result) {
+            logToConsole('User unbanned successfully', 'success');
+            refreshStatus();
+          } else {
+            logToConsole('Failed to unban user', 'error');
+          }
+        } else {
+          logToConsole('Unban function not available', 'error');
+        }
+      }
+    }
+
+    function setUserBalance() {
+      const amount = parseInt(document.getElementById('balance-amount').value);
+      if (isNaN(amount) || amount < 0) {
+        alert('Please enter a valid balance amount');
+        return;
+      }
+
+      if (confirm(`Set user balance to ${amount} chips?`)) {
+        if (typeof adminSetBalance === 'function') {
+          const result = adminSetBalance(amount, 'CONFIRM_SET_BALANCE');
+          if (result) {
+            logToConsole(`Balance set to ${amount} chips`, 'success');
+            refreshStatus();
+          } else {
+            logToConsole('Failed to set balance', 'error');
+          }
+        } else {
+          logToConsole('Set balance function not available', 'error');
+        }
+      }
+    }
+
+    function addBalance() {
+      const amount = parseInt(document.getElementById('balance-amount').value);
+      if (isNaN(amount) || amount <= 0) {
+        alert('Please enter a valid amount to add');
+        return;
+      }
+
+      const currentBalance = getCasinoBalance ? getCasinoBalance() : 0;
+      const newBalance = currentBalance + amount;
+
+      if (confirm(`Add ${amount} chips to current balance (${currentBalance})?\nNew balance will be: ${newBalance}`)) {
+        if (typeof adminSetBalance === 'function') {
+          const result = adminSetBalance(newBalance, 'CONFIRM_SET_BALANCE');
+          if (result) {
+            logToConsole(`Added ${amount} chips to balance`, 'success');
+            refreshStatus();
+          } else {
+            logToConsole('Failed to add balance', 'error');
+          }
+        } else {
+          logToConsole('Add balance function not available', 'error');
+        }
+      }
+    }
+
+    function clearUserData() {
+      if (confirm('⚠️ WARNING: This will clear ALL user data including balance, transactions, and history. This action cannot be undone.\n\nProceed?')) {
+        localStorage.removeItem('pyramidCasinoBalance');
+        localStorage.removeItem('pyramidCasinoBalanceSecure');
+        localStorage.removeItem('pyramidCasinoBanStatus');
+        localStorage.removeItem('pyramidCasinoBanTime');
+        localStorage.removeItem('pyramidCasinoBanReason');
+        logToConsole('All user data cleared', 'warning');
+        refreshStatus();
+      }
+    }
+
+    function clearTransactions() {
+      if (confirm('Clear all transaction history?')) {
+        if (typeof adminClearTransactions === 'function') {
+          const result = adminClearTransactions('CONFIRM_CLEAR_TRANSACTIONS');
+          if (result) {
+            logToConsole('All transactions cleared', 'success');
+          } else {
+            logToConsole('Failed to clear transactions', 'error');
+          }
+        } else {
+          logToConsole('Clear transactions function not available', 'error');
+        }
+      }
+    }
+
+    function resetDailyLimits() {
+      if (confirm('Reset daily topup limits?')) {
+        if (typeof adminResetTopups === 'function') {
+          const result = adminResetTopups('CONFIRM_RESET_TOPUPS');
+          if (result) {
+            logToConsole('Daily limits reset', 'success');
+            refreshStatus();
+          } else {
+            logToConsole('Failed to reset daily limits', 'error');
+          }
+        } else {
+          logToConsole('Reset topups function not available', 'error');
+        }
+      }
+    }
+
+    function toggleMaintenanceMode() {
+      maintenanceMode = !maintenanceMode;
+      const btn = document.getElementById('maintenance-btn');
+      btn.textContent = maintenanceMode ? 'Disable Maintenance' : 'Enable Maintenance';
+      btn.className = maintenanceMode ? 'admin-btn danger' : 'admin-btn';
+      
+      sessionStorage.setItem('pyramidCasinoMaintenance', maintenanceMode.toString());
+      logToConsole(`Maintenance mode ${maintenanceMode ? 'enabled' : 'disabled'}`, 'info');
+      refreshStatus();
+    }
+
+    function clearAllCache() {
+      if (confirm('Clear all browser cache and session data?')) {
+        sessionStorage.clear();
+        logToConsole('All cache cleared', 'warning');
+        alert('Cache cleared. Page will reload.');
+        location.reload();
+      }
+    }
+
+    function resetToDefaults() {
+      if (confirm('⚠️ WARNING: This will reset everything to default settings and reload the page. Continue?')) {
+        localStorage.clear();
+        sessionStorage.clear();
+        logToConsole('System reset to defaults', 'warning');
+        alert('System reset. Page will reload.');
+        location.reload();
+      }
+    }
+
+    function viewTransactions() {
+      // Try to get transaction data
+      const transactions = localStorage.getItem('pyramidCasinoTransactions');
+      if (transactions) {
+        try {
+          const data = JSON.parse(transactions);
+          logToConsole('Transaction data:\n' + JSON.stringify(data, null, 2), 'info');
+        } catch (e) {
+          logToConsole('Error parsing transaction data: ' + e.message, 'error');
+        }
+      } else {
+        logToConsole('No transaction data found', 'info');
+      }
+    }
+
+    function exportData() {
+      const data = {
+        balance: getCasinoBalance ? getCasinoBalance() : 0,
+        banStatus: typeof getBanStatus === 'function' ? getBanStatus() : false,
+        topupCount: typeof getTodayTopupCount === 'function' ? getTodayTopupCount() : 0,
+        exportTime: new Date().toISOString(),
+        localStorage: Object.keys(localStorage).reduce((acc, key) => {
+          if (key.includes('pyramidCasino')) {
+            acc[key] = localStorage[key];
+          }
+          return acc;
+        }, {})
+      };
+
+      const dataStr = JSON.stringify(data, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `pyramid-casino-admin-export-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      
+      URL.revokeObjectURL(url);
+      logToConsole('User data exported successfully', 'success');
+    }
+
+    function logToConsole(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const typeEmoji = {
+        'info': 'ℹ️',
+        'success': '✅',
+        'warning': '⚠️',
+        'error': '❌'
+      };
+      
+      const logEntry = `[${timestamp}] ${typeEmoji[type] || 'ℹ️'} ${message}`;
+      const consoleOutput = document.getElementById('console-output');
+      const currentLog = consoleOutput.querySelector('pre').textContent;
+      
+      // Keep only last 20 log entries
+      const lines = currentLog.split('\n');
+      if (lines.length > 20) {
+        lines.splice(0, lines.length - 20);
+      }
+      
+      lines.push(logEntry);
+      consoleOutput.innerHTML = `<pre>${lines.join('\n')}</pre>`;
+      consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    }
+
+    function clearConsole() {
+      document.getElementById('console-output').innerHTML = '<pre>Console cleared.</pre>';
+    }
+
+    function exitAdminMode() {
+      if (confirm('Exit admin mode and return to main site?')) {
+        disableAdminMode();
+        sessionStorage.removeItem('pyramidCasinoDirectAdminAccess');
+        window.location.href = 'index.html';
+      }
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if already in admin mode
+      if (isAdminMode()) {
+        showAdminPanel();
+      } else {
+        // Show login form
+        document.getElementById('login-section').style.display = 'block';
+      }
+
+      // Add enter key support for password field
+      document.getElementById('admin-password').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          attemptLogin();
+        }
+      });
+
+      logToConsole('Admin interface initialized', 'info');
+    });
+
+    // Security: Clear sensitive data on page unload
+    window.addEventListener('beforeunload', function() {
+      document.getElementById('admin-password').value = '';
+    });
+  </script>
+</body>
+</html>

@@ -120,6 +120,13 @@
       max-width: 800px;
       margin: 0 auto;
     }
+    
+    /* Desktop layout improvements for games */
+    @media (min-width: 1200px) {
+      .main-content {
+        max-width: 1200px;
+      }
+    }
     .balance-row {
       display: flex;
       justify-content: flex-end;
@@ -188,6 +195,27 @@
       box-shadow: 0 4px 12px #0005;
       width: 240px;
       text-align: center;
+    }
+    
+    /* Desktop improvements - more games per line */
+    @media (min-width: 1024px) {
+      .games-list {
+        gap: 1.5rem;
+      }
+      .game-card {
+        width: 220px;
+        padding: 1.3rem;
+      }
+    }
+    
+    @media (min-width: 1200px) {
+      .games-list {
+        gap: 1.2rem;
+      }
+      .game-card {
+        width: 200px;
+        padding: 1.2rem;
+      }
     }
     .game-card h3 {
       color: #f9d923;
@@ -270,6 +298,7 @@
         <li><a href="topup.html">Top Up</a></li>
         <li><a href="history.html">History</a></li>
         <li><a href="https://forms.gle/QYQqh72sSuweCue49" target="_blank" rel="noopener" aria-label="Suggest A Game - opens in new window">Suggest A Game</a></li>
+        <li id="admin-menu-item" style="display: none;"><a href="admin.html" style="color: #ff6b7a; font-weight: bold;">🛡️ Admin</a></li>
       </ul>
     </nav>
   </header>
@@ -389,8 +418,50 @@
   <script src="admin-config.js"></script>
   <script src="shared-modern.js"></script>
   <script>
+    // Secret admin access - key combination: Ctrl+Shift+A
+    let adminKeySequence = [];
+    const targetSequence = ['Control', 'Shift', 'KeyA'];
+    
+    document.addEventListener('keydown', function(e) {
+      // Check for admin key combination
+      if (e.ctrlKey && e.shiftKey && e.code === 'KeyA') {
+        e.preventDefault();
+        if (isAdminMode()) {
+          if (confirm('🔐 Access admin panel?')) {
+            window.location.href = 'admin.html';
+          }
+        } else {
+          if (confirm('🔐 This is a restricted area. Do you have admin access?\n\nClick OK to continue to admin login.')) {
+            window.location.href = 'admin.html';
+          }
+        }
+        return;
+      }
+      
+      // Secret sequence: type "pyramid" (hidden easter egg for admin access)
+      const secretWord = 'pyramid';
+      if (e.key.length === 1) {
+        adminKeySequence.push(e.key.toLowerCase());
+        if (adminKeySequence.length > secretWord.length) {
+          adminKeySequence.shift();
+        }
+        
+        if (adminKeySequence.join('') === secretWord) {
+          adminKeySequence = [];
+          if (confirm('🏛️ Easter egg found! This is the hidden admin access.\n\nContinue to admin panel?')) {
+            window.location.href = 'admin.html';
+          }
+        }
+      }
+    });
+
     // Use secure balance checking and anti-cheat
     document.addEventListener('DOMContentLoaded', function() {
+        // Show admin menu if in admin mode
+        if (typeof isAdminMode === 'function' && isAdminMode()) {
+          document.getElementById('admin-menu-item').style.display = 'block';
+        }
+        
         // Initialize balance display with anti-cheat protection
         var balanceEl = document.getElementById('balance');
         if (balanceEl) {
