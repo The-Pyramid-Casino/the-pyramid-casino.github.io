@@ -39,9 +39,9 @@
     <div class="notice">
       <span>✨ For fun only! No real money, just chips and luck. ✨</span>
     </div>
-    <div id="chip-bank">
-      <span>Chips: <span id="chip-balance">1000</span></span>
-      <button id="reset-chips" title="Reset chips to 1000">Reset</button>
+    <div class="balance-row">
+      <span>Balance: <span id="balance">1000</span></span>
+      <a href="topup.html" class="reset-btn">💳 Top Up</a>
     </div>
     <div id="betting-area">
       <div class="chips-row">
@@ -65,7 +65,7 @@
     <div class="rules">
       <h3>Roulette Rules</h3>
       <ul>
-        <li>You have 1,000 chips. No real money, just for fun!</li>
+        <li>Place chips and have fun! No real money, just entertainment!</li>
         <li>Click chip values, then click the table to place chips.</li>
         <li>Inside bets: straight up (35:1), split (17:1), street (11:1), corner (8:1), six line (5:1).</li>
         <li>Outside bets: red/black, even/odd, 1-18/19-36 pay 1:1; columns and dozens pay 2:1.</li>
@@ -93,8 +93,6 @@
 <script>
 // UI Elements
 document.getElementById('year').textContent = new Date().getFullYear();
-const chipBalanceEl = document.getElementById("chip-balance");
-const resetChipsBtn = document.getElementById("reset-chips");
 const rouletteTableEl = document.getElementById("roulette-table");
 const betSummaryEl = document.getElementById("bet-summary");
 const spinBtn = document.getElementById("spin-btn");
@@ -104,8 +102,19 @@ const payoutResultEl = document.getElementById("payout-result");
 const newRoundBtn = document.getElementById("new-round");
 const clearBetsBtn = document.getElementById("clear-bets");
 
+// Use shared balance display system
+function updateBalanceDisplay() {
+  const balanceElement = document.getElementById('balance');
+  const currentBalance = getCasinoBalance();
+  if (typeof updateBalanceWithAnimation === 'function') {
+    updateBalanceWithAnimation(balanceElement, currentBalance);
+  } else {
+    balanceElement.textContent = currentBalance;
+  }
+}
+updateBalanceDisplay();
+
 // Game State (uses shared balance!)
-let chips = getCasinoBalance();
 let selectedChip = 1;
 let bets = {}; // { betKey: {1: count, 5: count, 25: count, 100: count, 1000: count, total: sum} }
 let lastSpin = null;
@@ -120,10 +129,6 @@ const COLORS = {
 };
 const REDS = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
 
-function updateChipDisplay() {
-  chipBalanceEl.textContent = chips;
-}
-
 // Chip buttons
 document.querySelectorAll('.chip-btn').forEach(btn => {
   btn.onclick = () => {
@@ -133,19 +138,6 @@ document.querySelectorAll('.chip-btn').forEach(btn => {
   };
 });
 document.querySelector('.chip-btn[data-chip="1"]').classList.add('selected');
-
-// Reset chips: sets shared balance
-resetChipsBtn.onclick = () => {
-  if (confirm("Reset your chips to 1000? This will restart the game.")) {
-    setCasinoBalance(1000);
-    chips = 1000;
-    chipBalanceEl.textContent = chips;
-    bets = {};
-    renderBets();
-    renderChipsOnTable();
-    resultArea.style.display = 'none';
-  }
-};
 
 // Render the roulette table (European 0-36)
 function renderTable() {
@@ -243,12 +235,15 @@ function placeBet(e) {
     totalCurrentBets += (bets[key] ? bets[key].total : 0);
   }
   
+  // Get current balance from shared system
+  const currentBalance = getCasinoBalance();
+  
   // Only allow betting if you have enough chips and haven't spun yet
-  if ((chips - totalCurrentBets) < selectedChip || resultArea.style.display === '') return;
+  if ((currentBalance - totalCurrentBets) < selectedChip || resultArea.style.display === '') return;
   if (!bets[betKey]) bets[betKey] = {1:0,5:0,25:0,100:0,1000:0,total:0};
   bets[betKey][selectedChip] = (bets[betKey][selectedChip] || 0) + 1;
   bets[betKey].total += selectedChip;
-  updateChipDisplay();
+  updateBalanceDisplay();
   renderBets();
   renderChipsOnTable();
 }
@@ -309,11 +304,8 @@ function betDescription(key) {
 
 // Clear bets
 clearBetsBtn.onclick = () => {
-  for (let key in bets) {
-    chips += bets[key].total;
-  }
   bets = {};
-  updateChipDisplay();
+  updateBalanceDisplay();
   renderBets();
   renderChipsOnTable();
 };
@@ -339,7 +331,6 @@ spinBtn.onclick = () => {
   
   if (totalBetAmount > 0) {
     recordGameBet('Roulette', totalBetAmount);
-    chips = getCasinoBalance(); // Update local chips variable
   }
   
   const spin = riggedRandomInt(0, 36, null, 'roulette'); // Configurable house edge on roulette spin
@@ -347,7 +338,7 @@ spinBtn.onclick = () => {
   showSpinResult(spin);
   payout(spin);
   resultArea.style.display = '';
-  updateChipDisplay();
+  updateBalanceDisplay();
 };
 
 // Show spin result
@@ -396,7 +387,6 @@ function payout(spin) {
   if (totalWin > 0) {
     const winDetails = `Ball landed on ${spin} (${COLORS[spin]})`;
     recordGameWin('Roulette', totalWin, winDetails);
-    chips = getCasinoBalance(); // Update local chips variable
     payoutResultEl.innerHTML = `<div class="win">You won ${totalWin} chips!</div>${payoutMsg}`;
   } else if (totalWin === 0) {
     payoutResultEl.innerHTML = `<div class="push">No net win/loss.</div>${payoutMsg}`;
@@ -414,7 +404,6 @@ newRoundBtn.onclick = () => {
 };
 
 renderChipsOnTable();
-updateChipDisplay();
 </script>
 </body>
 </html>

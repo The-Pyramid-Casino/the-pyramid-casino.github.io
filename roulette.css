@@ -54,28 +54,30 @@ body {
   max-width: 550px;
   box-shadow: 0 2px 8px #0002;
 }
-#chip-bank {
-  background: #231b36;
-  padding: 0.7rem 1.4rem;
-  border-radius: 10px;
-  display: inline-block;
-  margin: 0 auto 1rem auto;
+.balance-row {
+  display: flex;
+  align-items: center;
+  gap: 1.2em;
+  justify-content: center;
+  margin-bottom: 1.2em;
   font-size: 1.2rem;
 }
-#chip-bank button {
-  margin-left: 1.2rem;
-  background: #f9d923;
-  color: #18122b;
+.reset-btn {
+  background: #43c734;
+  color: #fff;
+  border-radius: 8px;
   border: none;
-  border-radius: 5px;
-  padding: 0.3rem 0.8rem;
-  font-size: 1rem;
-  cursor: pointer;
+  font-size: 0.97rem;
   font-weight: bold;
-  transition: background 0.2s;
+  padding: 0.28em 1.1em;
+  cursor: pointer;
+  box-shadow: 0 2px 6px #0002;
+  transition: background 0.15s;
+  text-decoration: none;
+  display: inline-block;
 }
-#chip-bank button:hover {
-  background: #ffe277;
+.reset-btn:hover {
+  background: #2ea827;
 }
 .chips-row {
   margin-bottom: 1rem;
