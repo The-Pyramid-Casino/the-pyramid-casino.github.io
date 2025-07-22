@@ -443,9 +443,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load admin config if available
     loadAdminConfig();
     
-    // Initialize anti-cheat system first
+    // Initialize anti-cheat system first, but allow admin mode to bypass
     if (!initializeAntiCheat()) {
-        return; // Stop initialization if user is banned
+        // Check if this is an admin panel or if user is in admin mode
+        if (window.location.pathname.includes('admin.html') || (typeof isAdminMode !== 'undefined' && isAdminMode())) {
+            console.log('Admin mode: Bypassing ban checks for initialization');
+        } else {
+            return; // Stop initialization if user is banned and not in admin mode
+        }
     }
     
     // Add click effects to all buttons
@@ -1656,6 +1661,11 @@ function updateCountdown(expiresAt) {
         return true;
     }
     
+    // Ensure minimum display of 1 second if ban is still active
+    if (remaining < 1000) {
+        remaining = 1000;
+    }
+    
     var hours = Math.floor(remaining / (1000 * 60 * 60));
     var minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
     var seconds = Math.floor((remaining % (1000 * 60)) / 1000);
@@ -1684,6 +1694,13 @@ function getCasinoBalanceSecure() {
 }
 
 function setCasinoBalanceSecure(newBalance, transactionType, amount, description) {
+    // Admin mode bypasses ban checks
+    if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+        console.log('Admin mode: Bypassing ban status check for balance change');
+        setCasinoBalance(newBalance, transactionType, amount, description);
+        return;
+    }
+    
     // Check if user is banned
     var banStatus = getBanStatus();
     if (banStatus) {
@@ -1727,17 +1744,17 @@ function performAntiCheatCheck() {
 
 // Initialize lightweight anti-cheat system
 function initializeAntiCheat() {
-    // Check ban status first
+    // Admin mode can bypass all checks including bans
+    if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+        console.log('Admin mode active - bypassing all anti-cheat checks including bans');
+        return true;
+    }
+    
+    // Check ban status for regular users
     var banStatus = getBanStatus();
     if (banStatus) {
         showBanScreen();
         return false;
-    }
-    
-    // Admin mode can bypass all checks
-    if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
-        console.log('Admin mode active - anti-cheat checks minimal');
-        return true;
     }
     
     // Only check for obvious tampering (no more periodic integrity checks)
