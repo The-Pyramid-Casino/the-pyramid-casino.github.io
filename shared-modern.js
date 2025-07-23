@@ -1,17 +1,17 @@
 /* Shared Modern JavaScript for Pyramid Casino */
 
-// House Edge System - Configurable rigging for entertainment with admin controls
+// House Edge System - Heavily rigged for entertainment (nearly impossible to win but keeps players engaged)
 var GAME_ODDS_CONFIG = {
-    'blackjack': 2.5,
-    'slots': 3.0,
-    'roulette': 2.7,
-    'poker': 2.2,
-    'dice': 1.4,
-    'baccarat': 1.2,
-    'keno': 4.0,
-    'coinflip': 3.0,
-    'plinko': 2.8,
-    'coinpusher': 2.0
+    'blackjack': 18.5,    // Very challenging card game
+    'slots': 25.0,        // Slot machines are notorious for house advantage
+    'roulette': 22.7,     // High house edge on roulette
+    'poker': 19.2,        // Poker with significant house bias
+    'dice': 16.4,         // Dice games with heavy house favor
+    'baccarat': 15.2,     // Lowest house edge but still challenging
+    'keno': 35.0,         // Lottery-style game with very high house edge
+    'coinflip': 28.0,     // Even "50/50" games are heavily biased
+    'plinko': 26.8,       // Plinko with significant house advantage
+    'coinpusher': 20.0    // Arcade-style with moderate but high house edge
 };
 
 // Get configurable house edge for a specific game
@@ -24,7 +24,7 @@ function getGameHouseEdge(gameName) {
         }
     }
     
-    return GAME_ODDS_CONFIG[gameName] || 2.5; // Default 2.5%
+    return GAME_ODDS_CONFIG[gameName] || 20.0; // Default 20% house edge
 }
 
 // Admin function to get game settings
@@ -91,7 +91,7 @@ function riggedCoinFlip(houseEdgePercentage, gameName) {
     if (!houseEdgePercentage && gameName) {
         houseEdgePercentage = getGameHouseEdge(gameName);
     } else if (!houseEdgePercentage) {
-        houseEdgePercentage = 3.0; // Default for coin flip
+        houseEdgePercentage = 28.0; // Default for coin flip - heavily rigged
     }
     
     // Simple bias: make it slightly less than 50% chance for player win
@@ -819,6 +819,11 @@ function getCasinoBalance() {
         if (decryptedBalance && validateGameData(decryptedBalance, 'balance')) {
             balance = parseInt(decryptedBalance, 10);
             if (isNaN(balance)) balance = 1000;
+        } else if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+            // Admin mode: Allow large balances without corruption checks
+            balance = parseInt(decryptedBalance, 10);
+            if (isNaN(balance)) balance = 1000;
+            console.log('Admin mode: Allowing large balance without validation - ' + balance);
         } else {
             // Data corrupted or tampered - reset to default without calling setCasinoBalance
             console.warn('Balance data corrupted or tampered with, resetting to default');
@@ -1301,6 +1306,12 @@ function decryptData(encryptedData) {
 function validateGameData(data, dataType) {
     if (!data) return false;
     
+    // Admin mode bypasses validation checks
+    if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+        console.log('Admin mode: Bypassing data validation for', dataType);
+        return true;
+    }
+    
     try {
         switch(dataType) {
             case 'balance':
@@ -1708,10 +1719,15 @@ function setCasinoBalanceSecure(newBalance, transactionType, amount, description
         return;
     }
     
-    // Basic validation to prevent extreme values
-    if (typeof newBalance === 'number' && newBalance > 10000000) {
-        handleCheatDetection('Attempted to set unreasonably high balance: ' + newBalance);
-        return;
+    // Basic validation to prevent extreme values (admin mode allows higher limits)
+    const maxLimit = (typeof isAdminMode !== 'undefined' && isAdminMode()) ? 999999999 : 10000000;
+    if (typeof newBalance === 'number' && newBalance > maxLimit) {
+        if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+            console.log('Admin mode: Large balance set - ' + newBalance);
+        } else {
+            handleCheatDetection('Attempted to set unreasonably high balance: ' + newBalance);
+            return;
+        }
     }
     
     // Set balance using encrypted storage
@@ -1732,11 +1748,16 @@ function performAntiCheatCheck() {
         return false;
     }
     
-    // Only check for extreme values that indicate obvious tampering
+    // Only check for extreme values that indicate obvious tampering (admin mode has higher limits)
     var currentBalance = getCasinoBalance();
-    if (currentBalance > 10000000) {
-        handleCheatDetection('Balance exceeds reasonable limits: ' + currentBalance);
-        return false;
+    const maxLimit = (typeof isAdminMode !== 'undefined' && isAdminMode()) ? 999999999 : 10000000;
+    if (currentBalance > maxLimit) {
+        if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+            console.log('Admin mode: Large balance detected - ' + currentBalance);
+        } else {
+            handleCheatDetection('Balance exceeds reasonable limits: ' + currentBalance);
+            return false;
+        }
     }
     
     return true;
