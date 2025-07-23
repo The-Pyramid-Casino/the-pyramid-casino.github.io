@@ -1830,6 +1830,87 @@ if (typeof module !== 'undefined' && module.exports) {
         riggedRandom,
         riggedRandomInt,
         riggedCoinFlip,
-        riggedShuffle
+        riggedShuffle,
+        // Admin management functions
+        adminSetBalance,
+        adminClearTransactions,
+        adminResetTopups
     };
+}
+
+// Admin-specific balance management function
+function adminSetBalance(newBalance, confirmationKey) {
+    // Ensure this is only called by admin interface with proper confirmation
+    if (confirmationKey !== 'CONFIRM_SET_BALANCE') {
+        console.error('Admin balance change requires confirmation key');
+        return false;
+    }
+    
+    // Check if user is in admin mode
+    if (typeof isAdminMode !== 'undefined' && !isAdminMode()) {
+        console.error('Admin mode required to set balance');
+        return false;
+    }
+    
+    // Validate balance amount
+    if (typeof newBalance !== 'number' || newBalance < 0 || newBalance > 999999999) {
+        console.error('Invalid balance amount. Must be between 0 and 999,999,999');
+        return false;
+    }
+    
+    // Set the balance using the secure function (admin mode will bypass restrictions)
+    try {
+        var currentBalance = getCasinoBalance();
+        var changeAmount = newBalance - currentBalance;
+        setCasinoBalanceSecure(newBalance, 'admin_set', changeAmount, 'Admin set balance to ' + newBalance);
+        console.log('Admin successfully set balance to:', newBalance);
+        return true;
+    } catch (error) {
+        console.error('Failed to set admin balance:', error);
+        return false;
+    }
+}
+
+// Admin function to clear transactions
+function adminClearTransactions(confirmationKey) {
+    if (confirmationKey !== 'CONFIRM_CLEAR_TRANSACTIONS') {
+        console.error('Admin transaction clear requires confirmation key');
+        return false;
+    }
+    
+    if (typeof isAdminMode !== 'undefined' && !isAdminMode()) {
+        console.error('Admin mode required to clear transactions');
+        return false;
+    }
+    
+    try {
+        clearTransactionHistory();
+        console.log('Admin successfully cleared all transactions');
+        return true;
+    } catch (error) {
+        console.error('Failed to clear transactions:', error);
+        return false;
+    }
+}
+
+// Admin function to reset topup limits
+function adminResetTopups(confirmationKey) {
+    if (confirmationKey !== 'CONFIRM_RESET_TOPUPS') {
+        console.error('Admin topup reset requires confirmation key');
+        return false;
+    }
+    
+    if (typeof isAdminMode !== 'undefined' && !isAdminMode()) {
+        console.error('Admin mode required to reset topups');
+        return false;
+    }
+    
+    try {
+        localStorage.removeItem('pyramidCasinoTopupHistory');
+        console.log('Admin successfully reset daily topup limits');
+        return true;
+    } catch (error) {
+        console.error('Failed to reset topup limits:', error);
+        return false;
+    }
 }
