@@ -4,24 +4,76 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pyramid Casino - Free Online Entertainment Casino Games</title>
-  <meta name="description" content="Pyramid Casino is a free, fun experiment—an Ancient Egypt-themed online casino for entertainment only. No real money or payments involved." />
-  <meta name="keywords" content="Pyramid Casino, free online casino, ancient Egypt, slots, blackjack, roulette, entertainment, play for fun" />
+  <title>Pyramid Casino - Modern Free Online Casino Games | Entertainment Only</title>
+  <meta name="description" content="Experience the future of online gaming at Pyramid Casino! Modern UI, sleek design, and exciting free casino games including slots, blackjack, roulette, and more. Play for fun - no real money involved." />
+  <meta name="keywords" content="Pyramid Casino, free online casino, modern casino games, ancient Egypt slots, free blackjack, free roulette, entertainment casino, play for fun, modern UI casino" />
   <meta name="author" content="Pyramid Casino Team" />
+  <meta name="robots" content="index, follow" />
+  <meta name="language" content="English" />
+  <meta name="theme-color" content="#667eea" />
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://the-pyramid-casino.github.io/" />
+  
+  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Pyramid Casino" />
-  <meta property="og:description" content="Experience the thrill of ancient Egypt with Pyramid Casino! Play exciting games, win big, and enjoy a free, fun casino experience." />
+  <meta property="og:title" content="Pyramid Casino - Modern Free Online Casino Games" />
+  <meta property="og:description" content="Experience the future of online gaming with our modern, sleek casino. Free games, stunning UI, entertainment only!" />
   <meta property="og:image" content="https://the-pyramid-casino.github.io/assets/pyramid-casino-og-image.png" />
   <meta property="og:url" content="https://the-pyramid-casino.github.io/" />
   <meta property="og:site_name" content="Pyramid Casino" />
+  <meta property="og:locale" content="en_US" />
+  
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Pyramid Casino" />
-  <meta name="twitter:description" content="Pyramid Casino is a free, fun Ancient Egypt-themed casino. No real money, just entertainment!" />
+  <meta name="twitter:title" content="Pyramid Casino - Modern Free Online Casino Games" />
+  <meta name="twitter:description" content="Modern UI casino with free games - slots, blackjack, roulette and more. Entertainment only, no real money!" />
   <meta name="twitter:image" content="https://the-pyramid-casino.github.io/assets/pyramid-casino-og-image.png" />
+  <meta name="twitter:site" content="@PyramidCasino" />
+  
+  <!-- Additional SEO Meta Tags -->
+  <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE" />
+  <meta name="msvalidate.01" content="YOUR_BING_VERIFICATION_CODE" />
+  
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Pyramid Casino",
+    "description": "Modern free online casino with stunning UI and exciting games for entertainment only",
+    "url": "https://the-pyramid-casino.github.io/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://the-pyramid-casino.github.io/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Pyramid Casino",
+      "url": "https://the-pyramid-casino.github.io/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://the-pyramid-casino.github.io/favicon.ico"
+      }
+    },
+    "mainEntity": {
+      "@type": "Game",
+      "name": "Pyramid Casino Games",
+      "description": "Collection of free online casino games including slots, blackjack, roulette, poker, and more",
+      "gameLocation": "Online",
+      "numberOfPlayers": "1",
+      "audience": {
+        "@type": "Audience",
+        "suggestedMinAge": 18
+      }
+    }
+  }
+  </script>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="shared-modern.css" />
   <style>
-    /* Accessibility base styles */
+    /* Modern Accessibility base styles */
     * {
       box-sizing: border-box;
     }
@@ -43,7 +95,7 @@
       border: 0;
     }
     
-    /* Focus indicators - WCAG compliant */
+    /* Modern focus indicators - WCAG compliant */
     *:focus {
       outline: 3px solid #f9d923;
       outline-offset: 2px;
@@ -74,177 +126,489 @@
       }
     }
     
-    /* Color contrast improvements */
+    /* Modern glassmorphism and design */
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
       margin: 0;
-      background: #18122b;
-      color: #f3e9dc;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-attachment: fixed;
+      color: #ffffff;
       min-height: 100vh;
       line-height: 1.6;
+      position: relative;
     }
+    
+    /* Animated background pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+      animation: backgroundShift 20s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    @keyframes backgroundShift {
+      0%, 100% { transform: translateX(0) translateY(0) scale(1); }
+      33% { transform: translateX(-20px) translateY(-10px) scale(1.05); }
+      66% { transform: translateX(10px) translateY(-20px) scale(0.95); }
+    }
+    
+    /* Modern glassmorphism header */
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: #a0843a;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       color: #fff;
       padding: 1rem 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
+    
     .logo {
-      font-weight: bold;
+      font-weight: 700;
       font-size: 1.5rem;
       letter-spacing: 2px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     }
+    
     .header nav ul {
       list-style: none;
       display: flex;
-      gap: 1.2rem;
+      gap: 2rem;
       margin: 0;
       padding: 0;
     }
+    
     .header nav a {
-      color: #fff;
+      color: rgba(255, 255, 255, 0.9);
       text-decoration: none;
       font-weight: 500;
-      transition: color 0.2s;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
     }
+    
+    .header nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .header nav a:hover::before {
+      left: 100%;
+    }
+    
     .header nav a:hover,
     .header nav a:focus {
-      color: #f3e9dc;
-      text-shadow: 0 0 5px #f9d923;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
+    
     .main-content {
       padding: 2rem 1rem 3rem 1rem;
       min-height: 60vh;
-      max-width: 800px;
+      max-width: 1200px;
       margin: 0 auto;
     }
+    
+    /* Modern glassmorphism balance row */
     .balance-row {
       display: flex;
       justify-content: flex-end;
-      gap: 0.5rem;
+      gap: 1rem;
       align-items: center;
-      margin-bottom: 1rem;
-      font-size: 1.12rem;
-      color: #ffe277;
-      font-weight: bold;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+      color: #ffffff;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
+    
+    /* Modern session stats panel */
+    .modern-stats-panel {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-icon {
+      font-size: 2rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .stat-content {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.25rem;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 500;
+    }
+    
+    /* Modern button styling */
     .reset-btn {
-      margin-left: 10px;
-      background: #43c734;
+      background: linear-gradient(135deg, #667eea, #764ba2);
       color: #fff;
-      border-radius: 8px;
+      border-radius: 12px;
       border: none;
-      font-size: 0.97rem;
-      font-weight: bold;
-      padding: 0.28em 1.1em;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
       cursor: pointer;
-      box-shadow: 0 2px 6px #0002;
-      transition: background 0.15s;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      transition: all 0.3s ease;
       text-decoration: none;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
     }
+    
     .reset-btn:hover,
     .reset-btn:focus {
-      background: #2ea827;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(46, 168, 39, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
     }
+    
     .home {
       text-align: center;
     }
+    
+    .home h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .home p {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 600px;
+      margin: 0 auto 2rem auto;
+      line-height: 1.6;
+    }
+    
+    /* Modern primary button */
     .primary-btn {
       display: inline-block;
       margin-top: 1.5rem;
-      background: #f9d923;
-      color: #18122b;
-      padding: 0.8rem 2.2rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #ffffff;
+      padding: 1rem 2.5rem;
       border: none;
-      border-radius: 25px;
+      border-radius: 50px;
       font-size: 1.1rem;
-      font-weight: bold;
+      font-weight: 600;
       text-decoration: none;
-      transition: background 0.2s;
-      box-shadow: 0 4px 8px #0003;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+      position: relative;
+      overflow: hidden;
     }
+    
+    .primary-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    .primary-btn:hover::before {
+      left: 100%;
+    }
+    
     .primary-btn:hover,
     .primary-btn:focus {
-      background: #ffe277;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
     }
+    
+    /* Modern game cards */
     .games-list {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 2rem;
-      justify-content: center;
-      margin-top: 2rem;
+      margin-top: 3rem;
     }
+    
     .game-card {
-      background: #231b36;
-      padding: 1.5rem;
-      border-radius: 18px;
-      box-shadow: 0 4px 12px #0005;
-      width: 240px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
+    
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .game-card:hover::before {
+      opacity: 1;
+    }
+    
+    .game-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    
     .game-card h3 {
-      color: #f9d923;
-      margin-bottom: 0.5rem;
+      color: #ffffff;
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      font-weight: 700;
     }
+    
+    .game-card p {
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    
     .game-card button,
     .game-card a {
-      margin-top: 1rem;
-      background: #a0843a;
+      margin: 0.5rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
       color: #fff;
       border: none;
-      border-radius: 8px;
-      padding: 0.5rem 1.2rem;
-      font-size: 1rem;
+      border-radius: 12px;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 600;
       display: inline-block;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
+    
     .game-card button[disabled] {
       cursor: not-allowed;
-      opacity: 0.7;
+      opacity: 0.5;
     }
+    
     .game-card a:hover,
     .game-card a:focus,
     .game-card button:hover,
     .game-card button:focus {
-      background: #f9d923;
-      color: #18122b;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(249, 217, 35, 0.3);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
     }
+    
+    /* Modern notice styling */
     .notice {
-      background: #f9d923;
-      color: #18122b;
-      border-radius: 8px;
-      padding: 1rem 1.5rem;
-      margin: 1.5rem auto 2rem auto;
-      font-weight: bold;
-      max-width: 550px;
-      box-shadow: 0 2px 8px #0002;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      margin: 2rem auto;
+      font-weight: 600;
+      max-width: 600px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
-    .footer {
-      margin-top: 3rem;
+    
+    /* About section styling */
+    #about {
+      margin-top: 4rem;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
-    @media (max-width: 700px) {
-      .games-list {
+    
+    #about h2 {
+      color: #ffffff;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    #about p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    #about ul {
+      display: inline-block;
+      text-align: left;
+      margin-top: 1.2rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1rem 2rem;
+      border-radius: 12px;
+    }
+    
+    #about li {
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 0.5rem;
+    }
+    
+    .footer {
+      margin-top: 4rem;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .footer a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .footer a:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    /* Games section heading */
+    #games-heading {
+      text-align: center;
+      margin-top: 3rem;
+      color: #ffffff;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .header {
         flex-direction: column;
-        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
       }
+      
+      .header nav ul {
+        gap: 1rem;
+      }
+      
       .main-content {
         padding: 1rem 0.5rem 2.5rem 0.5rem;
       }
+      
       .notice {
-        padding: 0.7rem 0.7rem;
+        padding: 1rem;
+        margin: 1rem;
+      }
+      
+      .home h1 {
+        font-size: 2.5rem;
+      }
+      
+      .games-list {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
       }
     }
   </style>
@@ -280,13 +644,23 @@
       <a href="topup.html" class="reset-btn" aria-label="Go to top up page to add more chips">💳 Top Up</a>
     </div>
     
-    <!-- Session Stats Display -->
-    <div id="session-stats" style="text-align: center; margin: 1rem 0; padding: 1rem; background: rgba(35, 27, 54, 0.6); border-radius: 15px; border: 1px solid rgba(249, 217, 35, 0.3);">
-      <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem; font-size: 0.9rem; color: #ffe277;">
-        <div>🎮 Games: <span id="games-played">0</span></div>
-        <div>🔥 Streak: <span id="current-streak">0</span></div>
-        <div>⏰ Session: <span id="session-time">0m</span></div>
-        <div>🏆 Best: <span id="best-streak">0</span></div>
+    <!-- Modern Session Stats Display -->
+    <div id="session-stats" class="modern-stats-panel">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-icon">🎮</div>
+          <div class="stat-content">
+            <span class="stat-value" id="games-played">0</span>
+            <span class="stat-label">Games Played</span>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon">⏰</div>
+          <div class="stat-content">
+            <span class="stat-value" id="session-time">0m</span>
+            <span class="stat-label">Session Time</span>
+          </div>
+        </div>
       </div>
     </div>
     
@@ -295,15 +669,15 @@
       Pyramid Casino is a <b>FREE, FUN EXPERIMENT</b> - No real money involved and no payments accepted!<br>
       🎮 Enjoy playing for entertainment only! 🎮</span>
     </div>
-    <section class="home">
-      <h1>Welcome to Pyramid Casino</h1>
-      <p>
-        Experience the thrill of ancient Egypt with our exclusive online casino! Play exciting games, win big, and discover the secrets of the pyramid.
+    <section class="home" itemscope itemtype="https://schema.org/WebSite">
+      <h1 itemprop="name">Welcome to Pyramid Casino</h1>
+      <p itemprop="description">
+        Experience the future of online gaming with our modern, sleek interface and exciting casino games. Cutting-edge design meets classic entertainment in this next-generation gaming experience.
       </p>
-      <a class="primary-btn" href="#games" aria-describedby="play-now-help">
-        Play Now
+      <a class="primary-btn" href="#games" aria-describedby="play-now-help" itemprop="url">
+        🎮 Start Playing
       </a>
-      <div id="play-now-help" class="sr-only">Skip to games section to start playing</div>
+      <div id="play-now-help" class="sr-only">Navigate to games section to start playing</div>
     </section>
     <section id="games" aria-labelledby="games-heading">
       <h2 id="games-heading" style="text-align:center;margin-top:3rem;">Our Games</h2>
@@ -372,16 +746,18 @@
         </div>
       </div>
     </section>
-    <section id="about" style="margin-top:3rem;text-align:center;" aria-labelledby="about-heading">
-      <h2 id="about-heading">About Pyramid Casino</h2>
-      <p>
-        Pyramid Casino offers a unique online gaming experience inspired by the wonders of ancient Egypt.<br>
+    <section id="about" style="margin-top:3rem;text-align:center;" aria-labelledby="about-heading" itemscope itemtype="https://schema.org/Organization">
+      <h2 id="about-heading" itemprop="name">About Pyramid Casino</h2>
+      <p itemprop="description">
+        Pyramid Casino offers a cutting-edge online gaming experience with modern UI design and sleek functionality.<br>
         <strong>This is a fun project - not a real casino.</strong>
       </p>
-      <ul style="display:inline-block;text-align:left;margin-top:1.2rem;" aria-label="Casino features">
-        <li>Safe & Secure</li>
-        <li>No money or prizes involved</li>
-        <li>For entertainment only</li>
+      <ul style="display:inline-block;text-align:left;margin-top:1.2rem;" aria-label="Casino features" itemprop="areaServed">
+        <li>🔒 Safe & Secure</li>
+        <li>🎮 No money or prizes involved</li>
+        <li>✨ For entertainment only</li>
+        <li>📱 Modern responsive design</li>
+        <li>🎨 Sleek user interface</li>
       </ul>
     </section>
   </main>
@@ -436,7 +812,7 @@
         document.getElementById('year').textContent = new Date().getFullYear();
     });
     
-    // Function to update session stats display
+    // Function to update session stats display (without streaks)
     function updateSessionStatsDisplay() {
         try {
             if (typeof getPlayerSession === 'function') {
@@ -444,19 +820,7 @@
                 const sessionTimeMinutes = Math.floor((Date.now() - session.startTime) / (1000 * 60));
                 
                 document.getElementById('games-played').textContent = session.gamesPlayed || 0;
-                document.getElementById('current-streak').textContent = session.currentStreak || 0;
                 document.getElementById('session-time').textContent = sessionTimeMinutes + 'm';
-                document.getElementById('best-streak').textContent = session.bestStreak || 0;
-                
-                // Add visual flair for good streaks
-                const streakEl = document.getElementById('current-streak');
-                if (session.currentStreak >= 3) {
-                    streakEl.style.color = '#f9d923';
-                    streakEl.style.textShadow = '0 0 5px rgba(249, 217, 35, 0.5)';
-                } else {
-                    streakEl.style.color = '';
-                    streakEl.style.textShadow = '';
-                }
             }
         } catch (e) {
             console.error('Error updating session stats:', e);

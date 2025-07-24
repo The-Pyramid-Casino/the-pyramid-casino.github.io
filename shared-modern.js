@@ -264,7 +264,7 @@ function updateBalanceWithAnimation(balanceElement, newBalance) {
     }, duration / steps);
 }
 
-// Enhanced notification system with WCAG compliance and engagement features
+// Enhanced notification system with WCAG compliance and modern positioning
 function showNotification(message, type, duration) {
     if (typeof type === 'undefined') type = 'info';
     if (typeof duration === 'undefined') duration = 3000;
@@ -284,73 +284,129 @@ function showNotification(message, type, duration) {
     
     const styles = {
         position: 'fixed',
-        top: '20px',
-        right: '20px',
-        padding: '15px 25px',
-        borderRadius: '10px',
-        fontWeight: 'bold',
-        fontSize: '1rem',
+        bottom: '20px',
+        left: '20px',
+        padding: '16px 24px',
+        borderRadius: '12px',
+        fontWeight: '600',
+        fontSize: '0.95rem',
         zIndex: '9999',
-        minWidth: '200px',
-        textAlign: 'center',
-        animation: 'slide-up 0.5s ease-out',
-        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
-        border: '2px solid transparent'
+        minWidth: '280px',
+        maxWidth: '400px',
+        textAlign: 'left',
+        animation: 'slideInLeft 0.4s ease-out',
+        boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+        backdropFilter: 'blur(20px)',
+        webkitBackdropFilter: 'blur(20px)'
     };
     
-    // Type-specific styling with improved contrast
+    // Type-specific styling with improved contrast and modern design
     switch(type) {
         case 'win':
-            styles.background = '#2ea827'; // Solid color for better contrast
+            styles.background = 'rgba(34, 197, 94, 0.9)';
             styles.color = '#ffffff';
-            styles.border = '2px solid #43c734';
+            styles.borderColor = 'rgba(34, 197, 94, 0.3)';
             break;
         case 'lose':
-            styles.background = '#d7263d'; // Solid color for better contrast
+            styles.background = 'rgba(239, 68, 68, 0.9)';
             styles.color = '#ffffff';
-            styles.border = '2px solid #ff4757';
+            styles.borderColor = 'rgba(239, 68, 68, 0.3)';
             break;
         case 'near-miss':
-            styles.background = '#ff6b35'; // Orange for near-miss excitement
+            styles.background = 'rgba(251, 146, 60, 0.9)';
             styles.color = '#ffffff';
-            styles.border = '2px solid #ff8c42';
-            styles.animation = 'pulse-glow 0.8s ease-out';
+            styles.borderColor = 'rgba(251, 146, 60, 0.3)';
+            styles.animation = 'pulseGlow 0.8s ease-out';
             break;
         case 'achievement':
-            styles.background = '#9c27b0'; // Purple for achievements
+            styles.background = 'rgba(147, 51, 234, 0.9)';
             styles.color = '#ffffff';
-            styles.border = '2px solid #ba68c8';
-            styles.animation = 'bounce-in 0.6s ease-out';
-            break;
-        case 'streak':
-            styles.background = '#ff9800'; // Orange for streaks
-            styles.color = '#ffffff';
-            styles.border = '2px solid #ffb74d';
+            styles.borderColor = 'rgba(147, 51, 234, 0.3)';
+            styles.animation = 'bounceIn 0.6s ease-out';
             break;
         case 'info':
-            styles.background = '#f9d923'; // High contrast yellow
-            styles.color = '#18122b'; // Dark text on yellow
-            styles.border = '2px solid #eed920';
+            styles.background = 'rgba(59, 130, 246, 0.9)';
+            styles.color = '#ffffff';
+            styles.borderColor = 'rgba(59, 130, 246, 0.3)';
             break;
         default:
-            styles.background = '#231b36';
-            styles.color = '#f3e9dc';
-            styles.border = '2px solid #f9d923';
+            styles.background = 'rgba(75, 85, 99, 0.9)';
+            styles.color = '#ffffff';
+            styles.borderColor = 'rgba(156, 163, 175, 0.3)';
     }
     
     Object.assign(notification.style, styles);
     document.body.appendChild(notification);
     
+    // Add modern animations
+    if (!document.querySelector('#modern-notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'modern-notification-styles';
+        style.textContent = `
+            @keyframes slideInLeft {
+                from {
+                    transform: translateX(-100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutLeft {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(-100%);
+                    opacity: 0;
+                }
+            }
+            
+            @keyframes pulseGlow {
+                0%, 100% {
+                    transform: scale(1);
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+                }
+                50% {
+                    transform: scale(1.05);
+                    box-shadow: 0 15px 50px rgba(251, 146, 60, 0.4);
+                }
+            }
+            
+            @keyframes bounceIn {
+                0% {
+                    transform: scale(0.3) translateX(-100%);
+                    opacity: 0;
+                }
+                50% {
+                    transform: scale(1.1) translateX(0);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(1) translateX(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
     // Auto remove after duration
     setTimeout(function() {
-        notification.style.animation = 'slide-up 0.5s ease-out reverse';
+        notification.style.animation = 'slideOutLeft 0.4s ease-out';
         setTimeout(function() { 
-            notification.remove(); 
-        }, 500);
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 400);
     }, duration);
 }
 
-// Session and Engagement Tracking System
+// Session and Engagement Tracking System (without streaks)
 const SESSION_STORAGE_KEY = 'pyramidCasinoSession';
 const ACHIEVEMENTS_KEY = 'pyramidCasinoAchievements';
 
@@ -368,8 +424,6 @@ function getPlayerSession() {
             consecutiveLosses: 0,
             nearMissCount: 0,
             lastNearMiss: 0,
-            currentStreak: 0,
-            bestStreak: 0,
             totalBets: 0,
             totalWins: 0,
             dailyPlayTime: {},
@@ -410,7 +464,7 @@ function updatePlayerSession(updates) {
     }
 }
 
-// Achievement System for Engagement
+// Achievement System for Engagement (without streak achievements)
 function checkAchievements(session) {
     const achievements = getAchievements();
     
@@ -527,39 +581,6 @@ function handleNearMiss(game, type, excitement = 0.5) {
             }
         }, 2000);
     }
-}
-
-// Streak and Hot Hand System
-function updateStreakSystem(isWin, amount = 0) {
-    const session = getPlayerSession();
-    
-    if (isWin) {
-        session.currentStreak++;
-        session.totalWins++;
-        session.consecutiveLosses = 0;
-        
-        if (session.currentStreak > session.bestStreak) {
-            session.bestStreak = session.currentStreak;
-        }
-        
-        // Hot streak bonuses
-        if (session.currentStreak >= 3) {
-            showNotification(`🔥 HOT STREAK! ${session.currentStreak} wins in a row!`, 'streak', 3000);
-        }
-        
-        if (session.currentStreak === 5) {
-            const bonusAmount = Math.floor(amount * 0.2);
-            if (bonusAmount > 0) {
-                updateBalance(bonusAmount, 'bonus', 'Hot streak bonus');
-                showNotification(`🔥 HOT STREAK BONUS: +${bonusAmount} chips!`, 'achievement', 4000);
-            }
-        }
-    } else {
-        session.currentStreak = 0;
-        session.consecutiveLosses++;
-    }
-    
-    updatePlayerSession(session);
 }
 
 // Enhanced button click effects
@@ -711,8 +732,7 @@ function initializeSession() {
         // Show welcome back message for returning players
         if (session.gamesPlayed > 0 && session.engagementLevel !== 'new') {
             setTimeout(function() {
-                const streak = session.currentStreak > 0 ? ` You're on a ${session.currentStreak} game streak!` : '';
-                showNotification(`🎉 Welcome back!${streak}`, 'info', 3000);
+                showNotification(`🎉 Welcome back to Pyramid Casino!`, 'info', 3000);
             }, 1000);
         }
         
@@ -1301,11 +1321,10 @@ function recordGameWin(gameName, winAmount, details) {
     var description = details ? gameName + ' win: ' + winAmount + ' chips (' + details + ')' : gameName + ' win: ' + winAmount + ' chips';
     setCasinoBalanceSecure(newBalance, 'win', winAmount, description);
     
-    // Update streak system
-    updateStreakSystem(true, winAmount);
-    
     // Update session tracking
     updatePlayerSession({
+        totalWins: getPlayerSession().totalWins + 1,
+        consecutiveLosses: 0,
         lastActivity: Date.now()
     });
     
@@ -1325,11 +1344,9 @@ function recordGameWin(gameName, winAmount, details) {
 function recordGameLoss(gameName, details) {
     if (typeof details === 'undefined') details = '';
     
-    // Update streak system for losses
-    updateStreakSystem(false, 0);
-    
     // Update session tracking
     updatePlayerSession({
+        consecutiveLosses: getPlayerSession().consecutiveLosses + 1,
         lastActivity: Date.now()
     });
     
