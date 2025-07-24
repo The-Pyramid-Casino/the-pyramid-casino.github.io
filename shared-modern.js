@@ -1,7 +1,7 @@
 /* Shared Modern JavaScript for Pyramid Casino */
 
-// House Edge System - Subtle rigging for entertainment
-// Simple house-biased random number generator
+// Enhanced Engagement System - Creates compelling near-miss experiences
+// Advanced random system with near-miss generation for entertainment
 function riggedRandom(houseEdgePercentage = 2.5) {
     // Generate base random number
     let random = Math.random();
@@ -15,6 +15,49 @@ function riggedRandom(houseEdgePercentage = 2.5) {
     random = random * (1 - bias) + (random * random * bias);
     
     return random;
+}
+
+// Near-miss generation system for enhanced engagement
+function generateNearMiss(winThreshold = 0.5, nearMissChance = 0.3) {
+    const random = Math.random();
+    
+    // If would be a loss, chance to make it a near-miss instead
+    if (random > winThreshold && Math.random() < nearMissChance) {
+        // Generate a number very close to the win threshold
+        const nearMissOffset = (Math.random() * 0.05) + 0.01; // Very close but not quite
+        return winThreshold - nearMissOffset;
+    }
+    
+    return random;
+}
+
+// Enhanced slots near-miss system
+function generateSlotsNearMiss() {
+    const baseRandom = riggedRandom(3.0); // Slightly higher house edge for slots
+    
+    // 25% chance to create a near-miss scenario on losses
+    if (baseRandom > 0.4 && Math.random() < 0.25) {
+        // Create scenarios where 2 out of 3 symbols match
+        return {
+            isNearMiss: true,
+            type: 'two_of_three',
+            excitement: Math.random() * 0.5 + 0.3 // Moderate to high excitement
+        };
+    }
+    
+    // 15% chance for "just missed jackpot" scenarios
+    if (baseRandom > 0.85 && Math.random() < 0.15) {
+        return {
+            isNearMiss: true,
+            type: 'jackpot_miss',
+            excitement: Math.random() * 0.3 + 0.7 // High excitement
+        };
+    }
+    
+    return {
+        isNearMiss: false,
+        baseRandom: baseRandom
+    };
 }
 
 // Rigged random for integer ranges with house bias
@@ -221,7 +264,7 @@ function updateBalanceWithAnimation(balanceElement, newBalance) {
     }, duration / steps);
 }
 
-// Enhanced notification system with WCAG compliance
+// Enhanced notification system with WCAG compliance and engagement features
 function showNotification(message, type, duration) {
     if (typeof type === 'undefined') type = 'info';
     if (typeof duration === 'undefined') duration = 3000;
@@ -267,6 +310,23 @@ function showNotification(message, type, duration) {
             styles.color = '#ffffff';
             styles.border = '2px solid #ff4757';
             break;
+        case 'near-miss':
+            styles.background = '#ff6b35'; // Orange for near-miss excitement
+            styles.color = '#ffffff';
+            styles.border = '2px solid #ff8c42';
+            styles.animation = 'pulse-glow 0.8s ease-out';
+            break;
+        case 'achievement':
+            styles.background = '#9c27b0'; // Purple for achievements
+            styles.color = '#ffffff';
+            styles.border = '2px solid #ba68c8';
+            styles.animation = 'bounce-in 0.6s ease-out';
+            break;
+        case 'streak':
+            styles.background = '#ff9800'; // Orange for streaks
+            styles.color = '#ffffff';
+            styles.border = '2px solid #ffb74d';
+            break;
         case 'info':
             styles.background = '#f9d923'; // High contrast yellow
             styles.color = '#18122b'; // Dark text on yellow
@@ -288,6 +348,218 @@ function showNotification(message, type, duration) {
             notification.remove(); 
         }, 500);
     }, duration);
+}
+
+// Session and Engagement Tracking System
+const SESSION_STORAGE_KEY = 'pyramidCasinoSession';
+const ACHIEVEMENTS_KEY = 'pyramidCasinoAchievements';
+
+// Track player session for engagement features
+function getPlayerSession() {
+    try {
+        const sessionData = localStorage.getItem(SESSION_STORAGE_KEY);
+        if (sessionData) {
+            return JSON.parse(sessionData);
+        }
+        return {
+            startTime: Date.now(),
+            totalPlayTime: 0,
+            gamesPlayed: 0,
+            consecutiveLosses: 0,
+            nearMissCount: 0,
+            lastNearMiss: 0,
+            currentStreak: 0,
+            bestStreak: 0,
+            totalBets: 0,
+            totalWins: 0,
+            dailyPlayTime: {},
+            engagementLevel: 'new' // new, casual, engaged, hooked
+        };
+    } catch (e) {
+        console.error('Error loading session data:', e);
+        return getPlayerSession(); // Return default
+    }
+}
+
+function updatePlayerSession(updates) {
+    try {
+        const session = getPlayerSession();
+        Object.assign(session, updates);
+        
+        // Update engagement level based on play patterns
+        const playTime = session.totalPlayTime / (1000 * 60); // minutes
+        const gamesPerMinute = playTime > 0 ? session.gamesPlayed / playTime : 0;
+        
+        if (playTime > 60 && gamesPerMinute > 0.5) {
+            session.engagementLevel = 'hooked';
+        } else if (playTime > 30 && session.gamesPlayed > 20) {
+            session.engagementLevel = 'engaged';
+        } else if (session.gamesPlayed > 5) {
+            session.engagementLevel = 'casual';
+        }
+        
+        localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+        
+        // Check for achievements
+        checkAchievements(session);
+        
+        return session;
+    } catch (e) {
+        console.error('Error updating session data:', e);
+        return getPlayerSession();
+    }
+}
+
+// Achievement System for Engagement
+function checkAchievements(session) {
+    const achievements = getAchievements();
+    
+    // First time player
+    if (session.gamesPlayed === 1 && !achievements.firstGame) {
+        unlockAchievement('firstGame', '🎮 Welcome!', 'Played your first game at Pyramid Casino!');
+    }
+    
+    // Near miss milestone
+    if (session.nearMissCount >= 10 && !achievements.nearMissHunter) {
+        unlockAchievement('nearMissHunter', '🎯 So Close!', 'Experienced 10 near-miss moments!');
+    }
+    
+    // Play time milestones
+    const playTimeMinutes = session.totalPlayTime / (1000 * 60);
+    if (playTimeMinutes >= 30 && !achievements.dedicatedPlayer) {
+        unlockAchievement('dedicatedPlayer', '⏰ Dedicated Player', '30 minutes of exciting gameplay!');
+    }
+    
+    // Consecutive losses (encouragement)
+    if (session.consecutiveLosses >= 5 && !achievements.persistent) {
+        unlockAchievement('persistent', '💪 Never Give Up', 'Your luck is about to turn around!');
+        // Give a small consolation bonus
+        const bonusAmount = Math.min(50, Math.floor(getCasinoBalance() * 0.05));
+        if (bonusAmount > 0) {
+            updateBalance(bonusAmount, 'bonus', 'Persistence bonus');
+            showNotification(`🎁 Persistence Bonus: +${bonusAmount} chips!`, 'achievement', 4000);
+        }
+    }
+    
+    // Games played milestones
+    if (session.gamesPlayed >= 50 && !achievements.gamingMaster) {
+        unlockAchievement('gamingMaster', '🏆 Gaming Master', 'Played 50 games at Pyramid Casino!');
+    }
+}
+
+function getAchievements() {
+    try {
+        const achievementsData = localStorage.getItem(ACHIEVEMENTS_KEY);
+        if (achievementsData) {
+            return JSON.parse(achievementsData);
+        }
+        return {};
+    } catch (e) {
+        console.error('Error loading achievements:', e);
+        return {};
+    }
+}
+
+function unlockAchievement(achievementId, title, description) {
+    try {
+        const achievements = getAchievements();
+        if (!achievements[achievementId]) {
+            achievements[achievementId] = {
+                unlocked: true,
+                timestamp: Date.now(),
+                title: title,
+                description: description
+            };
+            localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));
+            
+            // Show achievement notification
+            showNotification(`${title}<br><small>${description}</small>`, 'achievement', 5000);
+        }
+    } catch (e) {
+        console.error('Error unlocking achievement:', e);
+    }
+}
+
+// Near-Miss Feedback System
+function handleNearMiss(game, type, excitement = 0.5) {
+    const session = updatePlayerSession({
+        nearMissCount: getPlayerSession().nearMissCount + 1,
+        lastNearMiss: Date.now()
+    });
+    
+    // Generate appropriate near-miss message
+    let message = '';
+    let suggestions = '';
+    
+    switch (type) {
+        case 'two_of_three':
+            message = '🎯 SO CLOSE! Two matching symbols!';
+            suggestions = 'The jackpot is calling your name!';
+            break;
+        case 'jackpot_miss':
+            message = '💫 ALMOST JACKPOT! Just one symbol away!';
+            suggestions = 'Your big win is right around the corner!';
+            break;
+        case 'blackjack_19_20':
+            message = '🃏 SO CLOSE! Just one point away from 21!';
+            suggestions = 'You\'re getting better at this!';
+            break;
+        case 'roulette_adjacent':
+            message = '🎯 ALMOST! The ball was so close to your number!';
+            suggestions = 'Lady luck is smiling at you!';
+            break;
+        default:
+            message = '✨ CLOSE CALL! You\'re getting warmer!';
+            suggestions = 'Keep going, you\'re on the right track!';
+    }
+    
+    // Show near-miss notification with excitement
+    const fullMessage = `${message}<br><small>${suggestions}</small>`;
+    showNotification(fullMessage, 'near-miss', 4000);
+    
+    // Suggest slightly higher bet if engagement is high
+    if (excitement > 0.7 && session.engagementLevel === 'engaged' || session.engagementLevel === 'hooked') {
+        setTimeout(() => {
+            const currentBalance = getCasinoBalance();
+            if (currentBalance > 100) {
+                const suggestedBet = Math.min(Math.floor(currentBalance * 0.1), 100);
+                showNotification(`💡 Feeling lucky? Try a ${suggestedBet} chip bet next!`, 'info', 3000);
+            }
+        }, 2000);
+    }
+}
+
+// Streak and Hot Hand System
+function updateStreakSystem(isWin, amount = 0) {
+    const session = getPlayerSession();
+    
+    if (isWin) {
+        session.currentStreak++;
+        session.totalWins++;
+        session.consecutiveLosses = 0;
+        
+        if (session.currentStreak > session.bestStreak) {
+            session.bestStreak = session.currentStreak;
+        }
+        
+        // Hot streak bonuses
+        if (session.currentStreak >= 3) {
+            showNotification(`🔥 HOT STREAK! ${session.currentStreak} wins in a row!`, 'streak', 3000);
+        }
+        
+        if (session.currentStreak === 5) {
+            const bonusAmount = Math.floor(amount * 0.2);
+            if (bonusAmount > 0) {
+                updateBalance(bonusAmount, 'bonus', 'Hot streak bonus');
+                showNotification(`🔥 HOT STREAK BONUS: +${bonusAmount} chips!`, 'achievement', 4000);
+            }
+        }
+    } else {
+        session.currentStreak = 0;
+        session.consecutiveLosses++;
+    }
+    
+    updatePlayerSession(session);
 }
 
 // Enhanced button click effects
@@ -373,6 +645,9 @@ document.addEventListener('DOMContentLoaded', function() {
         return; // Stop initialization if user is banned
     }
     
+    // Initialize session tracking for engagement
+    initializeSession();
+    
     // Add click effects to all buttons
     var buttons = document.querySelectorAll('button, .primary-btn, .game-card a');
     for (var i = 0; i < buttons.length; i++) {
@@ -402,6 +677,49 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Session initialization for engagement tracking
+function initializeSession() {
+    try {
+        // Update session start time and track total play time
+        const session = getPlayerSession();
+        const now = Date.now();
+        
+        // Update play time if returning user
+        if (session.startTime && session.startTime < now) {
+            const sessionDuration = now - session.startTime;
+            updatePlayerSession({
+                totalPlayTime: session.totalPlayTime + sessionDuration,
+                startTime: now
+            });
+        }
+        
+        // Track daily play time
+        const today = new Date().toDateString();
+        if (!session.dailyPlayTime[today]) {
+            session.dailyPlayTime[today] = 0;
+        }
+        
+        // Set up periodic session updates
+        setInterval(function() {
+            updatePlayerSession({
+                totalPlayTime: getPlayerSession().totalPlayTime + 30000, // 30 seconds
+                lastActivity: Date.now()
+            });
+        }, 30000);
+        
+        // Show welcome back message for returning players
+        if (session.gamesPlayed > 0 && session.engagementLevel !== 'new') {
+            setTimeout(function() {
+                const streak = session.currentStreak > 0 ? ` You're on a ${session.currentStreak} game streak!` : '';
+                showNotification(`🎉 Welcome back!${streak}`, 'info', 3000);
+            }, 1000);
+        }
+        
+    } catch (e) {
+        console.error('Error initializing session:', e);
+    }
+}
 
 // Game instruction content for each game
 const GAME_INSTRUCTIONS = {
@@ -939,7 +1257,7 @@ function updateBalance(amount, type, description) {
     return newBalance;
 }
 
-// Game-specific transaction recording functions with anti-cheat
+// Game-specific transaction recording functions with anti-cheat and engagement tracking
 function recordGameBet(gameName, betAmount) {
     // Perform anti-cheat check first
     if (!performAntiCheatCheck()) {
@@ -949,6 +1267,13 @@ function recordGameBet(gameName, betAmount) {
     var currentBalance = getCasinoBalance();
     var newBalance = Math.max(0, currentBalance - betAmount);
     setCasinoBalanceSecure(newBalance, 'loss', -betAmount, gameName + ' bet: ' + betAmount + ' chips');
+    
+    // Update session tracking
+    updatePlayerSession({
+        gamesPlayed: getPlayerSession().gamesPlayed + 1,
+        totalBets: getPlayerSession().totalBets + betAmount,
+        lastActivity: Date.now()
+    });
     
     // Update UI if balance element exists
     var balanceEl = document.getElementById('balance');
@@ -976,6 +1301,14 @@ function recordGameWin(gameName, winAmount, details) {
     var description = details ? gameName + ' win: ' + winAmount + ' chips (' + details + ')' : gameName + ' win: ' + winAmount + ' chips';
     setCasinoBalanceSecure(newBalance, 'win', winAmount, description);
     
+    // Update streak system
+    updateStreakSystem(true, winAmount);
+    
+    // Update session tracking
+    updatePlayerSession({
+        lastActivity: Date.now()
+    });
+    
     // Update UI if balance element exists
     var balanceEl = document.getElementById('balance');
     if (balanceEl) {
@@ -987,6 +1320,24 @@ function recordGameWin(gameName, winAmount, details) {
     }
     
     return newBalance;
+}
+
+function recordGameLoss(gameName, details) {
+    if (typeof details === 'undefined') details = '';
+    
+    // Update streak system for losses
+    updateStreakSystem(false, 0);
+    
+    // Update session tracking
+    updatePlayerSession({
+        lastActivity: Date.now()
+    });
+    
+    // Check if this should be a near-miss instead of regular loss
+    const nearMissResult = generateSlotsNearMiss();
+    if (nearMissResult.isNearMiss) {
+        handleNearMiss(gameName, nearMissResult.type, nearMissResult.excitement);
+    }
 }
 
 function recordGamePush(gameName, amount, details) {
@@ -1001,6 +1352,11 @@ function recordGamePush(gameName, amount, details) {
     var newBalance = currentBalance + amount;
     var description = details ? gameName + ' push: ' + amount + ' chips returned (' + details + ')' : gameName + ' push: ' + amount + ' chips returned';
     setCasinoBalanceSecure(newBalance, 'win', amount, description);
+    
+    // Update session tracking
+    updatePlayerSession({
+        lastActivity: Date.now()
+    });
     
     // Update UI if balance element exists
     var balanceEl = document.getElementById('balance');

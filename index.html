@@ -279,6 +279,17 @@
       <span>Chips: <span id="balance" aria-live="polite">1000</span></span>
       <a href="topup.html" class="reset-btn" aria-label="Go to top up page to add more chips">💳 Top Up</a>
     </div>
+    
+    <!-- Session Stats Display -->
+    <div id="session-stats" style="text-align: center; margin: 1rem 0; padding: 1rem; background: rgba(35, 27, 54, 0.6); border-radius: 15px; border: 1px solid rgba(249, 217, 35, 0.3);">
+      <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem; font-size: 0.9rem; color: #ffe277;">
+        <div>🎮 Games: <span id="games-played">0</span></div>
+        <div>🔥 Streak: <span id="current-streak">0</span></div>
+        <div>⏰ Session: <span id="session-time">0m</span></div>
+        <div>🏆 Best: <span id="best-streak">0</span></div>
+      </div>
+    </div>
+    
     <div class="notice" role="alert">
       <span>✨ <strong>FOR ENTERTAINMENT ONLY!</strong> ✨<br>
       Pyramid Casino is a <b>FREE, FUN EXPERIMENT</b> - No real money involved and no payments accepted!<br>
@@ -416,8 +427,41 @@
             }
         }
         
+        // Update session stats display
+        updateSessionStatsDisplay();
+        
+        // Update session stats every 30 seconds
+        setInterval(updateSessionStatsDisplay, 30000);
+        
         document.getElementById('year').textContent = new Date().getFullYear();
     });
+    
+    // Function to update session stats display
+    function updateSessionStatsDisplay() {
+        try {
+            if (typeof getPlayerSession === 'function') {
+                const session = getPlayerSession();
+                const sessionTimeMinutes = Math.floor((Date.now() - session.startTime) / (1000 * 60));
+                
+                document.getElementById('games-played').textContent = session.gamesPlayed || 0;
+                document.getElementById('current-streak').textContent = session.currentStreak || 0;
+                document.getElementById('session-time').textContent = sessionTimeMinutes + 'm';
+                document.getElementById('best-streak').textContent = session.bestStreak || 0;
+                
+                // Add visual flair for good streaks
+                const streakEl = document.getElementById('current-streak');
+                if (session.currentStreak >= 3) {
+                    streakEl.style.color = '#f9d923';
+                    streakEl.style.textShadow = '0 0 5px rgba(249, 217, 35, 0.5)';
+                } else {
+                    streakEl.style.color = '';
+                    streakEl.style.textShadow = '';
+                }
+            }
+        } catch (e) {
+            console.error('Error updating session stats:', e);
+        }
+    }
   </script>
 </body>
 </html>

@@ -270,7 +270,7 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Slot Game Logic
+    // Enhanced Slot Game Logic with Near-Miss Mechanics
     const symbols = [
       {emoji: "🔱", name: "Trident", payout: 30},
       {emoji: "🐪", name: "Camel", payout: 12},
@@ -322,16 +322,48 @@
       return weights.length-1;
     }
 
+    // Enhanced reel spinning with near-miss mechanics
     function spinReels() {
+      const nearMissResult = generateSlotsNearMiss();
+      
+      if (nearMissResult.isNearMiss) {
+        // Generate near-miss scenarios
+        if (nearMissResult.type === 'two_of_three') {
+          // Make first two symbols match, third different
+          const matchSymbol = Math.floor(Math.random() * symbols.length);
+          let differentSymbol = matchSymbol;
+          while (differentSymbol === matchSymbol) {
+            differentSymbol = Math.floor(Math.random() * symbols.length);
+          }
+          return [matchSymbol, matchSymbol, differentSymbol];
+        } else if (nearMissResult.type === 'jackpot_miss') {
+          // Almost jackpot - two high-value symbols and one close
+          const highValueSymbol = Math.floor(Math.random() * 3); // 0, 1, or 2 (high value)
+          const closeSymbol = highValueSymbol === 0 ? 1 : highValueSymbol - 1;
+          return [highValueSymbol, highValueSymbol, closeSymbol];
+        }
+      }
+      
+      // Regular random spin
       return [randomSymbol(), randomSymbol(), randomSymbol()];
     }
 
-    function displayReels(indices) {
+    // Enhanced reel display with excitement effects
+    function displayReels(indices, isNearMiss = false) {
       for (let i = 0; i < 3; i++) {
         reelEls[i].textContent = symbols[indices[i]].emoji;
+        
+        // Add excitement effect for near-misses
+        if (isNearMiss) {
+          reelEls[i].style.animation = 'excitement-shake 0.5s ease-out';
+          setTimeout(() => {
+            reelEls[i].style.animation = '';
+          }, 500);
+        }
       }
     }
 
+    // Enhanced evaluation with near-miss detection
     function evaluate(reelIdxs, bet) {
       // Three of a kind
       if (reelIdxs[0] === reelIdxs[1] && reelIdxs[1] === reelIdxs[2]) {
@@ -340,26 +372,70 @@
           win: true,
           amount: payout,
           msg: `🎉 JACKPOT! Three ${symbols[reelIdxs[0]].emoji} (${symbols[reelIdxs[0]].name}) — You win ${payout}!`,
-          color: "#f9d923"
+          color: "#f9d923",
+          isJackpot: true
         };
       }
+      
       // Two of a kind
       if (reelIdxs[0] === reelIdxs[1] || reelIdxs[1] === reelIdxs[2] || reelIdxs[0] === reelIdxs[2]) {
         let idx = reelIdxs[0] === reelIdxs[1] ? reelIdxs[0] : reelIdxs[2];
         const payout = bet * Math.ceil(symbols[idx].payout / 2);
+        
+        // Check if this is a near-miss scenario (two matching, third is close)
+        let isNearMiss = false;
+        let nearMissType = '';
+        
+        if (reelIdxs[0] === reelIdxs[1] && reelIdxs[2] !== reelIdxs[0]) {
+          // Check if third symbol is close to the matching ones
+          const diff = Math.abs(reelIdxs[2] - reelIdxs[0]);
+          if (diff === 1 || (reelIdxs[0] === 0 && reelIdxs[2] === symbols.length - 1) || 
+              (reelIdxs[0] === symbols.length - 1 && reelIdxs[2] === 0)) {
+            isNearMiss = true;
+            nearMissType = 'two_of_three';
+          }
+        }
+        
         return {
           win: true,
           amount: payout,
           msg: `Nice! Two ${symbols[idx].emoji} (${symbols[idx].name}) — You win ${payout}!`,
-          color: "#ffe277"
+          color: "#ffe277",
+          isNearMiss: isNearMiss,
+          nearMissType: nearMissType
         };
       }
-      // No win
+      
+      // Check for near-miss in losing combinations
+      let nearMissDetected = false;
+      let nearMissType = '';
+      
+      // Check for "almost jackpot" (two symbols match)
+      if (reelIdxs[0] === reelIdxs[1] || reelIdxs[1] === reelIdxs[2] || reelIdxs[0] === reelIdxs[2]) {
+        nearMissDetected = true;
+        nearMissType = 'two_of_three';
+      }
+      
+      // Check for consecutive symbols (almost matching)
+      const sorted = [...reelIdxs].sort((a, b) => a - b);
+      if (sorted[1] - sorted[0] === 1 && sorted[2] - sorted[1] === 1) {
+        nearMissDetected = true;
+        nearMissType = 'consecutive';
+      }
+      
+      // Check for high-value symbols present
+      const hasHighValue = reelIdxs.some(idx => idx <= 2); // Trident, Camel, or Gem
+      if (hasHighValue && nearMissDetected) {
+        nearMissType = 'jackpot_miss';
+      }
+      
       return {
         win: false,
         amount: 0,
-        msg: "No match, try again!",
-        color: "#f3e9dc"
+        msg: nearMissDetected ? "🎯 SO CLOSE! Keep spinning!" : "No match, try again!",
+        color: nearMissDetected ? "#ff6b35" : "#f3e9dc",
+        isNearMiss: nearMissDetected,
+        nearMissType: nearMissType
       };
     }
 
@@ -388,28 +464,70 @@
       spinBtn.disabled = true;
       resultEl.textContent = "Spinning...";
       resultEl.style.color = "#f3e9dc";
-      // Animation: simulate spinning reels
-      let spins = 16, delay = 45, curr = 0;
+      
+      // Enhanced animation: simulate spinning reels with building excitement
+      let spins = 20, delay = 50, curr = 0;
       let interval = setInterval(() => {
         let fake = [randomSymbol(), randomSymbol(), randomSymbol()];
         displayReels(fake);
+        
+        // Increase excitement as we approach the end
+        if (curr > spins - 5) {
+          delay += 10; // Slow down for dramatic effect
+        }
+        
         curr++;
         if (curr >= spins) {
           clearInterval(interval);
+          
+          // Get final result
           let reelIdxs = spinReels();
-          displayReels(reelIdxs);
           let res = evaluate(reelIdxs, bet);
           
-          // Record win transaction if player wins
+          // Display with special effects for near-miss or wins
+          displayReels(reelIdxs, res.isNearMiss || res.win);
+          
+          // Handle different result types
           if (res.win) {
             const winDetails = `${symbols[reelIdxs[0]].name} symbols, payout ${res.amount}`;
             recordGameWin('Slots', res.amount, winDetails);
+            
+            // Extra celebration for jackpots
+            if (res.isJackpot) {
+              // Add some visual celebration
+              document.body.style.animation = 'excitement-shake 0.8s ease-out';
+              setTimeout(() => {
+                document.body.style.animation = '';
+              }, 800);
+              
+              showNotification(`🎉 INCREDIBLE JACKPOT! +${res.amount} chips!`, 'win', 5000);
+            }
+            
             balance = getCasinoBalance(); // Update local balance variable
+          } else {
+            // Handle losses and near-misses
+            recordGameLoss('Slots', res.msg);
+            
+            if (res.isNearMiss) {
+              // Show near-miss feedback
+              handleNearMiss('Slots', res.nearMissType, 0.8);
+              
+              // Visual effect for near-miss
+              resultEl.style.animation = 'near-miss-glow 1s ease-out';
+              setTimeout(() => {
+                resultEl.style.animation = '';
+              }, 1000);
+            }
           }
           
           resultEl.textContent = res.msg;
           resultEl.style.color = res.color;
           updateUI();
+          
+          // Re-enable spin button with slight delay for effect
+          setTimeout(() => {
+            spinBtn.disabled = false;
+          }, 500);
         }
       }, delay);
     });
