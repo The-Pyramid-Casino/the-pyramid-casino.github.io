@@ -688,6 +688,162 @@ document.addEventListener('DOMContentLoaded', function() {
     var inputs = document.querySelectorAll('input[type="number"], input[type="text"]');
     for (var i = 0; i < inputs.length; i++) {
         inputs[i].addEventListener('focus', function() {
+            this.style.boxShadow = '0 0 10px rgba(102, 126, 234, 0.3)';
+            this.style.borderColor = '#667eea';
+        });
+        
+        inputs[i].addEventListener('blur', function() {
+            this.style.boxShadow = '';
+            this.style.borderColor = '';
+        });
+    }
+});
+
+// Session initialization for engagement tracking
+function initializeSession() {
+    try {
+        // Update session start time and track total play time
+        const session = getPlayerSession();
+        const now = Date.now();
+        
+        // Update play time if returning user
+        if (session.startTime && session.startTime < now) {
+            const sessionDuration = now - session.startTime;
+            updatePlayerSession({
+                totalPlayTime: session.totalPlayTime + sessionDuration,
+                startTime: now
+            });
+        }
+        
+        // Track daily play time
+        const today = new Date().toDateString();
+        if (!session.dailyPlayTime[today]) {
+            session.dailyPlayTime[today] = 0;
+        }
+        
+        // Set up periodic session updates
+        setInterval(function() {
+            updatePlayerSession({
+                totalPlayTime: getPlayerSession().totalPlayTime + 30000, // 30 seconds
+                lastActivity: Date.now()
+            });
+        }, 30000);
+        
+        // Show welcome back message for returning players
+        if (session.gamesPlayed > 0 && session.engagementLevel !== 'new') {
+            setTimeout(function() {
+                showNotification(`🎉 Welcome back to Pyramid Casino!`, 'info', 3000);
+            }, 1000);
+        }
+        
+    } catch (e) {
+        console.error('Error initializing session:', e);
+    }
+}
+function addButtonClickEffect(button) {
+    button.addEventListener('click', function(e) {
+        var ripple = document.createElement('span');
+        var rect = button.getBoundingClientRect();
+        var size = Math.max(rect.width, rect.height);
+        var x = e.clientX - rect.left - size / 2;
+        var y = e.clientY - rect.top - size / 2;
+        
+        ripple.style.cssText = 
+            'position: absolute;' +
+            'width: ' + size + 'px;' +
+            'height: ' + size + 'px;' +
+            'left: ' + x + 'px;' +
+            'top: ' + y + 'px;' +
+            'background: rgba(255, 255, 255, 0.3);' +
+            'border-radius: 50%;' +
+            'transform: scale(0);' +
+            'animation: ripple 0.6s ease-out;' +
+            'pointer-events: none;';
+        
+        // Add ripple animation CSS if not exists
+        if (!document.querySelector('#ripple-style')) {
+            var style = document.createElement('style');
+            style.id = 'ripple-style';
+            style.textContent = 
+                '@keyframes ripple {' +
+                    'to {' +
+                        'transform: scale(2);' +
+                        'opacity: 0;' +
+                    '}' +
+                '}';
+            document.head.appendChild(style);
+        }
+        
+        button.style.position = 'relative';
+        button.style.overflow = 'hidden';
+        button.appendChild(ripple);
+        
+        setTimeout(function() { 
+            ripple.remove(); 
+        }, 600);
+    });
+}
+
+// Load admin configuration if available
+function loadAdminConfig() {
+    try {
+        // Try to load admin-config.js dynamically
+        var script = document.createElement('script');
+        script.src = 'admin-config.js';
+        script.async = false;
+        script.onload = function() {
+            console.log('Admin configuration loaded successfully');
+            
+            // Check if there's a stored admin session
+            if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+                console.log('Previous admin session detected');
+                if (typeof showAdminModeIndicator !== 'undefined') {
+                    showAdminModeIndicator();
+                }
+            }
+        };
+        script.onerror = function() {
+            // Admin config not available - this is fine for regular users
+            console.log('Admin configuration not available');
+        };
+        document.head.appendChild(script);
+    } catch (e) {
+        console.log('Could not load admin configuration:', e.message);
+    }
+}
+
+// Initialize common functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Load admin config if available
+    loadAdminConfig();
+    
+    // Initialize anti-cheat system first
+    if (!initializeAntiCheat()) {
+        return; // Stop initialization if user is banned
+    }
+    
+    // Initialize session tracking for engagement
+    initializeSession();
+    
+    // Add click effects to all buttons
+    var buttons = document.querySelectorAll('button, .primary-btn, .game-card a');
+    for (var i = 0; i < buttons.length; i++) {
+        addButtonClickEffect(buttons[i]);
+    }
+    
+    // Add smooth scroll behavior
+    document.documentElement.style.scrollBehavior = 'smooth';
+    
+    // Add loading animation to game cards
+    var gameCards = document.querySelectorAll('.game-card');
+    for (var i = 0; i < gameCards.length; i++) {
+        gameCards[i].style.animation = 'slide-up 0.6s ease-out ' + (i * 0.1) + 's both';
+    }
+    
+    // Enhance form inputs with focus effects
+    var inputs = document.querySelectorAll('input[type="number"], input[type="text"]');
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener('focus', function() {
             this.style.boxShadow = '0 0 10px rgba(249, 217, 35, 0.3)';
             this.style.borderColor = '#f9d923';
         });
