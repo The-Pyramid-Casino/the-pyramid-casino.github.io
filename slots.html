@@ -8,46 +8,501 @@
   <meta name="description" content="Try your luck on Pyramid Slots at Pyramid Casino. Play for fun, with a shared balance across all games!" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="shared-modern.css" />
+  
   <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      background: #18122b;
-      color: #f3e9dc;
-      min-height: 100vh;
+    /* Game-specific styles using design system */
+    .slots-container {
+      max-width: 500px;
+      margin: 2rem auto;
+      text-align: center;
     }
-    .header {
+    
+    .slots-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--theme-text-primary);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .slots-reels {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0;
+      padding: 2rem;
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-xl));
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-2xl);
+    }
+    
+    .reel {
+      width: 80px;
+      height: 80px;
+      background: var(--theme-bg-surface);
+      border: 2px solid var(--theme-border-primary);
+      border-radius: var(--radius-lg);
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      background: #a0843a;
-      color: #fff;
-      padding: 1rem 2rem;
+      justify-content: center;
+      font-size: 2rem;
+      transition: all var(--transition-base);
+      box-shadow: var(--shadow-md);
     }
-    .logo {
-      font-weight: bold;
-      font-size: 1.5rem;
-      letter-spacing: 2px;
+    
+    .reel.spinning {
+      animation: spin 1s ease-in-out;
     }
-    .header nav ul {
-      list-style: none;
+    
+    @keyframes spin {
+      0% { transform: rotateY(0deg); }
+      50% { transform: rotateY(180deg) scale(1.1); }
+      100% { transform: rotateY(360deg); }
+    }
+    
+    .bet-controls {
       display: flex;
-      gap: 1.2rem;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-lg));
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-xl);
+    }
+    
+    .bet-controls label {
+      color: var(--theme-text-secondary);
+      font-weight: 600;
+    }
+    
+    .bet-input {
+      width: 80px;
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-md);
+      color: var(--theme-text-primary);
+      font-size: 1rem;
+      padding: 0.5rem;
+      text-align: center;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+    
+    .bet-input:focus {
+      border-color: var(--theme-border-focus);
+      background: var(--theme-bg-glass);
+    }
+    
+    .bet-btn {
+      padding: 0.375rem 0.75rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+    }
+    
+    .spin-btn {
+      padding: 1rem 3rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 1rem 0;
+    }
+    
+    .result-message {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      font-size: 1.125rem;
+      min-height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-secondary);
+      backdrop-filter: blur(var(--blur-lg));
+    }
+    
+    .result-message.win {
+      background: var(--theme-success);
+      color: white;
+      border-color: var(--theme-success);
+    }
+    
+    .result-message.lose {
+      background: var(--theme-error);
+      color: white;
+      border-color: var(--theme-error);
+    }
+    
+    .instructions-card {
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-lg));
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      text-align: left;
+    }
+    
+    .instructions-card h3 {
+      color: var(--theme-text-primary);
+      margin-bottom: 1rem;
+    }
+    
+    .instructions-card ul {
+      color: var(--theme-text-secondary);
       margin: 0;
-      padding: 0;
+      padding-left: 1.5rem;
     }
-    .header nav a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
+    
+    .instructions-card li {
+      margin-bottom: 0.5rem;
     }
-    .header nav a:hover {
-      color: #f3e9dc;
-      text-shadow: 0 0 5px #f9d923;
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .slots-reels {
+        gap: 0.5rem;
+        padding: 1.5rem;
+      }
+      
+      .reel {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+      }
+      
+      .bet-controls {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .spin-btn {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+      }
     }
-    .main-content {
-      padding: 2rem 1rem 3rem 1rem;
+  </style>
+</head>
+<body>
+  <!-- Skip link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Consistent Navbar -->
+  <nav class="navbar" role="banner">
+    <a href="index.html" class="navbar-brand">
+      <span role="img" aria-label="pyramid">🏜️</span>
+      Pyramid Casino
+    </a>
+    
+    <ul class="navbar-nav" role="navigation" aria-label="Main navigation">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="index.html#games" class="nav-link">Games</a></li>
+      <li><a href="topup.html" class="nav-link">Top Up</a></li>
+      <li><a href="history.html" class="nav-link">History</a></li>
+      <li><a href="https://forms.gle/QYQqh72sSuweCue49" class="nav-link" target="_blank" rel="noopener">Suggest</a></li>
+      <li>
+        <button 
+          class="theme-toggle" 
+          onclick="toggleTheme()" 
+          aria-label="Toggle between light and dark theme"
+          title="Toggle theme"
+        >
+          <span id="theme-icon">🌙</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+  
+  <main id="main-content" class="main-content container" role="main">
+    <!-- Balance Bar -->
+    <div class="balance-bar">
+      <span>Balance: <span id="balance" aria-live="polite">1000</span></span>
+      <a href="topup.html" class="btn btn-secondary btn-sm">💳 Top Up</a>
+    </div>
+    
+    <!-- Back to Menu -->
+    <div style="margin-bottom: 1rem;">
+      <a href="index.html" class="btn btn-secondary btn-sm">← Back to Menu</a>
+    </div>
+    
+    <!-- Slots Game -->
+    <div class="slots-container">
+      <h1 class="slots-title">🎰 Slots</h1>
+      
+      <!-- How to Play Button -->
+      <button id="how-to-play-btn" class="btn btn-secondary btn-md" style="margin-bottom: 2rem;">
+        ℹ️ How to Play
+      </button>
+      
+      <!-- Bet Controls -->
+      <div class="bet-controls">
+        <label for="bet-amount">Bet:</label>
+        <button class="btn btn-secondary bet-btn" onclick="adjustBet(-10)">-</button>
+        <input type="number" id="bet-amount" class="bet-input" value="10" min="1" max="100" />
+        <button class="btn btn-secondary bet-btn" onclick="adjustBet(10)">+</button>
+      </div>
+      
+      <!-- Slot Reels -->
+      <div class="slots-reels">
+        <div class="reel" id="reel1">🏛️</div>
+        <div class="reel" id="reel2">🏛️</div>
+        <div class="reel" id="reel3">💎</div>
+      </div>
+      
+      <!-- Spin Button -->
+      <button id="spin-btn" class="btn btn-primary spin-btn">
+        🎰 SPIN
+      </button>
+      
+      <!-- Result Message -->
+      <div id="result-message" class="result-message">
+        Ready to play! Place your bet and spin the reels.
+      </div>
+      
+      <!-- Instructions -->
+      <div id="instructions" class="instructions-card" style="display: none;">
+        <h3>How to Play Slots</h3>
+        <ul>
+          <li>Set your bet amount using the + and - buttons</li>
+          <li>Click "SPIN" to spin the reels</li>
+          <li>Match symbols to win prizes:</li>
+          <li style="margin-left: 1rem;">• Three 🏛️ (Coin) = 2x your bet</li>
+          <li style="margin-left: 1rem;">• Three 💎 (Diamond) = 10x your bet</li>
+          <li style="margin-left: 1rem;">• Three 👑 (Crown) = 50x your bet</li>
+          <li style="margin-left: 1rem;">• Three 🏆 (Trophy) = 100x your bet</li>
+          <li>Two matching symbols = 0.5x your bet</li>
+          <li>Your balance will update automatically</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="glass-surface text-center" role="contentinfo" style="padding: 2rem; margin-top: 3rem;">
+    <p>Pyramid Casino &copy; 2025 | 🎮 For Entertainment Only</p>
+  </footer>
+  
+  <!-- Toast notification container -->
+  <div class="toast-container" id="toast-container"></div>
+  
+  <!-- Scripts -->
+  <script src="theme.js"></script>
+  <script src="admin-config.js"></script>
+  <script src="shared-modern.js"></script>
+  
+  <script>
+    // Theme toggle functionality
+    function updateThemeIcon() {
+      const themeIcon = document.getElementById('theme-icon');
+      const currentTheme = getCurrentTheme();
+      themeIcon.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+    }
+    
+    // Listen for theme changes
+    window.addEventListener('themeChanged', updateThemeIcon);
+    
+    // Slots game symbols
+    const symbols = ['🏛️', '💎', '👑', '🏆'];
+    let isSpinning = false;
+    
+    // Initialize game
+    document.addEventListener('DOMContentLoaded', function() {
+      updateThemeIcon();
+      initializeBalance();
+      
+      // Add event listeners
+      document.getElementById('how-to-play-btn').addEventListener('click', toggleInstructions);
+      document.getElementById('spin-btn').addEventListener('click', spin);
+      document.getElementById('bet-amount').addEventListener('input', validateBet);
+    });
+    
+    // Initialize balance display
+    function initializeBalance() {
+      const balanceEl = document.getElementById('balance');
+      if (typeof getCasinoBalanceSecure === 'function') {
+        balanceEl.textContent = getCasinoBalanceSecure();
+      } else if (typeof getCasinoBalance === 'function') {
+        balanceEl.textContent = getCasinoBalance();
+      } else {
+        let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+        if (isNaN(bal)) bal = 1000;
+        balanceEl.textContent = bal;
+      }
+    }
+    
+    // Toggle instructions
+    function toggleInstructions() {
+      const instructions = document.getElementById('instructions');
+      const btn = document.getElementById('how-to-play-btn');
+      
+      if (instructions.style.display === 'none') {
+        instructions.style.display = 'block';
+        btn.textContent = '❌ Hide Instructions';
+      } else {
+        instructions.style.display = 'none';
+        btn.textContent = 'ℹ️ How to Play';
+      }
+    }
+    
+    // Adjust bet amount
+    function adjustBet(amount) {
+      const betInput = document.getElementById('bet-amount');
+      const currentBet = parseInt(betInput.value);
+      const newBet = Math.max(1, Math.min(100, currentBet + amount));
+      betInput.value = newBet;
+    }
+    
+    // Validate bet input
+    function validateBet() {
+      const betInput = document.getElementById('bet-amount');
+      const balance = getCurrentBalance();
+      const bet = parseInt(betInput.value);
+      
+      if (bet > balance) {
+        betInput.value = balance;
+      } else if (bet < 1) {
+        betInput.value = 1;
+      }
+    }
+    
+    // Get current balance
+    function getCurrentBalance() {
+      if (typeof getCasinoBalanceSecure === 'function') {
+        return getCasinoBalanceSecure();
+      } else if (typeof getCasinoBalance === 'function') {
+        return getCasinoBalance();
+      } else {
+        let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+        return isNaN(bal) ? 1000 : bal;
+      }
+    }
+    
+    // Update balance
+    function updateBalance(newBalance) {
+      if (typeof setCasinoBalanceSecure === 'function') {
+        setCasinoBalanceSecure(newBalance);
+      } else if (typeof setCasinoBalance === 'function') {
+        setCasinoBalance(newBalance);
+      } else {
+        localStorage.setItem('pyramidCasinoBalance', newBalance.toString());
+      }
+      document.getElementById('balance').textContent = newBalance;
+    }
+    
+    // Spin the reels
+    function spin() {
+      if (isSpinning) return;
+      
+      const bet = parseInt(document.getElementById('bet-amount').value);
+      const balance = getCurrentBalance();
+      
+      if (bet > balance) {
+        showResult('Insufficient balance!', 'lose');
+        return;
+      }
+      
+      isSpinning = true;
+      const spinBtn = document.getElementById('spin-btn');
+      spinBtn.disabled = true;
+      spinBtn.textContent = '🎰 SPINNING...';
+      
+      // Add spinning animation
+      const reels = ['reel1', 'reel2', 'reel3'];
+      reels.forEach(reelId => {
+        document.getElementById(reelId).classList.add('spinning');
+      });
+      
+      // Update session stats
+      if (typeof updatePlayerSession === 'function') {
+        updatePlayerSession();
+      }
+      
+      // Simulate spinning delay
+      setTimeout(() => {
+        // Generate random symbols
+        const results = [
+          symbols[Math.floor(Math.random() * symbols.length)],
+          symbols[Math.floor(Math.random() * symbols.length)],
+          symbols[Math.floor(Math.random() * symbols.length)]
+        ];
+        
+        // Update reels
+        results.forEach((symbol, index) => {
+          document.getElementById(`reel${index + 1}`).textContent = symbol;
+        });
+        
+        // Remove spinning animation
+        reels.forEach(reelId => {
+          document.getElementById(reelId).classList.remove('spinning');
+        });
+        
+        // Calculate winnings
+        const winnings = calculateWinnings(results, bet);
+        const newBalance = balance - bet + winnings;
+        
+        updateBalance(newBalance);
+        
+        // Show result
+        if (winnings > bet) {
+          showResult(`🎉 You won ${winnings} chips!`, 'win');
+          showNotification(`🎰 Won ${winnings} chips!`, 'success');
+        } else if (winnings > 0) {
+          showResult(`You got ${winnings} chips back!`, 'win');
+        } else {
+          showResult('No match this time. Try again!', 'lose');
+        }
+        
+        // Reset button
+        isSpinning = false;
+        spinBtn.disabled = false;
+        spinBtn.textContent = '🎰 SPIN';
+        
+      }, 2000);
+    }
+    
+    // Calculate winnings based on results
+    function calculateWinnings(results, bet) {
+      const [first, second, third] = results;
+      
+      // Three of a kind
+      if (first === second && second === third) {
+        switch (first) {
+          case '🏛️': return bet * 2;
+          case '💎': return bet * 10;
+          case '👑': return bet * 50;
+          case '🏆': return bet * 100;
+        }
+      }
+      
+      // Two of a kind
+      if (first === second || first === third || second === third) {
+        return Math.floor(bet * 0.5);
+      }
+      
+      return 0;
+    }
+    
+    // Show result message
+    function showResult(message, type) {
+      const resultEl = document.getElementById('result-message');
+      resultEl.textContent = message;
+      resultEl.className = `result-message ${type}`;
+    }
+    
+    // Show notification (using shared notification system)
+    function showNotification(message, type) {
+      if (typeof displayNotification === 'function') {
+        displayNotification(message, type);
+      }
+    }
+  </script>
+</body>
+</html>
       min-height: 60vh;
       max-width: 800px;
       margin: 0 auto;
