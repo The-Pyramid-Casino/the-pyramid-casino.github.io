@@ -32,9 +32,11 @@
       margin: 2rem 0;
       padding: 2rem;
       background: var(--theme-bg-glass);
-      backdrop-filter: blur(var(--blur-xl));
+      backdrop-filter: blur(var(--blur-xl)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--blur-xl)) saturate(150%);
       border: 1px solid var(--theme-border-secondary);
       border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-glass);
     }
     
     .reel {
@@ -69,7 +71,8 @@
       margin: 2rem 0;
       padding: 1.5rem;
       background: var(--theme-bg-glass);
-      backdrop-filter: blur(var(--blur-lg));
+      backdrop-filter: blur(var(--blur-lg)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(150%);
       border: 1px solid var(--theme-border-secondary);
       border-radius: var(--radius-xl);
     }
@@ -123,44 +126,30 @@
       justify-content: center;
       background: var(--theme-bg-surface);
       border: 1px solid var(--theme-border-secondary);
-      backdrop-filter: blur(var(--blur-lg));
     }
     
     .result-message.win {
-      background: var(--theme-success);
-      color: white;
+      background: rgba(34, 197, 94, 0.2);
       border-color: var(--theme-success);
+      color: var(--theme-success);
     }
     
     .result-message.lose {
-      background: var(--theme-error);
-      color: white;
+      background: rgba(239, 68, 68, 0.2);
       border-color: var(--theme-error);
+      color: var(--theme-error);
     }
     
-    .instructions-card {
-      background: var(--theme-bg-glass);
-      backdrop-filter: blur(var(--blur-lg));
-      border: 1px solid var(--theme-border-secondary);
-      border-radius: var(--radius-xl);
-      padding: 1.5rem;
-      margin: 2rem 0;
-      text-align: left;
+    .result-message.near-miss {
+      background: rgba(251, 146, 60, 0.2);
+      border-color: var(--theme-warning);
+      color: var(--theme-warning);
+      animation: near-miss-glow 1s ease-out;
     }
     
-    .instructions-card h3 {
-      color: var(--theme-text-primary);
-      margin-bottom: 1rem;
-    }
-    
-    .instructions-card ul {
-      color: var(--theme-text-secondary);
-      margin: 0;
-      padding-left: 1.5rem;
-    }
-    
-    .instructions-card li {
-      margin-bottom: 0.5rem;
+    @keyframes near-miss-glow {
+      0%, 100% { box-shadow: var(--shadow-md); }
+      50% { box-shadow: 0 0 20px var(--theme-warning); }
     }
     
     /* Mobile responsiveness */
@@ -249,46 +238,56 @@
       
       <!-- Slot Reels -->
       <div class="slots-reels">
-        <div class="reel" id="reel1">🏛️</div>
-        <div class="reel" id="reel2">🏛️</div>
-        <div class="reel" id="reel3">💎</div>
+        <div id="reel-1" class="reel">🏛️</div>
+        <div id="reel-2" class="reel">💎</div>
+        <div id="reel-3" class="reel">👑</div>
       </div>
       
       <!-- Spin Button -->
-      <button id="spin-btn" class="btn btn-primary spin-btn">
-        🎰 SPIN
+      <button id="spin-btn" class="btn btn-primary spin-btn" onclick="spin()">
+        🎰 Spin
       </button>
       
       <!-- Result Message -->
       <div id="result-message" class="result-message">
-        Ready to play! Place your bet and spin the reels.
-      </div>
-      
-      <!-- Instructions -->
-      <div id="instructions" class="instructions-card" style="display: none;">
-        <h3>How to Play Slots</h3>
-        <ul>
-          <li>Set your bet amount using the + and - buttons</li>
-          <li>Click "SPIN" to spin the reels</li>
-          <li>Match symbols to win prizes:</li>
-          <li style="margin-left: 1rem;">• Three 🏛️ (Coin) = 2x your bet</li>
-          <li style="margin-left: 1rem;">• Three 💎 (Diamond) = 10x your bet</li>
-          <li style="margin-left: 1rem;">• Three 👑 (Crown) = 50x your bet</li>
-          <li style="margin-left: 1rem;">• Three 🏆 (Trophy) = 100x your bet</li>
-          <li>Two matching symbols = 0.5x your bet</li>
-          <li>Your balance will update automatically</li>
-        </ul>
+        Place your bet and spin to win!
       </div>
     </div>
   </main>
   
   <!-- Footer -->
-  <footer class="glass-surface text-center" role="contentinfo" style="padding: 2rem; margin-top: 3rem;">
-    <p>Pyramid Casino &copy; 2025 | 🎮 For Entertainment Only</p>
+  <footer class="glass-surface text-center" role="contentinfo">
+    <div>
+      <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
+      <p style="margin: 5px 0; font-size: 1.1rem;">
+        📧 <strong>Contact us:</strong> 
+        <a href="mailto:casino.the.pyramid@gmail.com" style="color: var(--theme-text-primary); text-decoration: none;" aria-label="Send email to casino.the.pyramid@gmail.com">
+          casino.the.pyramid@gmail.com
+        </a>
+      </p>
+      <p style="margin: 5px 0; font-size: 0.9rem; color: var(--theme-text-muted);">
+        💰 No real money gambling | 🔞 18+ for entertainment
+      </p>
+    </div>
   </footer>
   
   <!-- Toast notification container -->
   <div class="toast-container" id="toast-container"></div>
+  
+  <!-- Modern Game Instructions Popup -->
+  <div class="popup-overlay" id="popup-overlay"></div>
+  <div class="popup" id="instructions-popup">
+    <div class="popup-close" onclick="hideInstructions()">×</div>
+    <h3>🎰 How to Play Slots</h3>
+    <ul>
+      <li>Choose your bet amount using the + and - buttons</li>
+      <li>Click "Spin" to spin the reels</li>
+      <li>Match symbols to win prizes:</li>
+      <li>Three matching symbols = 5x your bet</li>
+      <li>Two matching symbols = 0.5x your bet</li>
+      <li>Your balance will update automatically</li>
+    </ul>
+  </div>
   
   <!-- Scripts -->
   <script src="theme.js"></script>
@@ -316,685 +315,181 @@
       initializeBalance();
       
       // Add event listeners
-      document.getElementById('how-to-play-btn').addEventListener('click', toggleInstructions);
-      document.getElementById('spin-btn').addEventListener('click', spin);
-      document.getElementById('bet-amount').addEventListener('input', validateBet);
+      document.getElementById('how-to-play-btn').addEventListener('click', showInstructions);
+      document.getElementById('bet-amount').addEventListener('change', updateUI);
+      document.getElementById('year').textContent = new Date().getFullYear();
     });
     
-    // Initialize balance display
-    function initializeBalance() {
-      const balanceEl = document.getElementById('balance');
-      if (typeof getCasinoBalanceSecure === 'function') {
-        balanceEl.textContent = getCasinoBalanceSecure();
-      } else if (typeof getCasinoBalance === 'function') {
-        balanceEl.textContent = getCasinoBalance();
-      } else {
-        let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-        if (isNaN(bal)) bal = 1000;
-        balanceEl.textContent = bal;
-      }
+    // Show instructions popup
+    function showInstructions() {
+      document.getElementById('popup-overlay').classList.add('show');
+      document.getElementById('instructions-popup').classList.add('show');
     }
     
-    // Toggle instructions
-    function toggleInstructions() {
-      const instructions = document.getElementById('instructions');
-      const btn = document.getElementById('how-to-play-btn');
-      
-      if (instructions.style.display === 'none') {
-        instructions.style.display = 'block';
-        btn.textContent = '❌ Hide Instructions';
+    // Hide instructions popup
+    function hideInstructions() {
+      document.getElementById('popup-overlay').classList.remove('show');
+      document.getElementById('instructions-popup').classList.remove('show');
+    }
+    
+    // Close popup when clicking overlay
+    document.getElementById('popup-overlay').addEventListener('click', hideInstructions);
+    
+    // Initialize balance
+    function initializeBalance() {
+      const balanceEl = document.getElementById('balance');
+      if (typeof getCasinoBalance === 'function') {
+        balanceEl.textContent = getCasinoBalance();
       } else {
-        instructions.style.display = 'none';
-        btn.textContent = 'ℹ️ How to Play';
+        let balance = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+        if (isNaN(balance)) balance = 1000;
+        balanceEl.textContent = balance;
       }
     }
     
     // Adjust bet amount
     function adjustBet(amount) {
       const betInput = document.getElementById('bet-amount');
-      const currentBet = parseInt(betInput.value);
-      const newBet = Math.max(1, Math.min(100, currentBet + amount));
+      let currentBet = parseInt(betInput.value, 10);
+      let newBet = currentBet + amount;
+      
+      if (newBet < 1) newBet = 1;
+      if (newBet > 100) newBet = 100;
+      
       betInput.value = newBet;
+      updateUI();
     }
     
-    // Validate bet input
-    function validateBet() {
-      const betInput = document.getElementById('bet-amount');
+    // Update UI elements
+    function updateUI() {
       const balance = getCurrentBalance();
-      const bet = parseInt(betInput.value);
+      const bet = parseInt(document.getElementById('bet-amount').value, 10);
+      const spinBtn = document.getElementById('spin-btn');
       
-      if (bet > balance) {
-        betInput.value = balance;
-      } else if (bet < 1) {
-        betInput.value = 1;
+      document.getElementById('balance').textContent = balance;
+      
+      // Disable spin button if insufficient funds
+      if (balance < bet) {
+        spinBtn.disabled = true;
+        spinBtn.textContent = 'Insufficient Funds';
+      } else {
+        spinBtn.disabled = isSpinning;
+        spinBtn.textContent = isSpinning ? 'Spinning...' : '🎰 Spin';
       }
     }
     
     // Get current balance
     function getCurrentBalance() {
-      if (typeof getCasinoBalanceSecure === 'function') {
-        return getCasinoBalanceSecure();
-      } else if (typeof getCasinoBalance === 'function') {
+      if (typeof getCasinoBalance === 'function') {
         return getCasinoBalance();
       } else {
-        let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-        return isNaN(bal) ? 1000 : bal;
+        let balance = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+        if (isNaN(balance)) balance = 1000;
+        return balance;
       }
     }
     
     // Update balance
-    function updateBalance(newBalance) {
-      if (typeof setCasinoBalanceSecure === 'function') {
-        setCasinoBalanceSecure(newBalance);
-      } else if (typeof setCasinoBalance === 'function') {
-        setCasinoBalance(newBalance);
+    function updateBalance(amount) {
+      if (typeof updateCasinoBalance === 'function') {
+        updateCasinoBalance(amount);
       } else {
-        localStorage.setItem('pyramidCasinoBalance', newBalance.toString());
+        let balance = getCurrentBalance();
+        balance += amount;
+        localStorage.setItem('pyramidCasinoBalance', balance.toString());
       }
-      document.getElementById('balance').textContent = newBalance;
+      updateUI();
     }
     
-    // Spin the reels
+    // Main spin function
     function spin() {
       if (isSpinning) return;
       
-      const bet = parseInt(document.getElementById('bet-amount').value);
+      const bet = parseInt(document.getElementById('bet-amount').value, 10);
       const balance = getCurrentBalance();
       
-      if (bet > balance) {
-        showResult('Insufficient balance!', 'lose');
+      if (balance < bet) {
+        document.getElementById('result-message').textContent = 'Insufficient funds!';
+        document.getElementById('result-message').className = 'result-message lose';
         return;
       }
       
       isSpinning = true;
-      const spinBtn = document.getElementById('spin-btn');
-      spinBtn.disabled = true;
-      spinBtn.textContent = '🎰 SPINNING...';
+      updateUI();
       
-      // Add spinning animation
-      const reels = ['reel1', 'reel2', 'reel3'];
-      reels.forEach(reelId => {
-        document.getElementById(reelId).classList.add('spinning');
-      });
+      // Animate reels
+      const reels = [
+        document.getElementById('reel-1'),
+        document.getElementById('reel-2'),
+        document.getElementById('reel-3')
+      ];
       
-      // Update session stats
-      if (typeof updatePlayerSession === 'function') {
-        updatePlayerSession();
-      }
+      reels.forEach(reel => reel.classList.add('spinning'));
       
-      // Simulate spinning delay
+      // Deduct bet
+      updateBalance(-bet);
+      
       setTimeout(() => {
         // Generate random symbols
-        const results = [
+        const result = [
           symbols[Math.floor(Math.random() * symbols.length)],
           symbols[Math.floor(Math.random() * symbols.length)],
           symbols[Math.floor(Math.random() * symbols.length)]
         ];
         
-        // Update reels
-        results.forEach((symbol, index) => {
-          document.getElementById(`reel${index + 1}`).textContent = symbol;
-        });
+        // Update reel display
+        reels[0].textContent = result[0];
+        reels[1].textContent = result[1];
+        reels[2].textContent = result[2];
         
-        // Remove spinning animation
-        reels.forEach(reelId => {
-          document.getElementById(reelId).classList.remove('spinning');
-        });
+        // Stop spinning animation
+        reels.forEach(reel => reel.classList.remove('spinning'));
         
         // Calculate winnings
-        const winnings = calculateWinnings(results, bet);
-        const newBalance = balance - bet + winnings;
+        const resultEl = document.getElementById('result-message');
         
-        updateBalance(newBalance);
-        
-        // Show result
-        if (winnings > bet) {
-          showResult(`🎉 You won ${winnings} chips!`, 'win');
-          showNotification(`🎰 Won ${winnings} chips!`, 'success');
-        } else if (winnings > 0) {
-          showResult(`You got ${winnings} chips back!`, 'win');
+        if (result[0] === result[1] && result[1] === result[2]) {
+          // Three of a kind
+          const winnings = bet * 5;
+          updateBalance(winnings);
+          resultEl.textContent = `🎉 Jackpot! Three ${result[0]} — You win ${winnings} chips!`;
+          resultEl.className = 'result-message win';
+          
+          // Show toast notification
+          if (typeof showToast === 'function') {
+            showToast(`🎉 Jackpot! Won ${winnings} chips!`, 'success');
+          }
+        } else if (result[0] === result[1] || result[1] === result[2] || result[0] === result[2]) {
+          // Two of a kind
+          const winnings = Math.floor(bet * 0.5);
+          updateBalance(winnings);
+          resultEl.textContent = `🎯 Nice! Two matching symbols — You win ${winnings} chips!`;
+          resultEl.className = 'result-message win';
+          
+          if (typeof showToast === 'function') {
+            showToast(`🎯 Nice! Won ${winnings} chips!`, 'success');
+          }
         } else {
-          showResult('No match this time. Try again!', 'lose');
-        }
-        
-        // Reset button
-        isSpinning = false;
-        spinBtn.disabled = false;
-        spinBtn.textContent = '🎰 SPIN';
-        
-      }, 2000);
-    }
-    
-    // Calculate winnings based on results
-    function calculateWinnings(results, bet) {
-      const [first, second, third] = results;
-      
-      // Three of a kind
-      if (first === second && second === third) {
-        switch (first) {
-          case '🏛️': return bet * 2;
-          case '💎': return bet * 10;
-          case '👑': return bet * 50;
-          case '🏆': return bet * 100;
-        }
-      }
-      
-      // Two of a kind
-      if (first === second || first === third || second === third) {
-        return Math.floor(bet * 0.5);
-      }
-      
-      return 0;
-    }
-    
-    // Show result message
-    function showResult(message, type) {
-      const resultEl = document.getElementById('result-message');
-      resultEl.textContent = message;
-      resultEl.className = `result-message ${type}`;
-    }
-    
-    // Show notification (using shared notification system)
-    function showNotification(message, type) {
-      if (typeof displayNotification === 'function') {
-        displayNotification(message, type);
-      }
-    }
-  </script>
-</body>
-</html>
-      min-height: 60vh;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .slots-container {
-      background: #231b36;
-      border-radius: 18px;
-      box-shadow: 0 4px 12px #0005;
-      padding: 2.2rem 1.2rem 2rem 1.2rem;
-      max-width: 380px;
-      margin: 0 auto;
-      text-align: center;
-    }
-    .slots-title {
-      color: #f9d923;
-      font-size: 2.1rem;
-      margin-bottom: 0.7rem;
-      text-shadow: 0 2px 6px #0006;
-    }
-    .balance-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 1.2rem;
-      font-size: 1.1rem;
-      color: #ffe277;
-      font-weight: bold;
-    }
-    .bet-controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.2rem;
-    }
-    .bet-controls input[type="number"] {
-      width: 70px;
-      border-radius: 5px;
-      border: 1px solid #a0843a;
-      background: #18122b;
-      color: #f3e9dc;
-      font-size: 1.1rem;
-      padding: 0.3rem 0.5rem;
-      text-align: center;
-      outline: none;
-      transition: border 0.2s;
-    }
-    .bet-controls button {
-      background: #a0843a;
-      color: #fff;
-      border: none;
-      border-radius: 7px;
-      padding: 0.4rem 1.1rem;
-      font-size: 1.2rem;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.2s;
-    }
-    .bet-controls button:hover {
-      background: #2ea827;
-      color: #fff;
-    }
-    .reels {
-      display: flex;
-      justify-content: center;
-      margin: 1.5rem 0 1rem 0;
-      gap: 1.1rem;
-    }
-    .reel {
-      background: #18122b;
-      border: 2.5px solid #a0843a;
-      border-radius: 1em;
-      width: 66px;
-      height: 66px;
-      margin: 0;
-      font-size: 2.9em;
-      line-height: 66px;
-      box-shadow: 0 2px 8px #0007;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      user-select: none;
-    }
-    #spinBtn {
-      font-size: 1.23em;
-      padding: 0.6em 2.5em;
-      border-radius: 0.5em;
-      border: none;
-      background: #2ea827;
-      color: #fff;
-      cursor: pointer;
-      font-weight: bold;
-      margin-top: 0.2em;
-      box-shadow: 0 2px 7px #0002;
-      transition: background 0.2s;
-    }
-    #spinBtn:active {
-      background: #43c734;
-    }
-    #spinBtn[disabled] {
-      background: #aaa;
-      cursor: not-allowed;
-      color: #eee;
-    }
-    #result {
-      font-size: 1.23em;
-      margin-top: 1.3em;
-      min-height: 1.6em;
-      font-weight: bold;
-      color: #f3e9dc;
-      text-shadow: 0 1px 4px #0008;
-      transition: color 0.2s;
-    }
-    .footer {
-      margin-top: 3rem;
-    }
-    .back-link {
-      display: inline-block;
-      margin-bottom: 1.5rem;
-      color: #ffe277;
-      background: transparent;
-      border: none;
-      font-size: 1.05em;
-      font-weight: bold;
-      text-decoration: underline;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    .back-link:hover {
-      color: #f9d923;
-    }
-    .reset-btn {
-      margin-left: 10px;
-      background: #43c734;
-      color: #fff;
-      border-radius: 8px;
-      border: none;
-      font-size: 0.97rem;
-      font-weight: bold;
-      padding: 0.28em 1.1em;
-      cursor: pointer;
-      box-shadow: 0 2px 6px #0002;
-      transition: background 0.15s;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .reset-btn:hover {
-      background: #2ea827;
-    }
-    @media (max-width: 600px) {
-      .main-content { padding: 1rem 0.3rem 2.5rem 0.3rem; }
-      .slots-container { max-width: 97vw; }
-      .reels { gap: 0.5rem; }
-      .reel { width: 52px; height: 52px; font-size: 2em; }
-    }
-  </style>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-
-  gtag("config", "G-V9DHVKBD85");
-</script>
-</head>
-<body>
-  <header class="header">
-    <div class="logo">
-      <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
-    </div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="index.html#games">Games</a></li>
-        <li><a href="topup.html">Top Up</a></li>
-        <li><a href="history.html">History</a></li>
-        <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main class="main-content">
-    <a href="index.html" class="back-link">&larr; Back to Menu</a>
-    <div class="slots-container">
-      <div class="slots-title">🎰 Slots</div>
-      <button class="instructions-btn" onclick="showInstructions('Slots', GAME_INSTRUCTIONS['Slots'])" style="margin-bottom: 15px;">ℹ️ How to Play</button>
-      <div class="balance-row">
-        <span>Balance:</span>
-        <span id="balance">1000</span>
-        <a href="topup.html" class="reset-btn">💳 Top Up</a>
-      </div>
-      <div class="bet-controls">
-        <label for="bet" style="font-weight:bold;">Bet:</label>
-        <button type="button" id="bet-decrease">-</button>
-        <input type="number" id="bet" min="1" max="9999" value="10" step="1" />
-        <button type="button" id="bet-increase">+</button>
-      </div>
-      <div class="reels">
-        <div id="reel1" class="reel">🪙</div>
-        <div id="reel2" class="reel">🪙</div>
-        <div id="reel3" class="reel">🪙</div>
-      </div>
-      <button id="spinBtn">Spin</button>
-      <p id="result"></p>
-    </div>
-  </main>
-  <footer class="footer">
-    <div style="padding: 10px 0;">
-      <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
-      <p style="margin: 5px 0; font-size: 1.1rem;">
-        📧 <strong>Contact us:</strong> 
-        <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;">casino.the.pyramid@gmail.com</a>
-      </p>
-      <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
-        💰 No real money gambling | 🔞 18+ for entertainment
-      </p>
-    </div>
-  </footer>
-  <script src="admin-config.js"></script>
-  <script src="shared-modern.js"></script>
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Enhanced Slot Game Logic with Near-Miss Mechanics
-    const symbols = [
-      {emoji: "🔱", name: "Trident", payout: 30},
-      {emoji: "🐪", name: "Camel", payout: 12},
-      {emoji: "💎", name: "Gem", payout: 8},
-      {emoji: "🌴", name: "Palm", payout: 6},
-      {emoji: "🍋", name: "Lemon", payout: 4},
-      {emoji: "🍒", name: "Cherry", payout: 3},
-      {emoji: "🪙", name: "Coin", payout: 2}
-    ];
-
-    const reelEls = [
-      document.getElementById('reel1'),
-      document.getElementById('reel2'),
-      document.getElementById('reel3')
-    ];
-    const resultEl = document.getElementById('result');
-    const spinBtn = document.getElementById('spinBtn');
-    const balanceEl = document.getElementById('balance');
-    const betInput = document.getElementById('bet');
-    const betDecBtn = document.getElementById('bet-decrease');
-    const betIncBtn = document.getElementById('bet-increase');
-
-    let balance = getCasinoBalance();
-
-    function updateBalanceDisplay() {
-      balance = getCasinoBalance();
-      balanceEl.textContent = balance;
-    }
-    function setBet(val) {
-      let min = 1, max = Math.max(1, balance);
-      val = Math.max(min, Math.min(max, val));
-      betInput.value = val;
-    }
-    betInput.addEventListener('input', () => {
-      setBet(Number(betInput.value));
-    });
-    betDecBtn.addEventListener('click', () => setBet(Number(betInput.value) - 1));
-    betIncBtn.addEventListener('click', () => setBet(Number(betInput.value) + 1));
-
-    function randomSymbol() {
-      // Weighted probability for rare symbols with subtle house edge
-      const weights = [1, 3, 6, 8, 15, 20, 24]; // sum: 77
-      let total = weights.reduce((a,b)=>a+b,0);
-      let rnd = Math.floor(riggedRandom(2.0) * total); // Use rigged random for house edge
-      for (let i=0; i<weights.length; ++i) {
-        if (rnd < weights[i]) return i;
-        rnd -= weights[i];
-      }
-      return weights.length-1;
-    }
-
-    // Enhanced reel spinning with near-miss mechanics
-    function spinReels() {
-      const nearMissResult = generateSlotsNearMiss();
-      
-      if (nearMissResult.isNearMiss) {
-        // Generate near-miss scenarios
-        if (nearMissResult.type === 'two_of_three') {
-          // Make first two symbols match, third different
-          const matchSymbol = Math.floor(Math.random() * symbols.length);
-          let differentSymbol = matchSymbol;
-          while (differentSymbol === matchSymbol) {
-            differentSymbol = Math.floor(Math.random() * symbols.length);
-          }
-          return [matchSymbol, matchSymbol, differentSymbol];
-        } else if (nearMissResult.type === 'jackpot_miss') {
-          // Almost jackpot - two high-value symbols and one close
-          const highValueSymbol = Math.floor(Math.random() * 3); // 0, 1, or 2 (high value)
-          const closeSymbol = highValueSymbol === 0 ? 1 : highValueSymbol - 1;
-          return [highValueSymbol, highValueSymbol, closeSymbol];
-        }
-      }
-      
-      // Regular random spin
-      return [randomSymbol(), randomSymbol(), randomSymbol()];
-    }
-
-    // Enhanced reel display with excitement effects
-    function displayReels(indices, isNearMiss = false) {
-      for (let i = 0; i < 3; i++) {
-        reelEls[i].textContent = symbols[indices[i]].emoji;
-        
-        // Add excitement effect for near-misses
-        if (isNearMiss) {
-          reelEls[i].style.animation = 'excitement-shake 0.5s ease-out';
-          setTimeout(() => {
-            reelEls[i].style.animation = '';
-          }, 500);
-        }
-      }
-    }
-
-    // Enhanced evaluation with near-miss detection
-    function evaluate(reelIdxs, bet) {
-      // Three of a kind
-      if (reelIdxs[0] === reelIdxs[1] && reelIdxs[1] === reelIdxs[2]) {
-        const payout = bet * symbols[reelIdxs[0]].payout;
-        return {
-          win: true,
-          amount: payout,
-          msg: `🎉 JACKPOT! Three ${symbols[reelIdxs[0]].emoji} (${symbols[reelIdxs[0]].name}) — You win ${payout}!`,
-          color: "#f9d923",
-          isJackpot: true
-        };
-      }
-      
-      // Two of a kind
-      if (reelIdxs[0] === reelIdxs[1] || reelIdxs[1] === reelIdxs[2] || reelIdxs[0] === reelIdxs[2]) {
-        let idx = reelIdxs[0] === reelIdxs[1] ? reelIdxs[0] : reelIdxs[2];
-        const payout = bet * Math.ceil(symbols[idx].payout / 2);
-        
-        // Check if this is a near-miss scenario (two matching, third is close)
-        let isNearMiss = false;
-        let nearMissType = '';
-        
-        if (reelIdxs[0] === reelIdxs[1] && reelIdxs[2] !== reelIdxs[0]) {
-          // Check if third symbol is close to the matching ones
-          const diff = Math.abs(reelIdxs[2] - reelIdxs[0]);
-          if (diff === 1 || (reelIdxs[0] === 0 && reelIdxs[2] === symbols.length - 1) || 
-              (reelIdxs[0] === symbols.length - 1 && reelIdxs[2] === 0)) {
-            isNearMiss = true;
-            nearMissType = 'two_of_three';
-          }
-        }
-        
-        return {
-          win: true,
-          amount: payout,
-          msg: `Nice! Two ${symbols[idx].emoji} (${symbols[idx].name}) — You win ${payout}!`,
-          color: "#ffe277",
-          isNearMiss: isNearMiss,
-          nearMissType: nearMissType
-        };
-      }
-      
-      // Check for near-miss in losing combinations
-      let nearMissDetected = false;
-      let nearMissType = '';
-      
-      // Check for "almost jackpot" (two symbols match)
-      if (reelIdxs[0] === reelIdxs[1] || reelIdxs[1] === reelIdxs[2] || reelIdxs[0] === reelIdxs[2]) {
-        nearMissDetected = true;
-        nearMissType = 'two_of_three';
-      }
-      
-      // Check for consecutive symbols (almost matching)
-      const sorted = [...reelIdxs].sort((a, b) => a - b);
-      if (sorted[1] - sorted[0] === 1 && sorted[2] - sorted[1] === 1) {
-        nearMissDetected = true;
-        nearMissType = 'consecutive';
-      }
-      
-      // Check for high-value symbols present
-      const hasHighValue = reelIdxs.some(idx => idx <= 2); // Trident, Camel, or Gem
-      if (hasHighValue && nearMissDetected) {
-        nearMissType = 'jackpot_miss';
-      }
-      
-      return {
-        win: false,
-        amount: 0,
-        msg: nearMissDetected ? "🎯 SO CLOSE! Keep spinning!" : "No match, try again!",
-        color: nearMissDetected ? "#ff6b35" : "#f3e9dc",
-        isNearMiss: nearMissDetected,
-        nearMissType: nearMissType
-      };
-    }
-
-    function updateUI() {
-      updateBalanceDisplay();
-      setBet(Number(betInput.value));
-      spinBtn.disabled = (balance <= 0 || Number(betInput.value) < 1 || Number(betInput.value) > balance);
-      if (balance <= 0) {
-        resultEl.textContent = "You're out of coins! Reset above to play again.";
-        resultEl.style.color = "#f9d923";
-      }
-    }
-
-    spinBtn.addEventListener('click', () => {
-      let bet = Number(betInput.value);
-      if (bet < 1 || bet > balance) {
-        resultEl.textContent = "Invalid bet!";
-        resultEl.style.color = "#f3e9dc";
-        return;
-      }
-      
-      // Record the bet transaction
-      recordGameBet('Slots', bet);
-      balance = getCasinoBalance(); // Update local balance variable
-      
-      spinBtn.disabled = true;
-      resultEl.textContent = "Spinning...";
-      resultEl.style.color = "#f3e9dc";
-      
-      // Enhanced animation: simulate spinning reels with building excitement
-      let spins = 20, delay = 50, curr = 0;
-      let interval = setInterval(() => {
-        let fake = [randomSymbol(), randomSymbol(), randomSymbol()];
-        displayReels(fake);
-        
-        // Increase excitement as we approach the end
-        if (curr > spins - 5) {
-          delay += 10; // Slow down for dramatic effect
-        }
-        
-        curr++;
-        if (curr >= spins) {
-          clearInterval(interval);
+          // No match - check for near miss (close symbols)
+          const isNearMiss = Math.random() < 0.25; // 25% chance for near miss message
           
-          // Get final result
-          let reelIdxs = spinReels();
-          let res = evaluate(reelIdxs, bet);
-          
-          // Display with special effects for near-miss or wins
-          displayReels(reelIdxs, res.isNearMiss || res.win);
-          
-          // Handle different result types
-          if (res.win) {
-            const winDetails = `${symbols[reelIdxs[0]].name} symbols, payout ${res.amount}`;
-            recordGameWin('Slots', res.amount, winDetails);
+          if (isNearMiss) {
+            resultEl.textContent = `🎯 SO CLOSE! Almost had matching symbols!`;
+            resultEl.className = 'result-message near-miss';
             
-            // Extra celebration for jackpots
-            if (res.isJackpot) {
-              // Add some visual celebration
-              document.body.style.animation = 'excitement-shake 0.8s ease-out';
-              setTimeout(() => {
-                document.body.style.animation = '';
-              }, 800);
-              
-              showNotification(`🎉 INCREDIBLE JACKPOT! +${res.amount} chips!`, 'win', 5000);
+            if (typeof showToast === 'function') {
+              showToast('🎯 SO CLOSE! Keep spinning!', 'warning');
             }
-            
-            balance = getCasinoBalance(); // Update local balance variable
           } else {
-            // Handle losses and near-misses
-            recordGameLoss('Slots', res.msg);
-            
-            if (res.isNearMiss) {
-              // Show near-miss feedback
-              handleNearMiss('Slots', res.nearMissType, 0.8);
-              
-              // Visual effect for near-miss
-              resultEl.style.animation = 'near-miss-glow 1s ease-out';
-              setTimeout(() => {
-                resultEl.style.animation = '';
-              }, 1000);
-            }
+            resultEl.textContent = `💔 No match this time. Try again!`;
+            resultEl.className = 'result-message lose';
           }
-          
-          resultEl.textContent = res.msg;
-          resultEl.style.color = res.color;
-          updateUI();
-          
-          // Re-enable spin button with slight delay for effect
-          setTimeout(() => {
-            spinBtn.disabled = false;
-          }, 500);
         }
-      }, delay);
-    });
-
-    betInput.addEventListener('blur', updateUI);
-    betInput.addEventListener('change', updateUI);
-
-    // Set initial balance and year
-    balanceEl.textContent = getCasinoBalance();
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    updateUI();
+        
+        isSpinning = false;
+        updateUI();
+      }, 1500);
+    }
   </script>
 </body>
 </html>

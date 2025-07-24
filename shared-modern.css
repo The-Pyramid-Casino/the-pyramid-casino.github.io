@@ -4,10 +4,10 @@
 /* CSS Custom Properties for Theme System */
 :root {
   /* Theme colors (will be overridden by theme.js) */
-  --theme-bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --theme-bg-secondary: rgba(255, 255, 255, 0.1);
-  --theme-bg-surface: rgba(255, 255, 255, 0.08);
-  --theme-bg-glass: rgba(255, 255, 255, 0.1);
+  --theme-bg-primary: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 55%, #fbc2eb 100%);
+  --theme-bg-secondary: rgba(255, 255, 255, 0.2);
+  --theme-bg-surface: rgba(255, 255, 255, 0.15);
+  --theme-bg-glass: rgba(255, 255, 255, 0.2);
   
   --theme-text-primary: #ffffff;
   --theme-text-secondary: rgba(255, 255, 255, 0.9);
@@ -66,7 +66,7 @@ html {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   margin: 0;
   padding: 0;
   background: var(--theme-bg-primary);
@@ -76,6 +76,8 @@ body {
   line-height: 1.6;
   position: relative;
   transition: background var(--transition-base), color var(--transition-base);
+  display: flex;
+  flex-direction: column;
 }
 
 /* Animated background pattern for light theme */
@@ -168,13 +170,16 @@ body {
   align-items: center;
   justify-content: space-between;
   background: var(--theme-bg-glass);
-  backdrop-filter: blur(var(--blur-xl));
-  -webkit-backdrop-filter: blur(var(--blur-xl));
+  backdrop-filter: blur(var(--blur-xl)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--blur-xl)) saturate(150%);
   border-bottom: 1px solid var(--theme-border-primary);
+  box-shadow: var(--shadow-glass);
   padding: 1rem 2rem;
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 1100;
+  left: 0;
+  width: 100%;
+  z-index: 1200;
   transition: all var(--transition-base);
 }
 
@@ -419,7 +424,9 @@ body {
 
 .main-content {
   padding: 2rem 1rem;
-  min-height: calc(100vh - 80px);
+  margin-top: 80px; /* Account for fixed navbar */
+  flex: 1;
+  min-height: calc(100vh - 160px); /* Account for navbar and footer */
 }
 
 .section {
@@ -691,5 +698,92 @@ body {
   
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* === FOOTER COMPONENT === */
+footer {
+  background: var(--theme-bg-glass);
+  backdrop-filter: blur(var(--blur-xl)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--blur-xl)) saturate(150%);
+  border-top: 1px solid var(--theme-border-primary);
+  box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  margin-top: auto;
+  z-index: 1000;
+}
+
+/* === MODAL/POPUP SYSTEM === */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  padding: 2rem;
+  background: var(--theme-bg-glass);
+  backdrop-filter: blur(var(--blur-xl)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--blur-xl)) saturate(150%);
+  border: 1px solid var(--theme-border-primary);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+  z-index: 1400;
+  display: none;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup.show {
+  display: block;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(var(--blur-sm));
+  z-index: 1300;
+  display: none;
+}
+
+.popup-overlay.show {
+  display: block;
+}
+
+.popup-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--theme-bg-surface);
+  border: 1px solid var(--theme-border-secondary);
+  border-radius: var(--radius-full);
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--theme-text-secondary);
+  font-size: 1.2rem;
+  transition: all var(--transition-fast);
+}
+
+.popup-close:hover {
+  background: var(--theme-error);
+  color: white;
+  transform: scale(1.1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
   }
 }

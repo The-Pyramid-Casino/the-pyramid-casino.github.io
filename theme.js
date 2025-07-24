@@ -8,11 +8,11 @@ const PyramidTheme = {
   // Color palette for light and dark modes
   colors: {
     light: {
-      // Background colors
-      primary: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      secondary: 'rgba(255, 255, 255, 0.1)',
-      surface: 'rgba(255, 255, 255, 0.08)',
-      glass: 'rgba(255, 255, 255, 0.1)',
+      // Background colors - Enhanced gradients for modern look
+      primary: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 55%, #fbc2eb 100%)',
+      secondary: 'rgba(255, 255, 255, 0.2)',
+      surface: 'rgba(255, 255, 255, 0.15)',
+      glass: 'rgba(255, 255, 255, 0.2)',
       
       // Text colors
       text: {
@@ -37,11 +37,11 @@ const PyramidTheme = {
     },
     
     dark: {
-      // Background colors
-      primary: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',
-      secondary: 'rgba(0, 0, 0, 0.3)',
-      surface: 'rgba(0, 0, 0, 0.2)',
-      glass: 'rgba(0, 0, 0, 0.2)',
+      // Background colors - Enhanced dark gradients
+      primary: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      secondary: 'rgba(0, 0, 0, 0.4)',
+      surface: 'rgba(0, 0, 0, 0.3)',
+      glass: 'rgba(0, 0, 0, 0.3)',
       
       // Text colors
       text: {
@@ -69,7 +69,7 @@ const PyramidTheme = {
   // Typography system
   typography: {
     fontFamily: {
-      primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif",
+      primary: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
       mono: "'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace"
     },
     fontSize: {

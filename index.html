@@ -122,22 +122,6 @@
       </a>
     </div>
     
-    <!-- Session Stats Display -->
-    <div id="session-stats" class="glass-card">
-      <div class="game-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-        <div class="text-center">
-          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎮</div>
-          <div style="font-size: 1.5rem; font-weight: 700; color: var(--theme-text-primary);" id="games-played">0</div>
-          <div style="color: var(--theme-text-muted);">Games Played</div>
-        </div>
-        <div class="text-center">
-          <div style="font-size: 2rem; margin-bottom: 0.5rem;">⏰</div>
-          <div style="font-size: 1.5rem; font-weight: 700; color: var(--theme-text-primary);" id="session-time">0m</div>
-          <div style="color: var(--theme-text-muted);">Session Time</div>
-        </div>
-      </div>
-    </div>
-    
     <!-- Entertainment Notice -->
     <div class="glass-card text-center" role="alert" style="background: rgba(255, 215, 0, 0.15); border-color: rgba(255, 215, 0, 0.3);">
       <strong>✨ FOR ENTERTAINMENT ONLY! ✨</strong><br>
@@ -244,15 +228,6 @@
           </button>
           <a href="plinko.html" class="btn btn-primary btn-sm" aria-label="Play Plinko game">Play Now</a>
         </div>
-
-        <div class="game-card">
-          <h3>🪙 Coin Pusher</h3>
-          <p>Push coins to win big prizes and bonus rewards!</p>
-          <button class="btn btn-secondary btn-sm" onclick="showInstructions('Coin Pusher', GAME_INSTRUCTIONS['Coin Pusher'])" aria-label="Show instructions for Coin Pusher game">
-            ℹ️ How to Play
-          </button>
-          <a href="coinpusher.html" class="btn btn-primary btn-sm" aria-label="Play Coin Pusher game">Play Now</a>
-        </div>
       </div>
     </section>
     
@@ -339,15 +314,17 @@
       }
       
       // Update session stats display
-      updateSessionStatsDisplay();
+      // updateSessionStatsDisplay();
       
       // Update session stats every 30 seconds
-      setInterval(updateSessionStatsDisplay, 30000);
+      // setInterval(updateSessionStatsDisplay, 30000);
       
       document.getElementById('year').textContent = new Date().getFullYear();
     });
     
-    // Function to update session stats display
+    // Function to update session stats display - REMOVED
+    // Session stats removed from homepage per design requirements
+    /*
     function updateSessionStatsDisplay() {
       try {
         if (typeof getPlayerSession === 'function') {
@@ -361,6 +338,7 @@
         console.error('Error updating session stats:', e);
       }
     }
+    */
   </script>
 </body>
 </html>
