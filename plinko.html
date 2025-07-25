@@ -5,574 +5,703 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Plinko | Pyramid Casino</title>
-  <meta name="description" content="Drop the ball and watch it bounce through the pegs to win prizes at Pyramid Casino!" />
+  <meta name="description" content="Drop the ball and watch it bounce through the pegs at Pyramid Casino!" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="shared-modern.css" />
+  
   <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      background: #18122b;
-      color: #f3e9dc;
-      min-height: 100vh;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #a0843a;
-      color: #fff;
-      padding: 1rem 2rem;
-    }
-    .logo {
-      font-weight: bold;
-      font-size: 1.5rem;
-      letter-spacing: 2px;
-    }
-    .header nav ul {
-      list-style: none;
-      display: flex;
-      gap: 1.2rem;
-      margin: 0;
-      padding: 0;
-    }
-    .header nav a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    .header nav a:hover {
-      color: #f3e9dc;
-      text-shadow: 0 0 5px #f9d923;
-    }
-    .main-content {
-      padding: 2rem 1rem 3rem 1rem;
-      min-height: 60vh;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .back-link {
-      color: #f9d923;
-      text-decoration: none;
-      font-weight: bold;
-      margin-bottom: 1.5rem;
-      display: inline-block;
-      transition: color 0.2s;
-    }
-    .back-link:hover {
-      color: #ffe277;
-      text-shadow: 0 0 5px #f9d923;
-    }
+    /* Game-specific styles using design system */
     .plinko-container {
-      background: #231b36;
-      border-radius: 18px;
-      box-shadow: 0 4px 12px #0005;
-      padding: 2.2rem 1.2rem 2rem 1.2rem;
-      max-width: 600px;
-      margin: 0 auto;
+      max-width: 700px;
+      margin: 2rem auto;
       text-align: center;
     }
+    
     .plinko-title {
-      color: #f9d923;
-      font-size: 2.1rem;
-      margin-bottom: 0.7rem;
-      text-shadow: 0 2px 6px #0006;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--theme-text-primary);
+      margin-bottom: 1rem;
+      text-align: center;
     }
-    .balance-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.2rem;
-      font-size: 1.1rem;
-      color: #ffe277;
-      font-weight: bold;
-      background: rgba(35, 27, 54, 0.8);
-      padding: 10px 20px;
-      border-radius: 25px;
-      border: 1px solid #f9d923;
+    
+    .game-area {
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-xl)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--blur-xl)) saturate(150%);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-2xl);
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: var(--shadow-glass);
     }
-    .topup-btn {
-      background: #43c734;
-      color: #fff;
-      border-radius: 8px;
-      border: none;
-      font-size: 0.97rem;
-      font-weight: bold;
-      padding: 0.28em 1.1em;
-      cursor: pointer;
-      box-shadow: 0 2px 6px #0002;
-      transition: background 0.15s;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .topup-btn:hover {
-      background: #2ea827;
-    }
-    .bet-controls {
+    
+    .betting-controls {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-lg)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(150%);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-xl);
       flex-wrap: wrap;
     }
-    .bet-controls input[type="number"] {
-      width: 80px;
-      border-radius: 5px;
-      border: 1px solid #a0843a;
-      background: #f3e9dc;
-      color: #18122b;
-      padding: 0.4rem;
+    
+    .betting-controls label {
+      color: var(--theme-text-secondary);
+      font-weight: 600;
+    }
+    
+    .bet-input {
+      width: 100px;
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-md);
+      color: var(--theme-text-primary);
+      font-size: 1rem;
+      padding: 0.5rem;
       text-align: center;
-      font-size: 1rem;
-      font-weight: bold;
+      outline: none;
+      transition: all var(--transition-fast);
     }
-    .bet-controls button {
-      background: #a0843a;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.5rem 1.2rem;
-      font-size: 1rem;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.15s;
+    
+    .bet-input:focus {
+      border-color: var(--theme-border-focus);
+      background: var(--theme-bg-glass);
     }
-    .bet-controls button:hover:not(:disabled) {
-      background: #f9d923;
-      color: #18122b;
-    }
-    .bet-controls button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    
     .plinko-board {
-      background: linear-gradient(135deg, #2a1f3d 0%, #1e1530 100%);
-      border: 3px solid #f9d923;
-      border-radius: 15px;
-      padding: 20px;
-      margin: 1.5rem 0;
       position: relative;
-      height: 400px;
+      width: 100%;
+      max-width: 500px;
+      margin: 2rem auto;
+      background: var(--theme-bg-surface);
+      border: 2px solid var(--theme-border-primary);
+      border-radius: var(--radius-xl);
+      padding: 2rem 1rem;
       overflow: hidden;
     }
-    .pegs-container {
+    
+    .peg-row {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 1rem 0;
       position: relative;
-      height: 300px;
-      width: 100%;
     }
+    
     .peg {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: #f9d923;
-      border-radius: 50%;
-      box-shadow: 0 0 5px rgba(249, 217, 35, 0.5);
-    }
-    .ball {
-      position: absolute;
       width: 12px;
       height: 12px;
-      background: radial-gradient(circle at 30% 30%, #ff8a80, #ff6b6b, #d63031);
+      background: var(--theme-border-focus);
       border-radius: 50%;
-      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.8), 0 0 12px rgba(255, 107, 107, 0.4);
-      transition: transform 0.1s ease-out;
-      z-index: 10;
-      transform: translateX(-50%);
+      box-shadow: var(--shadow-sm);
     }
-    .prize-slots {
-      display: flex;
-      justify-content: space-between;
+    
+    .ball {
+      width: 16px;
+      height: 16px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      border-radius: 50%;
       position: absolute;
-      bottom: 10px;
-      left: 20px;
-      right: 20px;
-    }
-    .prize-slot {
-      flex: 1;
-      background: linear-gradient(135deg, #a0843a, #8a6f2e);
-      color: #fff;
-      text-align: center;
-      padding: 8px 4px;
-      margin: 0 1px;
-      border-radius: 8px 8px 0 0;
-      font-size: 0.8rem;
-      font-weight: bold;
-      border: 2px solid #f9d923;
-      border-bottom: none;
-    }
-    .prize-slot.jackpot {
-      background: linear-gradient(135deg, #43c734, #2ea827);
-      animation: pulse-glow 2s ease-in-out infinite;
-    }
-    .prize-slot[data-multiplier="0"] {
-      background: linear-gradient(135deg, #d7263d, #b91c2e);
-      color: #fff;
-    }
-    .drop-zone {
-      position: absolute;
-      top: 10px;
+      top: -20px;
       left: 50%;
       transform: translateX(-50%);
-      width: 30px;
-      height: 30px;
-      background: radial-gradient(circle, rgba(249, 217, 35, 0.3), rgba(249, 217, 35, 0.1));
-      border: 2px dashed #f9d923;
-      border-radius: 50%;
-      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+      transition: all 0.3s ease;
+    }
+    
+    .ball.dropping {
+      animation: drop 3s ease-in-out forwards;
+    }
+    
+    @keyframes drop {
+      0% { top: -20px; }
+      100% { top: 100%; }
+    }
+    
+    .prize-slots {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 2rem;
+      gap: 0.5rem;
+    }
+    
+    .prize-slot {
+      background: var(--theme-bg-surface);
+      border: 2px solid var(--theme-border-primary);
+      border-radius: var(--radius-md);
+      padding: 1rem 0.5rem;
+      font-weight: bold;
+      color: var(--theme-text-primary);
+      min-width: 60px;
+      transition: all var(--transition-fast);
+    }
+    
+    .prize-slot.winning {
+      background: var(--theme-success);
+      color: white;
+      border-color: var(--theme-success);
+      animation: prize-glow 0.5s ease-out;
+    }
+    
+    .prize-slot.high {
+      background: rgba(34, 197, 94, 0.2);
+      border-color: var(--theme-success);
+      color: var(--theme-success);
+    }
+    
+    .prize-slot.medium {
+      background: rgba(251, 146, 60, 0.2);
+      border-color: var(--theme-warning);
+      color: var(--theme-warning);
+    }
+    
+    .prize-slot.low {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: var(--theme-error);
+      color: var(--theme-error);
+    }
+    
+    @keyframes prize-glow {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .game-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+    
+    .result-message {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      font-size: 1.125rem;
+      min-height: 3rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-secondary);
     }
-    .drop-zone:hover {
-      background: radial-gradient(circle, rgba(249, 217, 35, 0.5), rgba(249, 217, 35, 0.2));
+    
+    .result-message.win {
+      background: rgba(34, 197, 94, 0.2);
+      border-color: var(--theme-success);
+      color: var(--theme-success);
     }
-    .game-status {
-      margin: 1rem 0;
-      padding: 1rem;
-      background: rgba(160, 132, 58, 0.2);
-      border-radius: 10px;
-      border: 1px solid #a0843a;
+    
+    .result-message.lose {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: var(--theme-error);
+      color: var(--theme-error);
     }
-    .instructions {
-      margin: 1.5rem 0;
-      padding: 1rem;
-      background: rgba(249, 217, 35, 0.1);
-      border-radius: 10px;
-      border: 1px solid #f9d923;
-      font-size: 0.9rem;
+    
+    .stats {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-lg);
     }
-    .footer {
-      margin-top: 3rem;
-      background: linear-gradient(135deg, #231b36 0%, #0f0a1a 50%, #231b36 100%);
-      border-top: 2px solid #f9d923;
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+    
+    .stats h4 {
+      color: var(--theme-text-secondary);
+      margin-bottom: 1rem;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+    
+    .stat-item {
       text-align: center;
-      padding: 15px 20px;
     }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--theme-text-primary);
+    }
+    
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--theme-text-secondary);
+    }
+    
+    /* Mobile responsiveness */
     @media (max-width: 768px) {
-      .plinko-container {
-        padding: 1.5rem 1rem;
-      }
       .plinko-board {
-        height: 350px;
+        max-width: 400px;
+        padding: 1rem 0.5rem;
       }
-      .bet-controls {
+      
+      .peg-row {
+        gap: 1.5rem;
+      }
+      
+      .peg {
+        width: 10px;
+        height: 10px;
+      }
+      
+      .ball {
+        width: 14px;
+        height: 14px;
+      }
+      
+      .prize-slots {
+        gap: 0.25rem;
+      }
+      
+      .prize-slot {
+        min-width: 45px;
+        padding: 0.75rem 0.25rem;
+        font-size: 0.875rem;
+      }
+      
+      .betting-controls {
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 1rem;
+      }
+      
+      .game-controls {
+        flex-direction: column;
+        align-items: center;
       }
     }
   </style>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag("js", new Date());
-    gtag("config", "G-V9DHVKBD85");
-  </script>
 </head>
 <body>
-  <header class="header">
-    <div class="logo">
-      <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
+  <!-- Skip link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Consistent Navbar -->
+  <nav class="navbar" role="banner">
+    <a href="index.html" class="navbar-brand">
+      <span role="img" aria-label="pyramid">🏜️</span>
+      Pyramid Casino
+    </a>
+    
+    <ul class="navbar-nav" role="navigation" aria-label="Main navigation">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="index.html#games" class="nav-link">Games</a></li>
+      <li><a href="topup.html" class="nav-link">Top Up</a></li>
+      <li><a href="history.html" class="nav-link">History</a></li>
+      <li><a href="https://forms.gle/QYQqh72sSuweCue49" class="nav-link" target="_blank" rel="noopener">Suggest</a></li>
+      <li>
+        <button 
+          class="theme-toggle" 
+          onclick="toggleTheme()" 
+          aria-label="Toggle between light and dark theme"
+          title="Toggle theme"
+        >
+          <span id="theme-icon">🌙</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+  
+  <main id="main-content" class="main-content container" role="main">
+    <!-- Balance Bar -->
+    <div class="balance-bar">
+      <span>Balance: <span id="balance" aria-live="polite">1000</span></span>
+      <a href="topup.html" class="btn btn-secondary btn-sm">💳 Top Up</a>
     </div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="topup.html">Top Up</a></li>
-        <li><a href="history.html">History</a></li>
-        <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main class="main-content">
-    <a href="index.html" class="back-link">← Back to Games</a>
-
+    
+    <!-- Back to Menu -->
+    <div style="margin-bottom: 1rem;">
+      <a href="index.html" class="btn btn-secondary btn-sm">← Back to Menu</a>
+    </div>
+    
+    <!-- Plinko Game -->
     <div class="plinko-container">
       <h1 class="plinko-title">🎯 Plinko</h1>
       
-      <div class="balance-row">
-        <span>💰 Balance: <span id="balance">1000</span> chips</span>
-        <a href="topup.html" class="topup-btn">💳 Top Up</a>
+      <!-- How to Play Button -->
+      <button id="how-to-play-btn" class="btn btn-secondary btn-md" style="margin-bottom: 2rem;">
+        ℹ️ How to Play
+      </button>
+      
+      <!-- Betting Controls -->
+      <div class="betting-controls">
+        <label for="bet-amount">Bet Amount:</label>
+        <input type="number" id="bet-amount" class="bet-input" value="10" min="1" max="100" />
       </div>
-
-      <div class="bet-controls">
-        <label>
-          <span>💰 Bet:</span>
-          <input type="number" id="bet-amount" min="1" max="1000" value="10" />
-        </label>
-        <button id="drop-btn" onclick="dropBall()">🔴 Drop Ball</button>
-        <button onclick="showInstructions('Plinko', GAME_INSTRUCTIONS['Plinko'])">ℹ️ How to Play</button>
-      </div>
-
-      <div class="plinko-board" id="plinko-board">
-        <div class="drop-zone" id="drop-zone" onclick="dropBall()">⬇️</div>
-        <div class="pegs-container" id="pegs-container"></div>
-        <div class="ball" id="ball" style="display: none;"></div>
-        <div class="prize-slots">
-          <div class="prize-slot jackpot" data-multiplier="10">10x</div>
-          <div class="prize-slot" data-multiplier="5">5x</div>
-          <div class="prize-slot" data-multiplier="2">2x</div>
-          <div class="prize-slot" data-multiplier="1">1x</div>
-          <div class="prize-slot" data-multiplier="0.5">0.5x</div>
-          <div class="prize-slot" data-multiplier="0">0x</div>
-          <div class="prize-slot" data-multiplier="0.5">0.5x</div>
-          <div class="prize-slot" data-multiplier="1">1x</div>
-          <div class="prize-slot" data-multiplier="2">2x</div>
-          <div class="prize-slot" data-multiplier="5">5x</div>
-          <div class="prize-slot jackpot" data-multiplier="10">10x</div>
+      
+      <!-- Game Area -->
+      <div class="game-area">
+        <!-- Plinko Board -->
+        <div class="plinko-board" id="plinko-board">
+          <!-- Pegs will be generated here -->
+          
+          <!-- Prize Slots -->
+          <div class="prize-slots">
+            <div class="prize-slot low">0.5x</div>
+            <div class="prize-slot medium">1x</div>
+            <div class="prize-slot high">2x</div>
+            <div class="prize-slot high">5x</div>
+            <div class="prize-slot medium">2x</div>
+            <div class="prize-slot high">3x</div>
+            <div class="prize-slot low">0.5x</div>
+          </div>
+        </div>
+        
+        <!-- Game Controls -->
+        <div class="game-controls">
+          <button id="drop-btn" class="btn btn-primary">🎯 Drop Ball</button>
+          <button id="new-game-btn" class="btn btn-warning" style="display: none;">New Game</button>
+        </div>
+        
+        <!-- Result Message -->
+        <div id="result-message" class="result-message">
+          Set your bet and drop the ball to play!
         </div>
       </div>
-
-      <div class="game-status">
-        <div id="last-result">🎯 Drop a ball to start playing!</div>
-      </div>
-
-      <div class="instructions">
-        <strong>🎮 Quick Start:</strong> Set your bet, click "Drop Ball" or the drop zone, and watch the ball bounce through the pegs to land in a prize slot!
+      
+      <!-- Game Stats -->
+      <div class="stats">
+        <h4>📊 Game Statistics</h4>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value" id="drops-count">0</div>
+            <div class="stat-label">Drops</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="total-won">0</div>
+            <div class="stat-label">Total Won</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="best-win">0</div>
+            <div class="stat-label">Best Win</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="win-rate">0%</div>
+            <div class="stat-label">Win Rate</div>
+          </div>
+        </div>
       </div>
     </div>
   </main>
-
-  <footer class="footer">
-    <div style="padding: 10px 0;">
+  
+  <!-- Footer -->
+  <footer class="glass-surface text-center" role="contentinfo">
+    <div>
       <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
       <p style="margin: 5px 0; font-size: 1.1rem;">
         📧 <strong>Contact us:</strong> 
-        <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;">casino.the.pyramid@gmail.com</a>
+        <a href="mailto:casino.the.pyramid@gmail.com" style="color: var(--theme-text-primary); text-decoration: none;" aria-label="Send email to casino.the.pyramid@gmail.com">
+          casino.the.pyramid@gmail.com
+        </a>
       </p>
-      <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
+      <p style="margin: 5px 0; font-size: 0.9rem; color: var(--theme-text-muted);">
         💰 No real money gambling | 🔞 18+ for entertainment
       </p>
     </div>
   </footer>
-
+  
+  <!-- Toast notification container -->
+  <div class="toast-container" id="toast-container"></div>
+  
+  <!-- Modern Game Instructions Popup -->
+  <div class="popup-overlay" id="popup-overlay"></div>
+  <div class="popup" id="instructions-popup">
+    <div class="popup-close" onclick="hideInstructions()">×</div>
+    <h3>🎯 How to Play Plinko</h3>
+    <ul>
+      <li>Set your bet amount and click "Drop Ball"</li>
+      <li>Watch the ball bounce through the pegs</li>
+      <li>The ball will land in one of the prize slots at the bottom</li>
+      <li>Your winnings are calculated based on the multiplier in that slot</li>
+      <li>Center slots typically have higher multipliers</li>
+      <li>Edge slots usually have lower multipliers or losses</li>
+      <li>Each drop is independent - past results don't affect future drops</li>
+    </ul>
+  </div>
+  
+  <!-- Scripts -->
+  <script src="theme.js"></script>
   <script src="admin-config.js"></script>
   <script src="shared-modern.js"></script>
+  
   <script>
-    let isDropping = false;
+    // Game state
+    let gameState = {
+      isDropping: false,
+      stats: {
+        drops: 0,
+        totalWon: 0,
+        bestWin: 0,
+        wins: 0
+      }
+    };
     
-    function initPlinko() {
+    // Prize multipliers (from left to right)
+    const prizeMultipliers = [0.5, 1, 2, 5, 2, 3, 0.5];
+    
+    // Theme toggle functionality
+    function updateThemeIcon() {
+      const themeIcon = document.getElementById('theme-icon');
+      const currentTheme = getCurrentTheme();
+      themeIcon.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+    }
+    
+    // Listen for theme changes
+    window.addEventListener('themeChanged', updateThemeIcon);
+    
+    // Initialize game
+    document.addEventListener('DOMContentLoaded', function() {
+      updateThemeIcon();
+      initializeBalance();
+      createPegBoard();
+      loadStats();
+      updateStatsDisplay();
+      
+      // Add event listeners
+      document.getElementById('how-to-play-btn').addEventListener('click', showInstructions);
+      document.getElementById('drop-btn').addEventListener('click', dropBall);
+      document.getElementById('new-game-btn').addEventListener('click', newGame);
+      document.getElementById('bet-amount').addEventListener('change', updateUI);
       document.getElementById('year').textContent = new Date().getFullYear();
-      document.getElementById('balance').textContent = getCasinoBalance();
-      createPegs();
-      
-      // Add input validation
-      const betInput = document.getElementById('bet-amount');
-      betInput.addEventListener('input', function() {
-        const maxBet = getCasinoBalance();
-        if (parseInt(this.value) > maxBet) {
-          this.value = maxBet;
-        }
-      });
+    });
+    
+    // Show instructions popup
+    function showInstructions() {
+      document.getElementById('popup-overlay').classList.add('show');
+      document.getElementById('instructions-popup').classList.add('show');
     }
-
-    function createPegs() {
-      const container = document.getElementById('pegs-container');
-      const rows = 12;
-      const pegSpacing = 40;
-      
-      for (let row = 0; row < rows; row++) {
-        const pegsInRow = row + 3;
-        const startX = (container.offsetWidth - (pegsInRow - 1) * pegSpacing) / 2;
-        
-        for (let peg = 0; peg < pegsInRow; peg++) {
-          const pegElement = document.createElement('div');
-          pegElement.className = 'peg';
-          pegElement.style.left = (startX + peg * pegSpacing) + 'px';
-          pegElement.style.top = (row * 25 + 30) + 'px';
-          container.appendChild(pegElement);
-        }
+    
+    // Hide instructions popup
+    function hideInstructions() {
+      document.getElementById('popup-overlay').classList.remove('show');
+      document.getElementById('instructions-popup').classList.remove('show');
+    }
+    
+    // Close popup when clicking overlay
+    document.getElementById('popup-overlay').addEventListener('click', hideInstructions);
+    
+    // Initialize balance
+    function initializeBalance() {
+      const balanceEl = document.getElementById('balance');
+      if (typeof getCasinoBalance === 'function') {
+        balanceEl.textContent = getCasinoBalance();
+      } else {
+        let balance = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+        if (isNaN(balance)) balance = 1000;
+        balanceEl.textContent = balance;
       }
     }
-
-    function dropBall() {
-      if (isDropping) return;
-      
-      const betAmount = parseInt(document.getElementById('bet-amount').value);
-      const currentBalance = getCasinoBalance();
-      
-      if (!betAmount || betAmount <= 0) {
-        showNotification('❌ Please enter a valid bet amount!', 'lose');
-        return;
+    
+    // Get current balance
+    function getCurrentBalance() {
+      if (typeof getCasinoBalance === 'function') {
+        return getCasinoBalance();
+      } else {
+        let balance = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+        if (isNaN(balance)) balance = 1000;
+        return balance;
       }
-      
-      if (betAmount > currentBalance) {
-        showNotification('❌ Insufficient chips! Your balance is ' + currentBalance, 'lose');
-        return;
+    }
+    
+    // Update balance
+    function updateBalance(amount) {
+      if (typeof updateCasinoBalance === 'function') {
+        updateCasinoBalance(amount);
+      } else {
+        let balance = getCurrentBalance();
+        balance += amount;
+        localStorage.setItem('pyramidCasinoBalance', balance.toString());
       }
-      
-      // Record the bet
-      recordGameBet('Plinko', betAmount);
-      updateBalanceDisplay();
-      
-      isDropping = true;
-      document.getElementById('drop-btn').disabled = true;
-      
-      const ball = document.getElementById('ball');
+      updateUI();
+    }
+    
+    // Create peg board
+    function createPegBoard() {
       const board = document.getElementById('plinko-board');
       
-      ball.style.display = 'block';
-      ball.style.left = '50%';
-      ball.style.top = '40px';
-      ball.style.transform = 'translateX(-50%)';
-      
-      // Initialize physics simulation
-      const physics = {
-        x: board.offsetWidth / 2,
-        y: 40,
-        vx: 0,
-        vy: 0,
-        gravity: 0.5,
-        bounce: 0.7,
-        friction: 0.98,
-        radius: 6
-      };
-      
-      // Get all peg positions
-      const pegs = Array.from(document.querySelectorAll('.peg')).map(peg => ({
-        x: peg.offsetLeft + 4,
-        y: peg.offsetTop + 4,
-        radius: 4
-      }));
-      
-      let animationId;
-      
-      function physicsLoop() {
-        // Apply gravity
-        physics.vy += physics.gravity;
+      // Create peg rows (7 rows with decreasing pegs)
+      for (let row = 0; row < 7; row++) {
+        const pegRow = document.createElement('div');
+        pegRow.className = 'peg-row';
         
-        // Apply friction
-        physics.vx *= physics.friction;
-        physics.vy *= physics.friction;
-        
-        // Update position
-        physics.x += physics.vx;
-        physics.y += physics.vy;
-        
-        // Check collision with pegs
-        pegs.forEach(peg => {
-          const dx = physics.x - peg.x;
-          const dy = physics.y - peg.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < physics.radius + peg.radius) {
-            // Collision detected - calculate bounce
-            const angle = Math.atan2(dy, dx);
-            const speed = Math.sqrt(physics.vx * physics.vx + physics.vy * physics.vy);
-            
-            // Separate ball from peg
-            const overlap = physics.radius + peg.radius - distance;
-            physics.x += Math.cos(angle) * overlap * 0.5;
-            physics.y += Math.sin(angle) * overlap * 0.5;
-            
-            // Bounce velocity
-            physics.vx = Math.cos(angle) * speed * physics.bounce;
-            physics.vy = Math.sin(angle) * speed * physics.bounce;
-            
-            // Add subtle bias towards less favorable slots for house edge
-            physics.vx += (riggedRandom(2.5) - 0.5) * 2;
-            physics.vy += (riggedRandom(2.5) - 0.5) * 1;
-            
-            // Visual bounce effect
-            ball.style.transform = 'translateX(-50%) scale(1.3)';
-            setTimeout(() => {
-              ball.style.transform = 'translateX(-50%) scale(1)';
-            }, 100);
-          }
-        });
-        
-        // Boundary collision
-        if (physics.x - physics.radius < 20) {
-          physics.x = 20 + physics.radius;
-          physics.vx = Math.abs(physics.vx) * physics.bounce;
-        }
-        if (physics.x + physics.radius > board.offsetWidth - 20) {
-          physics.x = board.offsetWidth - 20 - physics.radius;
-          physics.vx = -Math.abs(physics.vx) * physics.bounce;
+        const pegCount = 7 - row;
+        for (let peg = 0; peg < pegCount; peg++) {
+          const pegEl = document.createElement('div');
+          pegEl.className = 'peg';
+          pegRow.appendChild(pegEl);
         }
         
-        // Update ball position
-        ball.style.left = physics.x + 'px';
-        ball.style.top = physics.y + 'px';
-        
-        // Check if ball reached bottom
-        if (physics.y > 340) {
-          cancelAnimationFrame(animationId);
-          landInSlot(physics.x, betAmount);
-          return;
+        board.insertBefore(pegRow, board.querySelector('.prize-slots'));
+      }
+    }
+    
+    // Load stats from localStorage
+    function loadStats() {
+      const saved = localStorage.getItem('plinkoStats');
+      if (saved) {
+        gameState.stats = JSON.parse(saved);
+      }
+    }
+    
+    // Save stats to localStorage
+    function saveStats() {
+      localStorage.setItem('plinkoStats', JSON.stringify(gameState.stats));
+    }
+    
+    // Update stats display
+    function updateStatsDisplay() {
+      document.getElementById('drops-count').textContent = gameState.stats.drops;
+      document.getElementById('total-won').textContent = gameState.stats.totalWon;
+      document.getElementById('best-win').textContent = gameState.stats.bestWin;
+      
+      const winRate = gameState.stats.drops > 0 ? 
+        Math.round((gameState.stats.wins / gameState.stats.drops) * 100) : 0;
+      document.getElementById('win-rate').textContent = winRate + '%';
+    }
+    
+    // Update UI elements
+    function updateUI() {
+      const balance = getCurrentBalance();
+      const bet = parseInt(document.getElementById('bet-amount').value, 10);
+      const dropBtn = document.getElementById('drop-btn');
+      
+      document.getElementById('balance').textContent = balance;
+      
+      // Enable drop button if sufficient funds and not dropping
+      if (balance >= bet && !gameState.isDropping) {
+        dropBtn.disabled = false;
+        dropBtn.textContent = '🎯 Drop Ball';
+      } else {
+        dropBtn.disabled = true;
+        if (balance < bet) {
+          dropBtn.textContent = 'Insufficient Funds';
+        } else if (gameState.isDropping) {
+          dropBtn.textContent = 'Ball Dropping...';
         }
-        
-        // Continue animation
-        animationId = requestAnimationFrame(physicsLoop);
+      }
+    }
+    
+    // Drop ball
+    function dropBall() {
+      if (gameState.isDropping) return;
+      
+      const bet = parseInt(document.getElementById('bet-amount').value, 10);
+      const balance = getCurrentBalance();
+      
+      if (balance < bet) {
+        showResult('Insufficient funds!', 'lose');
+        return;
       }
       
-      // Start physics simulation
-      animationId = requestAnimationFrame(physicsLoop);
-    }
-
-    function landInSlot(ballX, betAmount) {
-      const slots = document.querySelectorAll('.prize-slot');
-      const slotWidth = document.querySelector('.prize-slots').offsetWidth / slots.length;
-      const slotIndex = Math.floor(ballX / slotWidth);
-      const finalSlot = Math.max(0, Math.min(slotIndex, slots.length - 1));
+      // Deduct bet
+      updateBalance(-bet);
+      gameState.isDropping = true;
+      updateUI();
       
-      const slot = slots[finalSlot];
-      const multiplier = parseFloat(slot.dataset.multiplier);
-      const winAmount = Math.floor(betAmount * multiplier);
+      // Create ball
+      const ball = document.createElement('div');
+      ball.className = 'ball dropping';
+      document.getElementById('plinko-board').appendChild(ball);
       
-      // Highlight winning slot
-      slot.style.background = 'linear-gradient(135deg, #f9d923, #eed920)';
-      slot.style.color = '#18122b';
-      
-      // Position ball in winning slot
-      const ball = document.getElementById('ball');
-      const slotPosition = finalSlot * slotWidth + slotWidth / 2;
-      ball.style.left = slotPosition + 'px';
-      ball.style.top = '360px';
-      
+      // Simulate ball path
       setTimeout(() => {
-        if (winAmount > 0) {
-          recordGameWin('Plinko', winAmount, multiplier + 'x multiplier');
-          updateBalanceDisplay();
+        // Remove ball
+        ball.remove();
+        
+        // Determine which slot the ball lands in (with some randomness weighted toward center)
+        const slotIndex = getRandomSlot();
+        const multiplier = prizeMultipliers[slotIndex];
+        const winnings = Math.floor(bet * multiplier);
+        
+        // Highlight winning slot
+        const slots = document.querySelectorAll('.prize-slot');
+        slots[slotIndex].classList.add('winning');
+        
+        setTimeout(() => {
+          slots[slotIndex].classList.remove('winning');
+        }, 1000);
+        
+        // Update stats
+        gameState.stats.drops++;
+        if (winnings > bet) {
+          gameState.stats.wins++;
+          gameState.stats.totalWon += (winnings - bet);
+          gameState.stats.bestWin = Math.max(gameState.stats.bestWin, winnings - bet);
+        }
+        saveStats();
+        updateStatsDisplay();
+        
+        // Show result
+        if (winnings > bet) {
+          updateBalance(winnings);
+          const profit = winnings - bet;
+          showResult(`🎉 ${multiplier}x! Won ${winnings} chips! (+${profit})`, 'win');
           
-          if (multiplier >= 2) {
-            showNotification('🎉 JACKPOT! You won ' + winAmount + ' chips with ' + multiplier + 'x multiplier!', 'win', 5000);
-          } else if (multiplier >= 1) {
-            showNotification('🎯 Good hit! You won ' + winAmount + ' chips with ' + multiplier + 'x multiplier!', 'win');
-          } else {
-            showNotification('💸 Small win: ' + winAmount + ' chips with ' + multiplier + 'x multiplier', 'info');
+          if (typeof showToast === 'function') {
+            showToast(`🎉 ${multiplier}x! Won ${winnings} chips!`, 'success');
           }
-          
-          document.getElementById('last-result').innerHTML = 
-            '🎉 Last Drop: ' + multiplier + 'x multiplier → Won ' + winAmount + ' chips!';
+        } else if (winnings === bet) {
+          updateBalance(winnings);
+          showResult(`🤝 ${multiplier}x - Broke even!`, '');
         } else {
-          document.getElementById('last-result').innerHTML = 
-            '💸 Last Drop: ' + multiplier + 'x multiplier → Lost ' + betAmount + ' chips';
-          showNotification('💸 Ball landed in ' + multiplier + 'x slot - better luck next time!', 'lose');
+          if (winnings > 0) {
+            updateBalance(winnings);
+            const loss = bet - winnings;
+            showResult(`💔 ${multiplier}x - Lost ${loss} chips`, 'lose');
+          } else {
+            showResult(`💔 ${multiplier}x - Lost ${bet} chips`, 'lose');
+          }
         }
         
-        // Reset for next drop
-        setTimeout(() => {
-          ball.style.display = 'none';
-          slot.style.background = '';
-          slot.style.color = '';
-          isDropping = false;
-          document.getElementById('drop-btn').disabled = false;
-        }, 2000);
-      }, 500);
+        gameState.isDropping = false;
+        document.getElementById('new-game-btn').style.display = 'inline-flex';
+        updateUI();
+      }, 3000);
     }
-
-    function updateBalanceDisplay() {
-      document.getElementById('balance').textContent = getCasinoBalance();
+    
+    // Get random slot with center bias
+    function getRandomSlot() {
+      // Use weighted random to favor center slots
+      const weights = [1, 2, 4, 6, 4, 3, 1]; // Center slots have higher weights
+      const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+      
+      let random = Math.random() * totalWeight;
+      for (let i = 0; i < weights.length; i++) {
+        random -= weights[i];
+        if (random <= 0) {
+          return i;
+        }
+      }
+      
+      return weights.length - 1; // Fallback
     }
-
-    // Initialize when page loads
-    document.addEventListener('DOMContentLoaded', initPlinko);
+    
+    // Start new game
+    function newGame() {
+      gameState.isDropping = false;
+      document.getElementById('new-game-btn').style.display = 'none';
+      showResult('Set your bet and drop the ball to play!', '');
+      updateUI();
+    }
+    
+    // Show result message
+    function showResult(message, type) {
+      const resultEl = document.getElementById('result-message');
+      resultEl.textContent = message;
+      resultEl.className = `result-message ${type}`;
+    }
   </script>
 </body>
 </html>

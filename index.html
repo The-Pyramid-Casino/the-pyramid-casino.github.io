@@ -4,420 +4,341 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pyramid Casino - Free Online Entertainment Casino Games</title>
-  <meta name="description" content="Pyramid Casino is a free, fun experiment—an Ancient Egypt-themed online casino for entertainment only. No real money or payments involved." />
-  <meta name="keywords" content="Pyramid Casino, free online casino, ancient Egypt, slots, blackjack, roulette, entertainment, play for fun" />
+  <title>Pyramid Casino - Modern Free Online Casino Games | Entertainment Only</title>
+  <meta name="description" content="Experience the future of online gaming at Pyramid Casino! Modern UI, sleek design, and exciting free casino games including slots, blackjack, roulette, and more. Play for fun - no real money involved." />
+  <meta name="keywords" content="Pyramid Casino, free online casino, modern casino games, ancient Egypt slots, free blackjack, free roulette, entertainment casino, play for fun, modern UI casino" />
   <meta name="author" content="Pyramid Casino Team" />
+  <meta name="robots" content="index, follow" />
+  <meta name="language" content="English" />
+  <meta name="theme-color" content="#667eea" />
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://the-pyramid-casino.github.io/" />
+  
+  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Pyramid Casino" />
-  <meta property="og:description" content="Experience the thrill of ancient Egypt with Pyramid Casino! Play exciting games, win big, and enjoy a free, fun casino experience." />
+  <meta property="og:title" content="Pyramid Casino - Modern Free Online Casino Games" />
+  <meta property="og:description" content="Experience the future of online gaming with our modern, sleek casino. Free games, stunning UI, entertainment only!" />
   <meta property="og:image" content="https://the-pyramid-casino.github.io/assets/pyramid-casino-og-image.png" />
   <meta property="og:url" content="https://the-pyramid-casino.github.io/" />
   <meta property="og:site_name" content="Pyramid Casino" />
+  <meta property="og:locale" content="en_US" />
+  
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Pyramid Casino" />
-  <meta name="twitter:description" content="Pyramid Casino is a free, fun Ancient Egypt-themed casino. No real money, just entertainment!" />
+  <meta name="twitter:title" content="Pyramid Casino - Modern Free Online Casino Games" />
+  <meta name="twitter:description" content="Modern UI casino with free games - slots, blackjack, roulette and more. Entertainment only, no real money!" />
   <meta name="twitter:image" content="https://the-pyramid-casino.github.io/assets/pyramid-casino-og-image.png" />
+  <meta name="twitter:site" content="@PyramidCasino" />
+  
+  <!-- Additional SEO Meta Tags -->
+  <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE" />
+  <meta name="msvalidate.01" content="YOUR_BING_VERIFICATION_CODE" />
+  
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Pyramid Casino",
+    "description": "Modern free online casino with stunning UI and exciting games for entertainment only",
+    "url": "https://the-pyramid-casino.github.io/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://the-pyramid-casino.github.io/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Pyramid Casino",
+      "url": "https://the-pyramid-casino.github.io/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://the-pyramid-casino.github.io/favicon.ico"
+      }
+    },
+    "mainEntity": {
+      "@type": "Game",
+      "name": "Pyramid Casino Games",
+      "description": "Collection of free online casino games including slots, blackjack, roulette, poker, and more",
+      "gameLocation": "Online",
+      "numberOfPlayers": "1",
+      "audience": {
+        "@type": "Audience",
+        "suggestedMinAge": 18
+      }
+    }
+  }
+  </script>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="shared-modern.css" />
-  <style>
-    /* Accessibility base styles */
-    * {
-      box-sizing: border-box;
-    }
-    
-    html {
-      scroll-behavior: smooth;
-    }
-    
-    /* Screen reader only content */
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-    
-    /* Focus indicators - WCAG compliant */
-    *:focus {
-      outline: 3px solid #f9d923;
-      outline-offset: 2px;
-    }
-    
-    /* High contrast mode support */
-    @media (prefers-contrast: high) {
-      .header {
-        border-bottom: 3px solid #fff;
-      }
-      .game-card {
-        border: 2px solid #fff;
-      }
-      .primary-btn, .game-card button, .game-card a {
-        border: 2px solid #000;
-      }
-    }
-    
-    /* Reduced motion support */
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-      html {
-        scroll-behavior: auto;
-      }
-    }
-    
-    /* Color contrast improvements */
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      background: #18122b;
-      color: #f3e9dc;
-      min-height: 100vh;
-      line-height: 1.6;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #a0843a;
-      color: #fff;
-      padding: 1rem 2rem;
-    }
-    .logo {
-      font-weight: bold;
-      font-size: 1.5rem;
-      letter-spacing: 2px;
-    }
-    .header nav ul {
-      list-style: none;
-      display: flex;
-      gap: 1.2rem;
-      margin: 0;
-      padding: 0;
-    }
-    .header nav a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    .header nav a:hover,
-    .header nav a:focus {
-      color: #f3e9dc;
-      text-shadow: 0 0 5px #f9d923;
-    }
-    .main-content {
-      padding: 2rem 1rem 3rem 1rem;
-      min-height: 60vh;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .balance-row {
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.5rem;
-      align-items: center;
-      margin-bottom: 1rem;
-      font-size: 1.12rem;
-      color: #ffe277;
-      font-weight: bold;
-    }
-    .reset-btn {
-      margin-left: 10px;
-      background: #43c734;
-      color: #fff;
-      border-radius: 8px;
-      border: none;
-      font-size: 0.97rem;
-      font-weight: bold;
-      padding: 0.28em 1.1em;
-      cursor: pointer;
-      box-shadow: 0 2px 6px #0002;
-      transition: background 0.15s;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .reset-btn:hover,
-    .reset-btn:focus {
-      background: #2ea827;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(46, 168, 39, 0.3);
-    }
-    .home {
-      text-align: center;
-    }
-    .primary-btn {
-      display: inline-block;
-      margin-top: 1.5rem;
-      background: #f9d923;
-      color: #18122b;
-      padding: 0.8rem 2.2rem;
-      border: none;
-      border-radius: 25px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      text-decoration: none;
-      transition: background 0.2s;
-      box-shadow: 0 4px 8px #0003;
-    }
-    .primary-btn:hover,
-    .primary-btn:focus {
-      background: #ffe277;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.4);
-    }
-    .games-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      justify-content: center;
-      margin-top: 2rem;
-    }
-    .game-card {
-      background: #231b36;
-      padding: 1.5rem;
-      border-radius: 18px;
-      box-shadow: 0 4px 12px #0005;
-      width: 240px;
-      text-align: center;
-    }
-    .game-card h3 {
-      color: #f9d923;
-      margin-bottom: 0.5rem;
-    }
-    .game-card button,
-    .game-card a {
-      margin-top: 1rem;
-      background: #a0843a;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.5rem 1.2rem;
-      font-size: 1rem;
-      text-decoration: none;
-      font-weight: bold;
-      display: inline-block;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .game-card button[disabled] {
-      cursor: not-allowed;
-      opacity: 0.7;
-    }
-    .game-card a:hover,
-    .game-card a:focus,
-    .game-card button:hover,
-    .game-card button:focus {
-      background: #f9d923;
-      color: #18122b;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(249, 217, 35, 0.3);
-    }
-    .notice {
-      background: #f9d923;
-      color: #18122b;
-      border-radius: 8px;
-      padding: 1rem 1.5rem;
-      margin: 1.5rem auto 2rem auto;
-      font-weight: bold;
-      max-width: 550px;
-      box-shadow: 0 2px 8px #0002;
-      text-align: center;
-    }
-    .footer {
-      margin-top: 3rem;
-    }
-    @media (max-width: 700px) {
-      .games-list {
-        flex-direction: column;
-        align-items: center;
-      }
-      .main-content {
-        padding: 1rem 0.5rem 2.5rem 0.5rem;
-      }
-      .notice {
-        padding: 0.7rem 0.7rem;
-      }
-    }
-  </style>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-
-  gtag("config", "G-V9DHVKBD85");
-</script>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-V9DHVKBD85");
+  </script>
 </head>
 <body>
-  <header class="header" role="banner">
-    <div class="logo">
-      <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
-    </div>
-    <nav role="navigation" aria-label="Main navigation">
-      <ul>
-        <li><a href="index.html" aria-current="page">Home</a></li>
-        <li><a href="#games" aria-describedby="games-section">Games</a></li>
-        <li><a href="topup.html">Top Up</a></li>
-        <li><a href="history.html">History</a></li>
-        <li><a href="https://forms.gle/QYQqh72sSuweCue49" target="_blank" rel="noopener" aria-label="Suggest A Game - opens in new window">Suggest A Game</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main class="main-content" role="main">
-    <div class="balance-row" role="group" aria-labelledby="balance-heading">
+  <!-- Skip link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Minimal Apple-style Navbar -->
+  <nav class="navbar" role="banner">
+    <a href="index.html" class="navbar-brand" aria-current="page">
+      <span role="img" aria-label="pyramid">🏜️</span>
+      Pyramid Casino
+    </a>
+    
+    <ul class="navbar-nav" role="navigation" aria-label="Main navigation">
+      <li><a href="index.html" class="nav-link active" aria-current="page">Home</a></li>
+      <li><a href="#games" class="nav-link" aria-describedby="games-section">Games</a></li>
+      <li><a href="topup.html" class="nav-link">Top Up</a></li>
+      <li><a href="history.html" class="nav-link">History</a></li>
+      <li><a href="https://forms.gle/QYQqh72sSuweCue49" class="nav-link" target="_blank" rel="noopener" aria-label="Suggest A Game - opens in new window">Suggest</a></li>
+      <li>
+        <button 
+          class="theme-toggle" 
+          onclick="toggleTheme()" 
+          aria-label="Toggle between light and dark theme"
+          title="Toggle theme"
+        >
+          <span id="theme-icon">🌙</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+  
+  <main id="main-content" class="main-content container" role="main">
+    <!-- Balance Bar -->
+    <div class="balance-bar" role="group" aria-labelledby="balance-heading">
       <h2 id="balance-heading" class="sr-only">Account Balance</h2>
       <span>Chips: <span id="balance" aria-live="polite">1000</span></span>
-      <a href="topup.html" class="reset-btn" aria-label="Go to top up page to add more chips">💳 Top Up</a>
-    </div>
-    <div class="notice" role="alert">
-      <span>✨ <strong>FOR ENTERTAINMENT ONLY!</strong> ✨<br>
-      Pyramid Casino is a <b>FREE, FUN EXPERIMENT</b> - No real money involved and no payments accepted!<br>
-      🎮 Enjoy playing for entertainment only! 🎮</span>
-    </div>
-    <section class="home">
-      <h1>Welcome to Pyramid Casino</h1>
-      <p>
-        Experience the thrill of ancient Egypt with our exclusive online casino! Play exciting games, win big, and discover the secrets of the pyramid.
-      </p>
-      <a class="primary-btn" href="#games" aria-describedby="play-now-help">
-        Play Now
+      <a href="topup.html" class="btn btn-secondary btn-sm" aria-label="Go to top up page to add more chips">
+        💳 Top Up
       </a>
-      <div id="play-now-help" class="sr-only">Skip to games section to start playing</div>
+    </div>
+    
+    <!-- Entertainment Notice -->
+    <div class="glass-card text-center" role="alert" style="background: rgba(255, 215, 0, 0.15); border-color: rgba(255, 215, 0, 0.3);">
+      <strong>✨ FOR ENTERTAINMENT ONLY! ✨</strong><br>
+      Pyramid Casino is a <strong>FREE, FUN EXPERIMENT</strong> - No real money involved and no payments accepted!<br>
+      🎮 Enjoy playing for entertainment only! 🎮
+    </div>
+    
+    <!-- Hero Section -->
+    <section class="section text-center" itemscope itemtype="https://schema.org/WebSite">
+      <h1 class="game-title" itemprop="name">Welcome to Pyramid Casino</h1>
+      <p class="game-subtitle" itemprop="description">
+        Experience the future of online gaming with our modern, sleek interface and exciting casino games. 
+        Cutting-edge design meets classic entertainment in this next-generation gaming experience.
+      </p>
+      <a class="btn btn-primary btn-lg" href="#games" aria-describedby="play-now-help" itemprop="url">
+        🎮 Start Playing
+      </a>
+      <div id="play-now-help" class="sr-only">Navigate to games section to start playing</div>
     </section>
-    <section id="games" aria-labelledby="games-heading">
-      <h2 id="games-heading" style="text-align:center;margin-top:3rem;">Our Games</h2>
-      <div class="games-list" role="group" aria-labelledby="games-list-heading">
+    
+    <!-- Games Section -->
+    <section id="games" class="section" aria-labelledby="games-heading">
+      <h2 id="games-heading" class="game-title text-center">Our Games</h2>
+      <div class="game-grid" role="group" aria-labelledby="games-list-heading">
         <h3 id="games-list-heading" class="sr-only">Available casino games</h3>
+        
         <div class="game-card">
-          <h3>Slots</h3>
+          <h3>🎰 Slots</h3>
           <p>Spin the reels and match ancient Egyptian symbols to win treasures.</p>
-          <button class="instructions-btn" onclick="showInstructions('Slots', GAME_INSTRUCTIONS['Slots'])" aria-label="Show instructions for Slots game">ℹ️ How to Play</button>
-          <a href="slots.html" aria-label="Play Slots game">Play Slots</a>
+          <button class="btn btn-secondary btn-sm" onclick="showInstructions('Slots', GAME_INSTRUCTIONS['Slots'])" aria-label="Show instructions for Slots game">
+            ℹ️ How to Play
+          </button>
+          <a href="slots.html" class="btn btn-primary btn-sm" aria-label="Play Slots game">Play Now</a>
         </div>
+        
         <div class="game-card">
-          <h3>Blackjack</h3>
+          <h3>🃏 Blackjack</h3>
           <p>Beat the dealer in our classic blackjack game.</p>
-          <button class="instructions-btn" onclick="showInstructions('Blackjack', GAME_INSTRUCTIONS['Blackjack'])" aria-label="Show instructions for Blackjack game">ℹ️ How to Play</button>
-          <a href="blackjack.html" aria-label="Play Blackjack game">Play Blackjack</a>
+          <button class="btn btn-secondary btn-sm" onclick="showInstructions('Blackjack', GAME_INSTRUCTIONS['Blackjack'])" aria-label="Show instructions for Blackjack game">
+            ℹ️ How to Play
+          </button>
+          <a href="blackjack.html" class="btn btn-primary btn-sm" aria-label="Play Blackjack game">Play Now</a>
         </div>
+        
         <div class="game-card">
-          <h3>Roulette</h3>
+          <h3>🎯 Roulette</h3>
           <p>Place your bets on the lucky numbers and spin the wheel.</p>
-          <button class="instructions-btn" onclick="showInstructions('Roulette', GAME_INSTRUCTIONS['Roulette'])" aria-label="Show instructions for Roulette game">ℹ️ How to Play</button>
-          <a href="roulette.html" aria-label="Play Roulette game">Play Roulette</a>
+          <button class="btn btn-secondary btn-sm" onclick="showInstructions('Roulette', GAME_INSTRUCTIONS['Roulette'])" aria-label="Show instructions for Roulette game">
+            ℹ️ How to Play
+          </button>
+          <a href="roulette.html" class="btn btn-primary btn-sm" aria-label="Play Roulette game">Play Now</a>
         </div>
+        
         <div class="game-card">
-          <h3>Poker</h3>
+          <h3>🃖 Poker</h3>
           <p>Five-card draw poker with royal payouts and classic gameplay.</p>
-          <button class="instructions-btn" onclick="showInstructions('Poker', GAME_INSTRUCTIONS['Poker'])" aria-label="Show instructions for Poker game">ℹ️ How to Play</button>
-          <a href="poker.html" aria-label="Play Poker game">Play Poker</a>
+          <button class="btn btn-secondary btn-sm" onclick="showInstructions('Poker', GAME_INSTRUCTIONS['Poker'])" aria-label="Show instructions for Poker game">
+            ℹ️ How to Play
+          </button>
+          <a href="poker.html" class="btn btn-primary btn-sm" aria-label="Play Poker game">Play Now</a>
         </div>
+        
         <div class="game-card">
-          <h3>Dice</h3>
+          <h3>🎲 Dice</h3>
           <p>Roll the dice and bet on outcomes for exciting wins.</p>
-          <button class="instructions-btn" onclick="showInstructions('Dice', GAME_INSTRUCTIONS['Dice'])" aria-label="Show instructions for Dice game">ℹ️ How to Play</button>
-          <a href="dice.html" aria-label="Play Dice game">Play Dice</a>
+          <button class="btn btn-secondary btn-sm" onclick="showInstructions('Dice', GAME_INSTRUCTIONS['Dice'])" aria-label="Show instructions for Dice game">
+            ℹ️ How to Play
+          </button>
+          <a href="dice.html" class="btn btn-primary btn-sm" aria-label="Play Dice game">Play Now</a>
         </div>
+        
         <div class="game-card">
-          <h3>Baccarat</h3>
+          <h3>🃏 Baccarat</h3>
           <p>Classic baccarat with elegant gameplay and simple rules.</p>
-          <button class="instructions-btn" onclick="showInstructions('Baccarat', GAME_INSTRUCTIONS['Baccarat'])" aria-label="Show instructions for Baccarat game">ℹ️ How to Play</button>
-          <a href="baccarat.html" aria-label="Play Baccarat game">Play Baccarat</a>
+          <button class="btn btn-secondary btn-sm" onclick="showInstructions('Baccarat', GAME_INSTRUCTIONS['Baccarat'])" aria-label="Show instructions for Baccarat game">
+            ℹ️ How to Play
+          </button>
+          <a href="baccarat.html" class="btn btn-primary btn-sm" aria-label="Play Baccarat game">Play Now</a>
         </div>
+        
         <div class="game-card">
-          <h3>Keno</h3>
+          <h3>🎱 Keno</h3>
           <p>Pick your lucky numbers in this classic lottery-style game.</p>
-          <button class="instructions-btn" onclick="showInstructions('Keno', GAME_INSTRUCTIONS['Keno'])" aria-label="Show instructions for Keno game">ℹ️ How to Play</button>
-          <a href="keno.html" aria-label="Play Keno game">Play Keno</a>
+          <button class="btn btn-secondary btn-sm" onclick="showInstructions('Keno', GAME_INSTRUCTIONS['Keno'])" aria-label="Show instructions for Keno game">
+            ℹ️ How to Play
+          </button>
+          <a href="keno.html" class="btn btn-primary btn-sm" aria-label="Play Keno game">Play Now</a>
         </div>
+        
         <div class="game-card">
-          <h3>Coin Flip</h3>
+          <h3>🪙 Coin Flip</h3>
           <p>Flip the coin and trust your instincts to double your bet.</p>
-          <button class="instructions-btn" onclick="showInstructions('Coin Flip', GAME_INSTRUCTIONS['Coin Flip'])" aria-label="Show instructions for Coin Flip game">ℹ️ How to Play</button>
-          <a href="coinflip.html" aria-label="Play Coin Flip game">Play Coin Flip</a>
+          <button class="btn btn-secondary btn-sm" onclick="showInstructions('Coin Flip', GAME_INSTRUCTIONS['Coin Flip'])" aria-label="Show instructions for Coin Flip game">
+            ℹ️ How to Play
+          </button>
+          <a href="coinflip.html" class="btn btn-primary btn-sm" aria-label="Play Coin Flip game">Play Now</a>
         </div>
+        
         <div class="game-card">
-          <h3>Plinko</h3>
+          <h3>🎯 Plinko</h3>
           <p>Drop the ball through pegs and win big in the prize slots!</p>
-          <button class="instructions-btn" onclick="showInstructions('Plinko', GAME_INSTRUCTIONS['Plinko'])" aria-label="Show instructions for Plinko game">ℹ️ How to Play</button>
-          <a href="plinko.html" aria-label="Play Plinko game">Play Plinko</a>
-        </div>
-
-        <div class="game-card">
-          <h3>Coin Pusher</h3>
-          <p>Push coins to win big prizes and bonus rewards!</p>
-          <button class="instructions-btn" onclick="showInstructions('Coin Pusher', GAME_INSTRUCTIONS['Coin Pusher'])" aria-label="Show instructions for Coin Pusher game">ℹ️ How to Play</button>
-          <a href="coinpusher.html" aria-label="Play Coin Pusher game">Play Coin Pusher</a>
+          <button class="btn btn-secondary btn-sm" onclick="showInstructions('Plinko', GAME_INSTRUCTIONS['Plinko'])" aria-label="Show instructions for Plinko game">
+            ℹ️ How to Play
+          </button>
+          <a href="plinko.html" class="btn btn-primary btn-sm" aria-label="Play Plinko game">Play Now</a>
         </div>
       </div>
     </section>
-    <section id="about" style="margin-top:3rem;text-align:center;" aria-labelledby="about-heading">
-      <h2 id="about-heading">About Pyramid Casino</h2>
-      <p>
-        Pyramid Casino offers a unique online gaming experience inspired by the wonders of ancient Egypt.<br>
+    
+    <!-- About Section -->
+    <section id="about" class="section text-center glass-card" aria-labelledby="about-heading" itemscope itemtype="https://schema.org/Organization">
+      <h2 id="about-heading" itemprop="name">About Pyramid Casino</h2>
+      <p itemprop="description">
+        Pyramid Casino offers a cutting-edge online gaming experience with modern UI design and sleek functionality.<br>
         <strong>This is a fun project - not a real casino.</strong>
       </p>
-      <ul style="display:inline-block;text-align:left;margin-top:1.2rem;" aria-label="Casino features">
-        <li>Safe & Secure</li>
-        <li>No money or prizes involved</li>
-        <li>For entertainment only</li>
+      <ul style="display:inline-block;text-align:left;margin-top:1.2rem;" aria-label="Casino features" itemprop="areaServed">
+        <li>🔒 Safe & Secure</li>
+        <li>🎮 No money or prizes involved</li>
+        <li>✨ For entertainment only</li>
+        <li>📱 Modern responsive design</li>
+        <li>🎨 Sleek user interface</li>
       </ul>
     </section>
   </main>
-  <footer class="footer" role="contentinfo">
-    <div style="padding: 10px 0;">
+  
+  <!-- Footer -->
+  <footer class="glass-surface text-center" role="contentinfo" style="padding: 2rem; margin-top: 3rem;">
+    <div>
       <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
       <p style="margin: 5px 0; font-size: 1.1rem;">
         📧 <strong>Contact us:</strong> 
-        <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;" aria-label="Send email to casino.the.pyramid@gmail.com">casino.the.pyramid@gmail.com</a>
+        <a href="mailto:casino.the.pyramid@gmail.com" style="color: var(--theme-text-primary); text-decoration: none;" aria-label="Send email to casino.the.pyramid@gmail.com">
+          casino.the.pyramid@gmail.com
+        </a>
       </p>
-      <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
+      <p style="margin: 5px 0; font-size: 0.9rem; color: var(--theme-text-muted);">
         💰 No real money gambling | 🔞 18+ for entertainment
       </p>
     </div>
   </footer>
+  
+  <!-- Toast notification container -->
+  <div class="toast-container" id="toast-container"></div>
+  
+  <!-- Scripts -->
+  <script src="theme.js"></script>
   <script src="admin-config.js"></script>
   <script src="shared-modern.js"></script>
+  
   <script>
-    // Use secure balance checking and anti-cheat
+    // Theme toggle functionality
+    function updateThemeIcon() {
+      const themeIcon = document.getElementById('theme-icon');
+      const currentTheme = getCurrentTheme();
+      themeIcon.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+    }
+    
+    // Listen for theme changes
+    window.addEventListener('themeChanged', updateThemeIcon);
+    
+    // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize balance display with anti-cheat protection
-        var balanceEl = document.getElementById('balance');
-        if (balanceEl) {
-            // Check if user is banned first
-            if (typeof getBanStatus === 'function' && getBanStatus()) {
-                balanceEl.textContent = '0';
-                if (typeof showBanScreen === 'function') {
-                    showBanScreen();
-                }
-                return;
-            }
-            
-            // Use secure balance function if available
-            if (typeof getCasinoBalanceSecure === 'function') {
-                balanceEl.textContent = getCasinoBalanceSecure();
-            } else if (typeof getCasinoBalance === 'function') {
-                balanceEl.textContent = getCasinoBalance();
-            } else {
-                // Fallback
-                let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-                if (isNaN(bal)) bal = 1000;
-                balanceEl.textContent = bal;
-            }
+      // Initialize theme icon
+      updateThemeIcon();
+      
+      // Initialize balance display with anti-cheat protection
+      var balanceEl = document.getElementById('balance');
+      if (balanceEl) {
+        // Check if user is banned first
+        if (typeof getBanStatus === 'function' && getBanStatus()) {
+          balanceEl.textContent = '0';
+          if (typeof showBanScreen === 'function') {
+            showBanScreen();
+          }
+          return;
         }
         
-        document.getElementById('year').textContent = new Date().getFullYear();
+        // Use secure balance function if available
+        if (typeof getCasinoBalanceSecure === 'function') {
+          balanceEl.textContent = getCasinoBalanceSecure();
+        } else if (typeof getCasinoBalance === 'function') {
+          balanceEl.textContent = getCasinoBalance();
+        } else {
+          // Fallback
+          let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+          if (isNaN(bal)) bal = 1000;
+          balanceEl.textContent = bal;
+        }
+      }
+      
+      // Update session stats display
+      // updateSessionStatsDisplay();
+      
+      // Update session stats every 30 seconds
+      // setInterval(updateSessionStatsDisplay, 30000);
+      
+      document.getElementById('year').textContent = new Date().getFullYear();
     });
+    
+    // Function to update session stats display - REMOVED
+    // Session stats removed from homepage per design requirements
+    /*
+    function updateSessionStatsDisplay() {
+      try {
+        if (typeof getPlayerSession === 'function') {
+          const session = getPlayerSession();
+          const sessionTimeMinutes = Math.floor((Date.now() - session.startTime) / (1000 * 60));
+          
+          document.getElementById('games-played').textContent = session.gamesPlayed || 0;
+          document.getElementById('session-time').textContent = sessionTimeMinutes + 'm';
+        }
+      } catch (e) {
+        console.error('Error updating session stats:', e);
+      }
+    }
+    */
   </script>
 </body>
 </html>

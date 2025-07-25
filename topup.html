@@ -8,46 +8,448 @@
   <meta name="description" content="Top up your chips at Pyramid Casino - add funds to continue playing your favorite games." />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="shared-modern.css" />
+  
   <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      background: #18122b;
-      color: #f3e9dc;
-      min-height: 100vh;
+    /* Page-specific styles using design system */
+    .topup-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      text-align: center;
     }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #a0843a;
-      color: #fff;
-      padding: 1rem 2rem;
+    
+    .topup-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--theme-text-primary);
+      margin-bottom: 1rem;
     }
-    .logo {
-      font-weight: bold;
+    
+    .topup-description {
+      font-size: 1.125rem;
+      color: var(--theme-text-secondary);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    
+    .current-balance {
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-lg));
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: center;
+    }
+    
+    .balance-label {
+      font-size: 1rem;
+      color: var(--theme-text-muted);
+      margin-bottom: 0.5rem;
+    }
+    
+    .balance-amount {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--theme-text-primary);
+      margin-bottom: 1rem;
+    }
+    
+    .topup-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .topup-option {
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-lg));
+      border: 2px solid var(--theme-border-secondary);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem 1rem;
+      cursor: pointer;
+      transition: all var(--transition-base);
+      text-align: center;
+    }
+    
+    .topup-option:hover {
+      border-color: var(--theme-border-primary);
+      transform: translateY(-2px);
+      background: var(--theme-bg-secondary);
+    }
+    
+    .topup-option.selected {
+      border-color: var(--theme-info);
+      background: rgba(59, 130, 246, 0.1);
+    }
+    
+    .option-amount {
       font-size: 1.5rem;
-      letter-spacing: 2px;
+      font-weight: 700;
+      color: var(--theme-text-primary);
+      margin-bottom: 0.5rem;
     }
-    .header nav ul {
-      list-style: none;
+    
+    .option-label {
+      font-size: 0.875rem;
+      color: var(--theme-text-muted);
+    }
+    
+    .custom-amount {
+      margin: 2rem 0;
+    }
+    
+    .custom-input {
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-lg);
+      color: var(--theme-text-primary);
+      font-size: 1.25rem;
+      padding: 1rem;
+      text-align: center;
+      outline: none;
+      transition: all var(--transition-fast);
+      width: 200px;
+      max-width: 100%;
+    }
+    
+    .custom-input:focus {
+      border-color: var(--theme-border-focus);
+      background: var(--theme-bg-glass);
+    }
+    
+    .topup-actions {
       display: flex;
-      gap: 1.2rem;
-      margin: 0;
-      padding: 0;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 2rem 0;
     }
-    .header nav a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
+    
+    .disclaimer {
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-lg));
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      text-align: center;
+      color: var(--theme-text-secondary);
     }
-    .header nav a:hover {
-      color: #f3e9dc;
-      text-shadow: 0 0 5px #f9d923;
+    
+    .disclaimer strong {
+      color: var(--theme-text-primary);
     }
-    .main-content {
-      padding: 2rem 1rem 3rem 1rem;
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .topup-options {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .topup-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .balance-amount {
+        font-size: 2.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .topup-options {
+        grid-template-columns: 1fr;
+      }
+      
+      .option-amount {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Consistent Navbar -->
+  <nav class="navbar" role="banner">
+    <a href="index.html" class="navbar-brand">
+      <span role="img" aria-label="pyramid">🏜️</span>
+      Pyramid Casino
+    </a>
+    
+    <ul class="navbar-nav" role="navigation" aria-label="Main navigation">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="index.html#games" class="nav-link">Games</a></li>
+      <li><a href="topup.html" class="nav-link active" aria-current="page">Top Up</a></li>
+      <li><a href="history.html" class="nav-link">History</a></li>
+      <li><a href="https://forms.gle/QYQqh72sSuweCue49" class="nav-link" target="_blank" rel="noopener">Suggest</a></li>
+      <li>
+        <button 
+          class="theme-toggle" 
+          onclick="toggleTheme()" 
+          aria-label="Toggle between light and dark theme"
+          title="Toggle theme"
+        >
+          <span id="theme-icon">🌙</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+  
+  <main id="main-content" class="main-content container" role="main">
+    <!-- Back to Menu -->
+    <div style="margin-bottom: 2rem;">
+      <a href="index.html" class="btn btn-secondary btn-sm">← Back to Menu</a>
+    </div>
+    
+    <!-- Top Up Container -->
+    <div class="topup-container">
+      <h1 class="topup-title">💳 Top Up</h1>
+      <p class="topup-description">
+        Add chips to your account to continue playing your favorite casino games.
+      </p>
+      
+      <!-- Current Balance -->
+      <div class="current-balance">
+        <div class="balance-label">Current Balance</div>
+        <div class="balance-amount" id="current-balance">1000</div>
+        <div style="color: var(--theme-text-muted); font-size: 0.875rem;">chips</div>
+      </div>
+      
+      <!-- Top Up Options -->
+      <div class="topup-options" role="group" aria-labelledby="topup-options-heading">
+        <h2 id="topup-options-heading" class="sr-only">Top up amount options</h2>
+        
+        <div class="topup-option" onclick="selectAmount(100)" data-amount="100">
+          <div class="option-amount">100</div>
+          <div class="option-label">Starter</div>
+        </div>
+        
+        <div class="topup-option" onclick="selectAmount(500)" data-amount="500">
+          <div class="option-amount">500</div>
+          <div class="option-label">Standard</div>
+        </div>
+        
+        <div class="topup-option" onclick="selectAmount(1000)" data-amount="1000">
+          <div class="option-amount">1000</div>
+          <div class="option-label">Popular</div>
+        </div>
+        
+        <div class="topup-option" onclick="selectAmount(2500)" data-amount="2500">
+          <div class="option-amount">2500</div>
+          <div class="option-label">Premium</div>
+        </div>
+        
+        <div class="topup-option" onclick="selectAmount(5000)" data-amount="5000">
+          <div class="option-amount">5000</div>
+          <div class="option-label">VIP</div>
+        </div>
+        
+        <div class="topup-option" onclick="selectAmount(10000)" data-amount="10000">
+          <div class="option-amount">10000</div>
+          <div class="option-label">Elite</div>
+        </div>
+      </div>
+      
+      <!-- Custom Amount -->
+      <div class="custom-amount">
+        <label for="custom-amount-input" style="display: block; margin-bottom: 1rem; color: var(--theme-text-secondary); font-weight: 600;">
+          Or enter custom amount:
+        </label>
+        <input 
+          type="number" 
+          id="custom-amount-input" 
+          class="custom-input" 
+          placeholder="Enter amount" 
+          min="1" 
+          max="100000"
+          oninput="handleCustomAmount()"
+        />
+      </div>
+      
+      <!-- Actions -->
+      <div class="topup-actions">
+        <button id="topup-btn" class="btn btn-primary btn-lg" onclick="processTopUp()" disabled>
+          💳 Add <span id="selected-amount">0</span> Chips
+        </button>
+        <button class="btn btn-secondary btn-lg" onclick="resetSelection()">
+          🔄 Reset
+        </button>
+      </div>
+      
+      <!-- Disclaimer -->
+      <div class="disclaimer" role="alert">
+        <strong>💡 FOR ENTERTAINMENT ONLY!</strong><br>
+        This is a <strong>FREE casino simulation</strong>. No real money is involved.<br>
+        Adding chips is just for fun and gameplay continuation.
+      </div>
+    </div>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="glass-surface text-center" role="contentinfo" style="padding: 2rem; margin-top: 3rem;">
+    <p>Pyramid Casino &copy; 2025 | 🎮 For Entertainment Only</p>
+  </footer>
+  
+  <!-- Toast notification container -->
+  <div class="toast-container" id="toast-container"></div>
+  
+  <!-- Scripts -->
+  <script src="theme.js"></script>
+  <script src="admin-config.js"></script>
+  <script src="shared-modern.js"></script>
+  
+  <script>
+    let selectedAmount = 0;
+    
+    // Theme toggle functionality
+    function updateThemeIcon() {
+      const themeIcon = document.getElementById('theme-icon');
+      const currentTheme = getCurrentTheme();
+      themeIcon.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+    }
+    
+    // Listen for theme changes
+    window.addEventListener('themeChanged', updateThemeIcon);
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      updateThemeIcon();
+      updateCurrentBalance();
+    });
+    
+    // Update current balance display
+    function updateCurrentBalance() {
+      const balanceEl = document.getElementById('current-balance');
+      if (typeof getCasinoBalanceSecure === 'function') {
+        balanceEl.textContent = getCasinoBalanceSecure();
+      } else if (typeof getCasinoBalance === 'function') {
+        balanceEl.textContent = getCasinoBalance();
+      } else {
+        let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+        if (isNaN(bal)) bal = 1000;
+        balanceEl.textContent = bal;
+      }
+    }
+    
+    // Select amount option
+    function selectAmount(amount) {
+      // Clear previous selections
+      document.querySelectorAll('.topup-option').forEach(option => {
+        option.classList.remove('selected');
+      });
+      
+      // Select new option
+      const selectedOption = document.querySelector(`[data-amount="${amount}"]`);
+      if (selectedOption) {
+        selectedOption.classList.add('selected');
+      }
+      
+      // Clear custom input
+      document.getElementById('custom-amount-input').value = '';
+      
+      // Update selected amount
+      selectedAmount = amount;
+      updateTopUpButton();
+    }
+    
+    // Handle custom amount input
+    function handleCustomAmount() {
+      const customInput = document.getElementById('custom-amount-input');
+      const amount = parseInt(customInput.value);
+      
+      // Clear option selections
+      document.querySelectorAll('.topup-option').forEach(option => {
+        option.classList.remove('selected');
+      });
+      
+      if (amount && amount > 0) {
+        selectedAmount = amount;
+      } else {
+        selectedAmount = 0;
+      }
+      
+      updateTopUpButton();
+    }
+    
+    // Update top up button state
+    function updateTopUpButton() {
+      const topUpBtn = document.getElementById('topup-btn');
+      const amountSpan = document.getElementById('selected-amount');
+      
+      amountSpan.textContent = selectedAmount;
+      
+      if (selectedAmount > 0) {
+        topUpBtn.disabled = false;
+        topUpBtn.classList.remove('btn-secondary');
+        topUpBtn.classList.add('btn-primary');
+      } else {
+        topUpBtn.disabled = true;
+        topUpBtn.classList.remove('btn-primary');
+        topUpBtn.classList.add('btn-secondary');
+      }
+    }
+    
+    // Process top up
+    function processTopUp() {
+      if (selectedAmount <= 0) return;
+      
+      // Get current balance
+      let currentBalance;
+      if (typeof getCasinoBalanceSecure === 'function') {
+        currentBalance = getCasinoBalanceSecure();
+      } else if (typeof getCasinoBalance === 'function') {
+        currentBalance = getCasinoBalance();
+      } else {
+        currentBalance = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+        if (isNaN(currentBalance)) currentBalance = 1000;
+      }
+      
+      // Add chips
+      const newBalance = currentBalance + selectedAmount;
+      
+      // Update balance
+      if (typeof setCasinoBalanceSecure === 'function') {
+        setCasinoBalanceSecure(newBalance);
+      } else if (typeof setCasinoBalance === 'function') {
+        setCasinoBalance(newBalance);
+      } else {
+        localStorage.setItem('pyramidCasinoBalance', newBalance.toString());
+      }
+      
+      // Update display
+      updateCurrentBalance();
+      
+      // Show success message
+      showNotification(`✅ Successfully added ${selectedAmount} chips!`, 'success');
+      
+      // Reset selection
+      resetSelection();
+    }
+    
+    // Reset selection
+    function resetSelection() {
+      selectedAmount = 0;
+      document.querySelectorAll('.topup-option').forEach(option => {
+        option.classList.remove('selected');
+      });
+      document.getElementById('custom-amount-input').value = '';
+      updateTopUpButton();
+    }
+    
+    // Show notification
+    function showNotification(message, type) {
+      if (typeof displayNotification === 'function') {
+        displayNotification(message, type);
+      } else {
+        alert(message);
+      }
+    }
+  </script>
+</body>
+</html>
       min-height: 60vh;
       max-width: 600px;
       margin: 0 auto;

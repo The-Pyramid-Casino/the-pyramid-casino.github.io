@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Roulette | Pyramid Casino</title>
-  <link rel="stylesheet" href="roulette.css" />
+  <meta name="description" content="Play European Roulette at Pyramid Casino. Place your bets and spin the wheel!" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="shared-modern.css" />
+  
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
   <script>
@@ -14,85 +17,382 @@
     gtag("js", new Date());
     gtag("config", "G-V9DHVKBD85");
   </script>
+  
+  <style>
+    /* Game-specific styles using design system */
+    .roulette-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      text-align: center;
+    }
+    
+    .roulette-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--theme-text-primary);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .game-area {
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-xl)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--blur-xl)) saturate(150%);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-2xl);
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: var(--shadow-glass);
+    }
+    
+    .chips-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+    
+    .chip-btn {
+      background: var(--theme-bg-surface);
+      border: 2px solid var(--theme-border-primary);
+      border-radius: var(--radius-full);
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--theme-text-primary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .chip-btn:hover {
+      background: var(--theme-bg-glass);
+      transform: scale(1.05);
+    }
+    
+    .chip-btn.selected {
+      border-color: var(--theme-border-focus);
+      background: var(--theme-border-focus);
+      color: white;
+    }
+    
+    .roulette-layout {
+      margin: 2rem auto;
+      border-collapse: separate;
+      border-spacing: 2px;
+      background: var(--theme-bg-surface);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+    }
+    
+    .num-cell, .outside-cell {
+      border: 1px solid var(--theme-border-primary);
+      padding: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      transition: all var(--transition-fast);
+      background: var(--theme-bg-surface);
+      color: var(--theme-text-primary);
+    }
+    
+    .num-cell:hover, .outside-cell:hover {
+      background: var(--theme-bg-glass);
+      transform: scale(1.02);
+    }
+    
+    .num-cell.red { background-color: #dc2626; color: white; }
+    .num-cell.black { background-color: #1f2937; color: white; }
+    .num-cell.green { background-color: #16a34a; color: white; }
+    
+    .outside-cell.red { background-color: #dc2626; color: white; }
+    .outside-cell.black { background-color: #1f2937; color: white; }
+    
+    .bet-placed {
+      box-shadow: 0 0 10px var(--theme-border-focus) !important;
+      border-color: var(--theme-border-focus) !important;
+    }
+    
+    .bet-chip {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      display: flex;
+      gap: 2px;
+      flex-wrap: wrap;
+    }
+    
+    .bet-chip-img {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      font-size: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .chip-1 { background: #6b7280; }
+    .chip-5 { background: #dc2626; }
+    .chip-25 { background: #16a34a; }
+    .chip-100 { background: #2563eb; }
+    .chip-1000 { background: #7c2d12; }
+    
+    .bet-total-label {
+      position: absolute;
+      bottom: 2px;
+      left: 2px;
+      background: var(--theme-border-focus);
+      color: white;
+      padding: 2px 4px;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    
+    .bet-summary {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+    }
+    
+    .result-area {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-lg)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(150%);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-xl);
+    }
+    
+    .spin-ball {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 1rem;
+      color: white;
+    }
+    
+    .spin-ball.red { background: #dc2626; }
+    .spin-ball.black { background: #1f2937; }
+    .spin-ball.green { background: #16a34a; }
+    
+    .spin-label {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0.5rem 0;
+    }
+    
+    .win { color: var(--theme-success); }
+    .lose { color: var(--theme-error); }
+    .push { color: var(--theme-info); }
+    
+    .game-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .roulette-layout {
+        font-size: 0.875rem;
+      }
+      
+      .num-cell, .outside-cell {
+        padding: 0.5rem;
+      }
+      
+      .chips-row {
+        gap: 0.25rem;
+      }
+      
+      .chip-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 0.875rem;
+      }
+    }
+  </style>
 </head>
 <body>
-<header class="header">
-  <div class="logo">
-    <a href="index.html" style="color:inherit;text-decoration:none;">
-      <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
+  <!-- Skip link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Consistent Navbar -->
+  <nav class="navbar" role="banner">
+    <a href="index.html" class="navbar-brand">
+      <span role="img" aria-label="pyramid">🏜️</span>
+      Pyramid Casino
     </a>
-  </div>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="index.html#games">Games</a></li>
-      <li><a href="topup.html">Top Up</a></li>
-        <li><a href="history.html">History</a></li>
-      <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
+    
+    <ul class="navbar-nav" role="navigation" aria-label="Main navigation">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="index.html#games" class="nav-link">Games</a></li>
+      <li><a href="topup.html" class="nav-link">Top Up</a></li>
+      <li><a href="history.html" class="nav-link">History</a></li>
+      <li><a href="https://forms.gle/QYQqh72sSuweCue49" class="nav-link" target="_blank" rel="noopener">Suggest</a></li>
+      <li>
+        <button 
+          class="theme-toggle" 
+          onclick="toggleTheme()" 
+          aria-label="Toggle between light and dark theme"
+          title="Toggle theme"
+        >
+          <span id="theme-icon">🌙</span>
+        </button>
+      </li>
     </ul>
   </nav>
-</header>
-<main class="main-content">
-  <section class="roulette">
-    <h1>🎯 Roulette</h1>
-    <button class="instructions-btn" onclick="showInstructions('Roulette', GAME_INSTRUCTIONS['Roulette'])" style="margin-bottom: 15px;">ℹ️ How to Play</button>
-    <div class="notice">
-      <span>✨ For fun only! No real money, just chips and luck. ✨</span>
+  
+  <main id="main-content" class="main-content container" role="main">
+    <!-- Balance Bar -->
+    <div class="balance-bar">
+      <span>Balance: <span id="chip-balance" aria-live="polite">1000</span></span>
+      <a href="topup.html" class="btn btn-secondary btn-sm">💳 Top Up</a>
     </div>
-    <div id="chip-bank">
-      <span>Chips: <span id="chip-balance">1000</span></span>
-      <button id="reset-chips" title="Reset chips to 1000">Reset</button>
+    
+    <!-- Back to Menu -->
+    <div style="margin-bottom: 1rem;">
+      <a href="index.html" class="btn btn-secondary btn-sm">← Back to Menu</a>
     </div>
-    <div id="betting-area">
-      <div class="chips-row">
-        <button class="chip-btn" data-chip="1"><span>1</span></button>
-        <button class="chip-btn" data-chip="5"><span>5</span></button>
-        <button class="chip-btn" data-chip="25"><span>25</span></button>
-        <button class="chip-btn" data-chip="100"><span>100</span></button>
-        <button class="chip-btn" data-chip="1000"><span>1000</span></button>
+    
+    <!-- Roulette Game -->
+    <div class="roulette-container">
+      <h1 class="roulette-title">🎯 Roulette</h1>
+      
+      <!-- How to Play Button -->
+      <button id="how-to-play-btn" class="btn btn-secondary btn-md" style="margin-bottom: 2rem;">
+        ℹ️ How to Play
+      </button>
+      
+      <!-- Entertainment Notice -->
+      <div class="glass-card text-center" role="alert" style="background: rgba(255, 215, 0, 0.15); border-color: rgba(255, 215, 0, 0.3); margin-bottom: 2rem;">
+        ✨ For fun only! No real money, just chips and luck. ✨
       </div>
-      <div id="roulette-table"></div>
-      <div id="bet-summary"></div>
-      <button id="clear-bets">Clear Bets</button>
-      <button id="spin-btn">Spin</button>
+      
+      <!-- Game Area -->
+      <div class="game-area">
+        <!-- Chip Selection -->
+        <div class="chips-row">
+          <button class="chip-btn" data-chip="1"><span>1</span></button>
+          <button class="chip-btn" data-chip="5"><span>5</span></button>
+          <button class="chip-btn" data-chip="25"><span>25</span></button>
+          <button class="chip-btn" data-chip="100"><span>100</span></button>
+          <button class="chip-btn" data-chip="1000"><span>1000</span></button>
+        </div>
+        
+        <!-- Roulette Table -->
+        <div id="roulette-table"></div>
+        
+        <!-- Bet Summary -->
+        <div id="bet-summary" class="bet-summary">No bets placed yet.</div>
+        
+        <!-- Game Controls -->
+        <div class="game-controls">
+          <button id="clear-bets" class="btn btn-secondary">Clear Bets</button>
+          <button id="spin-btn" class="btn btn-primary">🎯 Spin</button>
+          <button id="reset-chips" class="btn btn-warning btn-sm" title="Reset chips to 1000">Reset Chips</button>
+        </div>
+      </div>
+      
+      <!-- Result Area -->
+      <div id="result-area" class="result-area" style="display:none;">
+        <h3>Result</h3>
+        <div id="spin-result"></div>
+        <div id="payout-result"></div>
+        <button id="new-round" class="btn btn-primary">New Round</button>
+      </div>
     </div>
-    <div id="result-area" style="display:none;">
-      <h2>Result</h2>
-      <div id="spin-result"></div>
-      <div id="payout-result"></div>
-      <button id="new-round">New Round</button>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="glass-surface text-center" role="contentinfo">
+    <div>
+      <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
+      <p style="margin: 5px 0; font-size: 1.1rem;">
+        📧 <strong>Contact us:</strong> 
+        <a href="mailto:casino.the.pyramid@gmail.com" style="color: var(--theme-text-primary); text-decoration: none;" aria-label="Send email to casino.the.pyramid@gmail.com">
+          casino.the.pyramid@gmail.com
+        </a>
+      </p>
+      <p style="margin: 5px 0; font-size: 0.9rem; color: var(--theme-text-muted);">
+        💰 No real money gambling | 🔞 18+ for entertainment
+      </p>
     </div>
-    <div class="rules">
-      <h3>Roulette Rules</h3>
-      <ul>
-        <li>You have 1,000 chips. No real money, just for fun!</li>
-        <li>Click chip values, then click the table to place chips.</li>
-        <li>Inside bets: straight up (35:1), split (17:1), street (11:1), corner (8:1), six line (5:1).</li>
-        <li>Outside bets: red/black, even/odd, 1-18/19-36 pay 1:1; columns and dozens pay 2:1.</li>
-        <li>Click "Spin" to play. Click "Clear Bets" to start over.</li>
-      </ul>
-    </div>
-  </section>
-</main>
-<footer class="footer">
-  <div style="padding: 10px 0;">
-    <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
-    <p style="margin: 5px 0; font-size: 1.1rem;">
-      📧 <strong>Contact us:</strong> 
-      <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;">casino.the.pyramid@gmail.com</a>
-    </p>
-    <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
-      💰 No real money gambling | 🔞 18+ for entertainment
-    </p>
+  </footer>
+  
+  <!-- Toast notification container -->
+  <div class="toast-container" id="toast-container"></div>
+  
+  <!-- Modern Game Instructions Popup -->
+  <div class="popup-overlay" id="popup-overlay"></div>
+  <div class="popup" id="instructions-popup">
+    <div class="popup-close" onclick="hideInstructions()">×</div>
+    <h3>🎯 How to Play Roulette</h3>
+    <ul>
+      <li>Select a chip value by clicking on the chip buttons</li>
+      <li>Click on numbers or betting areas on the table to place your chips</li>
+      <li>Inside bets: straight up (35:1), split (17:1), street (11:1), corner (8:1), six line (5:1)</li>
+      <li>Outside bets: red/black, even/odd, 1-18/19-36 pay 1:1; columns and dozens pay 2:1</li>
+      <li>Click "Spin" when ready - the ball will land on a number</li>
+      <li>Winnings are automatically added to your balance</li>
+    </ul>
   </div>
-</footer>
-<script src="admin-config.js"></script>
+  
+  <!-- Scripts -->
+  <script src="theme.js"></script>
+  <script src="admin-config.js"></script>
   <script src="shared-modern.js"></script>
-<script src="admin-config.js"></script>
-  <script src="shared-modern.js"></script>
-<script>
+  
+  <script>
+    // Theme toggle functionality
+    function updateThemeIcon() {
+      const themeIcon = document.getElementById('theme-icon');
+      const currentTheme = getCurrentTheme();
+      themeIcon.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+    }
+    
+    // Listen for theme changes
+    window.addEventListener('themeChanged', updateThemeIcon);
+    
+    // Show instructions popup
+    function showInstructions() {
+      document.getElementById('popup-overlay').classList.add('show');
+      document.getElementById('instructions-popup').classList.add('show');
+    }
+    
+    // Hide instructions popup
+    function hideInstructions() {
+      document.getElementById('popup-overlay').classList.remove('show');
+      document.getElementById('instructions-popup').classList.remove('show');
+    }
+    
+    // Initialize game
+    document.addEventListener('DOMContentLoaded', function() {
+      updateThemeIcon();
+      document.getElementById('how-to-play-btn').addEventListener('click', showInstructions);
+      document.getElementById('popup-overlay').addEventListener('click', hideInstructions);
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+
 // UI Elements
-document.getElementById('year').textContent = new Date().getFullYear();
 const chipBalanceEl = document.getElementById("chip-balance");
 const resetChipsBtn = document.getElementById("reset-chips");
 const rouletteTableEl = document.getElementById("roulette-table");
@@ -398,6 +698,10 @@ function payout(spin) {
     recordGameWin('Roulette', totalWin, winDetails);
     chips = getCasinoBalance(); // Update local chips variable
     payoutResultEl.innerHTML = `<div class="win">You won ${totalWin} chips!</div>${payoutMsg}`;
+    
+    if (typeof showToast === 'function') {
+      showToast(`🎉 Won ${totalWin} chips!`, 'success');
+    }
   } else if (totalWin === 0) {
     payoutResultEl.innerHTML = `<div class="push">No net win/loss.</div>${payoutMsg}`;
   } else {
@@ -415,6 +719,6 @@ newRoundBtn.onclick = () => {
 
 renderChipsOnTable();
 updateChipDisplay();
-</script>
+  </script>
 </body>
 </html>

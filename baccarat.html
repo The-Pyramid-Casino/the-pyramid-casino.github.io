@@ -5,621 +5,762 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Baccarat | Pyramid Casino</title>
-  <meta name="description" content="Play Cleopatra's Baccarat at Pyramid Casino. Classic baccarat with Egyptian elegance!" />
+  <meta name="description" content="Play Classic Baccarat at Pyramid Casino. Bet on Player, Banker, or Tie!" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="shared-modern.css" />
+  
   <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      background: #18122b;
-      color: #f3e9dc;
-      min-height: 100vh;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #a0843a;
-      color: #fff;
-      padding: 1rem 2rem;
-    }
-    .logo {
-      font-weight: bold;
-      font-size: 1.5rem;
-      letter-spacing: 2px;
-    }
-    .header nav ul {
-      list-style: none;
-      display: flex;
-      gap: 1.2rem;
-      margin: 0;
-      padding: 0;
-    }
-    .header nav a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    .header nav a:hover {
-      color: #f3e9dc;
-      text-shadow: 0 0 5px #f9d923;
-    }
-    .main-content {
-      padding: 2rem 1rem 3rem 1rem;
-      min-height: 60vh;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .back-link {
-      color: #f9d923;
-      text-decoration: none;
-      font-weight: bold;
-      margin-bottom: 1.5rem;
-      display: inline-block;
-      transition: color 0.2s;
-    }
-    .back-link:hover {
-      color: #ffe277;
-      text-shadow: 0 0 5px #f9d923;
-    }
+    /* Game-specific styles using design system */
     .baccarat-container {
-      background: #231b36;
-      border-radius: 18px;
-      box-shadow: 0 4px 12px #0005;
-      padding: 2.2rem 1.2rem 2rem 1.2rem;
-      max-width: 600px;
-      margin: 0 auto;
+      max-width: 800px;
+      margin: 2rem auto;
       text-align: center;
     }
+    
     .baccarat-title {
-      color: #f9d923;
-      font-size: 2.1rem;
-      margin-bottom: 0.7rem;
-      text-shadow: 0 2px 6px #0006;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--theme-text-primary);
+      margin-bottom: 1rem;
+      text-align: center;
     }
-    .balance-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 1.2rem;
-      font-size: 1.1rem;
-      color: #ffe277;
-      font-weight: bold;
+    
+    .game-area {
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-xl)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--blur-xl)) saturate(150%);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-2xl);
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: var(--shadow-glass);
     }
-    .bet-controls {
+    
+    .betting-area {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-lg)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(150%);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-xl);
+    }
+    
+    .bet-option {
+      background: var(--theme-bg-surface);
+      border: 2px solid var(--theme-border-primary);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-weight: 600;
+      color: var(--theme-text-primary);
+      position: relative;
+    }
+    
+    .bet-option:hover {
+      background: var(--theme-bg-glass);
+      border-color: var(--theme-border-focus);
+      transform: translateY(-2px);
+    }
+    
+    .bet-option.selected {
+      background: var(--theme-border-focus);
+      color: white;
+      border-color: var(--theme-border-focus);
+    }
+    
+    .bet-option .payout {
+      display: block;
+      font-size: 0.875rem;
+      opacity: 0.8;
+      margin-top: 0.5rem;
+    }
+    
+    .bet-amount-control {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 1rem;
-      margin-bottom: 1.2rem;
+      margin: 2rem 0;
     }
-    .bet-controls input[type="number"] {
-      width: 70px;
-      border-radius: 5px;
-      border: 1px solid #a0843a;
-      background: #18122b;
-      color: #f3e9dc;
-      font-size: 1.1rem;
-      padding: 0.3rem 0.5rem;
+    
+    .bet-amount-control label {
+      color: var(--theme-text-secondary);
+      font-weight: 600;
+    }
+    
+    .bet-input {
+      width: 100px;
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-md);
+      color: var(--theme-text-primary);
+      font-size: 1rem;
+      padding: 0.5rem;
       text-align: center;
       outline: none;
+      transition: all var(--transition-fast);
     }
-    .bet-controls button {
-      background: #a0843a;
-      color: #fff;
-      border: none;
-      border-radius: 7px;
-      padding: 0.4rem 1.1rem;
-      font-size: 1.2rem;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.2s;
+    
+    .bet-input:focus {
+      border-color: var(--theme-border-focus);
+      background: var(--theme-bg-glass);
     }
-    .bet-controls button:hover {
-      background: #2ea827;
-      color: #fff;
-    }
-    .reset-btn {
-      background: #2ea827;
-      color: #fff;
-      border-radius: 8px;
-      border: none;
-      font-size: 0.97rem;
-      font-weight: bold;
-      padding: 0.28em 1.1em;
-      cursor: pointer;
-      box-shadow: 0 2px 6px #0002;
-      transition: background 0.15s;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .reset-btn:hover {
-      background: #43c734;
-    }
-    .betting-section {
+    
+    .cards-area {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
-    .bet-option {
-      background: #18122b;
-      border: 2px solid #a0843a;
-      border-radius: 8px;
-      padding: 1rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-weight: bold;
-      min-height: 60px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .bet-option:hover {
-      border-color: #f9d923;
-      background: #2a1f3f;
-    }
-    .bet-option.selected {
-      border-color: #f9d923;
-      background: #2ea827;
-      color: #fff;
-    }
-    .bet-amount {
-      font-size: 0.9rem;
-      margin-top: 0.3rem;
-      color: #ffe277;
-    }
-    .bet-option.selected .bet-amount {
-      color: #fff;
-    }
-    .game-area {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
       margin: 2rem 0;
     }
-    .hands {
-      display: flex;
-      justify-content: space-around;
-      margin: 2rem 0;
-    }
+    
     .hand {
-      text-align: center;
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-primary);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
     }
-    .hand h4 {
-      color: #f9d923;
-      margin: 0 0 1rem 0;
+    
+    .hand h3 {
+      color: var(--theme-text-secondary);
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
     }
+    
     .cards {
       display: flex;
-      gap: 0.5rem;
       justify-content: center;
+      gap: 0.5rem;
       margin: 1rem 0;
+      flex-wrap: wrap;
+      min-height: 80px;
+      align-items: center;
     }
+    
     .card {
-      width: 50px;
-      height: 70px;
-      background: #f3e9dc;
-      border: 2px solid #a0843a;
-      border-radius: 6px;
+      width: 60px;
+      height: 85px;
+      background: white;
+      color: #000;
+      border-radius: var(--radius-md);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
-      font-weight: bold;
-      color: #fff;
+      font-weight: 600;
+      box-shadow: var(--shadow-sm);
+      font-size: 0.875rem;
     }
+    
     .card.red {
-      color: #d7263d;
+      color: #dc2626;
     }
-    .card.black {
+    
+    .card.back {
+      background: #1f2937;
       color: #fff;
     }
-    .card .suit {
-      font-size: 1rem;
-      margin-top: 2px;
+    
+    .score {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--theme-text-primary);
+      margin-top: 1rem;
     }
-    .hand-total {
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin: 0.5rem 0;
-      color: #ffe277;
-    }
-    .deal-btn {
-      background: #a0843a;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin: 1rem 0;
-    }
-    .deal-btn:hover:not(:disabled) {
-      background: #2ea827;
-      color: #fff;
-    }
-    .deal-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .result {
-      font-size: 1.3rem;
-      font-weight: bold;
-      margin: 1rem 0;
-      min-height: 1.5rem;
-    }
-    .result.winning {
-      color: #f9d923;
-      text-shadow: 0 0 5px #f9d923;
-    }
-    .result.losing {
-      color: #d7263d;
-    }
-    .payout-info {
-      background: #18122b;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-top: 1.5rem;
-      font-size: 0.9rem;
-      text-align: left;
-    }
-    .payout-info h4 {
-      color: #f9d923;
-      margin: 0 0 0.5rem 0;
-      text-align: center;
-    }
-    .payout-row {
+    
+    .game-controls {
       display: flex;
-      justify-content: space-between;
-      margin: 0.3rem 0;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 2rem 0;
     }
-    .footer {
-      margin-top: 3rem;
+    
+    .result-message {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      font-size: 1.125rem;
+      min-height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-secondary);
     }
-    @media (max-width: 700px) {
-      .main-content {
-        padding: 1rem 0.5rem 2.5rem 0.5rem;
+    
+    .result-message.win {
+      background: rgba(34, 197, 94, 0.2);
+      border-color: var(--theme-success);
+      color: var(--theme-success);
+    }
+    
+    .result-message.lose {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: var(--theme-error);
+      color: var(--theme-error);
+    }
+    
+    .result-message.tie {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: var(--theme-info);
+      color: var(--theme-info);
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .cards-area {
+        grid-template-columns: 1fr;
+        gap: 1rem;
       }
-      .baccarat-container {
-        padding: 1.5rem 1rem;
-      }
-      .betting-section {
+      
+      .betting-area {
         grid-template-columns: 1fr;
       }
-      .hands {
+      
+      .bet-amount-control {
         flex-direction: column;
         gap: 1rem;
       }
+      
+      .game-controls {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .cards {
+        gap: 0.25rem;
+      }
+      
+      .card {
+        width: 50px;
+        height: 70px;
+        font-size: 0.75rem;
+      }
     }
   </style>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag("js", new Date());
-    gtag("config", "G-V9DHVKBD85");
-  </script>
 </head>
 <body>
-  <header class="header">
-    <div class="logo">
-      <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
+  <!-- Skip link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Consistent Navbar -->
+  <nav class="navbar" role="banner">
+    <a href="index.html" class="navbar-brand">
+      <span role="img" aria-label="pyramid">🏜️</span>
+      Pyramid Casino
+    </a>
+    
+    <ul class="navbar-nav" role="navigation" aria-label="Main navigation">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="index.html#games" class="nav-link">Games</a></li>
+      <li><a href="topup.html" class="nav-link">Top Up</a></li>
+      <li><a href="history.html" class="nav-link">History</a></li>
+      <li><a href="https://forms.gle/QYQqh72sSuweCue49" class="nav-link" target="_blank" rel="noopener">Suggest</a></li>
+      <li>
+        <button 
+          class="theme-toggle" 
+          onclick="toggleTheme()" 
+          aria-label="Toggle between light and dark theme"
+          title="Toggle theme"
+        >
+          <span id="theme-icon">🌙</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+  
+  <main id="main-content" class="main-content container" role="main">
+    <!-- Balance Bar -->
+    <div class="balance-bar">
+      <span>Balance: <span id="balance" aria-live="polite">1000</span></span>
+      <a href="topup.html" class="btn btn-secondary btn-sm">💳 Top Up</a>
     </div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="index.html#games">Games</a></li>
-        <li><a href="topup.html">Top Up</a></li>
-        <li><a href="history.html">History</a></li>
-        <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main class="main-content">
-    <a href="index.html" class="back-link">&larr; Back to Menu</a>
+    
+    <!-- Back to Menu -->
+    <div style="margin-bottom: 1rem;">
+      <a href="index.html" class="btn btn-secondary btn-sm">← Back to Menu</a>
+    </div>
+    
+    <!-- Baccarat Game -->
     <div class="baccarat-container">
-      <div class="baccarat-title">🃏 Baccarat</div>
-      <button class="instructions-btn" onclick="showInstructions('Baccarat', GAME_INSTRUCTIONS['Baccarat'])" style="margin-bottom: 15px;">ℹ️ How to Play</button>
-      <div class="balance-row">
-        <span>Balance:</span>
-        <span id="balance">1000</span>
-        <a href="topup.html" class="reset-btn">💳 Top Up</a>
-      </div>
-      <div class="bet-controls">
-        <label for="bet" style="font-weight:bold;">Bet:</label>
-        <button type="button" id="bet-decrease">-</button>
-        <input type="number" id="bet" min="1" max="9999" value="10" step="1" />
-        <button type="button" id="bet-increase">+</button>
-      </div>
+      <h1 class="baccarat-title">🃏 Baccarat</h1>
       
-      <div class="betting-section">
-        <div class="bet-option selected" data-bet="player" data-payout="1">
-          <div>PLAYER</div>
-          <div class="bet-amount" id="player-bet">0</div>
-        </div>
-        <div class="bet-option" data-bet="banker" data-payout="0.95">
-          <div>BANKER</div>
-          <div class="bet-amount" id="banker-bet">0</div>
-        </div>
-        <div class="bet-option" data-bet="tie" data-payout="8">
-          <div>TIE</div>
-          <div class="bet-amount" id="tie-bet">0</div>
-        </div>
+      <!-- How to Play Button -->
+      <button id="how-to-play-btn" class="btn btn-secondary btn-md" style="margin-bottom: 2rem;">
+        ℹ️ How to Play
+      </button>
+      
+      <!-- Bet Amount Control -->
+      <div class="bet-amount-control">
+        <label for="bet-amount">Bet Amount:</label>
+        <input type="number" id="bet-amount" class="bet-input" value="10" min="1" max="100" />
       </div>
       
-      <button class="deal-btn" id="dealBtn">Deal Cards</button>
+      <!-- Betting Area -->
+      <div class="betting-area">
+        <div class="bet-option" data-bet="player">
+          🎮 Player
+          <span class="payout">Payout: 1:1</span>
+        </div>
+        <div class="bet-option" data-bet="banker">
+          🏛️ Banker
+          <span class="payout">Payout: 1:1 (5% commission)</span>
+        </div>
+        <div class="bet-option" data-bet="tie">
+          🤝 Tie
+          <span class="payout">Payout: 8:1</span>
+        </div>
+      </div>
       
-      <div class="game-area" id="gameArea" style="display:none;">
-        <div class="hands">
+      <!-- Game Area -->
+      <div class="game-area">
+        <div class="cards-area">
+          <!-- Player Hand -->
           <div class="hand">
-            <h4>👑 Player</h4>
-            <div class="cards" id="playerCards"></div>
-            <div class="hand-total" id="playerTotal">-</div>
+            <h3>🎮 Player</h3>
+            <div class="cards" id="player-cards">
+              <div style="color: var(--theme-text-muted);">No cards dealt</div>
+            </div>
+            <div class="score">Score: <span id="player-score">0</span></div>
           </div>
+          
+          <!-- Banker Hand -->
           <div class="hand">
-            <h4>🏦 Banker</h4>
-            <div class="cards" id="bankerCards"></div>
-            <div class="hand-total" id="bankerTotal">-</div>
+            <h3>🏛️ Banker</h3>
+            <div class="cards" id="banker-cards">
+              <div style="color: var(--theme-text-muted);">No cards dealt</div>
+            </div>
+            <div class="score">Score: <span id="banker-score">0</span></div>
           </div>
         </div>
-        <div class="result" id="result"></div>
-        <button class="deal-btn" id="newGameBtn" style="display:none;">New Game</button>
-      </div>
-      
-      <div class="payout-info">
-        <h4>👸 Cleopatra's Payouts 👸</h4>
-        <div class="payout-row"><span>Player Wins</span><span>1:1</span></div>
-        <div class="payout-row"><span>Banker Wins</span><span>0.95:1</span></div>
-        <div class="payout-row"><span>Tie</span><span>8:1</span></div>
-        <p style="font-size:0.8rem; margin-top:1rem; color:#ffe277;">
-          Click a bet type, then click "Deal Cards" to play. Closest to 9 wins!
-        </p>
+        
+        <!-- Game Controls -->
+        <div class="game-controls">
+          <button id="deal-btn" class="btn btn-primary" disabled>Deal Cards</button>
+          <button id="new-game-btn" class="btn btn-warning" style="display: none;">New Game</button>
+        </div>
+        
+        <!-- Result Message -->
+        <div id="result-message" class="result-message">
+          Select your bet and click Deal to start!
+        </div>
       </div>
     </div>
   </main>
-  <footer class="footer">
-  <div style="padding: 10px 0;">
-    <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
-    <p style="margin: 5px 0; font-size: 1.1rem;">
-      📧 <strong>Contact us:</strong> 
-      <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;">casino.the.pyramid@gmail.com</a>
-    </p>
-    <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
-      💰 No real money gambling | 🔞 18+ for entertainment
-    </p>
+  
+  <!-- Footer -->
+  <footer class="glass-surface text-center" role="contentinfo">
+    <div>
+      <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
+      <p style="margin: 5px 0; font-size: 1.1rem;">
+        📧 <strong>Contact us:</strong> 
+        <a href="mailto:casino.the.pyramid@gmail.com" style="color: var(--theme-text-primary); text-decoration: none;" aria-label="Send email to casino.the.pyramid@gmail.com">
+          casino.the.pyramid@gmail.com
+        </a>
+      </p>
+      <p style="margin: 5px 0; font-size: 0.9rem; color: var(--theme-text-muted);">
+        💰 No real money gambling | 🔞 18+ for entertainment
+      </p>
+    </div>
+  </footer>
+  
+  <!-- Toast notification container -->
+  <div class="toast-container" id="toast-container"></div>
+  
+  <!-- Modern Game Instructions Popup -->
+  <div class="popup-overlay" id="popup-overlay"></div>
+  <div class="popup" id="instructions-popup">
+    <div class="popup-close" onclick="hideInstructions()">×</div>
+    <h3>🃏 How to Play Baccarat</h3>
+    <ul>
+      <li>Choose your bet: Player, Banker, or Tie</li>
+      <li>Set your bet amount and click "Deal Cards"</li>
+      <li>Two cards are dealt to both Player and Banker</li>
+      <li>Card values: Ace = 1, 2-9 = face value, 10/J/Q/K = 0</li>
+      <li>Hand value is the last digit of the total (9 is highest)</li>
+      <li>Natural 8 or 9 wins immediately</li>
+      <li>Player wins pay 1:1, Banker wins pay 1:1 (5% commission), Tie pays 8:1</li>
+    </ul>
   </div>
-</footer>
+  
+  <!-- Scripts -->
+  <script src="theme.js"></script>
   <script src="admin-config.js"></script>
   <script src="shared-modern.js"></script>
+  
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Baccarat Game Logic
+    // Game state
+    let gameState = {
+      deck: [],
+      playerHand: [],
+      bankerHand: [],
+      selectedBet: null,
+      gameActive: false
+    };
+    
+    // Card suits and values
     const suits = ['♠', '♥', '♦', '♣'];
-    const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+    const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
     
-    let balance = getCasinoBalance();
-    let currentBets = { player: 0, banker: 0, tie: 0 };
-    let selectedBetType = 'player';
-    let deck = [];
+    // Theme toggle functionality
+    function updateThemeIcon() {
+      const themeIcon = document.getElementById('theme-icon');
+      const currentTheme = getCurrentTheme();
+      themeIcon.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+    }
     
-    const balanceEl = document.getElementById('balance');
-    const betEl = document.getElementById('bet');
-    const gameAreaEl = document.getElementById('gameArea');
-    const dealBtn = document.getElementById('dealBtn');
-    const newGameBtn = document.getElementById('newGameBtn');
-    const resultEl = document.getElementById('result');
-    const playerCardsEl = document.getElementById('playerCards');
-    const bankerCardsEl = document.getElementById('bankerCards');
-    const playerTotalEl = document.getElementById('playerTotal');
-    const bankerTotalEl = document.getElementById('bankerTotal');
+    // Listen for theme changes
+    window.addEventListener('themeChanged', updateThemeIcon);
     
-    balanceEl.textContent = balance;
-    updateBetDisplay();
-    
-    // Bet controls
-    document.getElementById('bet-decrease').onclick = () => {
-      const current = parseInt(betEl.value);
-      if (current > 1) betEl.value = current - 1;
-    };
-    
-    document.getElementById('bet-increase').onclick = () => {
-      const current = parseInt(betEl.value);
-      if (current < balance) betEl.value = current + 1;
-    };
-    
-    // Bet type selection
-    document.querySelectorAll('.bet-option').forEach(option => {
-      option.onclick = () => {
-        const betType = option.dataset.bet;
-        const betAmount = parseInt(betEl.value);
-        
-        if (betAmount > balance) {
-          alert('Insufficient balance!');
-          return;
-        }
-        
-        // Add bet
-        currentBets[betType] += betAmount;
-        recordGameBet('Baccarat', betAmount);
-        balance = getCasinoBalance(); // Update local balance
-        balanceEl.textContent = balance;
-        
-        updateBetDisplay();
-        
-        // Enable deal button if any bets placed
-        if (Object.values(currentBets).some(bet => bet > 0)) {
-          dealBtn.disabled = false;
-        }
-      };
+    // Initialize game
+    document.addEventListener('DOMContentLoaded', function() {
+      updateThemeIcon();
+      initializeBalance();
+      
+      // Add event listeners
+      document.getElementById('how-to-play-btn').addEventListener('click', showInstructions);
+      document.getElementById('deal-btn').addEventListener('click', dealCards);
+      document.getElementById('new-game-btn').addEventListener('click', newGame);
+      document.getElementById('bet-amount').addEventListener('change', updateUI);
+      document.getElementById('year').textContent = new Date().getFullYear();
+      
+      // Betting option event listeners
+      document.querySelectorAll('.bet-option').forEach(option => {
+        option.addEventListener('click', () => selectBet(option.dataset.bet));
+      });
     });
     
-    function updateBetDisplay() {
-      document.getElementById('player-bet').textContent = currentBets.player;
-      document.getElementById('banker-bet').textContent = currentBets.banker;
-      document.getElementById('tie-bet').textContent = currentBets.tie;
+    // Show instructions popup
+    function showInstructions() {
+      document.getElementById('popup-overlay').classList.add('show');
+      document.getElementById('instructions-popup').classList.add('show');
     }
     
-    // Create and shuffle deck
-    function createDeck() {
-      const newDeck = [];
-      for (let suit of suits) {
-        for (let rank of ranks) {
-          newDeck.push({ rank, suit });
+    // Hide instructions popup
+    function hideInstructions() {
+      document.getElementById('popup-overlay').classList.remove('show');
+      document.getElementById('instructions-popup').classList.remove('show');
+    }
+    
+    // Close popup when clicking overlay
+    document.getElementById('popup-overlay').addEventListener('click', hideInstructions);
+    
+    // Initialize balance
+    function initializeBalance() {
+      const balanceEl = document.getElementById('balance');
+      if (typeof getCasinoBalance === 'function') {
+        balanceEl.textContent = getCasinoBalance();
+      } else {
+        let balance = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+        if (isNaN(balance)) balance = 1000;
+        balanceEl.textContent = balance;
+      }
+    }
+    
+    // Get current balance
+    function getCurrentBalance() {
+      if (typeof getCasinoBalance === 'function') {
+        return getCasinoBalance();
+      } else {
+        let balance = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
+        if (isNaN(balance)) balance = 1000;
+        return balance;
+      }
+    }
+    
+    // Update balance
+    function updateBalance(amount) {
+      if (typeof updateCasinoBalance === 'function') {
+        updateCasinoBalance(amount);
+      } else {
+        let balance = getCurrentBalance();
+        balance += amount;
+        localStorage.setItem('pyramidCasinoBalance', balance.toString());
+      }
+      updateUI();
+    }
+    
+    // Update UI elements
+    function updateUI() {
+      const balance = getCurrentBalance();
+      const bet = parseInt(document.getElementById('bet-amount').value, 10);
+      const dealBtn = document.getElementById('deal-btn');
+      
+      document.getElementById('balance').textContent = balance;
+      
+      // Enable deal button if bet is selected and sufficient funds
+      if (gameState.selectedBet && balance >= bet && !gameState.gameActive) {
+        dealBtn.disabled = false;
+        dealBtn.textContent = 'Deal Cards';
+      } else {
+        dealBtn.disabled = true;
+        if (balance < bet) {
+          dealBtn.textContent = 'Insufficient Funds';
+        } else if (!gameState.selectedBet) {
+          dealBtn.textContent = 'Select a Bet First';
         }
       }
-      return shuffleDeck(newDeck);
     }
     
+    // Select bet
+    function selectBet(betType) {
+      // Clear previous selection
+      document.querySelectorAll('.bet-option').forEach(option => {
+        option.classList.remove('selected');
+      });
+      
+      // Select new bet
+      document.querySelector(`[data-bet="${betType}"]`).classList.add('selected');
+      gameState.selectedBet = betType;
+      updateUI();
+    }
+    
+    // Create a new deck
+    function createDeck() {
+      const deck = [];
+      for (let suit of suits) {
+        for (let value of values) {
+          deck.push({
+            suit: suit,
+            value: value,
+            baccaratValue: getBaccaratValue(value)
+          });
+        }
+      }
+      return shuffleDeck(deck);
+    }
+    
+    // Shuffle deck
     function shuffleDeck(deck) {
       for (let i = deck.length - 1; i > 0; i--) {
-        const j = Math.floor(riggedRandom(1.8) * (i + 1)); // Subtle shuffle bias for baccarat
+        const j = Math.floor(Math.random() * (i + 1));
         [deck[i], deck[j]] = [deck[j], deck[i]];
       }
       return deck;
     }
     
-    function getCardValue(card) {
-      if (card.rank === 'A') return 1;
-      if (['J', 'Q', 'K'].includes(card.rank)) return 0;
-      return parseInt(card.rank) || 10;
+    // Get baccarat card value
+    function getBaccaratValue(value) {
+      if (value === 'A') return 1;
+      if (['J', 'Q', 'K'].includes(value)) return 0;
+      return parseInt(value) || 0;
     }
     
-    function calculateHandValue(cards) {
-      const total = cards.reduce((sum, card) => sum + getCardValue(card), 0);
+    // Calculate hand value (last digit only)
+    function calculateHandValue(hand) {
+      const total = hand.reduce((sum, card) => sum + card.baccaratValue, 0);
       return total % 10;
     }
     
-    function createCardElement(card) {
-      const cardEl = document.createElement('div');
-      cardEl.className = 'card';
+    // Render hand
+    function renderHand(hand, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
       
-      if (card.suit === '♥' || card.suit === '♦') {
-        cardEl.classList.add('red');
-      } else {
-        cardEl.classList.add('black');
-      }
-      
-      cardEl.innerHTML = `<div>${card.rank}</div><div class="suit">${card.suit}</div>`;
-      return cardEl;
-    }
-    
-    // Deal cards
-    dealBtn.onclick = () => {
-      if (Object.values(currentBets).every(bet => bet === 0)) {
-        alert('Please place a bet first!');
+      if (hand.length === 0) {
+        container.innerHTML = '<div style="color: var(--theme-text-muted);">No cards dealt</div>';
         return;
       }
       
-      deck = createDeck();
-      const playerHand = [deck.pop(), deck.pop()];
-      const bankerHand = [deck.pop(), deck.pop()];
-      
-      // Display cards
-      playerCardsEl.innerHTML = '';
-      bankerCardsEl.innerHTML = '';
-      
-      playerHand.forEach(card => playerCardsEl.appendChild(createCardElement(card)));
-      bankerHand.forEach(card => bankerCardsEl.appendChild(createCardElement(card)));
-      
-      let playerTotal = calculateHandValue(playerHand);
-      let bankerTotal = calculateHandValue(bankerHand);
-      
-      // Third card rules (simplified)
-      if (playerTotal <= 5 && bankerTotal <= 5) {
-        // Player draws third card
-        const playerThird = deck.pop();
-        playerHand.push(playerThird);
-        playerCardsEl.appendChild(createCardElement(playerThird));
-        playerTotal = calculateHandValue(playerHand);
+      hand.forEach(card => {
+        const cardEl = document.createElement('div');
+        cardEl.className = 'card';
         
-        // Banker draws based on rules
-        if (bankerTotal <= 3 || (bankerTotal <= 5 && getCardValue(playerThird) >= 4)) {
-          const bankerThird = deck.pop();
-          bankerHand.push(bankerThird);
-          bankerCardsEl.appendChild(createCardElement(bankerThird));
-          bankerTotal = calculateHandValue(bankerHand);
+        if (card.suit === '♥' || card.suit === '♦') {
+          cardEl.className += ' red';
         }
-      } else if (playerTotal <= 5) {
-        const playerThird = deck.pop();
-        playerHand.push(playerThird);
-        playerCardsEl.appendChild(createCardElement(playerThird));
-        playerTotal = calculateHandValue(playerHand);
-      } else if (bankerTotal <= 5) {
-        const bankerThird = deck.pop();
-        bankerHand.push(bankerThird);
-        bankerCardsEl.appendChild(createCardElement(bankerThird));
-        bankerTotal = calculateHandValue(bankerHand);
-      }
-      
-      playerTotalEl.textContent = playerTotal;
-      bankerTotalEl.textContent = bankerTotal;
-      
-      // Determine winner and calculate payouts
-      let winner;
-      if (playerTotal > bankerTotal) {
-        winner = 'player';
-      } else if (bankerTotal > playerTotal) {
-        winner = 'banker';
-      } else {
-        winner = 'tie';
-      }
-      
-      let totalWinnings = 0;
-      let resultText = '';
-      
-      if (winner === 'player') {
-        resultText = 'Player Wins!';
-        if (currentBets.player > 0) {
-          totalWinnings += currentBets.player * 2;
-        }
-      } else if (winner === 'banker') {
-        resultText = 'Banker Wins!';
-        if (currentBets.banker > 0) {
-          totalWinnings += currentBets.banker * 1.95;
-        }
-      } else {
-        resultText = "It's a Tie!";
-        if (currentBets.tie > 0) {
-          totalWinnings += currentBets.tie * 9;
-        }
-        // Return original player and banker bets on tie
-        totalWinnings += currentBets.player + currentBets.banker;
-      }
-      
-      if (totalWinnings > 0) {
-        const resultDetails = `${bankerTotal} vs ${playerTotal}`;
-        recordGameWin('Baccarat', Math.floor(totalWinnings), resultDetails);
-        balance = getCasinoBalance(); // Update local balance
-        balanceEl.textContent = balance;
-        resultEl.textContent = `${resultText} Won ${Math.floor(totalWinnings)} chips!`;
-        resultEl.className = 'result winning';
-      } else {
-        resultEl.textContent = `${resultText} No win this time.`;
-        resultEl.className = 'result losing';
-      }
-      
-      gameAreaEl.style.display = 'block';
-      dealBtn.style.display = 'none';
-      newGameBtn.style.display = 'inline-block';
-    };
+        
+        cardEl.innerHTML = `
+          <div>${card.value}</div>
+          <div>${card.suit}</div>
+        `;
+        
+        container.appendChild(cardEl);
+      });
+    }
     
-    // New game
-    newGameBtn.onclick = () => {
-      currentBets = { player: 0, banker: 0, tie: 0 };
-      updateBetDisplay();
-      gameAreaEl.style.display = 'none';
-      dealBtn.style.display = 'inline-block';
-      dealBtn.disabled = true;
-      newGameBtn.style.display = 'none';
-      resultEl.textContent = '';
-    };
+    // Deal initial cards
+    function dealCards() {
+      const bet = parseInt(document.getElementById('bet-amount').value, 10);
+      const balance = getCurrentBalance();
+      
+      if (balance < bet || !gameState.selectedBet) {
+        showResult('Select a bet and ensure sufficient funds!', 'lose');
+        return;
+      }
+      
+      // Deduct bet
+      updateBalance(-bet);
+      
+      // Initialize game
+      gameState.deck = createDeck();
+      gameState.playerHand = [];
+      gameState.bankerHand = [];
+      gameState.gameActive = true;
+      
+      // Deal initial cards (2 each)
+      gameState.playerHand.push(gameState.deck.pop());
+      gameState.bankerHand.push(gameState.deck.pop());
+      gameState.playerHand.push(gameState.deck.pop());
+      gameState.bankerHand.push(gameState.deck.pop());
+      
+      // Update display
+      renderHand(gameState.playerHand, 'player-cards');
+      renderHand(gameState.bankerHand, 'banker-cards');
+      
+      const playerValue = calculateHandValue(gameState.playerHand);
+      const bankerValue = calculateHandValue(gameState.bankerHand);
+      
+      document.getElementById('player-score').textContent = playerValue;
+      document.getElementById('banker-score').textContent = bankerValue;
+      
+      // Check for natural win (8 or 9)
+      if (playerValue >= 8 || bankerValue >= 8) {
+        endGame(playerValue, bankerValue, bet);
+      } else {
+        // Apply drawing rules
+        applyDrawingRules(playerValue, bankerValue, bet);
+      }
+      
+      updateUI();
+    }
     
-    // Start with deal button disabled
-    dealBtn.disabled = true;
+    // Apply baccarat drawing rules
+    function applyDrawingRules(playerValue, bankerValue, bet) {
+      let playerThirdCard = null;
+      
+      // Player draws if total is 5 or less
+      if (playerValue <= 5) {
+        playerThirdCard = gameState.deck.pop();
+        gameState.playerHand.push(playerThirdCard);
+        renderHand(gameState.playerHand, 'player-cards');
+        playerValue = calculateHandValue(gameState.playerHand);
+        document.getElementById('player-score').textContent = playerValue;
+      }
+      
+      // Banker drawing rules
+      if (playerThirdCard === null) {
+        // No third card for player - banker draws on 5 or less
+        if (bankerValue <= 5) {
+          gameState.bankerHand.push(gameState.deck.pop());
+          renderHand(gameState.bankerHand, 'banker-cards');
+          bankerValue = calculateHandValue(gameState.bankerHand);
+          document.getElementById('banker-score').textContent = bankerValue;
+        }
+      } else {
+        // Player drew third card - complex banker rules
+        const thirdCardValue = playerThirdCard.baccaratValue;
+        let bankerDraws = false;
+        
+        if (bankerValue <= 2) bankerDraws = true;
+        else if (bankerValue === 3 && thirdCardValue !== 8) bankerDraws = true;
+        else if (bankerValue === 4 && [2,3,4,5,6,7].includes(thirdCardValue)) bankerDraws = true;
+        else if (bankerValue === 5 && [4,5,6,7].includes(thirdCardValue)) bankerDraws = true;
+        else if (bankerValue === 6 && [6,7].includes(thirdCardValue)) bankerDraws = true;
+        
+        if (bankerDraws) {
+          gameState.bankerHand.push(gameState.deck.pop());
+          renderHand(gameState.bankerHand, 'banker-cards');
+          bankerValue = calculateHandValue(gameState.bankerHand);
+          document.getElementById('banker-score').textContent = bankerValue;
+        }
+      }
+      
+      // End game
+      setTimeout(() => endGame(playerValue, bankerValue, bet), 1000);
+    }
+    
+    // End game and determine winner
+    function endGame(playerValue, bankerValue, bet) {
+      gameState.gameActive = false;
+      
+      let result = '';
+      let payout = 0;
+      
+      if (playerValue > bankerValue) {
+        result = 'Player wins!';
+        if (gameState.selectedBet === 'player') {
+          payout = bet * 2;
+          updateBalance(payout);
+          showResult(`🎉 Player wins! Won ${payout} chips!`, 'win');
+          
+          if (typeof showToast === 'function') {
+            showToast(`🎉 Player wins! Won ${payout} chips!`, 'success');
+          }
+        } else {
+          showResult('Player wins - You lose!', 'lose');
+        }
+      } else if (bankerValue > playerValue) {
+        result = 'Banker wins!';
+        if (gameState.selectedBet === 'banker') {
+          payout = Math.floor(bet * 1.95); // 5% commission
+          updateBalance(bet + payout);
+          showResult(`🎉 Banker wins! Won ${payout} chips!`, 'win');
+          
+          if (typeof showToast === 'function') {
+            showToast(`🎉 Banker wins! Won ${payout} chips!`, 'success');
+          }
+        } else {
+          showResult('Banker wins - You lose!', 'lose');
+        }
+      } else {
+        result = 'Tie!';
+        if (gameState.selectedBet === 'tie') {
+          payout = bet * 9;
+          updateBalance(payout);
+          showResult(`🎉 Tie! Won ${payout} chips!`, 'win');
+          
+          if (typeof showToast === 'function') {
+            showToast(`🎉 Tie! Won ${payout} chips!`, 'success');
+          }
+        } else if (gameState.selectedBet === 'player' || gameState.selectedBet === 'banker') {
+          updateBalance(bet); // Return bet on tie
+          showResult('Tie - Bet returned!', 'tie');
+        }
+      }
+      
+      document.getElementById('new-game-btn').style.display = 'inline-flex';
+      updateUI();
+    }
+    
+    // Start new game
+    function newGame() {
+      gameState = {
+        deck: [],
+        playerHand: [],
+        bankerHand: [],
+        selectedBet: null,
+        gameActive: false
+      };
+      
+      // Clear selections
+      document.querySelectorAll('.bet-option').forEach(option => {
+        option.classList.remove('selected');
+      });
+      
+      document.getElementById('player-cards').innerHTML = '<div style="color: var(--theme-text-muted);">No cards dealt</div>';
+      document.getElementById('banker-cards').innerHTML = '<div style="color: var(--theme-text-muted);">No cards dealt</div>';
+      document.getElementById('player-score').textContent = '0';
+      document.getElementById('banker-score').textContent = '0';
+      
+      document.getElementById('new-game-btn').style.display = 'none';
+      
+      showResult('Select your bet and click Deal to start!', '');
+      updateUI();
+    }
+    
+    // Show result message
+    function showResult(message, type) {
+      const resultEl = document.getElementById('result-message');
+      resultEl.textContent = message;
+      resultEl.className = `result-message ${type}`;
+    }
   </script>
 </body>
 </html>

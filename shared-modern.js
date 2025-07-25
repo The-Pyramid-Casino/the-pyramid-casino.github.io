@@ -1,7 +1,7 @@
 /* Shared Modern JavaScript for Pyramid Casino */
 
-// House Edge System - Subtle rigging for entertainment
-// Simple house-biased random number generator
+// Enhanced Engagement System - Creates compelling near-miss experiences
+// Advanced random system with near-miss generation for entertainment
 function riggedRandom(houseEdgePercentage = 2.5) {
     // Generate base random number
     let random = Math.random();
@@ -15,6 +15,49 @@ function riggedRandom(houseEdgePercentage = 2.5) {
     random = random * (1 - bias) + (random * random * bias);
     
     return random;
+}
+
+// Near-miss generation system for enhanced engagement
+function generateNearMiss(winThreshold = 0.5, nearMissChance = 0.3) {
+    const random = Math.random();
+    
+    // If would be a loss, chance to make it a near-miss instead
+    if (random > winThreshold && Math.random() < nearMissChance) {
+        // Generate a number very close to the win threshold
+        const nearMissOffset = (Math.random() * 0.05) + 0.01; // Very close but not quite
+        return winThreshold - nearMissOffset;
+    }
+    
+    return random;
+}
+
+// Enhanced slots near-miss system
+function generateSlotsNearMiss() {
+    const baseRandom = riggedRandom(3.0); // Slightly higher house edge for slots
+    
+    // 25% chance to create a near-miss scenario on losses
+    if (baseRandom > 0.4 && Math.random() < 0.25) {
+        // Create scenarios where 2 out of 3 symbols match
+        return {
+            isNearMiss: true,
+            type: 'two_of_three',
+            excitement: Math.random() * 0.5 + 0.3 // Moderate to high excitement
+        };
+    }
+    
+    // 15% chance for "just missed jackpot" scenarios
+    if (baseRandom > 0.85 && Math.random() < 0.15) {
+        return {
+            isNearMiss: true,
+            type: 'jackpot_miss',
+            excitement: Math.random() * 0.3 + 0.7 // High excitement
+        };
+    }
+    
+    return {
+        isNearMiss: false,
+        baseRandom: baseRandom
+    };
 }
 
 // Rigged random for integer ranges with house bias
@@ -221,7 +264,7 @@ function updateBalanceWithAnimation(balanceElement, newBalance) {
     }, duration / steps);
 }
 
-// Enhanced notification system with WCAG compliance
+// Enhanced notification system with WCAG compliance and modern positioning
 function showNotification(message, type, duration) {
     if (typeof type === 'undefined') type = 'info';
     if (typeof duration === 'undefined') duration = 3000;
@@ -241,53 +284,303 @@ function showNotification(message, type, duration) {
     
     const styles = {
         position: 'fixed',
-        top: '20px',
-        right: '20px',
-        padding: '15px 25px',
-        borderRadius: '10px',
-        fontWeight: 'bold',
-        fontSize: '1rem',
+        bottom: '20px',
+        left: '20px',
+        padding: '16px 24px',
+        borderRadius: '12px',
+        fontWeight: '600',
+        fontSize: '0.95rem',
         zIndex: '9999',
-        minWidth: '200px',
-        textAlign: 'center',
-        animation: 'slide-up 0.5s ease-out',
-        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
-        border: '2px solid transparent'
+        minWidth: '280px',
+        maxWidth: '400px',
+        textAlign: 'left',
+        animation: 'slideInLeft 0.4s ease-out',
+        boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+        backdropFilter: 'blur(20px)',
+        webkitBackdropFilter: 'blur(20px)'
     };
     
-    // Type-specific styling with improved contrast
+    // Type-specific styling with improved contrast and modern design
     switch(type) {
         case 'win':
-            styles.background = '#2ea827'; // Solid color for better contrast
+            styles.background = 'rgba(34, 197, 94, 0.9)';
             styles.color = '#ffffff';
-            styles.border = '2px solid #43c734';
+            styles.borderColor = 'rgba(34, 197, 94, 0.3)';
             break;
         case 'lose':
-            styles.background = '#d7263d'; // Solid color for better contrast
+            styles.background = 'rgba(239, 68, 68, 0.9)';
             styles.color = '#ffffff';
-            styles.border = '2px solid #ff4757';
+            styles.borderColor = 'rgba(239, 68, 68, 0.3)';
+            break;
+        case 'near-miss':
+            styles.background = 'rgba(251, 146, 60, 0.9)';
+            styles.color = '#ffffff';
+            styles.borderColor = 'rgba(251, 146, 60, 0.3)';
+            styles.animation = 'pulseGlow 0.8s ease-out';
+            break;
+        case 'achievement':
+            styles.background = 'rgba(147, 51, 234, 0.9)';
+            styles.color = '#ffffff';
+            styles.borderColor = 'rgba(147, 51, 234, 0.3)';
+            styles.animation = 'bounceIn 0.6s ease-out';
             break;
         case 'info':
-            styles.background = '#f9d923'; // High contrast yellow
-            styles.color = '#18122b'; // Dark text on yellow
-            styles.border = '2px solid #eed920';
+            styles.background = 'rgba(59, 130, 246, 0.9)';
+            styles.color = '#ffffff';
+            styles.borderColor = 'rgba(59, 130, 246, 0.3)';
             break;
         default:
-            styles.background = '#231b36';
-            styles.color = '#f3e9dc';
-            styles.border = '2px solid #f9d923';
+            styles.background = 'rgba(75, 85, 99, 0.9)';
+            styles.color = '#ffffff';
+            styles.borderColor = 'rgba(156, 163, 175, 0.3)';
     }
     
     Object.assign(notification.style, styles);
     document.body.appendChild(notification);
     
+    // Add modern animations
+    if (!document.querySelector('#modern-notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'modern-notification-styles';
+        style.textContent = `
+            @keyframes slideInLeft {
+                from {
+                    transform: translateX(-100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutLeft {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(-100%);
+                    opacity: 0;
+                }
+            }
+            
+            @keyframes pulseGlow {
+                0%, 100% {
+                    transform: scale(1);
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+                }
+                50% {
+                    transform: scale(1.05);
+                    box-shadow: 0 15px 50px rgba(251, 146, 60, 0.4);
+                }
+            }
+            
+            @keyframes bounceIn {
+                0% {
+                    transform: scale(0.3) translateX(-100%);
+                    opacity: 0;
+                }
+                50% {
+                    transform: scale(1.1) translateX(0);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(1) translateX(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
     // Auto remove after duration
     setTimeout(function() {
-        notification.style.animation = 'slide-up 0.5s ease-out reverse';
+        notification.style.animation = 'slideOutLeft 0.4s ease-out';
         setTimeout(function() { 
-            notification.remove(); 
-        }, 500);
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 400);
     }, duration);
+}
+
+// Session and Engagement Tracking System (without streaks)
+const SESSION_STORAGE_KEY = 'pyramidCasinoSession';
+const ACHIEVEMENTS_KEY = 'pyramidCasinoAchievements';
+
+// Track player session for engagement features
+function getPlayerSession() {
+    try {
+        const sessionData = localStorage.getItem(SESSION_STORAGE_KEY);
+        if (sessionData) {
+            return JSON.parse(sessionData);
+        }
+        return {
+            startTime: Date.now(),
+            totalPlayTime: 0,
+            gamesPlayed: 0,
+            consecutiveLosses: 0,
+            nearMissCount: 0,
+            lastNearMiss: 0,
+            totalBets: 0,
+            totalWins: 0,
+            dailyPlayTime: {},
+            engagementLevel: 'new' // new, casual, engaged, hooked
+        };
+    } catch (e) {
+        console.error('Error loading session data:', e);
+        return getPlayerSession(); // Return default
+    }
+}
+
+function updatePlayerSession(updates) {
+    try {
+        const session = getPlayerSession();
+        Object.assign(session, updates);
+        
+        // Update engagement level based on play patterns
+        const playTime = session.totalPlayTime / (1000 * 60); // minutes
+        const gamesPerMinute = playTime > 0 ? session.gamesPlayed / playTime : 0;
+        
+        if (playTime > 60 && gamesPerMinute > 0.5) {
+            session.engagementLevel = 'hooked';
+        } else if (playTime > 30 && session.gamesPlayed > 20) {
+            session.engagementLevel = 'engaged';
+        } else if (session.gamesPlayed > 5) {
+            session.engagementLevel = 'casual';
+        }
+        
+        localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+        
+        // Check for achievements
+        checkAchievements(session);
+        
+        return session;
+    } catch (e) {
+        console.error('Error updating session data:', e);
+        return getPlayerSession();
+    }
+}
+
+// Achievement System for Engagement (without streak achievements)
+function checkAchievements(session) {
+    const achievements = getAchievements();
+    
+    // First time player
+    if (session.gamesPlayed === 1 && !achievements.firstGame) {
+        unlockAchievement('firstGame', '🎮 Welcome!', 'Played your first game at Pyramid Casino!');
+    }
+    
+    // Near miss milestone
+    if (session.nearMissCount >= 10 && !achievements.nearMissHunter) {
+        unlockAchievement('nearMissHunter', '🎯 So Close!', 'Experienced 10 near-miss moments!');
+    }
+    
+    // Play time milestones
+    const playTimeMinutes = session.totalPlayTime / (1000 * 60);
+    if (playTimeMinutes >= 30 && !achievements.dedicatedPlayer) {
+        unlockAchievement('dedicatedPlayer', '⏰ Dedicated Player', '30 minutes of exciting gameplay!');
+    }
+    
+    // Consecutive losses (encouragement)
+    if (session.consecutiveLosses >= 5 && !achievements.persistent) {
+        unlockAchievement('persistent', '💪 Never Give Up', 'Your luck is about to turn around!');
+        // Give a small consolation bonus
+        const bonusAmount = Math.min(50, Math.floor(getCasinoBalance() * 0.05));
+        if (bonusAmount > 0) {
+            updateBalance(bonusAmount, 'bonus', 'Persistence bonus');
+            showNotification(`🎁 Persistence Bonus: +${bonusAmount} chips!`, 'achievement', 4000);
+        }
+    }
+    
+    // Games played milestones
+    if (session.gamesPlayed >= 50 && !achievements.gamingMaster) {
+        unlockAchievement('gamingMaster', '🏆 Gaming Master', 'Played 50 games at Pyramid Casino!');
+    }
+}
+
+function getAchievements() {
+    try {
+        const achievementsData = localStorage.getItem(ACHIEVEMENTS_KEY);
+        if (achievementsData) {
+            return JSON.parse(achievementsData);
+        }
+        return {};
+    } catch (e) {
+        console.error('Error loading achievements:', e);
+        return {};
+    }
+}
+
+function unlockAchievement(achievementId, title, description) {
+    try {
+        const achievements = getAchievements();
+        if (!achievements[achievementId]) {
+            achievements[achievementId] = {
+                unlocked: true,
+                timestamp: Date.now(),
+                title: title,
+                description: description
+            };
+            localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));
+            
+            // Show achievement notification
+            showNotification(`${title}<br><small>${description}</small>`, 'achievement', 5000);
+        }
+    } catch (e) {
+        console.error('Error unlocking achievement:', e);
+    }
+}
+
+// Near-Miss Feedback System
+function handleNearMiss(game, type, excitement = 0.5) {
+    const session = updatePlayerSession({
+        nearMissCount: getPlayerSession().nearMissCount + 1,
+        lastNearMiss: Date.now()
+    });
+    
+    // Generate appropriate near-miss message
+    let message = '';
+    let suggestions = '';
+    
+    switch (type) {
+        case 'two_of_three':
+            message = '🎯 SO CLOSE! Two matching symbols!';
+            suggestions = 'The jackpot is calling your name!';
+            break;
+        case 'jackpot_miss':
+            message = '💫 ALMOST JACKPOT! Just one symbol away!';
+            suggestions = 'Your big win is right around the corner!';
+            break;
+        case 'blackjack_19_20':
+            message = '🃏 SO CLOSE! Just one point away from 21!';
+            suggestions = 'You\'re getting better at this!';
+            break;
+        case 'roulette_adjacent':
+            message = '🎯 ALMOST! The ball was so close to your number!';
+            suggestions = 'Lady luck is smiling at you!';
+            break;
+        default:
+            message = '✨ CLOSE CALL! You\'re getting warmer!';
+            suggestions = 'Keep going, you\'re on the right track!';
+    }
+    
+    // Show near-miss notification with excitement
+    const fullMessage = `${message}<br><small>${suggestions}</small>`;
+    showNotification(fullMessage, 'near-miss', 4000);
+    
+    // Suggest slightly higher bet if engagement is high
+    if (excitement > 0.7 && session.engagementLevel === 'engaged' || session.engagementLevel === 'hooked') {
+        setTimeout(() => {
+            const currentBalance = getCasinoBalance();
+            if (currentBalance > 100) {
+                const suggestedBet = Math.min(Math.floor(currentBalance * 0.1), 100);
+                showNotification(`💡 Feeling lucky? Try a ${suggestedBet} chip bet next!`, 'info', 3000);
+            }
+        }, 2000);
+    }
 }
 
 // Enhanced button click effects
@@ -373,6 +666,165 @@ document.addEventListener('DOMContentLoaded', function() {
         return; // Stop initialization if user is banned
     }
     
+    // Initialize session tracking for engagement
+    initializeSession();
+    
+    // Add click effects to all buttons
+    var buttons = document.querySelectorAll('button, .primary-btn, .game-card a');
+    for (var i = 0; i < buttons.length; i++) {
+        addButtonClickEffect(buttons[i]);
+    }
+    
+    // Add smooth scroll behavior
+    document.documentElement.style.scrollBehavior = 'smooth';
+    
+    // Add loading animation to game cards
+    var gameCards = document.querySelectorAll('.game-card');
+    for (var i = 0; i < gameCards.length; i++) {
+        gameCards[i].style.animation = 'slide-up 0.6s ease-out ' + (i * 0.1) + 's both';
+    }
+    
+    // Enhance form inputs with focus effects
+    var inputs = document.querySelectorAll('input[type="number"], input[type="text"]');
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener('focus', function() {
+            this.style.boxShadow = '0 0 10px rgba(102, 126, 234, 0.3)';
+            this.style.borderColor = '#667eea';
+        });
+        
+        inputs[i].addEventListener('blur', function() {
+            this.style.boxShadow = '';
+            this.style.borderColor = '';
+        });
+    }
+});
+
+// Session initialization for engagement tracking
+function initializeSession() {
+    try {
+        // Update session start time and track total play time
+        const session = getPlayerSession();
+        const now = Date.now();
+        
+        // Update play time if returning user
+        if (session.startTime && session.startTime < now) {
+            const sessionDuration = now - session.startTime;
+            updatePlayerSession({
+                totalPlayTime: session.totalPlayTime + sessionDuration,
+                startTime: now
+            });
+        }
+        
+        // Track daily play time
+        const today = new Date().toDateString();
+        if (!session.dailyPlayTime[today]) {
+            session.dailyPlayTime[today] = 0;
+        }
+        
+        // Set up periodic session updates
+        setInterval(function() {
+            updatePlayerSession({
+                totalPlayTime: getPlayerSession().totalPlayTime + 30000, // 30 seconds
+                lastActivity: Date.now()
+            });
+        }, 30000);
+        
+        // Show welcome back message for returning players
+        if (session.gamesPlayed > 0 && session.engagementLevel !== 'new') {
+            setTimeout(function() {
+                showNotification(`🎉 Welcome back to Pyramid Casino!`, 'info', 3000);
+            }, 1000);
+        }
+        
+    } catch (e) {
+        console.error('Error initializing session:', e);
+    }
+}
+function addButtonClickEffect(button) {
+    button.addEventListener('click', function(e) {
+        var ripple = document.createElement('span');
+        var rect = button.getBoundingClientRect();
+        var size = Math.max(rect.width, rect.height);
+        var x = e.clientX - rect.left - size / 2;
+        var y = e.clientY - rect.top - size / 2;
+        
+        ripple.style.cssText = 
+            'position: absolute;' +
+            'width: ' + size + 'px;' +
+            'height: ' + size + 'px;' +
+            'left: ' + x + 'px;' +
+            'top: ' + y + 'px;' +
+            'background: rgba(255, 255, 255, 0.3);' +
+            'border-radius: 50%;' +
+            'transform: scale(0);' +
+            'animation: ripple 0.6s ease-out;' +
+            'pointer-events: none;';
+        
+        // Add ripple animation CSS if not exists
+        if (!document.querySelector('#ripple-style')) {
+            var style = document.createElement('style');
+            style.id = 'ripple-style';
+            style.textContent = 
+                '@keyframes ripple {' +
+                    'to {' +
+                        'transform: scale(2);' +
+                        'opacity: 0;' +
+                    '}' +
+                '}';
+            document.head.appendChild(style);
+        }
+        
+        button.style.position = 'relative';
+        button.style.overflow = 'hidden';
+        button.appendChild(ripple);
+        
+        setTimeout(function() { 
+            ripple.remove(); 
+        }, 600);
+    });
+}
+
+// Load admin configuration if available
+function loadAdminConfig() {
+    try {
+        // Try to load admin-config.js dynamically
+        var script = document.createElement('script');
+        script.src = 'admin-config.js';
+        script.async = false;
+        script.onload = function() {
+            console.log('Admin configuration loaded successfully');
+            
+            // Check if there's a stored admin session
+            if (typeof isAdminMode !== 'undefined' && isAdminMode()) {
+                console.log('Previous admin session detected');
+                if (typeof showAdminModeIndicator !== 'undefined') {
+                    showAdminModeIndicator();
+                }
+            }
+        };
+        script.onerror = function() {
+            // Admin config not available - this is fine for regular users
+            console.log('Admin configuration not available');
+        };
+        document.head.appendChild(script);
+    } catch (e) {
+        console.log('Could not load admin configuration:', e.message);
+    }
+}
+
+// Initialize common functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Load admin config if available
+    loadAdminConfig();
+    
+    // Initialize anti-cheat system first
+    if (!initializeAntiCheat()) {
+        return; // Stop initialization if user is banned
+    }
+    
+    // Initialize session tracking for engagement
+    initializeSession();
+    
     // Add click effects to all buttons
     var buttons = document.querySelectorAll('button, .primary-btn, .game-card a');
     for (var i = 0; i < buttons.length; i++) {
@@ -402,6 +854,48 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Session initialization for engagement tracking
+function initializeSession() {
+    try {
+        // Update session start time and track total play time
+        const session = getPlayerSession();
+        const now = Date.now();
+        
+        // Update play time if returning user
+        if (session.startTime && session.startTime < now) {
+            const sessionDuration = now - session.startTime;
+            updatePlayerSession({
+                totalPlayTime: session.totalPlayTime + sessionDuration,
+                startTime: now
+            });
+        }
+        
+        // Track daily play time
+        const today = new Date().toDateString();
+        if (!session.dailyPlayTime[today]) {
+            session.dailyPlayTime[today] = 0;
+        }
+        
+        // Set up periodic session updates
+        setInterval(function() {
+            updatePlayerSession({
+                totalPlayTime: getPlayerSession().totalPlayTime + 30000, // 30 seconds
+                lastActivity: Date.now()
+            });
+        }, 30000);
+        
+        // Show welcome back message for returning players
+        if (session.gamesPlayed > 0 && session.engagementLevel !== 'new') {
+            setTimeout(function() {
+                showNotification(`🎉 Welcome back to Pyramid Casino!`, 'info', 3000);
+            }, 1000);
+        }
+        
+    } catch (e) {
+        console.error('Error initializing session:', e);
+    }
+}
 
 // Game instruction content for each game
 const GAME_INSTRUCTIONS = {
@@ -939,7 +1433,7 @@ function updateBalance(amount, type, description) {
     return newBalance;
 }
 
-// Game-specific transaction recording functions with anti-cheat
+// Game-specific transaction recording functions with anti-cheat and engagement tracking
 function recordGameBet(gameName, betAmount) {
     // Perform anti-cheat check first
     if (!performAntiCheatCheck()) {
@@ -949,6 +1443,13 @@ function recordGameBet(gameName, betAmount) {
     var currentBalance = getCasinoBalance();
     var newBalance = Math.max(0, currentBalance - betAmount);
     setCasinoBalanceSecure(newBalance, 'loss', -betAmount, gameName + ' bet: ' + betAmount + ' chips');
+    
+    // Update session tracking
+    updatePlayerSession({
+        gamesPlayed: getPlayerSession().gamesPlayed + 1,
+        totalBets: getPlayerSession().totalBets + betAmount,
+        lastActivity: Date.now()
+    });
     
     // Update UI if balance element exists
     var balanceEl = document.getElementById('balance');
@@ -976,6 +1477,13 @@ function recordGameWin(gameName, winAmount, details) {
     var description = details ? gameName + ' win: ' + winAmount + ' chips (' + details + ')' : gameName + ' win: ' + winAmount + ' chips';
     setCasinoBalanceSecure(newBalance, 'win', winAmount, description);
     
+    // Update session tracking
+    updatePlayerSession({
+        totalWins: getPlayerSession().totalWins + 1,
+        consecutiveLosses: 0,
+        lastActivity: Date.now()
+    });
+    
     // Update UI if balance element exists
     var balanceEl = document.getElementById('balance');
     if (balanceEl) {
@@ -987,6 +1495,22 @@ function recordGameWin(gameName, winAmount, details) {
     }
     
     return newBalance;
+}
+
+function recordGameLoss(gameName, details) {
+    if (typeof details === 'undefined') details = '';
+    
+    // Update session tracking
+    updatePlayerSession({
+        consecutiveLosses: getPlayerSession().consecutiveLosses + 1,
+        lastActivity: Date.now()
+    });
+    
+    // Check if this should be a near-miss instead of regular loss
+    const nearMissResult = generateSlotsNearMiss();
+    if (nearMissResult.isNearMiss) {
+        handleNearMiss(gameName, nearMissResult.type, nearMissResult.excitement);
+    }
 }
 
 function recordGamePush(gameName, amount, details) {
@@ -1001,6 +1525,11 @@ function recordGamePush(gameName, amount, details) {
     var newBalance = currentBalance + amount;
     var description = details ? gameName + ' push: ' + amount + ' chips returned (' + details + ')' : gameName + ' push: ' + amount + ' chips returned';
     setCasinoBalanceSecure(newBalance, 'win', amount, description);
+    
+    // Update session tracking
+    updatePlayerSession({
+        lastActivity: Date.now()
+    });
     
     // Update UI if balance element exists
     var balanceEl = document.getElementById('balance');
