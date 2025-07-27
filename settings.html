@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Settings | Pyramid Casino</title>
+  <meta name="description" content="Customize your Pyramid Casino experience with theme settings, account management, and preferences." />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="shared-modern.css" />
+  
+  <style>
+    .settings-container {
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    .settings-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--theme-text-primary);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .settings-section {
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-lg)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(150%);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--theme-text-primary);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--theme-border-secondary);
+    }
+    
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+    
+    .setting-info {
+      flex: 1;
+    }
+    
+    .setting-name {
+      font-weight: 600;
+      color: var(--theme-text-primary);
+      margin-bottom: 0.25rem;
+    }
+    
+    .setting-desc {
+      color: var(--theme-text-secondary);
+      font-size: 0.9rem;
+    }
+    
+    .setting-control {
+      flex-shrink: 0;
+      margin-left: 1rem;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--theme-bg-surface);
+      transition: 0.4s;
+      border-radius: 34px;
+      border: 1px solid var(--theme-border-primary);
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--theme-text-primary);
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .toggle-slider {
+      background-color: var(--theme-border-focus);
+    }
+    
+    input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+      display: block;
+      font-weight: 600;
+      color: var(--theme-text-primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-primary);
+      border-radius: var(--radius-lg);
+      color: var(--theme-text-primary);
+      font-size: 1rem;
+      transition: var(--transition-fast);
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--theme-border-focus);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .theme-preview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .theme-card {
+      background: var(--theme-bg-surface);
+      border: 2px solid var(--theme-border-primary);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+    
+    .theme-card.active {
+      border-color: var(--theme-border-focus);
+      background: rgba(102, 126, 234, 0.1);
+    }
+    
+    .theme-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--theme-border-focus);
+    }
+    
+    .theme-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .danger-zone {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    .guest-notice {
+      background: rgba(251, 146, 60, 0.15);
+      border: 1px solid rgba(251, 146, 60, 0.3);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .guest-notice h2 {
+      color: var(--theme-warning);
+      margin-bottom: 0.5rem;
+    }
+    
+    .guest-notice p {
+      color: var(--theme-text-secondary);
+      margin-bottom: 1rem;
+    }
+    
+    .password-requirements {
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-primary);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .requirement {
+      margin-bottom: 0.25rem;
+      color: var(--theme-text-secondary);
+    }
+    
+    .requirement.valid {
+      color: var(--theme-success);
+    }
+    
+    .requirement.invalid {
+      color: var(--theme-error);
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Minimal Apple-style Navbar -->
+  <nav class="navbar" role="banner">
+    <a href="index.html" class="navbar-brand">
+      <span role="img" aria-label="pyramid">🏜️</span>
+      Pyramid Casino
+    </a>
+    
+    <ul class="navbar-nav" role="navigation" aria-label="Main navigation">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="games.html" class="nav-link">Games</a></li>
+      <li><a href="profile.html" class="nav-link">Profile</a></li>
+      <li><a href="topup.html" class="nav-link">Top Up</a></li>
+      <li><a href="history.html" class="nav-link">History</a></li>
+      <li>
+        <button 
+          class="theme-toggle" 
+          onclick="toggleTheme()" 
+          aria-label="Toggle between light and dark theme"
+          title="Toggle theme"
+        >
+          <span id="theme-icon">🌙</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+  
+  <main id="main-content" class="main-content container" role="main">
+    <div class="settings-container">
+      <h1 class="settings-title">⚙️ Settings</h1>
+      
+      <!-- Guest Notice (shown when not logged in) -->
+      <div id="guest-notice" class="guest-notice" style="display: none;">
+        <h2>🎮 Guest Mode</h2>
+        <p>Some settings require an account. Create one to access all features!</p>
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+          <a href="signup.html" class="btn btn-primary">Create Account</a>
+          <a href="login.html" class="btn btn-secondary">Log In</a>
+        </div>
+      </div>
+      
+      <!-- Theme Settings -->
+      <div class="settings-section">
+        <h2 class="section-title">🎨 Appearance</h2>
+        
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Dark Mode</div>
+            <div class="setting-desc">Toggle between light and dark theme</div>
+          </div>
+          <div class="setting-control">
+            <label class="toggle-switch">
+              <input type="checkbox" id="darkModeToggle" onchange="toggleTheme()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="theme-preview">
+          <div class="theme-card" onclick="setTheme('light')">
+            <div class="theme-icon">☀️</div>
+            <div>Light Mode</div>
+          </div>
+          <div class="theme-card" onclick="setTheme('dark')">
+            <div class="theme-icon">🌙</div>
+            <div>Dark Mode</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Game Settings -->
+      <div class="settings-section">
+        <h2 class="section-title">🎮 Game Preferences</h2>
+        
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Sound Effects</div>
+            <div class="setting-desc">Enable game sound effects and audio feedback</div>
+          </div>
+          <div class="setting-control">
+            <label class="toggle-switch">
+              <input type="checkbox" id="soundToggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Animations</div>
+            <div class="setting-desc">Enable smooth animations and transitions</div>
+          </div>
+          <div class="setting-control">
+            <label class="toggle-switch">
+              <input type="checkbox" id="animationsToggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Auto-Save Progress</div>
+            <div class="setting-desc">Automatically save game progress and settings</div>
+          </div>
+          <div class="setting-control">
+            <label class="toggle-switch">
+              <input type="checkbox" id="autoSaveToggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Account Settings (only shown when logged in) -->
+      <div class="settings-section" id="account-settings" style="display: none;">
+        <h2 class="section-title">👤 Account</h2>
+        
+        <div class="form-group">
+          <label for="currentEmail" class="form-label">Email Address</label>
+          <input 
+            type="email" 
+            id="currentEmail" 
+            class="form-input" 
+            readonly
+            placeholder="No email set"
+          />
+        </div>
+        
+        <button onclick="changeEmail()" class="btn btn-secondary">
+          📧 Change Email
+        </button>
+      </div>
+      
+      <!-- Password Settings (only shown when logged in) -->
+      <div class="settings-section" id="password-settings" style="display: none;">
+        <h2 class="section-title">🔒 Password</h2>
+        
+        <form id="passwordForm">
+          <div class="form-group">
+            <label for="currentPassword" class="form-label">Current Password</label>
+            <input 
+              type="password" 
+              id="currentPassword" 
+              class="form-input" 
+              autocomplete="current-password"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="newPassword" class="form-label">New Password</label>
+            <input 
+              type="password" 
+              id="newPassword" 
+              class="form-input" 
+              autocomplete="new-password"
+            />
+            
+            <div id="password-requirements" class="password-requirements" style="display: none;">
+              <div class="requirement" id="req-length">At least 6 characters</div>
+              <div class="requirement" id="req-letter">At least one letter</div>
+              <div class="requirement" id="req-number">At least one number</div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="confirmPassword" class="form-label">Confirm New Password</label>
+            <input 
+              type="password" 
+              id="confirmPassword" 
+              class="form-input" 
+              autocomplete="new-password"
+            />
+          </div>
+          
+          <button type="submit" class="btn btn-primary" id="changePasswordBtn" disabled>
+            🔐 Change Password
+          </button>
+        </form>
+      </div>
+      
+      <!-- Data Management -->
+      <div class="settings-section">
+        <h2 class="section-title">💾 Data Management</h2>
+        
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Export Data</div>
+            <div class="setting-desc">Download your game data and statistics</div>
+          </div>
+          <div class="setting-control">
+            <button onclick="exportData()" class="btn btn-secondary btn-sm">
+              📤 Export
+            </button>
+          </div>
+        </div>
+        
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Reset Statistics</div>
+            <div class="setting-desc">Clear all game statistics and achievements</div>
+          </div>
+          <div class="setting-control">
+            <button onclick="resetStats()" class="btn btn-outline btn-sm">
+              🔄 Reset Stats
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Danger Zone (only shown when logged in) -->
+      <div class="settings-section danger-zone" id="danger-zone" style="display: none;">
+        <h2 class="section-title">⚠️ Danger Zone</h2>
+        
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-name">Delete Account</div>
+            <div class="setting-desc">Permanently delete your account and all data</div>
+          </div>
+          <div class="setting-control">
+            <button onclick="deleteAccount()" class="btn btn-danger btn-sm">
+              🗑️ Delete Account
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="glass-surface text-center" role="contentinfo" style="padding: 2rem; margin-top: 3rem;">
+    <div>
+      <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
+      <p style="margin: 5px 0; font-size: 0.9rem; color: var(--theme-text-muted);">
+        💰 No real money gambling | 🔞 18+ for entertainment
+      </p>
+    </div>
+  </footer>
+  
+  <!-- Toast notification container -->
+  <div class="toast-container" id="toast-container"></div>
+  
+  <!-- Scripts -->
+  <script src="theme.js"></script>
+  <script src="shared-modern.js"></script>
+  
+  <script>
+    let currentUser = null;
+    
+    // Theme toggle functionality
+    function updateThemeIcon() {
+      const themeIcon = document.getElementById('theme-icon');
+      const currentTheme = getCurrentTheme();
+      themeIcon.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+      
+      // Update toggle switch
+      document.getElementById('darkModeToggle').checked = currentTheme === 'dark';
+      
+      // Update theme cards
+      document.querySelectorAll('.theme-card').forEach(card => {
+        card.classList.remove('active');
+      });
+      document.querySelector(`[onclick="setTheme('${currentTheme}')"]`).classList.add('active');
+    }
+    
+    // Listen for theme changes
+    window.addEventListener('themeChanged', updateThemeIcon);
+    
+    function setTheme(theme) {
+      if (typeof applyTheme === 'function') {
+        applyTheme(theme);
+      }
+      updateThemeIcon();
+    }
+    
+    function validatePassword(password) {
+      const requirements = {
+        length: password.length >= 6,
+        letter: /[a-zA-Z]/.test(password),
+        number: /[0-9]/.test(password)
+      };
+      
+      if (document.getElementById('password-requirements').style.display !== 'none') {
+        document.getElementById('req-length').className = requirements.length ? 'requirement valid' : 'requirement invalid';
+        document.getElementById('req-letter').className = requirements.letter ? 'requirement valid' : 'requirement invalid';
+        document.getElementById('req-number').className = requirements.number ? 'requirement valid' : 'requirement invalid';
+      }
+      
+      return requirements.length && requirements.letter && requirements.number;
+    }
+    
+    function validatePasswordForm() {
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      const isValid = currentPassword && 
+                     validatePassword(newPassword) && 
+                     newPassword === confirmPassword;
+      
+      document.getElementById('changePasswordBtn').disabled = !isValid;
+      return isValid;
+    }
+    
+    function changeEmail() {
+      const newEmail = prompt('Enter your new email address:');
+      if (newEmail && currentUser) {
+        const users = JSON.parse(localStorage.getItem('pyramidCasinoUsers') || '{}');
+        if (users[currentUser]) {
+          users[currentUser].email = newEmail;
+          localStorage.setItem('pyramidCasinoUsers', JSON.stringify(users));
+          document.getElementById('currentEmail').value = newEmail;
+          
+          if (typeof showToast === 'function') {
+            showToast('Email updated successfully', 'success');
+          }
+        }
+      }
+    }
+    
+    function exportData() {
+      const data = {
+        balance: localStorage.getItem('pyramidCasinoBalance'),
+        gamesPlayed: localStorage.getItem('pyramidCasinoGamesPlayed'),
+        totalWinnings: localStorage.getItem('pyramidCasinoTotalWinnings'),
+        transactions: localStorage.getItem('pyramidCasinoTransactions'),
+        settings: {
+          theme: getCurrentTheme(),
+          sound: document.getElementById('soundToggle').checked,
+          animations: document.getElementById('animationsToggle').checked,
+          autoSave: document.getElementById('autoSaveToggle').checked
+        }
+      };
+      
+      if (currentUser) {
+        data.user = JSON.parse(localStorage.getItem('pyramidCasinoUsers') || '{}')[currentUser];
+      }
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `pyramid-casino-data-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      if (typeof showToast === 'function') {
+        showToast('Data exported successfully', 'success');
+      }
+    }
+    
+    function resetStats() {
+      if (confirm('Are you sure you want to reset all statistics? This cannot be undone.')) {
+        localStorage.removeItem('pyramidCasinoGamesPlayed');
+        localStorage.removeItem('pyramidCasinoTotalWinnings');
+        localStorage.removeItem('pyramidCasinoBestStreak');
+        localStorage.removeItem('pyramidCasinoBiggestWin');
+        localStorage.removeItem('pyramidCasinoTransactions');
+        
+        if (currentUser) {
+          const users = JSON.parse(localStorage.getItem('pyramidCasinoUsers') || '{}');
+          if (users[currentUser]) {
+            users[currentUser].xp = 0;
+            users[currentUser].achievements = [];
+            users[currentUser].gamesPlayed = 0;
+            users[currentUser].totalWinnings = 0;
+            localStorage.setItem('pyramidCasinoUsers', JSON.stringify(users));
+          }
+        }
+        
+        if (typeof showToast === 'function') {
+          showToast('Statistics reset successfully', 'success');
+        }
+      }
+    }
+    
+    function deleteAccount() {
+      if (!currentUser) return;
+      
+      const confirmation = prompt('Type "DELETE" to confirm account deletion:');
+      if (confirmation === 'DELETE') {
+        const users = JSON.parse(localStorage.getItem('pyramidCasinoUsers') || '{}');
+        delete users[currentUser];
+        localStorage.setItem('pyramidCasinoUsers', JSON.stringify(users));
+        localStorage.removeItem('pyramidCasinoCurrentUser');
+        
+        if (typeof showToast === 'function') {
+          showToast('Account deleted successfully', 'info');
+        }
+        
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1000);
+      }
+    }
+    
+    function loadSettings() {
+      currentUser = localStorage.getItem('pyramidCasinoCurrentUser');
+      
+      if (currentUser) {
+        // Show account sections
+        document.getElementById('guest-notice').style.display = 'none';
+        document.getElementById('account-settings').style.display = 'block';
+        document.getElementById('password-settings').style.display = 'block';
+        document.getElementById('danger-zone').style.display = 'block';
+        
+        // Load user data
+        const users = JSON.parse(localStorage.getItem('pyramidCasinoUsers') || '{}');
+        const user = users[currentUser];
+        if (user) {
+          document.getElementById('currentEmail').value = user.email || '';
+        }
+      } else {
+        // Show guest notice
+        document.getElementById('guest-notice').style.display = 'block';
+        document.getElementById('account-settings').style.display = 'none';
+        document.getElementById('password-settings').style.display = 'none';
+        document.getElementById('danger-zone').style.display = 'none';
+      }
+      
+      // Load saved settings
+      const savedSettings = JSON.parse(localStorage.getItem('pyramidCasinoSettings') || '{}');
+      document.getElementById('soundToggle').checked = savedSettings.sound !== false;
+      document.getElementById('animationsToggle').checked = savedSettings.animations !== false;
+      document.getElementById('autoSaveToggle').checked = savedSettings.autoSave !== false;
+    }
+    
+    function saveSettings() {
+      const settings = {
+        sound: document.getElementById('soundToggle').checked,
+        animations: document.getElementById('animationsToggle').checked,
+        autoSave: document.getElementById('autoSaveToggle').checked
+      };
+      localStorage.setItem('pyramidCasinoSettings', JSON.stringify(settings));
+    }
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      updateThemeIcon();
+      document.getElementById('year').textContent = new Date().getFullYear();
+      loadSettings();
+      
+      // Show password requirements when typing
+      document.getElementById('newPassword').addEventListener('input', function() {
+        document.getElementById('password-requirements').style.display = 'block';
+        validatePassword(this.value);
+        validatePasswordForm();
+      });
+      
+      document.getElementById('currentPassword').addEventListener('input', validatePasswordForm);
+      document.getElementById('confirmPassword').addEventListener('input', validatePasswordForm);
+      
+      // Save settings when toggles change
+      document.querySelectorAll('#soundToggle, #animationsToggle, #autoSaveToggle').forEach(toggle => {
+        toggle.addEventListener('change', saveSettings);
+      });
+      
+      // Handle password change form
+      document.getElementById('passwordForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (!validatePasswordForm() || !currentUser) return;
+        
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        
+        const users = JSON.parse(localStorage.getItem('pyramidCasinoUsers') || '{}');
+        const user = users[currentUser];
+        
+        if (!user || user.password !== currentPassword) {
+          if (typeof showToast === 'function') {
+            showToast('Current password is incorrect', 'error');
+          }
+          return;
+        }
+        
+        user.password = newPassword;
+        localStorage.setItem('pyramidCasinoUsers', JSON.stringify(users));
+        
+        // Clear form
+        document.getElementById('passwordForm').reset();
+        document.getElementById('password-requirements').style.display = 'none';
+        document.getElementById('changePasswordBtn').disabled = true;
+        
+        if (typeof showToast === 'function') {
+          showToast('Password changed successfully', 'success');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login | Pyramid Casino</title>
+  <meta name="description" content="Log into your Pyramid Casino account to access your profile, balance, and game progress." />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="shared-modern.css" />
+  
+  <style>
+    .auth-container {
+      max-width: 400px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+    
+    .auth-card {
+      background: var(--theme-bg-glass);
+      backdrop-filter: blur(var(--blur-lg)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(150%);
+      border: 1px solid var(--theme-border-secondary);
+      border-radius: var(--radius-2xl);
+      padding: 2.5rem;
+      text-align: center;
+    }
+    
+    .auth-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--theme-text-primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .auth-subtitle {
+      color: var(--theme-text-secondary);
+      margin-bottom: 2rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+    
+    .form-label {
+      display: block;
+      font-weight: 600;
+      color: var(--theme-text-primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-primary);
+      border-radius: var(--radius-lg);
+      color: var(--theme-text-primary);
+      font-size: 1rem;
+      transition: var(--transition-fast);
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--theme-border-focus);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .auth-link {
+      color: var(--theme-border-focus);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .auth-link:hover {
+      text-decoration: underline;
+    }
+    
+    .divider {
+      margin: 1.5rem 0;
+      text-align: center;
+      color: var(--theme-text-muted);
+    }
+    
+    .guest-login {
+      background: var(--theme-bg-surface);
+      border: 1px solid var(--theme-border-primary);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .guest-login h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--theme-text-primary);
+    }
+    
+    .guest-login p {
+      margin: 0 0 1rem 0;
+      color: var(--theme-text-secondary);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Minimal Apple-style Navbar -->
+  <nav class="navbar" role="banner">
+    <a href="index.html" class="navbar-brand">
+      <span role="img" aria-label="pyramid">🏜️</span>
+      Pyramid Casino
+    </a>
+    
+    <ul class="navbar-nav" role="navigation" aria-label="Main navigation">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="games.html" class="nav-link">Games</a></li>
+      <li><a href="signup.html" class="nav-link">Sign Up</a></li>
+      <li>
+        <button 
+          class="theme-toggle" 
+          onclick="toggleTheme()" 
+          aria-label="Toggle between light and dark theme"
+          title="Toggle theme"
+        >
+          <span id="theme-icon">🌙</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+  
+  <main id="main-content" class="main-content container" role="main">
+    <div class="auth-container">
+      <div class="auth-card">
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-subtitle">Log in to your Pyramid Casino account</p>
+        
+        <form id="loginForm" aria-label="Login form">
+          <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <input 
+              type="text" 
+              id="username" 
+              name="username" 
+              class="form-input" 
+              required 
+              aria-describedby="username-help"
+              autocomplete="username"
+            />
+            <div id="username-help" class="sr-only">Enter your username</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              class="form-input" 
+              required 
+              aria-describedby="password-help"
+              autocomplete="current-password"
+            />
+            <div id="password-help" class="sr-only">Enter your password</div>
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-block">
+            🔓 Log In
+          </button>
+        </form>
+        
+        <div class="divider">
+          <p>Don't have an account? <a href="signup.html" class="auth-link">Sign up here</a></p>
+        </div>
+        
+        <div class="guest-login">
+          <h3>🎮 Play as Guest</h3>
+          <p>Continue playing without an account (progress won't be saved)</p>
+          <a href="index.html" class="btn btn-secondary btn-block">Continue as Guest</a>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="glass-surface text-center" role="contentinfo" style="padding: 2rem; margin-top: 3rem;">
+    <div>
+      <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
+      <p style="margin: 5px 0; font-size: 0.9rem; color: var(--theme-text-muted);">
+        💰 No real money gambling | 🔞 18+ for entertainment
+      </p>
+    </div>
+  </footer>
+  
+  <!-- Toast notification container -->
+  <div class="toast-container" id="toast-container"></div>
+  
+  <!-- Scripts -->
+  <script src="theme.js"></script>
+  <script src="shared-modern.js"></script>
+  
+  <script>
+    // Theme toggle functionality
+    function updateThemeIcon() {
+      const themeIcon = document.getElementById('theme-icon');
+      const currentTheme = getCurrentTheme();
+      themeIcon.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+    }
+    
+    // Listen for theme changes
+    window.addEventListener('themeChanged', updateThemeIcon);
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      updateThemeIcon();
+      document.getElementById('year').textContent = new Date().getFullYear();
+      
+      // Handle login form submission
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        
+        if (!username || !password) {
+          if (typeof showToast === 'function') {
+            showToast('Please fill in all fields', 'error');
+          } else {
+            alert('Please fill in all fields');
+          }
+          return;
+        }
+        
+        // Simple authentication simulation
+        const users = JSON.parse(localStorage.getItem('pyramidCasinoUsers') || '{}');
+        
+        if (users[username] && users[username].password === password) {
+          // Successful login
+          localStorage.setItem('pyramidCasinoCurrentUser', username);
+          if (typeof showToast === 'function') {
+            showToast('Login successful! Welcome back, ' + username, 'success');
+          }
+          
+          // Redirect to profile or home page
+          setTimeout(() => {
+            window.location.href = 'profile.html';
+          }, 1000);
+        } else {
+          // Failed login
+          if (typeof showToast === 'function') {
+            showToast('Invalid username or password', 'error');
+          } else {
+            alert('Invalid username or password');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

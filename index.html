@@ -95,10 +95,17 @@
     
     <ul class="navbar-nav" role="navigation" aria-label="Main navigation">
       <li><a href="index.html" class="nav-link active" aria-current="page">Home</a></li>
-      <li><a href="#games" class="nav-link" aria-describedby="games-section">Games</a></li>
+      <li><a href="games.html" class="nav-link">Games</a></li>
+      <li><a href="profile.html" class="nav-link">Profile</a></li>
       <li><a href="topup.html" class="nav-link">Top Up</a></li>
       <li><a href="history.html" class="nav-link">History</a></li>
-      <li><a href="https://forms.gle/QYQqh72sSuweCue49" class="nav-link" target="_blank" rel="noopener" aria-label="Suggest A Game - opens in new window">Suggest</a></li>
+      <li><a href="settings.html" class="nav-link">Settings</a></li>
+      <li id="auth-nav-logged-out">
+        <a href="login.html" class="nav-link">Login</a>
+      </li>
+      <li id="auth-nav-logged-in" style="display: none;">
+        <button onclick="logout()" class="nav-link" style="background: none; border: none; cursor: pointer;">Logout</button>
+      </li>
       <li>
         <button 
           class="theme-toggle" 
@@ -136,15 +143,18 @@
         Experience the future of online gaming with our modern, sleek interface and exciting casino games. 
         Cutting-edge design meets classic entertainment in this next-generation gaming experience.
       </p>
-      <a class="btn btn-primary btn-lg" href="#games" aria-describedby="play-now-help" itemprop="url">
+      <a class="btn btn-primary btn-lg" href="games.html" aria-describedby="play-now-help" itemprop="url">
         🎮 Start Playing
       </a>
-      <div id="play-now-help" class="sr-only">Navigate to games section to start playing</div>
+      <div id="play-now-help" class="sr-only">Navigate to games page to start playing</div>
     </section>
     
     <!-- Games Section -->
     <section id="games" class="section" aria-labelledby="games-heading">
       <h2 id="games-heading" class="game-title text-center">Our Games</h2>
+      <p class="text-center" style="color: var(--theme-text-secondary); margin-bottom: 2rem;">
+        Featured games from our collection of 20+ casino games
+      </p>
       <div class="game-grid" role="group" aria-labelledby="games-list-heading">
         <h3 id="games-list-heading" class="sr-only">Available casino games</h3>
         
@@ -229,6 +239,13 @@
           <a href="plinko.html" class="btn btn-primary btn-sm" aria-label="Play Plinko game">Play Now</a>
         </div>
       </div>
+      
+      <!-- View All Games Button -->
+      <div class="text-center" style="margin-top: 2rem;">
+        <a href="games.html" class="btn btn-primary btn-lg">
+          🎮 View All 20+ Games
+        </a>
+      </div>
     </section>
     
     <!-- About Section -->
@@ -283,10 +300,36 @@
     // Listen for theme changes
     window.addEventListener('themeChanged', updateThemeIcon);
     
+    // Authentication functions
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('pyramidCasinoCurrentUser');
+        updateAuthUI();
+        if (typeof showToast === 'function') {
+          showToast('Logged out successfully', 'info');
+        }
+      }
+    }
+    
+    function updateAuthUI() {
+      const currentUser = localStorage.getItem('pyramidCasinoCurrentUser');
+      const loggedOutNav = document.getElementById('auth-nav-logged-out');
+      const loggedInNav = document.getElementById('auth-nav-logged-in');
+      
+      if (currentUser) {
+        loggedOutNav.style.display = 'none';
+        loggedInNav.style.display = 'block';
+      } else {
+        loggedOutNav.style.display = 'block';
+        loggedInNav.style.display = 'none';
+      }
+    }
+    
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
       // Initialize theme icon
       updateThemeIcon();
+      updateAuthUI();
       
       // Initialize balance display with anti-cheat protection
       var balanceEl = document.getElementById('balance');
@@ -312,12 +355,6 @@
           balanceEl.textContent = bal;
         }
       }
-      
-      // Update session stats display
-      // updateSessionStatsDisplay();
-      
-      // Update session stats every 30 seconds
-      // setInterval(updateSessionStatsDisplay, 30000);
       
       document.getElementById('year').textContent = new Date().getFullYear();
     });
