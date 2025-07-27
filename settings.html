@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Pyramid Casino</title>
+    <meta name="description" content="Manage your Pyramid Casino account settings, themes, and preferences.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/settings.css">
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-link" aria-label="Pyramid Casino Home">
+                    <i class="fas fa-chess-queen" aria-hidden="true"></i>
+                    <span>Pyramid Casino</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="games.html" class="nav-link">
+                        <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        <span>Games</span>
+                    </a>
+                    <a href="topup.html" class="nav-link">
+                        <i class="fas fa-coins" aria-hidden="true"></i>
+                        <span>Top-Up</span>
+                    </a>
+                    <a href="history.html" class="nav-link">
+                        <i class="fas fa-history" aria-hidden="true"></i>
+                        <span>History</span>
+                    </a>
+                    <a href="profile.html" class="nav-link">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <span>Profile</span>
+                    </a>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                    
+                    <div class="auth-section" id="authSection">
+                        <a href="login.html" class="nav-link auth-link">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="signup.html" class="nav-link auth-link">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </div>
+                    
+                    <div class="user-section hidden" id="userSection">
+                        <div class="balance-display">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            <span id="userBalance">$0.00</span>
+                        </div>
+                        <div class="user-menu">
+                            <button class="user-menu-btn" id="userMenuBtn" aria-label="User menu">
+                                <i class="fas fa-user-circle" aria-hidden="true"></i>
+                                <span id="username"></span>
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="profile.html" class="dropdown-link">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    Profile
+                                </a>
+                                <a href="settings.html" class="dropdown-link">
+                                    <i class="fas fa-cog" aria-hidden="true"></i>
+                                    Settings
+                                </a>
+                                <button class="dropdown-link logout-btn" id="logoutBtn">
+                                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main" class="settings-main">
+        <!-- Settings Header -->
+        <section class="settings-header">
+            <div class="container">
+                <h1>Settings</h1>
+                <p>Manage your account preferences and casino settings</p>
+            </div>
+        </section>
+
+        <!-- Settings Content -->
+        <section class="settings-content">
+            <div class="container">
+                <div class="settings-layout">
+                    <!-- Settings Navigation -->
+                    <nav class="settings-nav">
+                        <ul class="settings-nav-list">
+                            <li>
+                                <button class="settings-nav-item active" data-tab="appearance">
+                                    <i class="fas fa-palette" aria-hidden="true"></i>
+                                    Appearance
+                                </button>
+                            </li>
+                            <li>
+                                <button class="settings-nav-item" data-tab="account">
+                                    <i class="fas fa-user-cog" aria-hidden="true"></i>
+                                    Account
+                                </button>
+                            </li>
+                            <li>
+                                <button class="settings-nav-item" data-tab="privacy">
+                                    <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                                    Privacy
+                                </button>
+                            </li>
+                            <li>
+                                <button class="settings-nav-item" data-tab="notifications">
+                                    <i class="fas fa-bell" aria-hidden="true"></i>
+                                    Notifications
+                                </button>
+                            </li>
+                            <li>
+                                <button class="settings-nav-item" data-tab="data">
+                                    <i class="fas fa-download" aria-hidden="true"></i>
+                                    Data Export
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <!-- Settings Panels -->
+                    <div class="settings-panels">
+                        <!-- Appearance Panel -->
+                        <div class="settings-panel active" id="appearance-panel">
+                            <h2>Appearance Settings</h2>
+                            
+                            <div class="setting-group">
+                                <h3>Theme</h3>
+                                <p>Choose your preferred theme for the casino interface.</p>
+                                
+                                <div class="theme-options">
+                                    <div class="theme-option">
+                                        <input type="radio" id="theme-light" name="theme" value="light">
+                                        <label for="theme-light" class="theme-card">
+                                            <div class="theme-preview light-preview">
+                                                <div class="preview-header"></div>
+                                                <div class="preview-content">
+                                                    <div class="preview-element"></div>
+                                                    <div class="preview-element"></div>
+                                                </div>
+                                            </div>
+                                            <span class="theme-name">Light Mode</span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="theme-option">
+                                        <input type="radio" id="theme-dark" name="theme" value="dark">
+                                        <label for="theme-dark" class="theme-card">
+                                            <div class="theme-preview dark-preview">
+                                                <div class="preview-header"></div>
+                                                <div class="preview-content">
+                                                    <div class="preview-element"></div>
+                                                    <div class="preview-element"></div>
+                                                </div>
+                                            </div>
+                                            <span class="theme-name">Dark Mode</span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="theme-option">
+                                        <input type="radio" id="theme-auto" name="theme" value="auto">
+                                        <label for="theme-auto" class="theme-card">
+                                            <div class="theme-preview auto-preview">
+                                                <div class="preview-header half-light"></div>
+                                                <div class="preview-content">
+                                                    <div class="preview-element half-dark"></div>
+                                                    <div class="preview-element half-light"></div>
+                                                </div>
+                                            </div>
+                                            <span class="theme-name">Auto (System)</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-group">
+                                <h3>Animation Settings</h3>
+                                <div class="setting-item">
+                                    <label class="setting-label">
+                                        <input type="checkbox" id="enableAnimations" checked>
+                                        <span class="checkmark"></span>
+                                        Enable animations and transitions
+                                    </label>
+                                    <p class="setting-description">Disable this to reduce motion for accessibility</p>
+                                </div>
+                                
+                                <div class="setting-item">
+                                    <label class="setting-label">
+                                        <input type="checkbox" id="enableSounds" checked>
+                                        <span class="checkmark"></span>
+                                        Enable sound effects
+                                    </label>
+                                    <p class="setting-description">Play sounds for wins, notifications, and game events</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Panel -->
+                        <div class="settings-panel" id="account-panel">
+                            <h2>Account Settings</h2>
+                            
+                            <div class="setting-group">
+                                <h3>Profile Information</h3>
+                                <form id="profileForm" class="settings-form">
+                                    <div class="form-group">
+                                        <label for="displayName">Display Name</label>
+                                        <input type="text" id="displayName" placeholder="Enter display name">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="email">Email Address</label>
+                                        <input type="email" id="email" placeholder="Enter email address">
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save" aria-hidden="true"></i>
+                                        Save Changes
+                                    </button>
+                                </form>
+                            </div>
+                            
+                            <div class="setting-group">
+                                <h3>Password Management</h3>
+                                <form id="passwordForm" class="settings-form">
+                                    <div class="form-group">
+                                        <label for="currentPassword">Current Password</label>
+                                        <input type="password" id="currentPassword" placeholder="Enter current password">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="newPassword">New Password</label>
+                                        <input type="password" id="newPassword" placeholder="Enter new password">
+                                        <div class="password-strength" id="passwordStrength">
+                                            <div class="strength-bar">
+                                                <div class="strength-fill"></div>
+                                            </div>
+                                            <span class="strength-text">Password strength</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="confirmPassword">Confirm New Password</label>
+                                        <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-key" aria-hidden="true"></i>
+                                        Update Password
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Privacy Panel -->
+                        <div class="settings-panel" id="privacy-panel">
+                            <h2>Privacy & Security</h2>
+                            
+                            <div class="setting-group">
+                                <h3>Data Collection</h3>
+                                <div class="setting-item">
+                                    <label class="setting-label">
+                                        <input type="checkbox" id="analyticsConsent" checked>
+                                        <span class="checkmark"></span>
+                                        Allow anonymous usage analytics
+                                    </label>
+                                    <p class="setting-description">Help us improve the casino by sharing anonymous usage data</p>
+                                </div>
+                                
+                                <div class="setting-item">
+                                    <label class="setting-label">
+                                        <input type="checkbox" id="performanceData" checked>
+                                        <span class="checkmark"></span>
+                                        Share performance data
+                                    </label>
+                                    <p class="setting-description">Share game performance data to help optimize gameplay</p>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-group">
+                                <h3>Session Management</h3>
+                                <div class="setting-item">
+                                    <label class="setting-label">
+                                        <input type="checkbox" id="rememberSession" checked>
+                                        <span class="checkmark"></span>
+                                        Remember me on this device
+                                    </label>
+                                    <p class="setting-description">Stay logged in for faster access</p>
+                                </div>
+                                
+                                <div class="setting-item">
+                                    <button class="btn btn-secondary" id="logoutAllDevices">
+                                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                        Logout from all devices
+                                    </button>
+                                    <p class="setting-description">Force logout from all sessions on other devices</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notifications Panel -->
+                        <div class="settings-panel" id="notifications-panel">
+                            <h2>Notification Settings</h2>
+                            
+                            <div class="setting-group">
+                                <h3>Game Notifications</h3>
+                                <div class="setting-item">
+                                    <label class="setting-label">
+                                        <input type="checkbox" id="winNotifications" checked>
+                                        <span class="checkmark"></span>
+                                        Big win notifications
+                                    </label>
+                                    <p class="setting-description">Get notified when you hit a big win</p>
+                                </div>
+                                
+                                <div class="setting-item">
+                                    <label class="setting-label">
+                                        <input type="checkbox" id="bonusNotifications" checked>
+                                        <span class="checkmark"></span>
+                                        Bonus and promotion alerts
+                                    </label>
+                                    <p class="setting-description">Receive notifications about bonuses and special offers</p>
+                                </div>
+                                
+                                <div class="setting-item">
+                                    <label class="setting-label">
+                                        <input type="checkbox" id="achievementNotifications" checked>
+                                        <span class="checkmark"></span>
+                                        Achievement unlocked notifications
+                                    </label>
+                                    <p class="setting-description">Get notified when you unlock new achievements</p>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-group">
+                                <h3>Account Notifications</h3>
+                                <div class="setting-item">
+                                    <label class="setting-label">
+                                        <input type="checkbox" id="securityNotifications" checked>
+                                        <span class="checkmark"></span>
+                                        Security alerts
+                                    </label>
+                                    <p class="setting-description">Important security-related notifications</p>
+                                </div>
+                                
+                                <div class="setting-item">
+                                    <label class="setting-label">
+                                        <input type="checkbox" id="maintenanceNotifications" checked>
+                                        <span class="checkmark"></span>
+                                        Maintenance announcements
+                                    </label>
+                                    <p class="setting-description">Notifications about scheduled maintenance</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Export Panel -->
+                        <div class="settings-panel" id="data-panel">
+                            <h2>Data Export & Management</h2>
+                            
+                            <div class="setting-group">
+                                <h3>Export Your Data</h3>
+                                <p>Download your personal data in a portable format.</p>
+                                
+                                <div class="export-options">
+                                    <div class="export-item">
+                                        <div class="export-info">
+                                            <h4>Profile Data</h4>
+                                            <p>Your profile information, statistics, and achievements</p>
+                                        </div>
+                                        <button class="btn btn-secondary" id="exportProfile">
+                                            <i class="fas fa-download" aria-hidden="true"></i>
+                                            Export Profile
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="export-item">
+                                        <div class="export-info">
+                                            <h4>Transaction History</h4>
+                                            <p>Complete history of all your transactions and game activity</p>
+                                        </div>
+                                        <button class="btn btn-secondary" id="exportTransactions">
+                                            <i class="fas fa-download" aria-hidden="true"></i>
+                                            Export Transactions
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="export-item">
+                                        <div class="export-info">
+                                            <h4>Complete Data Package</h4>
+                                            <p>All your data in a comprehensive package</p>
+                                        </div>
+                                        <button class="btn btn-primary" id="exportAll">
+                                            <i class="fas fa-download" aria-hidden="true"></i>
+                                            Export All Data
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-group danger-zone">
+                                <h3>Danger Zone</h3>
+                                <div class="setting-item">
+                                    <div class="danger-item">
+                                        <div class="danger-info">
+                                            <h4>Clear All Data</h4>
+                                            <p>Permanently delete all your data and start fresh. This action cannot be undone.</p>
+                                        </div>
+                                        <button class="btn btn-danger" id="clearAllData">
+                                            <i class="fas fa-trash" aria-hidden="true"></i>
+                                            Clear All Data
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Confirmation Modal -->
+    <div class="modal hidden" id="confirmModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Confirm Action</h3>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage">Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modalCancel">Cancel</button>
+                <button class="btn btn-danger" id="modalConfirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/theme.js"></script>
+    <script src="scripts/main.js"></script>
+    <script>
+        // Settings Management System
+        class SettingsManager {
+            constructor() {
+                this.currentTab = 'appearance';
+                this.settings = this.loadSettings();
+                this.init();
+            }
+            
+            init() {
+                this.checkAuth();
+                this.bindEvents();
+                this.loadUserData();
+                this.applySettings();
+            }
+            
+            checkAuth() {
+                if (!window.authManager || !window.authManager.isLoggedIn()) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+            }
+            
+            bindEvents() {
+                // Tab navigation
+                document.querySelectorAll('.settings-nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        this.switchTab(e.target.dataset.tab);
+                    });
+                });
+                
+                // Theme selection
+                document.querySelectorAll('input[name="theme"]').forEach(input => {
+                    input.addEventListener('change', (e) => {
+                        this.updateTheme(e.target.value);
+                    });
+                });
+                
+                // Settings checkboxes
+                document.querySelectorAll('.setting-item input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.addEventListener('change', (e) => {
+                        this.updateSetting(e.target.id, e.target.checked);
+                    });
+                });
+                
+                // Forms
+                document.getElementById('profileForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.updateProfile();
+                });
+                
+                document.getElementById('passwordForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.updatePassword();
+                });
+                
+                // Password strength checker
+                document.getElementById('newPassword').addEventListener('input', (e) => {
+                    this.checkPasswordStrength(e.target.value);
+                });
+                
+                // Export buttons
+                document.getElementById('exportProfile').addEventListener('click', () => {
+                    this.exportData('profile');
+                });
+                
+                document.getElementById('exportTransactions').addEventListener('click', () => {
+                    this.exportData('transactions');
+                });
+                
+                document.getElementById('exportAll').addEventListener('click', () => {
+                    this.exportData('all');
+                });
+                
+                // Danger zone
+                document.getElementById('clearAllData').addEventListener('click', () => {
+                    this.showConfirmModal(
+                        'Clear All Data',
+                        'This will permanently delete all your data including profile, transactions, and game progress. This action cannot be undone. Are you sure?',
+                        () => this.clearAllData()
+                    );
+                });
+                
+                document.getElementById('logoutAllDevices').addEventListener('click', () => {
+                    this.logoutAllDevices();
+                });
+                
+                // Modal events
+                document.getElementById('modalClose').addEventListener('click', () => {
+                    this.hideModal();
+                });
+                
+                document.getElementById('modalCancel').addEventListener('click', () => {
+                    this.hideModal();
+                });
+                
+                document.getElementById('modalConfirm').addEventListener('click', () => {
+                    if (this.pendingAction) {
+                        this.pendingAction();
+                        this.hideModal();
+                    }
+                });
+            }
+            
+            switchTab(tabName) {
+                // Update nav
+                document.querySelectorAll('.settings-nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                
+                // Update panels
+                document.querySelectorAll('.settings-panel').forEach(panel => {
+                    panel.classList.remove('active');
+                });
+                document.getElementById(`${tabName}-panel`).classList.add('active');
+                
+                this.currentTab = tabName;
+            }
+            
+            loadUserData() {
+                const user = window.authManager.getCurrentUser();
+                if (!user) return;
+                
+                // Load profile data
+                document.getElementById('displayName').value = user.displayName || user.username;
+                document.getElementById('email').value = user.email || '';
+                
+                // Load theme preference
+                const currentTheme = window.themeManager ? window.themeManager.getCurrentTheme() : 'auto';
+                document.querySelector(`input[name="theme"][value="${currentTheme}"]`).checked = true;
+            }
+            
+            loadSettings() {
+                const saved = localStorage.getItem('pyramid-casino-settings');
+                return saved ? JSON.parse(saved) : {
+                    enableAnimations: true,
+                    enableSounds: true,
+                    analyticsConsent: true,
+                    performanceData: true,
+                    rememberSession: true,
+                    winNotifications: true,
+                    bonusNotifications: true,
+                    achievementNotifications: true,
+                    securityNotifications: true,
+                    maintenanceNotifications: true
+                };
+            }
+            
+            saveSettings() {
+                localStorage.setItem('pyramid-casino-settings', JSON.stringify(this.settings));
+            }
+            
+            applySettings() {
+                Object.keys(this.settings).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element && element.type === 'checkbox') {
+                        element.checked = this.settings[key];
+                    }
+                });
+            }
+            
+            updateSetting(key, value) {
+                this.settings[key] = value;
+                this.saveSettings();
+                
+                // Apply setting immediately if needed
+                this.applySetting(key, value);
+                
+                this.showNotification('Setting updated successfully', 'success');
+            }
+            
+            applySetting(key, value) {
+                switch (key) {
+                    case 'enableAnimations':
+                        document.body.classList.toggle('reduce-motion', !value);
+                        break;
+                    case 'enableSounds':
+                        // Update sound manager if available
+                        if (window.soundManager) {
+                            window.soundManager.setEnabled(value);
+                        }
+                        break;
+                }
+            }
+            
+            updateTheme(theme) {
+                if (window.themeManager) {
+                    window.themeManager.setTheme(theme);
+                    this.showNotification('Theme updated successfully', 'success');
+                }
+            }
+            
+            updateProfile() {
+                const displayName = document.getElementById('displayName').value.trim();
+                const email = document.getElementById('email').value.trim();
+                
+                if (!displayName) {
+                    this.showNotification('Display name is required', 'error');
+                    return;
+                }
+                
+                const user = window.authManager.getCurrentUser();
+                user.displayName = displayName;
+                user.email = email;
+                
+                window.authManager.updateUser(user);
+                this.showNotification('Profile updated successfully', 'success');
+            }
+            
+            updatePassword() {
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    this.showNotification('All password fields are required', 'error');
+                    return;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    this.showNotification('New passwords do not match', 'error');
+                    return;
+                }
+                
+                if (newPassword.length < 6) {
+                    this.showNotification('Password must be at least 6 characters long', 'error');
+                    return;
+                }
+                
+                const user = window.authManager.getCurrentUser();
+                if (user.password !== currentPassword) {
+                    this.showNotification('Current password is incorrect', 'error');
+                    return;
+                }
+                
+                user.password = newPassword;
+                window.authManager.updateUser(user);
+                
+                // Clear form
+                document.getElementById('passwordForm').reset();
+                
+                this.showNotification('Password updated successfully', 'success');
+            }
+            
+            checkPasswordStrength(password) {
+                const strengthBar = document.querySelector('.strength-fill');
+                const strengthText = document.querySelector('.strength-text');
+                
+                let strength = 0;
+                let strengthLabel = 'Very Weak';
+                
+                if (password.length >= 6) strength += 1;
+                if (password.length >= 8) strength += 1;
+                if (/[A-Z]/.test(password)) strength += 1;
+                if (/[0-9]/.test(password)) strength += 1;
+                if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+                
+                switch (strength) {
+                    case 0:
+                    case 1:
+                        strengthLabel = 'Very Weak';
+                        strengthBar.className = 'strength-fill very-weak';
+                        break;
+                    case 2:
+                        strengthLabel = 'Weak';
+                        strengthBar.className = 'strength-fill weak';
+                        break;
+                    case 3:
+                        strengthLabel = 'Moderate';
+                        strengthBar.className = 'strength-fill moderate';
+                        break;
+                    case 4:
+                        strengthLabel = 'Strong';
+                        strengthBar.className = 'strength-fill strong';
+                        break;
+                    case 5:
+                        strengthLabel = 'Very Strong';
+                        strengthBar.className = 'strength-fill very-strong';
+                        break;
+                }
+                
+                strengthBar.style.width = `${(strength / 5) * 100}%`;
+                strengthText.textContent = strengthLabel;
+            }
+            
+            exportData(type) {
+                const user = window.authManager.getCurrentUser();
+                let data = {};
+                let filename = '';
+                
+                switch (type) {
+                    case 'profile':
+                        data = {
+                            username: user.username,
+                            displayName: user.displayName,
+                            email: user.email,
+                            level: user.level,
+                            xp: user.xp,
+                            balance: user.balance,
+                            createdAt: user.createdAt,
+                            exportedAt: new Date().toISOString()
+                        };
+                        filename = `pyramid-casino-profile-${Date.now()}.json`;
+                        break;
+                        
+                    case 'transactions':
+                        data = {
+                            transactions: user.transactions || [],
+                            exportedAt: new Date().toISOString()
+                        };
+                        filename = `pyramid-casino-transactions-${Date.now()}.json`;
+                        break;
+                        
+                    case 'all':
+                        data = {
+                            profile: user,
+                            settings: this.settings,
+                            exportedAt: new Date().toISOString()
+                        };
+                        filename = `pyramid-casino-complete-data-${Date.now()}.json`;
+                        break;
+                }
+                
+                this.downloadJSON(data, filename);
+                this.showNotification('Data exported successfully', 'success');
+            }
+            
+            downloadJSON(data, filename) {
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+            
+            clearAllData() {
+                // Clear all localStorage data
+                localStorage.removeItem('pyramid-casino-user');
+                localStorage.removeItem('pyramid-casino-settings');
+                localStorage.removeItem('pyramid-casino-theme');
+                
+                // Clear any game-specific data
+                Object.keys(localStorage).forEach(key => {
+                    if (key.startsWith('pyramid-casino-') || key.includes('-game-stats')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+                
+                this.showNotification('All data cleared successfully', 'success');
+                
+                // Redirect to homepage after delay
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }
+            
+            logoutAllDevices() {
+                // In a real app, this would invalidate all sessions on the server
+                window.authManager.logout();
+                this.showNotification('Logged out from all devices', 'success');
+            }
+            
+            showConfirmModal(title, message, action) {
+                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('modalMessage').textContent = message;
+                this.pendingAction = action;
+                document.getElementById('confirmModal').classList.remove('hidden');
+            }
+            
+            hideModal() {
+                document.getElementById('confirmModal').classList.add('hidden');
+                this.pendingAction = null;
+            }
+            
+            showNotification(message, type = 'info') {
+                if (window.pyramidCasino) {
+                    window.pyramidCasino.showNotification(message, type);
+                } else {
+                    console.log(`${type.toUpperCase()}: ${message}`);
+                }
+            }
+        }
+        
+        // Initialize settings when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.settingsManager = new SettingsManager();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top-Up Balance - Pyramid Casino</title>
+    <meta name="description" content="Add credits to your Pyramid Casino account balance and get ready to play your favorite games.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/topup.css">
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-link" aria-label="Pyramid Casino Home">
+                    <i class="fas fa-chess-queen" aria-hidden="true"></i>
+                    <span>Pyramid Casino</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="games.html" class="nav-link">
+                        <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        <span>Games</span>
+                    </a>
+                    <a href="topup.html" class="nav-link active" aria-current="page">
+                        <i class="fas fa-coins" aria-hidden="true"></i>
+                        <span>Top-Up</span>
+                    </a>
+                    <a href="history.html" class="nav-link">
+                        <i class="fas fa-history" aria-hidden="true"></i>
+                        <span>History</span>
+                    </a>
+                    <a href="profile.html" class="nav-link">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <span>Profile</span>
+                    </a>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                    
+                    <div class="auth-section" id="authSection">
+                        <a href="login.html" class="nav-link auth-link">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="signup.html" class="nav-link auth-link">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </div>
+                    
+                    <div class="user-section hidden" id="userSection">
+                        <div class="balance-display">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            <span id="userBalance">$0.00</span>
+                        </div>
+                        <div class="user-menu">
+                            <button class="user-menu-btn" id="userMenuBtn" aria-label="User menu">
+                                <i class="fas fa-user-circle" aria-hidden="true"></i>
+                                <span id="username"></span>
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="profile.html" class="dropdown-link">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    Profile
+                                </a>
+                                <a href="settings.html" class="dropdown-link">
+                                    <i class="fas fa-cog" aria-hidden="true"></i>
+                                    Settings
+                                </a>
+                                <button class="dropdown-link logout-btn" id="logoutBtn">
+                                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main" class="topup-main">
+        <!-- Header -->
+        <section class="topup-header">
+            <div class="container">
+                <h1>Add Credits to Your Account</h1>
+                <p>Top up your balance and start playing your favorite casino games</p>
+                
+                <div class="current-balance">
+                    <div class="balance-card">
+                        <div class="balance-icon">
+                            <i class="fas fa-wallet" aria-hidden="true"></i>
+                        </div>
+                        <div class="balance-info">
+                            <div class="balance-label">Current Balance</div>
+                            <div class="balance-amount" id="currentBalance">$0.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Top-Up Options -->
+        <section class="quick-topup">
+            <div class="container">
+                <h2>Quick Top-Up</h2>
+                <div class="topup-options">
+                    <button class="topup-option" data-amount="10">
+                        <div class="option-amount">$10</div>
+                        <div class="option-bonus">+$1 Bonus</div>
+                    </button>
+                    <button class="topup-option" data-amount="25">
+                        <div class="option-amount">$25</div>
+                        <div class="option-bonus">+$3 Bonus</div>
+                    </button>
+                    <button class="topup-option popular" data-amount="50">
+                        <div class="option-badge">Popular</div>
+                        <div class="option-amount">$50</div>
+                        <div class="option-bonus">+$8 Bonus</div>
+                    </button>
+                    <button class="topup-option" data-amount="100">
+                        <div class="option-amount">$100</div>
+                        <div class="option-bonus">+$20 Bonus</div>
+                    </button>
+                    <button class="topup-option best-value" data-amount="250">
+                        <div class="option-badge">Best Value</div>
+                        <div class="option-amount">$250</div>
+                        <div class="option-bonus">+$75 Bonus</div>
+                    </button>
+                    <button class="topup-option" data-amount="500">
+                        <div class="option-amount">$500</div>
+                        <div class="option-bonus">+$200 Bonus</div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Custom Amount -->
+        <section class="custom-topup">
+            <div class="container">
+                <div class="topup-form-container">
+                    <div class="form-section">
+                        <h2>Custom Amount</h2>
+                        <form id="topupForm" class="topup-form">
+                            <div class="form-group">
+                                <label for="customAmount">Enter Amount</label>
+                                <div class="amount-input-group">
+                                    <span class="currency-symbol">$</span>
+                                    <input 
+                                        type="number" 
+                                        id="customAmount" 
+                                        placeholder="0.00" 
+                                        min="1" 
+                                        max="10000" 
+                                        step="0.01"
+                                        aria-label="Custom top-up amount"
+                                    >
+                                </div>
+                                <div class="amount-info">
+                                    <span class="min-amount">Minimum: $1.00</span>
+                                    <span class="max-amount">Maximum: $10,000.00</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bonus-calculator" id="bonusCalculator">
+                                <div class="bonus-breakdown">
+                                    <div class="breakdown-item">
+                                        <span class="breakdown-label">Base Amount:</span>
+                                        <span class="breakdown-value" id="baseAmount">$0.00</span>
+                                    </div>
+                                    <div class="breakdown-item bonus">
+                                        <span class="breakdown-label">Bonus Credits:</span>
+                                        <span class="breakdown-value" id="bonusAmount">$0.00</span>
+                                    </div>
+                                    <div class="breakdown-item total">
+                                        <span class="breakdown-label">Total Added:</span>
+                                        <span class="breakdown-value" id="totalAmount">$0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-large" id="topupBtn" disabled>
+                                <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                                Add Credits
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="info-section">
+                        <div class="info-card">
+                            <h3>
+                                <i class="fas fa-gift" aria-hidden="true"></i>
+                                Bonus Credits
+                            </h3>
+                            <div class="bonus-tiers">
+                                <div class="bonus-tier">
+                                    <span class="tier-range">$1 - $24</span>
+                                    <span class="tier-bonus">10% Bonus</span>
+                                </div>
+                                <div class="bonus-tier">
+                                    <span class="tier-range">$25 - $49</span>
+                                    <span class="tier-bonus">12% Bonus</span>
+                                </div>
+                                <div class="bonus-tier">
+                                    <span class="tier-range">$50 - $99</span>
+                                    <span class="tier-bonus">16% Bonus</span>
+                                </div>
+                                <div class="bonus-tier">
+                                    <span class="tier-range">$100 - $249</span>
+                                    <span class="tier-bonus">20% Bonus</span>
+                                </div>
+                                <div class="bonus-tier highlighted">
+                                    <span class="tier-range">$250 - $499</span>
+                                    <span class="tier-bonus">30% Bonus</span>
+                                </div>
+                                <div class="bonus-tier premium">
+                                    <span class="tier-range">$500+</span>
+                                    <span class="tier-bonus">40% Bonus</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h3>
+                                <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                                Safe & Secure
+                            </h3>
+                            <ul class="security-features">
+                                <li>
+                                    <i class="fas fa-lock" aria-hidden="true"></i>
+                                    Secure transaction processing
+                                </li>
+                                <li>
+                                    <i class="fas fa-clock" aria-hidden="true"></i>
+                                    Instant credit addition
+                                </li>
+                                <li>
+                                    <i class="fas fa-history" aria-hidden="true"></i>
+                                    Complete transaction history
+                                </li>
+                                <li>
+                                    <i class="fas fa-handshake" aria-hidden="true"></i>
+                                    Educational purposes only
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Top-Ups -->
+        <section class="recent-topups">
+            <div class="container">
+                <h2>Recent Top-Ups</h2>
+                <div class="recent-list" id="recentTopups">
+                    <!-- Recent top-ups will be populated by JavaScript -->
+                </div>
+                <div class="section-footer">
+                    <a href="history.html" class="btn btn-secondary">
+                        <i class="fas fa-history" aria-hidden="true"></i>
+                        View Full History
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Success Modal -->
+    <div class="modal hidden" id="successModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content success">
+            <div class="modal-header">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle" aria-hidden="true"></i>
+                </div>
+                <h3>Credits Added Successfully!</h3>
+            </div>
+            <div class="modal-body">
+                <div class="success-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Amount Added:</span>
+                        <span class="detail-value" id="successAmount">$0.00</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Bonus Credits:</span>
+                        <span class="detail-value" id="successBonus">$0.00</span>
+                    </div>
+                    <div class="detail-item total">
+                        <span class="detail-label">Total Added:</span>
+                        <span class="detail-value" id="successTotal">$0.00</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">New Balance:</span>
+                        <span class="detail-value" id="successBalance">$0.00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="playNowBtn">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    Start Playing
+                </button>
+                <button class="btn btn-secondary" id="continueBtn">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/theme.js"></script>
+    <script src="scripts/main.js"></script>
+    <script>
+        // Top-Up Management System
+        class TopUpManager {
+            constructor() {
+                this.bonusTiers = [
+                    { min: 1, max: 24, bonus: 0.10 },
+                    { min: 25, max: 49, bonus: 0.12 },
+                    { min: 50, max: 99, bonus: 0.16 },
+                    { min: 100, max: 249, bonus: 0.20 },
+                    { min: 250, max: 499, bonus: 0.30 },
+                    { min: 500, max: Infinity, bonus: 0.40 }
+                ];
+                
+                this.init();
+            }
+            
+            init() {
+                this.checkAuth();
+                this.bindEvents();
+                this.updateDisplay();
+                this.loadRecentTopUps();
+            }
+            
+            checkAuth() {
+                if (!window.authManager || !window.authManager.isLoggedIn()) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+            }
+            
+            bindEvents() {
+                // Quick top-up buttons
+                document.querySelectorAll('.topup-option').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const amount = parseFloat(e.currentTarget.dataset.amount);
+                        this.selectQuickAmount(amount);
+                    });
+                });
+                
+                // Custom amount input
+                const customAmount = document.getElementById('customAmount');
+                customAmount.addEventListener('input', (e) => {
+                    this.updateBonusCalculator(parseFloat(e.target.value) || 0);
+                    this.validateForm();
+                });
+                
+                // Top-up form
+                document.getElementById('topupForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.processTopUp();
+                });
+                
+                // Modal buttons
+                document.getElementById('playNowBtn').addEventListener('click', () => {
+                    window.location.href = 'games.html';
+                });
+                
+                document.getElementById('continueBtn').addEventListener('click', () => {
+                    this.hideSuccessModal();
+                });
+                
+                // Close modal on overlay click
+                document.querySelector('.modal-overlay').addEventListener('click', () => {
+                    this.hideSuccessModal();
+                });
+            }
+            
+            selectQuickAmount(amount) {
+                document.getElementById('customAmount').value = amount;
+                this.updateBonusCalculator(amount);
+                this.validateForm();
+                
+                // Highlight selected option
+                document.querySelectorAll('.topup-option').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                
+                document.querySelector(`[data-amount="${amount}"]`).classList.add('selected');
+            }
+            
+            updateBonusCalculator(amount) {
+                const bonus = this.calculateBonus(amount);
+                const total = amount + bonus;
+                
+                document.getElementById('baseAmount').textContent = window.authManager.formatCurrency(amount);
+                document.getElementById('bonusAmount').textContent = window.authManager.formatCurrency(bonus);
+                document.getElementById('totalAmount').textContent = window.authManager.formatCurrency(total);
+                
+                // Show/hide calculator
+                const calculator = document.getElementById('bonusCalculator');
+                if (amount > 0) {
+                    calculator.classList.add('visible');
+                } else {
+                    calculator.classList.remove('visible');
+                }
+            }
+            
+            calculateBonus(amount) {
+                if (amount <= 0) return 0;
+                
+                const tier = this.bonusTiers.find(t => amount >= t.min && amount <= t.max);
+                return tier ? amount * tier.bonus : 0;
+            }
+            
+            validateForm() {
+                const amount = parseFloat(document.getElementById('customAmount').value) || 0;
+                const topupBtn = document.getElementById('topupBtn');
+                
+                if (amount >= 1 && amount <= 10000) {
+                    topupBtn.disabled = false;
+                    topupBtn.innerHTML = `
+                        <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                        Add ${window.authManager.formatCurrency(amount + this.calculateBonus(amount))}
+                    `;
+                } else {
+                    topupBtn.disabled = true;
+                    topupBtn.innerHTML = `
+                        <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                        Add Credits
+                    `;
+                }
+            }
+            
+            processTopUp() {
+                const amount = parseFloat(document.getElementById('customAmount').value);
+                
+                if (amount < 1 || amount > 10000) {
+                    this.showNotification('Please enter an amount between $1.00 and $10,000.00', 'error');
+                    return;
+                }
+                
+                const bonus = this.calculateBonus(amount);
+                const total = amount + bonus;
+                
+                // Add to balance
+                window.authManager.updateBalance(total);
+                
+                // Record transaction
+                window.authManager.addTransaction({
+                    type: 'topup',
+                    amount: total,
+                    baseAmount: amount,
+                    bonusAmount: bonus,
+                    description: `Top-up: $${amount.toFixed(2)} + $${bonus.toFixed(2)} bonus`,
+                    method: 'demo_credits'
+                });
+                
+                // Add XP for top-up
+                window.authManager.addXP(Math.floor(amount / 10));
+                
+                // Show success modal
+                this.showSuccessModal(amount, bonus, total);
+                
+                // Reset form
+                document.getElementById('topupForm').reset();
+                document.querySelectorAll('.topup-option').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                this.updateBonusCalculator(0);
+                this.validateForm();
+                
+                // Update display
+                this.updateDisplay();
+                this.loadRecentTopUps();
+            }
+            
+            showSuccessModal(amount, bonus, total) {
+                const user = window.authManager.getCurrentUser();
+                
+                document.getElementById('successAmount').textContent = window.authManager.formatCurrency(amount);
+                document.getElementById('successBonus').textContent = window.authManager.formatCurrency(bonus);
+                document.getElementById('successTotal').textContent = window.authManager.formatCurrency(total);
+                document.getElementById('successBalance').textContent = window.authManager.formatCurrency(user.balance);
+                
+                document.getElementById('successModal').classList.remove('hidden');
+                
+                // Add celebration effect
+                this.createCelebrationEffect();
+            }
+            
+            hideSuccessModal() {
+                document.getElementById('successModal').classList.add('hidden');
+            }
+            
+            createCelebrationEffect() {
+                // Create confetti effect
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        this.createConfettiPiece();
+                    }, i * 20);
+                }
+            }
+            
+            createConfettiPiece() {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+            
+            updateDisplay() {
+                const user = window.authManager.getCurrentUser();
+                if (user) {
+                    document.getElementById('currentBalance').textContent = 
+                        window.authManager.formatCurrency(user.balance);
+                }
+            }
+            
+            loadRecentTopUps() {
+                const user = window.authManager.getCurrentUser();
+                const topups = (user.transactions || [])
+                    .filter(t => t.type === 'topup')
+                    .slice(-5)
+                    .reverse();
+                
+                const recentList = document.getElementById('recentTopups');
+                
+                if (topups.length === 0) {
+                    recentList.innerHTML = `
+                        <div class="no-topups">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            <p>No recent top-ups</p>
+                            <p>Add your first credits to start playing!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                recentList.innerHTML = topups.map(topup => {
+                    const date = new Date(topup.timestamp);
+                    const timeAgo = this.getTimeAgo(date);
+                    
+                    return `
+                        <div class="recent-item">
+                            <div class="recent-icon">
+                                <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                            </div>
+                            <div class="recent-content">
+                                <div class="recent-description">
+                                    ${topup.description}
+                                </div>
+                                <div class="recent-details">
+                                    <span class="recent-method">Demo Credits</span>
+                                    <span class="recent-time">${timeAgo}</span>
+                                </div>
+                            </div>
+                            <div class="recent-amount">
+                                +${window.authManager.formatCurrency(topup.amount)}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            getTimeAgo(date) {
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMins / 60);
+                const diffDays = Math.floor(diffHours / 24);
+                
+                if (diffMins < 1) return 'Just now';
+                if (diffMins < 60) return `${diffMins}m ago`;
+                if (diffHours < 24) return `${diffHours}h ago`;
+                if (diffDays < 7) return `${diffDays}d ago`;
+                
+                return date.toLocaleDateString();
+            }
+            
+            showNotification(message, type = 'info') {
+                if (window.pyramidCasino) {
+                    window.pyramidCasino.showNotification(message, type);
+                } else {
+                    console.log(`${type.toUpperCase()}: ${message}`);
+                }
+            }
+        }
+        
+        // Initialize top-up manager when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.topUpManager = new TopUpManager();
+        });
+    </script>
+</body>
+</html>
