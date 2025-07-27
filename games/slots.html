@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Slots - Pyramid Casino</title>
+    <meta name="description" content="Play Classic Slots at Pyramid Casino. Spin the reels and win big with traditional 3-reel slot machine gameplay.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/theme.css">
+    <link rel="stylesheet" href="../styles/games.css">
+    <link rel="stylesheet" href="../styles/slot-machine.css">
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html" class="brand-link" aria-label="Pyramid Casino Home">
+                    <i class="fas fa-chess-queen" aria-hidden="true"></i>
+                    <span>Pyramid Casino</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="../index.html" class="nav-link">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="../games.html" class="nav-link">
+                        <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        <span>Games</span>
+                    </a>
+                    <a href="../topup.html" class="nav-link">
+                        <i class="fas fa-coins" aria-hidden="true"></i>
+                        <span>Top-Up</span>
+                    </a>
+                    <a href="../history.html" class="nav-link">
+                        <i class="fas fa-history" aria-hidden="true"></i>
+                        <span>History</span>
+                    </a>
+                    <a href="../profile.html" class="nav-link">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <span>Profile</span>
+                    </a>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                    
+                    <div class="auth-section" id="authSection">
+                        <a href="../login.html" class="nav-link auth-link">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="../signup.html" class="nav-link auth-link">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </div>
+                    
+                    <div class="user-section hidden" id="userSection">
+                        <div class="balance-display">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            <span id="userBalance">$0.00</span>
+                        </div>
+                        <div class="user-menu">
+                            <button class="user-menu-btn" id="userMenuBtn" aria-label="User menu">
+                                <i class="fas fa-user-circle" aria-hidden="true"></i>
+                                <span id="username"></span>
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="../profile.html" class="dropdown-link">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    Profile
+                                </a>
+                                <a href="../settings.html" class="dropdown-link">
+                                    <i class="fas fa-cog" aria-hidden="true"></i>
+                                    Settings
+                                </a>
+                                <button class="dropdown-link logout-btn" id="logoutBtn">
+                                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main" class="game-main">
+        <!-- Game Header -->
+        <section class="game-header">
+            <div class="container">
+                <div class="game-breadcrumb">
+                    <a href="../games.html" class="breadcrumb-link">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                        Back to Games
+                    </a>
+                </div>
+                <div class="game-title">
+                    <h1>Classic Slots</h1>
+                    <p>Traditional 3-reel slot machine with classic symbols</p>
+                </div>
+                <div class="game-info">
+                    <div class="info-item">
+                        <span class="info-label">Category:</span>
+                        <span class="info-value">Slots</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Min Bet:</span>
+                        <span class="info-value">$1.00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Max Bet:</span>
+                        <span class="info-value">$100.00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">RTP:</span>
+                        <span class="info-value">96.5%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Interface -->
+        <section class="game-interface">
+            <div class="container">
+                <div class="slot-machine">
+                    <div class="machine-header">
+                        <div class="machine-title">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            Classic Slots
+                        </div>
+                        <div class="machine-balance">
+                            Balance: <span id="gameBalance">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="machine-body">
+                        <!-- Slot Reels -->
+                        <div class="slot-reels" id="slotReels">
+                            <div class="reel" id="reel1">
+                                <div class="symbol" data-symbol="🍒">🍒</div>
+                                <div class="symbol" data-symbol="🍋">🍋</div>
+                                <div class="symbol" data-symbol="🍊">🍊</div>
+                            </div>
+                            <div class="reel" id="reel2">
+                                <div class="symbol" data-symbol="🍒">🍒</div>
+                                <div class="symbol" data-symbol="🍋">🍋</div>
+                                <div class="symbol" data-symbol="🍊">🍊</div>
+                            </div>
+                            <div class="reel" id="reel3">
+                                <div class="symbol" data-symbol="🍒">🍒</div>
+                                <div class="symbol" data-symbol="🍋">🍋</div>
+                                <div class="symbol" data-symbol="🍊">🍊</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Payline -->
+                        <div class="payline" id="payline"></div>
+                        
+                        <!-- Win Display -->
+                        <div class="win-display hidden" id="winDisplay">
+                            <div class="win-amount" id="winAmount">$0.00</div>
+                            <div class="win-text">You Win!</div>
+                        </div>
+                    </div>
+                    
+                    <div class="machine-controls">
+                        <!-- Bet Controls -->
+                        <div class="bet-controls">
+                            <label for="betAmount" class="control-label">Bet Amount:</label>
+                            <div class="bet-input-group">
+                                <button class="bet-btn decrease" id="decreaseBet" aria-label="Decrease bet">
+                                    <i class="fas fa-minus" aria-hidden="true"></i>
+                                </button>
+                                <input 
+                                    type="number" 
+                                    id="betAmount" 
+                                    min="1" 
+                                    max="100" 
+                                    value="5" 
+                                    step="1"
+                                    aria-label="Bet amount"
+                                >
+                                <button class="bet-btn increase" id="increaseBet" aria-label="Increase bet">
+                                    <i class="fas fa-plus" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Spin Button -->
+                        <button class="spin-btn" id="spinBtn" aria-label="Spin the reels">
+                            <i class="fas fa-play" aria-hidden="true"></i>
+                            <span>SPIN</span>
+                            <div class="spin-cost">$<span id="spinCost">5</span></div>
+                        </button>
+                        
+                        <!-- Max Bet Button -->
+                        <button class="max-bet-btn" id="maxBetBtn" aria-label="Bet maximum amount">
+                            <i class="fas fa-rocket" aria-hidden="true"></i>
+                            MAX BET
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Game Stats -->
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalSpins">0</div>
+                        <div class="stat-label">Total Spins</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalWins">0</div>
+                        <div class="stat-label">Total Wins</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="biggestWin">$0</div>
+                        <div class="stat-label">Biggest Win</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="winPercentage">0%</div>
+                        <div class="stat-label">Win Rate</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Paytable -->
+        <section class="paytable-section">
+            <div class="container">
+                <h2>Paytable</h2>
+                <div class="paytable">
+                    <div class="paytable-row">
+                        <div class="combination">🍒 🍒 🍒</div>
+                        <div class="payout">10x bet</div>
+                    </div>
+                    <div class="paytable-row">
+                        <div class="combination">🍋 🍋 🍋</div>
+                        <div class="payout">20x bet</div>
+                    </div>
+                    <div class="paytable-row">
+                        <div class="combination">🍊 🍊 🍊</div>
+                        <div class="payout">30x bet</div>
+                    </div>
+                    <div class="paytable-row">
+                        <div class="combination">🔔 🔔 🔔</div>
+                        <div class="payout">50x bet</div>
+                    </div>
+                    <div class="paytable-row">
+                        <div class="combination">⭐ ⭐ ⭐</div>
+                        <div class="payout">100x bet</div>
+                    </div>
+                    <div class="paytable-row">
+                        <div class="combination">💎 💎 💎</div>
+                        <div class="payout">500x bet</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../scripts/auth.js"></script>
+    <script src="../scripts/theme.js"></script>
+    <script src="../scripts/main.js"></script>
+    <script>
+        // Slot Machine Game Logic
+        class SlotMachine {
+            constructor() {
+                this.symbols = ['🍒', '🍋', '🍊', '🔔', '⭐', '💎'];
+                this.symbolWeights = {
+                    '🍒': 30,  // Most common
+                    '🍋': 25,
+                    '🍊': 20,
+                    '🔔': 15,
+                    '⭐': 8,
+                    '💎': 2    // Rarest
+                };
+                
+                this.payouts = {
+                    '🍒': 10,
+                    '🍋': 20,
+                    '🍊': 30,
+                    '🔔': 50,
+                    '⭐': 100,
+                    '💎': 500
+                };
+                
+                this.isSpinning = false;
+                this.gameStats = {
+                    totalSpins: 0,
+                    totalWins: 0,
+                    biggestWin: 0,
+                    winCount: 0
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.bindEvents();
+                this.loadGameStats();
+                this.updateDisplay();
+                this.checkAuthAndBalance();
+            }
+            
+            bindEvents() {
+                // Spin button
+                document.getElementById('spinBtn').addEventListener('click', () => {
+                    if (!this.isSpinning) {
+                        this.spin();
+                    }
+                });
+                
+                // Bet controls
+                document.getElementById('decreaseBet').addEventListener('click', () => {
+                    this.adjustBet(-1);
+                });
+                
+                document.getElementById('increaseBet').addEventListener('click', () => {
+                    this.adjustBet(1);
+                });
+                
+                document.getElementById('maxBetBtn').addEventListener('click', () => {
+                    this.setMaxBet();
+                });
+                
+                // Bet input
+                document.getElementById('betAmount').addEventListener('change', (e) => {
+                    this.validateBet(parseInt(e.target.value));
+                });
+                
+                // Keyboard controls
+                document.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space' && !this.isSpinning) {
+                        e.preventDefault();
+                        this.spin();
+                    }
+                });
+            }
+            
+            checkAuthAndBalance() {
+                if (!window.authManager || !window.authManager.isLoggedIn()) {
+                    window.location.href = '../login.html';
+                    return;
+                }
+                
+                const user = window.authManager.getCurrentUser();
+                if (user.balance < 1) {
+                    this.showInsufficientFunds();
+                }
+            }
+            
+            adjustBet(direction) {
+                const betInput = document.getElementById('betAmount');
+                const currentBet = parseInt(betInput.value);
+                const newBet = Math.max(1, Math.min(100, currentBet + direction));
+                
+                betInput.value = newBet;
+                this.updateSpinCost();
+            }
+            
+            setMaxBet() {
+                const user = window.authManager.getCurrentUser();
+                const maxAffordable = Math.min(100, Math.floor(user.balance));
+                
+                document.getElementById('betAmount').value = maxAffordable;
+                this.updateSpinCost();
+            }
+            
+            validateBet(bet) {
+                const validBet = Math.max(1, Math.min(100, bet || 1));
+                document.getElementById('betAmount').value = validBet;
+                this.updateSpinCost();
+            }
+            
+            updateSpinCost() {
+                const bet = parseInt(document.getElementById('betAmount').value);
+                document.getElementById('spinCost').textContent = bet;
+            }
+            
+            getRandomSymbol() {
+                const totalWeight = Object.values(this.symbolWeights).reduce((sum, weight) => sum + weight, 0);
+                let random = Math.random() * totalWeight;
+                
+                for (const [symbol, weight] of Object.entries(this.symbolWeights)) {
+                    random -= weight;
+                    if (random <= 0) {
+                        return symbol;
+                    }
+                }
+                
+                return this.symbols[0]; // Fallback
+            }
+            
+            async spin() {
+                const bet = parseInt(document.getElementById('betAmount').value);
+                const user = window.authManager.getCurrentUser();
+                
+                // Check balance
+                if (user.balance < bet) {
+                    this.showInsufficientFunds();
+                    return;
+                }
+                
+                // Deduct bet
+                window.authManager.updateBalance(-bet);
+                
+                // Start spinning
+                this.isSpinning = true;
+                this.updateSpinButton(true);
+                this.hideWinDisplay();
+                
+                // Generate random result
+                const results = [
+                    this.getRandomSymbol(),
+                    this.getRandomSymbol(),
+                    this.getRandomSymbol()
+                ];
+                
+                // Animate reels
+                await this.animateReels(results);
+                
+                // Check for wins
+                const winAmount = this.checkWin(results, bet);
+                
+                // Update stats
+                this.gameStats.totalSpins++;
+                if (winAmount > 0) {
+                    this.gameStats.totalWins += winAmount;
+                    this.gameStats.winCount++;
+                    this.gameStats.biggestWin = Math.max(this.gameStats.biggestWin, winAmount);
+                    
+                    // Add winnings to balance
+                    window.authManager.updateBalance(winAmount);
+                    
+                    // Show win
+                    this.showWin(winAmount);
+                    
+                    // Add XP
+                    window.authManager.addXP(Math.floor(winAmount / 10));
+                }
+                
+                // Save stats and update display
+                this.saveGameStats();
+                this.updateDisplay();
+                
+                // Record transaction
+                window.authManager.addTransaction({
+                    type: 'game_bet',
+                    amount: bet,
+                    description: `Classic Slots - Bet`,
+                    game: 'Classic Slots',
+                    result: winAmount > 0 ? 'win' : 'loss',
+                    winAmount: winAmount
+                });
+                
+                this.isSpinning = false;
+                this.updateSpinButton(false);
+            }
+            
+            async animateReels(results) {
+                const reels = document.querySelectorAll('.reel');
+                const animationPromises = [];
+                
+                reels.forEach((reel, index) => {
+                    animationPromises.push(this.animateReel(reel, results[index], index * 500));
+                });
+                
+                await Promise.all(animationPromises);
+            }
+            
+            animateReel(reel, finalSymbol, delay) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        // Add spinning class
+                        reel.classList.add('spinning');
+                        
+                        // Generate spinning symbols
+                        let spinCount = 0;
+                        const maxSpins = 20 + Math.random() * 10;
+                        
+                        const spinInterval = setInterval(() => {
+                            const randomSymbol = this.symbols[Math.floor(Math.random() * this.symbols.length)];
+                            reel.querySelector('.symbol').textContent = randomSymbol;
+                            reel.querySelector('.symbol').setAttribute('data-symbol', randomSymbol);
+                            
+                            spinCount++;
+                            
+                            if (spinCount >= maxSpins) {
+                                clearInterval(spinInterval);
+                                
+                                // Set final symbol
+                                reel.querySelector('.symbol').textContent = finalSymbol;
+                                reel.querySelector('.symbol').setAttribute('data-symbol', finalSymbol);
+                                
+                                // Remove spinning class
+                                reel.classList.remove('spinning');
+                                
+                                resolve();
+                            }
+                        }, 100);
+                    }, delay);
+                });
+            }
+            
+            checkWin(results, bet) {
+                // Check for three of a kind
+                if (results[0] === results[1] && results[1] === results[2]) {
+                    const multiplier = this.payouts[results[0]];
+                    return bet * multiplier;
+                }
+                
+                return 0;
+            }
+            
+            showWin(amount) {
+                const winDisplay = document.getElementById('winDisplay');
+                const winAmount = document.getElementById('winAmount');
+                
+                winAmount.textContent = window.authManager.formatCurrency(amount);
+                winDisplay.classList.remove('hidden');
+                winDisplay.classList.add('win-animation');
+                
+                // Play win sound (if available)
+                this.playWinSound();
+                
+                // Hide after delay
+                setTimeout(() => {
+                    winDisplay.classList.add('hidden');
+                    winDisplay.classList.remove('win-animation');
+                }, 3000);
+            }
+            
+            hideWinDisplay() {
+                document.getElementById('winDisplay').classList.add('hidden');
+            }
+            
+            showInsufficientFunds() {
+                if (window.pyramidCasino) {
+                    window.pyramidCasino.showNotification(
+                        'Insufficient funds! <a href="../topup.html" style="color: var(--primary-light); text-decoration: underline;">Add more credits</a>',
+                        'warning',
+                        5000
+                    );
+                }
+            }
+            
+            updateSpinButton(spinning) {
+                const spinBtn = document.getElementById('spinBtn');
+                const icon = spinBtn.querySelector('i');
+                const text = spinBtn.querySelector('span');
+                
+                if (spinning) {
+                    spinBtn.disabled = true;
+                    icon.className = 'fas fa-spinner fa-spin';
+                    text.textContent = 'SPINNING...';
+                } else {
+                    spinBtn.disabled = false;
+                    icon.className = 'fas fa-play';
+                    text.textContent = 'SPIN';
+                }
+            }
+            
+            updateDisplay() {
+                // Update balance
+                const user = window.authManager.getCurrentUser();
+                if (user) {
+                    document.getElementById('gameBalance').textContent = 
+                        window.authManager.formatCurrency(user.balance);
+                }
+                
+                // Update stats
+                document.getElementById('totalSpins').textContent = this.gameStats.totalSpins;
+                document.getElementById('totalWins').textContent = 
+                    window.authManager.formatCurrency(this.gameStats.totalWins);
+                document.getElementById('biggestWin').textContent = 
+                    window.authManager.formatCurrency(this.gameStats.biggestWin);
+                
+                const winPercentage = this.gameStats.totalSpins > 0 ? 
+                    (this.gameStats.winCount / this.gameStats.totalSpins * 100).toFixed(1) : 0;
+                document.getElementById('winPercentage').textContent = winPercentage + '%';
+            }
+            
+            loadGameStats() {
+                const saved = localStorage.getItem('slots-game-stats');
+                if (saved) {
+                    this.gameStats = { ...this.gameStats, ...JSON.parse(saved) };
+                }
+            }
+            
+            saveGameStats() {
+                localStorage.setItem('slots-game-stats', JSON.stringify(this.gameStats));
+            }
+            
+            playWinSound() {
+                // Placeholder for win sound
+                console.log('🎉 Win sound!');
+            }
+        }
+        
+        // Initialize game when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.slotMachine = new SlotMachine();
+        });
+    </script>
+</body>
+</html>
