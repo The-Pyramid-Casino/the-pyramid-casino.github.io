@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>European Roulette - Pyramid Casino</title>
+    <meta name="description" content="Play European Roulette at Pyramid Casino. Place your bets and watch the wheel spin in this classic casino game.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/theme.css">
+    <link rel="stylesheet" href="../styles/games.css">
+    <link rel="stylesheet" href="../styles/roulette.css">
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html" class="brand-link" aria-label="Pyramid Casino Home">
+                    <i class="fas fa-chess-queen" aria-hidden="true"></i>
+                    <span>Pyramid Casino</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="../index.html" class="nav-link">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="../games.html" class="nav-link">
+                        <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        <span>Games</span>
+                    </a>
+                    <a href="../topup.html" class="nav-link">
+                        <i class="fas fa-coins" aria-hidden="true"></i>
+                        <span>Top-Up</span>
+                    </a>
+                    <a href="../history.html" class="nav-link">
+                        <i class="fas fa-history" aria-hidden="true"></i>
+                        <span>History</span>
+                    </a>
+                    <a href="../profile.html" class="nav-link">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <span>Profile</span>
+                    </a>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                    
+                    <div class="auth-section" id="authSection">
+                        <a href="../login.html" class="nav-link auth-link">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="../signup.html" class="nav-link auth-link">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </div>
+                    
+                    <div class="user-section hidden" id="userSection">
+                        <div class="balance-display">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            <span id="userBalance">$0.00</span>
+                        </div>
+                        <div class="user-menu">
+                            <button class="user-menu-btn" id="userMenuBtn" aria-label="User menu">
+                                <i class="fas fa-user-circle" aria-hidden="true"></i>
+                                <span id="username"></span>
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="../profile.html" class="dropdown-link">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    Profile
+                                </a>
+                                <a href="../settings.html" class="dropdown-link">
+                                    <i class="fas fa-cog" aria-hidden="true"></i>
+                                    Settings
+                                </a>
+                                <button class="dropdown-link logout-btn" id="logoutBtn">
+                                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main" class="game-main">
+        <!-- Game Header -->
+        <section class="game-header">
+            <div class="container">
+                <div class="game-breadcrumb">
+                    <a href="../games.html" class="breadcrumb-link">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                        Back to Games
+                    </a>
+                </div>
+                <div class="game-title">
+                    <h1>European Roulette</h1>
+                    <p>Classic European roulette with single zero</p>
+                </div>
+                <div class="game-info">
+                    <div class="info-item">
+                        <span class="info-label">Category:</span>
+                        <span class="info-value">Table Games</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Min Bet:</span>
+                        <span class="info-value">$1.00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Max Bet:</span>
+                        <span class="info-value">$1,000.00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">RTP:</span>
+                        <span class="info-value">97.3%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Interface -->
+        <section class="game-interface">
+            <div class="container">
+                <div class="roulette-game">
+                    <!-- Roulette Wheel -->
+                    <div class="wheel-section">
+                        <div class="roulette-wheel" id="rouletteWheel">
+                            <div class="wheel-ball" id="wheelBall"></div>
+                            <div class="wheel-center">
+                                <i class="fas fa-circle-notch"></i>
+                            </div>
+                        </div>
+                        <div class="wheel-result" id="wheelResult">
+                            <div class="result-number" id="resultNumber">-</div>
+                            <div class="result-color" id="resultColor">Place your bet</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Betting Board -->
+                    <div class="betting-board">
+                        <div class="numbers-grid">
+                            <!-- Numbers 1-36 -->
+                            <div class="number-cell red" data-bet="1">1</div>
+                            <div class="number-cell black" data-bet="2">2</div>
+                            <div class="number-cell red" data-bet="3">3</div>
+                            <div class="number-cell black" data-bet="4">4</div>
+                            <div class="number-cell red" data-bet="5">5</div>
+                            <div class="number-cell black" data-bet="6">6</div>
+                            <div class="number-cell red" data-bet="7">7</div>
+                            <div class="number-cell black" data-bet="8">8</div>
+                            <div class="number-cell red" data-bet="9">9</div>
+                            <div class="number-cell black" data-bet="10">10</div>
+                            <div class="number-cell black" data-bet="11">11</div>
+                            <div class="number-cell red" data-bet="12">12</div>
+                            <div class="number-cell black" data-bet="13">13</div>
+                            <div class="number-cell red" data-bet="14">14</div>
+                            <div class="number-cell black" data-bet="15">15</div>
+                            <div class="number-cell red" data-bet="16">16</div>
+                            <div class="number-cell black" data-bet="17">17</div>
+                            <div class="number-cell red" data-bet="18">18</div>
+                            <div class="number-cell red" data-bet="19">19</div>
+                            <div class="number-cell black" data-bet="20">20</div>
+                            <div class="number-cell red" data-bet="21">21</div>
+                            <div class="number-cell black" data-bet="22">22</div>
+                            <div class="number-cell red" data-bet="23">23</div>
+                            <div class="number-cell black" data-bet="24">24</div>
+                            <div class="number-cell red" data-bet="25">25</div>
+                            <div class="number-cell black" data-bet="26">26</div>
+                            <div class="number-cell red" data-bet="27">27</div>
+                            <div class="number-cell black" data-bet="28">28</div>
+                            <div class="number-cell black" data-bet="29">29</div>
+                            <div class="number-cell red" data-bet="30">30</div>
+                            <div class="number-cell black" data-bet="31">31</div>
+                            <div class="number-cell red" data-bet="32">32</div>
+                            <div class="number-cell black" data-bet="33">33</div>
+                            <div class="number-cell red" data-bet="34">34</div>
+                            <div class="number-cell black" data-bet="35">35</div>
+                            <div class="number-cell red" data-bet="36">36</div>
+                        </div>
+                        
+                        <!-- Zero -->
+                        <div class="zero-section">
+                            <div class="number-cell green" data-bet="0">0</div>
+                        </div>
+                        
+                        <!-- Outside Bets -->
+                        <div class="outside-bets">
+                            <div class="bet-row">
+                                <div class="bet-cell" data-bet="1-18">1-18</div>
+                                <div class="bet-cell" data-bet="even">EVEN</div>
+                                <div class="bet-cell red" data-bet="red">RED</div>
+                                <div class="bet-cell black" data-bet="black">BLACK</div>
+                                <div class="bet-cell" data-bet="odd">ODD</div>
+                                <div class="bet-cell" data-bet="19-36">19-36</div>
+                            </div>
+                            <div class="bet-row">
+                                <div class="bet-cell" data-bet="1st-12">1st 12</div>
+                                <div class="bet-cell" data-bet="2nd-12">2nd 12</div>
+                                <div class="bet-cell" data-bet="3rd-12">3rd 12</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Game Controls -->
+                    <div class="game-controls">
+                        <div class="chip-selector">
+                            <div class="chip-label">Select Chip:</div>
+                            <div class="chips">
+                                <button class="chip active" data-value="1">$1</button>
+                                <button class="chip" data-value="5">$5</button>
+                                <button class="chip" data-value="10">$10</button>
+                                <button class="chip" data-value="25">$25</button>
+                                <button class="chip" data-value="100">$100</button>
+                            </div>
+                        </div>
+                        
+                        <div class="game-actions">
+                            <button class="btn btn-secondary" id="clearBets">
+                                <i class="fas fa-times" aria-hidden="true"></i>
+                                Clear Bets
+                            </button>
+                            <button class="btn btn-primary" id="spinWheel" disabled>
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Spin Wheel
+                            </button>
+                        </div>
+                        
+                        <div class="bet-info">
+                            <div class="total-bet">
+                                Total Bet: <span id="totalBet">$0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Active Bets -->
+                <div class="active-bets" id="activeBets">
+                    <h3>Your Bets</h3>
+                    <div class="bets-list" id="betsList">
+                        <div class="no-bets">No bets placed</div>
+                    </div>
+                </div>
+                
+                <!-- Game Stats -->
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="spinsPlayed">0</div>
+                        <div class="stat-label">Spins Played</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="spinsWon">0</div>
+                        <div class="stat-label">Spins Won</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="biggestWin">$0</div>
+                        <div class="stat-label">Biggest Win</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalWinnings">$0</div>
+                        <div class="stat-label">Total Winnings</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../scripts/auth.js"></script>
+    <script src="../scripts/theme.js"></script>
+    <script src="../scripts/main.js"></script>
+    <script>
+        // European Roulette Game Logic
+        class RouletteGame {
+            constructor() {
+                this.currentChip = 1;
+                this.bets = new Map();
+                this.isSpinning = false;
+                this.gameStats = {
+                    spinsPlayed: 0,
+                    spinsWon: 0,
+                    biggestWin: 0,
+                    totalWinnings: 0
+                };
+                
+                this.redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+                this.payouts = {
+                    'straight': 35, // Single number
+                    'red': 1, 'black': 1,
+                    'odd': 1, 'even': 1,
+                    '1-18': 1, '19-36': 1,
+                    '1st-12': 2, '2nd-12': 2, '3rd-12': 2
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.checkAuth();
+                this.bindEvents();
+                this.loadGameStats();
+                this.updateDisplay();
+            }
+            
+            checkAuth() {
+                if (!window.authManager || !window.authManager.isLoggedIn()) {
+                    window.location.href = '../login.html';
+                    return;
+                }
+            }
+            
+            bindEvents() {
+                // Chip selection
+                document.querySelectorAll('.chip').forEach(chip => {
+                    chip.addEventListener('click', (e) => {
+                        this.selectChip(parseInt(e.target.dataset.value));
+                    });
+                });
+                
+                // Betting board clicks
+                document.querySelectorAll('[data-bet]').forEach(cell => {
+                    cell.addEventListener('click', (e) => {
+                        this.placeBet(e.target.dataset.bet);
+                    });
+                });
+                
+                // Game controls
+                document.getElementById('clearBets').addEventListener('click', () => {
+                    this.clearAllBets();
+                });
+                
+                document.getElementById('spinWheel').addEventListener('click', () => {
+                    this.spinWheel();
+                });
+            }
+            
+            selectChip(value) {
+                this.currentChip = value;
+                
+                document.querySelectorAll('.chip').forEach(chip => {
+                    chip.classList.remove('active');
+                });
+                
+                document.querySelector(`[data-value="${value}"]`).classList.add('active');
+            }
+            
+            placeBet(betType) {
+                if (this.isSpinning) return;
+                
+                const user = window.authManager.getCurrentUser();
+                if (user.balance < this.currentChip) {
+                    this.showMessage('Insufficient funds!', 'error');
+                    return;
+                }
+                
+                // Add to existing bet or create new
+                const currentBet = this.bets.get(betType) || 0;
+                this.bets.set(betType, currentBet + this.currentChip);
+                
+                // Deduct from balance
+                window.authManager.updateBalance(-this.currentChip);
+                
+                this.updateBetsDisplay();
+                this.updateDisplay();
+            }
+            
+            clearAllBets() {
+                if (this.isSpinning) return;
+                
+                // Return all bet money to balance
+                let totalBets = 0;
+                for (let amount of this.bets.values()) {
+                    totalBets += amount;
+                }
+                
+                if (totalBets > 0) {
+                    window.authManager.updateBalance(totalBets);
+                    this.bets.clear();
+                    this.updateBetsDisplay();
+                    this.updateDisplay();
+                }
+            }
+            
+            async spinWheel() {
+                if (this.isSpinning || this.bets.size === 0) return;
+                
+                this.isSpinning = true;
+                document.getElementById('spinWheel').disabled = true;
+                document.getElementById('clearBets').disabled = true;
+                
+                // Generate random number
+                const winningNumber = Math.floor(Math.random() * 37); // 0-36
+                
+                // Animate wheel
+                await this.animateWheel(winningNumber);
+                
+                // Calculate winnings
+                const totalWinnings = this.calculateWinnings(winningNumber);
+                
+                // Update balance with winnings
+                if (totalWinnings > 0) {
+                    window.authManager.updateBalance(totalWinnings);
+                }
+                
+                // Update stats
+                this.updateGameStats(winningNumber, totalWinnings);
+                
+                // Record transaction
+                this.recordTransaction(winningNumber, totalWinnings);
+                
+                // Show result
+                this.showResult(winningNumber, totalWinnings);
+                
+                // Clear bets and reset
+                this.bets.clear();
+                this.updateBetsDisplay();
+                this.updateDisplay();
+                
+                this.isSpinning = false;
+                document.getElementById('spinWheel').disabled = true;
+                document.getElementById('clearBets').disabled = false;
+            }
+            
+            async animateWheel(winningNumber) {
+                const wheel = document.getElementById('rouletteWheel');
+                const ball = document.getElementById('wheelBall');
+                
+                // Spin wheel
+                wheel.style.transform = `rotate(${Math.random() * 360 + 1800}deg)`;
+                
+                // Animate ball
+                ball.style.animationDuration = '3s';
+                ball.classList.add('spinning');
+                
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        ball.classList.remove('spinning');
+                        this.displayResult(winningNumber);
+                        resolve();
+                    }, 3000);
+                });
+            }
+            
+            displayResult(number) {
+                const resultNumber = document.getElementById('resultNumber');
+                const resultColor = document.getElementById('resultColor');
+                
+                resultNumber.textContent = number;
+                
+                if (number === 0) {
+                    resultColor.textContent = 'Green';
+                    resultColor.className = 'result-color green';
+                } else if (this.redNumbers.includes(number)) {
+                    resultColor.textContent = 'Red';
+                    resultColor.className = 'result-color red';
+                } else {
+                    resultColor.textContent = 'Black';
+                    resultColor.className = 'result-color black';
+                }
+            }
+            
+            calculateWinnings(winningNumber) {
+                let totalWinnings = 0;
+                
+                for (let [betType, amount] of this.bets) {
+                    if (this.isBetWinner(betType, winningNumber)) {
+                        const payout = this.getBetPayout(betType);
+                        totalWinnings += amount * (payout + 1); // payout + original bet
+                    }
+                }
+                
+                return totalWinnings;
+            }
+            
+            isBetWinner(betType, number) {
+                // Straight number
+                if (!isNaN(betType)) {
+                    return parseInt(betType) === number;
+                }
+                
+                // Outside bets
+                switch (betType) {
+                    case 'red':
+                        return this.redNumbers.includes(number);
+                    case 'black':
+                        return number !== 0 && !this.redNumbers.includes(number);
+                    case 'even':
+                        return number !== 0 && number % 2 === 0;
+                    case 'odd':
+                        return number !== 0 && number % 2 === 1;
+                    case '1-18':
+                        return number >= 1 && number <= 18;
+                    case '19-36':
+                        return number >= 19 && number <= 36;
+                    case '1st-12':
+                        return number >= 1 && number <= 12;
+                    case '2nd-12':
+                        return number >= 13 && number <= 24;
+                    case '3rd-12':
+                        return number >= 25 && number <= 36;
+                    default:
+                        return false;
+                }
+            }
+            
+            getBetPayout(betType) {
+                if (!isNaN(betType)) {
+                    return this.payouts.straight;
+                }
+                return this.payouts[betType] || 0;
+            }
+            
+            updateBetsDisplay() {
+                const betsList = document.getElementById('betsList');
+                const totalBetElement = document.getElementById('totalBet');
+                const spinButton = document.getElementById('spinWheel');
+                
+                if (this.bets.size === 0) {
+                    betsList.innerHTML = '<div class="no-bets">No bets placed</div>';
+                    totalBetElement.textContent = '$0';
+                    spinButton.disabled = true;
+                    return;
+                }
+                
+                let totalBet = 0;
+                const betsHTML = Array.from(this.bets.entries()).map(([bet, amount]) => {
+                    totalBet += amount;
+                    return `
+                        <div class="bet-item">
+                            <span class="bet-type">${bet}</span>
+                            <span class="bet-amount">$${amount}</span>
+                        </div>
+                    `;
+                }).join('');
+                
+                betsList.innerHTML = betsHTML;
+                totalBetElement.textContent = `$${totalBet}`;
+                spinButton.disabled = false;
+            }
+            
+            updateGameStats(winningNumber, winnings) {
+                this.gameStats.spinsPlayed++;
+                
+                if (winnings > 0) {
+                    this.gameStats.spinsWon++;
+                    const profit = winnings - Array.from(this.bets.values()).reduce((sum, bet) => sum + bet, 0);
+                    this.gameStats.totalWinnings += profit;
+                    this.gameStats.biggestWin = Math.max(this.gameStats.biggestWin, profit);
+                    
+                    // Add XP
+                    window.authManager.addXP(Math.floor(profit / 10));
+                }
+                
+                this.saveGameStats();
+                this.updateStatsDisplay();
+            }
+            
+            recordTransaction(winningNumber, winnings) {
+                const totalBet = Array.from(this.bets.values()).reduce((sum, bet) => sum + bet, 0);
+                const profit = winnings - totalBet;
+                
+                window.authManager.addTransaction({
+                    type: 'game_bet',
+                    amount: totalBet,
+                    description: `Roulette - Number ${winningNumber}`,
+                    game: 'European Roulette',
+                    result: winnings > 0 ? 'win' : 'loss',
+                    winAmount: Math.max(0, profit)
+                });
+            }
+            
+            showResult(winningNumber, winnings) {
+                const totalBet = Array.from(this.bets.values()).reduce((sum, bet) => sum + bet, 0);
+                const profit = winnings - totalBet;
+                
+                let message;
+                let type;
+                
+                if (profit > 0) {
+                    message = `Number ${winningNumber} wins! You won ${window.authManager.formatCurrency(profit)}`;
+                    type = 'success';
+                } else if (winnings > 0) {
+                    message = `Number ${winningNumber}. Some bets won. Net: ${window.authManager.formatCurrency(profit)}`;
+                    type = 'info';
+                } else {
+                    message = `Number ${winningNumber}. Better luck next time!`;
+                    type = 'error';
+                }
+                
+                this.showMessage(message, type);
+            }
+            
+            updateDisplay() {
+                const user = window.authManager.getCurrentUser();
+                if (user) {
+                    document.getElementById('userBalance').textContent = 
+                        window.authManager.formatCurrency(user.balance);
+                }
+            }
+            
+            updateStatsDisplay() {
+                document.getElementById('spinsPlayed').textContent = this.gameStats.spinsPlayed;
+                document.getElementById('spinsWon').textContent = this.gameStats.spinsWon;
+                document.getElementById('biggestWin').textContent = 
+                    window.authManager.formatCurrency(this.gameStats.biggestWin);
+                document.getElementById('totalWinnings').textContent = 
+                    window.authManager.formatCurrency(this.gameStats.totalWinnings);
+            }
+            
+            loadGameStats() {
+                const saved = localStorage.getItem('roulette-game-stats');
+                if (saved) {
+                    this.gameStats = { ...this.gameStats, ...JSON.parse(saved) };
+                }
+            }
+            
+            saveGameStats() {
+                localStorage.setItem('roulette-game-stats', JSON.stringify(this.gameStats));
+            }
+            
+            showMessage(message, type = 'info') {
+                if (window.pyramidCasino) {
+                    window.pyramidCasino.showNotification(message, type);
+                } else {
+                    console.log(`${type.toUpperCase()}: ${message}`);
+                }
+            }
+        }
+        
+        // Initialize game when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.rouletteGame = new RouletteGame();
+        });
+    </script>
+</body>
+</html>

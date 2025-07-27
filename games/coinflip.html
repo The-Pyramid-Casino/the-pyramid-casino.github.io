@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Flip - Pyramid Casino</title>
+    <meta name="description" content="Play Coin Flip at Pyramid Casino. Simple heads or tails betting game with instant results and great payouts.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/theme.css">
+    <link rel="stylesheet" href="../styles/games.css">
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html" class="brand-link" aria-label="Pyramid Casino Home">
+                    <i class="fas fa-chess-queen" aria-hidden="true"></i>
+                    <span>Pyramid Casino</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="../index.html" class="nav-link">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="../games.html" class="nav-link">
+                        <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        <span>Games</span>
+                    </a>
+                    <a href="../topup.html" class="nav-link">
+                        <i class="fas fa-coins" aria-hidden="true"></i>
+                        <span>Top-Up</span>
+                    </a>
+                    <a href="../history.html" class="nav-link">
+                        <i class="fas fa-history" aria-hidden="true"></i>
+                        <span>History</span>
+                    </a>
+                    <a href="../profile.html" class="nav-link">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <span>Profile</span>
+                    </a>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                    
+                    <div class="auth-section" id="authSection">
+                        <a href="../login.html" class="nav-link auth-link">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="../signup.html" class="nav-link auth-link">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </div>
+                    
+                    <div class="user-section hidden" id="userSection">
+                        <div class="balance-display">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            <span id="userBalance">$0.00</span>
+                        </div>
+                        <div class="user-menu">
+                            <button class="user-menu-btn" id="userMenuBtn" aria-label="User menu">
+                                <i class="fas fa-user-circle" aria-hidden="true"></i>
+                                <span id="username"></span>
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="../profile.html" class="dropdown-link">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    Profile
+                                </a>
+                                <a href="../settings.html" class="dropdown-link">
+                                    <i class="fas fa-cog" aria-hidden="true"></i>
+                                    Settings
+                                </a>
+                                <button class="dropdown-link logout-btn" id="logoutBtn">
+                                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main" class="game-main">
+        <!-- Game Header -->
+        <section class="game-header">
+            <div class="container">
+                <div class="game-breadcrumb">
+                    <a href="../games.html" class="breadcrumb-link">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                        Back to Games
+                    </a>
+                </div>
+                <div class="game-title">
+                    <h1>Coin Flip</h1>
+                    <p>Simple heads or tails betting game</p>
+                </div>
+                <div class="game-info">
+                    <div class="info-item">
+                        <span class="info-label">Category:</span>
+                        <span class="info-value">Arcade</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Min Bet:</span>
+                        <span class="info-value">$1.00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Max Bet:</span>
+                        <span class="info-value">$500.00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">RTP:</span>
+                        <span class="info-value">98.0%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Interface -->
+        <section class="game-interface">
+            <div class="container">
+                <div class="coinflip-game" style="max-width: 600px; margin: 0 auto;">
+                    <!-- Coin Display -->
+                    <div class="coin-display" style="text-align: center; margin-bottom: 3rem;">
+                        <div class="coin-container" style="perspective: 1000px; margin-bottom: 1.5rem;">
+                            <div class="coin" id="coin" style="width: 200px; height: 200px; margin: 0 auto; position: relative; transform-style: preserve-3d; transition: transform 2s;">
+                                <div class="coin-side coin-heads" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 50%; background: linear-gradient(145deg, #ffd700, #ffed4e); border: 4px solid #b8860b; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: #8b4513; box-shadow: 0 8px 16px rgba(0,0,0,0.3);">
+                                    <i class="fas fa-crown"></i>
+                                </div>
+                                <div class="coin-side coin-tails" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 50%; background: linear-gradient(145deg, #c0c0c0, #e6e6e6); border: 4px solid #808080; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: #2f4f4f; box-shadow: 0 8px 16px rgba(0,0,0,0.3); transform: rotateY(180deg);">
+                                    <i class="fas fa-eagle"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="coin-result" style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary);">
+                            <span id="coinResult">Choose Heads or Tails</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Betting Section -->
+                    <div class="betting-section" style="background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow); border: 1px solid var(--border);">
+                        <!-- Bet Amount -->
+                        <div class="bet-controls" style="text-align: center; margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 600; font-size: 1.1rem;">Bet Amount:</label>
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem;">
+                                <button id="decreaseBet" style="width: 50px; height: 50px; border: 2px solid var(--border); background: var(--card-bg); color: var(--text-primary); border-radius: 50%; cursor: pointer; font-size: 1.2rem; transition: all 0.2s;">-</button>
+                                <input type="number" id="betAmount" min="1" max="500" value="10" style="width: 120px; padding: 0.75rem; border: 2px solid var(--border); border-radius: 8px; background: var(--background); color: var(--text-primary); text-align: center; font-weight: 600; font-size: 1.1rem;">
+                                <button id="increaseBet" style="width: 50px; height: 50px; border: 2px solid var(--border); background: var(--card-bg); color: var(--text-primary); border-radius: 50%; cursor: pointer; font-size: 1.2rem; transition: all 0.2s;">+</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Choice Buttons -->
+                        <div class="choice-buttons" style="display: flex; gap: 1.5rem; margin-bottom: 2rem; justify-content: center;">
+                            <button class="choice-btn" data-choice="heads" style="flex: 1; max-width: 200px; padding: 2rem 1rem; border: 3px solid var(--border); background: var(--surface); color: var(--text-primary); border-radius: 12px; cursor: pointer; transition: all 0.3s; text-align: center;">
+                                <div style="font-size: 3rem; margin-bottom: 0.5rem; color: #ffd700;">
+                                    <i class="fas fa-crown"></i>
+                                </div>
+                                <div style="font-size: 1.2rem; font-weight: 600;">HEADS</div>
+                                <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">1:1 Payout</div>
+                            </button>
+                            
+                            <button class="choice-btn" data-choice="tails" style="flex: 1; max-width: 200px; padding: 2rem 1rem; border: 3px solid var(--border); background: var(--surface); color: var(--text-primary); border-radius: 12px; cursor: pointer; transition: all 0.3s; text-align: center;">
+                                <div style="font-size: 3rem; margin-bottom: 0.5rem; color: #c0c0c0;">
+                                    <i class="fas fa-eagle"></i>
+                                </div>
+                                <div style="font-size: 1.2rem; font-weight: 600;">TAILS</div>
+                                <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">1:1 Payout</div>
+                            </button>
+                        </div>
+                        
+                        <!-- Active Bet Display -->
+                        <div class="active-bet" id="activeBet" style="text-align: center; margin-bottom: 1.5rem; padding: 1rem; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); display: none;">
+                            <div style="color: var(--text-primary); margin-bottom: 0.25rem;">Your Choice: <span id="betChoice" style="font-weight: 600; color: var(--primary);"></span></div>
+                            <div style="color: var(--primary); font-weight: 600;">Bet Amount: <span id="betAmountDisplay"></span></div>
+                        </div>
+                        
+                        <!-- Flip Button -->
+                        <div style="text-align: center;">
+                            <button id="flipCoin" disabled style="padding: 1.25rem 3rem; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1.2rem; font-weight: 600; cursor: pointer; opacity: 0.6; transition: all 0.3s; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                                <i class="fas fa-coins" style="margin-right: 0.75rem;"></i>
+                                Flip Coin
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Game Stats -->
+                    <div class="game-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 2rem;">
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);" id="flipsPlayed">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">Flips Played</div>
+                        </div>
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);" id="flipsWon">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">Flips Won</div>
+                        </div>
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);" id="winStreak">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">Win Streak</div>
+                        </div>
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);" id="totalWinnings">$0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">Total Winnings</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../scripts/auth.js"></script>
+    <script src="../scripts/theme.js"></script>
+    <script src="../scripts/main.js"></script>
+    <script>
+        // Coin Flip Game Logic
+        class CoinFlipGame {
+            constructor() {
+                this.currentChoice = null;
+                this.betAmount = 10;
+                this.isFlipping = false;
+                this.gameStats = {
+                    flipsPlayed: 0,
+                    flipsWon: 0,
+                    winStreak: 0,
+                    currentStreak: 0,
+                    totalWinnings: 0
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.checkAuth();
+                this.bindEvents();
+                this.loadGameStats();
+                this.updateDisplay();
+            }
+            
+            checkAuth() {
+                if (!window.authManager || !window.authManager.isLoggedIn()) {
+                    window.location.href = '../login.html';
+                    return;
+                }
+            }
+            
+            bindEvents() {
+                // Bet controls
+                document.getElementById('decreaseBet').addEventListener('click', () => {
+                    this.adjustBet(-5);
+                });
+                
+                document.getElementById('increaseBet').addEventListener('click', () => {
+                    this.adjustBet(5);
+                });
+                
+                document.getElementById('betAmount').addEventListener('change', (e) => {
+                    this.betAmount = Math.max(1, Math.min(500, parseInt(e.target.value) || 1));
+                    e.target.value = this.betAmount;
+                    this.updateActiveBet();
+                });
+                
+                // Choice buttons
+                document.querySelectorAll('.choice-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        this.selectChoice(e.currentTarget);
+                    });
+                });
+                
+                // Flip coin
+                document.getElementById('flipCoin').addEventListener('click', () => {
+                    this.flipCoin();
+                });
+            }
+            
+            adjustBet(amount) {
+                this.betAmount = Math.max(1, Math.min(500, this.betAmount + amount));
+                document.getElementById('betAmount').value = this.betAmount;
+                this.updateActiveBet();
+            }
+            
+            selectChoice(button) {
+                if (this.isFlipping) return;
+                
+                // Clear previous selection
+                document.querySelectorAll('.choice-btn').forEach(btn => {
+                    btn.style.borderColor = 'var(--border)';
+                    btn.style.background = 'var(--surface)';
+                    btn.style.transform = 'scale(1)';
+                });
+                
+                // Highlight selected
+                button.style.borderColor = 'var(--primary)';
+                button.style.background = 'rgba(var(--primary-rgb), 0.1)';
+                button.style.transform = 'scale(1.05)';
+                
+                this.currentChoice = button.dataset.choice;
+                this.updateActiveBet();
+            }
+            
+            updateActiveBet() {
+                const activeBet = document.getElementById('activeBet');
+                const flipButton = document.getElementById('flipCoin');
+                
+                if (this.currentChoice) {
+                    document.getElementById('betChoice').textContent = this.currentChoice.toUpperCase();
+                    document.getElementById('betAmountDisplay').textContent = window.authManager.formatCurrency(this.betAmount);
+                    activeBet.style.display = 'block';
+                    flipButton.disabled = false;
+                    flipButton.style.opacity = '1';
+                } else {
+                    activeBet.style.display = 'none';
+                    flipButton.disabled = true;
+                    flipButton.style.opacity = '0.6';
+                }
+            }
+            
+            async flipCoin() {
+                if (this.isFlipping || !this.currentChoice) return;
+                
+                const user = window.authManager.getCurrentUser();
+                if (user.balance < this.betAmount) {
+                    this.showMessage('Insufficient funds!', 'error');
+                    return;
+                }
+                
+                this.isFlipping = true;
+                document.getElementById('flipCoin').disabled = true;
+                
+                // Deduct bet
+                window.authManager.updateBalance(-this.betAmount);
+                
+                // Animate coin flip
+                const result = Math.random() < 0.5 ? 'heads' : 'tails';
+                await this.animateCoinFlip(result);
+                
+                // Check win
+                const isWin = result === this.currentChoice;
+                let winAmount = 0;
+                
+                if (isWin) {
+                    winAmount = this.betAmount * 2; // 1:1 payout + original bet
+                    window.authManager.updateBalance(winAmount);
+                }
+                
+                // Update stats
+                this.updateGameStats(isWin, winAmount - this.betAmount);
+                
+                // Record transaction
+                this.recordTransaction(result, isWin, winAmount - this.betAmount);
+                
+                // Show result
+                this.showResult(result, isWin, winAmount - this.betAmount);
+                
+                // Reset for next round
+                setTimeout(() => {
+                    this.resetGame();
+                }, 3000);
+            }
+            
+            async animateCoinFlip(result) {
+                const coin = document.getElementById('coin');
+                const coinResult = document.getElementById('coinResult');
+                
+                coinResult.textContent = 'Flipping...';
+                
+                // Calculate rotation for result
+                const rotations = 5 + Math.random() * 3; // 5-8 rotations
+                const finalRotation = result === 'heads' ? 0 : 180;
+                const totalRotation = (rotations * 360) + finalRotation;
+                
+                return new Promise(resolve => {
+                    coin.style.transform = `rotateY(${totalRotation}deg)`;
+                    
+                    setTimeout(() => {
+                        const resultText = result === 'heads' ? 'HEADS!' : 'TAILS!';
+                        coinResult.textContent = resultText;
+                        coinResult.style.color = result === this.currentChoice ? 'var(--success)' : 'var(--danger)';
+                        resolve();
+                    }, 2000);
+                });
+            }
+            
+            showResult(result, isWin, profit) {
+                let message;
+                if (isWin) {
+                    message = `🎉 ${result.toUpperCase()}! You won ${window.authManager.formatCurrency(profit)}!`;
+                } else {
+                    message = `${result.toUpperCase()}! Better luck next time!`;
+                }
+                
+                this.showMessage(message, isWin ? 'success' : 'error');
+            }
+            
+            resetGame() {
+                this.currentChoice = null;
+                this.isFlipping = false;
+                
+                // Clear choice selection
+                document.querySelectorAll('.choice-btn').forEach(btn => {
+                    btn.style.borderColor = 'var(--border)';
+                    btn.style.background = 'var(--surface)';
+                    btn.style.transform = 'scale(1)';
+                });
+                
+                this.updateActiveBet();
+                this.updateDisplay();
+                
+                // Reset coin result
+                document.getElementById('coinResult').textContent = 'Choose Heads or Tails';
+                document.getElementById('coinResult').style.color = 'var(--text-primary)';
+            }
+            
+            updateGameStats(isWin, profit) {
+                this.gameStats.flipsPlayed++;
+                
+                if (isWin) {
+                    this.gameStats.flipsWon++;
+                    this.gameStats.currentStreak++;
+                    this.gameStats.winStreak = Math.max(this.gameStats.winStreak, this.gameStats.currentStreak);
+                    this.gameStats.totalWinnings += profit;
+                    
+                    // Add XP
+                    window.authManager.addXP(Math.floor(profit / 5));
+                } else {
+                    this.gameStats.currentStreak = 0;
+                }
+                
+                this.saveGameStats();
+                this.updateStatsDisplay();
+            }
+            
+            recordTransaction(result, isWin, profit) {
+                window.authManager.addTransaction({
+                    type: 'game_bet',
+                    amount: this.betAmount,
+                    description: `Coin Flip - ${result}`,
+                    game: 'Coin Flip',
+                    result: isWin ? 'win' : 'loss',
+                    winAmount: Math.max(0, profit)
+                });
+            }
+            
+            updateDisplay() {
+                const user = window.authManager.getCurrentUser();
+                if (user) {
+                    document.getElementById('userBalance').textContent = 
+                        window.authManager.formatCurrency(user.balance);
+                }
+            }
+            
+            updateStatsDisplay() {
+                document.getElementById('flipsPlayed').textContent = this.gameStats.flipsPlayed;
+                document.getElementById('flipsWon').textContent = this.gameStats.flipsWon;
+                document.getElementById('winStreak').textContent = this.gameStats.winStreak;
+                document.getElementById('totalWinnings').textContent = 
+                    window.authManager.formatCurrency(this.gameStats.totalWinnings);
+            }
+            
+            loadGameStats() {
+                const saved = localStorage.getItem('coinflip-game-stats');
+                if (saved) {
+                    this.gameStats = { ...this.gameStats, ...JSON.parse(saved) };
+                }
+            }
+            
+            saveGameStats() {
+                localStorage.setItem('coinflip-game-stats', JSON.stringify(this.gameStats));
+            }
+            
+            showMessage(message, type = 'info') {
+                if (window.pyramidCasino) {
+                    window.pyramidCasino.showNotification(message, type);
+                } else {
+                    console.log(`${type.toUpperCase()}: ${message}`);
+                }
+            }
+        }
+        
+        // Initialize game when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.coinFlipGame = new CoinFlipGame();
+        });
+    </script>
+</body>
+</html>
