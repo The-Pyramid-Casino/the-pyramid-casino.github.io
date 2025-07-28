@@ -356,51 +356,7 @@ class GamesManager {
         document.body.appendChild(skipLink);
     }
     
-    sortGames(sortBy) {
-        let sortedGames;
-        
-        switch (sortBy) {
-            case 'name':
-                sortedGames = [...this.gamesData].sort((a, b) => 
-                    a.title.localeCompare(b.title)
-                );
-                break;
-            case 'rating':
-                sortedGames = [...this.gamesData].sort((a, b) => 
-                    b.rating - a.rating
-                );
-                break;
-            case 'category':
-                sortedGames = [...this.gamesData].sort((a, b) => 
-                    a.category.localeCompare(b.category)
-                );
-                break;
-            case 'availability':
-                sortedGames = [...this.gamesData].sort((a, b) => 
-                    (b.available ? 1 : 0) - (a.available ? 1 : 0)
-                );
-                break;
-            default:
-                return;
-        }
-        
-        // Reorder DOM elements
-        const gamesGrid = document.getElementById('gamesGrid');
-        if (gamesGrid) {
-            sortedGames.forEach(game => {
-                gamesGrid.appendChild(game.element);
-            });
-        }
-        
-        // Update games data order
-        this.gamesData = sortedGames;
-        
-        // Analytics
-        this.trackEvent('games_sorted', { sortBy });
-        
-        // Accessibility announcement
-        this.announce(`Games sorted by ${sortBy}`);
-    }
+
     
     getGameRecommendations() {
         if (!window.authManager || !window.authManager.isLoggedIn()) {

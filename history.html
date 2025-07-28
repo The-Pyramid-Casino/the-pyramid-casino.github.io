@@ -235,24 +235,20 @@
                     <table class="history-table" id="historyTable">
                         <thead>
                             <tr>
-                                <th class="sortable" data-sort="timestamp">
+                                <th>
                                     Date & Time
-                                    <i class="fas fa-sort" aria-hidden="true"></i>
                                 </th>
-                                <th class="sortable" data-sort="type">
+                                <th>
                                     Type
-                                    <i class="fas fa-sort" aria-hidden="true"></i>
                                 </th>
                                 <th>Description</th>
                                 <th>Game</th>
-                                <th class="sortable" data-sort="amount">
+                                <th>
                                     Amount
-                                    <i class="fas fa-sort" aria-hidden="true"></i>
                                 </th>
                                 <th>Result</th>
-                                <th class="sortable" data-sort="balance">
+                                <th>
                                     Balance After
-                                    <i class="fas fa-sort" aria-hidden="true"></i>
                                 </th>
                             </tr>
                         </thead>
@@ -313,8 +309,6 @@
                 this.filteredTransactions = [];
                 this.currentPage = 1;
                 this.itemsPerPage = 20;
-                this.sortBy = 'timestamp';
-                this.sortOrder = 'desc';
                 
                 this.init();
             }
@@ -378,13 +372,6 @@
                 // Export
                 document.getElementById('exportHistory').addEventListener('click', () => {
                     this.exportHistory();
-                });
-                
-                // Table sorting
-                document.querySelectorAll('.sortable').forEach(header => {
-                    header.addEventListener('click', (e) => {
-                        this.sortTable(e.currentTarget.dataset.sort);
-                    });
                 });
                 
                 // Modal close
@@ -505,42 +492,7 @@
                 this.renderTable();
                 this.renderPagination();
             }
-            
-            sortTable(column) {
-                if (this.sortBy === column) {
-                    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-                } else {
-                    this.sortBy = column;
-                    this.sortOrder = 'desc';
-                }
-                
-                this.filteredTransactions.sort((a, b) => {
-                    let aVal = a[column];
-                    let bVal = b[column];
-                    
-                    if (column === 'timestamp') {
-                        aVal = new Date(aVal);
-                        bVal = new Date(bVal);
-                    } else if (column === 'amount' || column === 'balance') {
-                        aVal = parseFloat(aVal) || 0;
-                        bVal = parseFloat(bVal) || 0;
-                    }
-                    
-                    if (aVal < bVal) return this.sortOrder === 'asc' ? -1 : 1;
-                    if (aVal > bVal) return this.sortOrder === 'asc' ? 1 : -1;
-                    return 0;
-                });
-                
-                // Update sort indicators
-                document.querySelectorAll('.sortable i').forEach(icon => {
-                    icon.className = 'fas fa-sort';
-                });
-                
-                const activeHeader = document.querySelector(`[data-sort="${column}"] i`);
-                activeHeader.className = `fas fa-sort-${this.sortOrder === 'asc' ? 'up' : 'down'}`;
-                
-                this.renderTable();
-            }
+
             
             renderTable() {
                 const tbody = document.getElementById('historyTableBody');
