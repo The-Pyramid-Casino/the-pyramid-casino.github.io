@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hi-Lo - Pyramid Casino</title>
+    <meta name="description" content="Play Hi-Lo at Pyramid Casino.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/theme.css">
+    <link rel="stylesheet" href="../styles/games.css">
+</head>
+<body>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html" class="brand-link" aria-label="Pyramid Casino Home">
+                    <i class="fas fa-chess-queen" aria-hidden="true"></i>
+                    <span>Pyramid Casino</span>
+                </a>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="../index.html" class="nav-link"><i class="fas fa-home" aria-hidden="true"></i><span>Home</span></a>
+                    <a href="../games.html" class="nav-link"><i class="fas fa-gamepad" aria-hidden="true"></i><span>Games</span></a>
+                    <a href="../topup.html" class="nav-link"><i class="fas fa-coins" aria-hidden="true"></i><span>Top-Up</span></a>
+                    <a href="../history.html" class="nav-link"><i class="fas fa-history" aria-hidden="true"></i><span>History</span></a>
+                    <a href="../profile.html" class="nav-link"><i class="fas fa-user" aria-hidden="true"></i><span>Profile</span></a>
+                </div>
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon" aria-hidden="true"></i></button>
+                    <div class="auth-section" id="authSection">
+                        <a href="../login.html" class="nav-link auth-link"><i class="fas fa-sign-in-alt" aria-hidden="true"></i><span>Login</span></a>
+                        <a href="../signup.html" class="nav-link auth-link"><i class="fas fa-user-plus" aria-hidden="true"></i><span>Sign Up</span></a>
+                    </div>
+                    <div class="user-section hidden" id="userSection">
+                        <div class="balance-display"><i class="fas fa-coins" aria-hidden="true"></i><span id="userBalance">$0.00</span></div>
+                        <div class="user-menu">
+                            <button class="user-menu-btn" id="userMenuBtn" aria-label="User menu"><i class="fas fa-user-circle" aria-hidden="true"></i><span id="username"></span></button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="../profile.html" class="dropdown-link"><i class="fas fa-user" aria-hidden="true"></i>Profile</a>
+                                <a href="../settings.html" class="dropdown-link"><i class="fas fa-cog" aria-hidden="true"></i>Settings</a>
+                                <button class="dropdown-link logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt" aria-hidden="true"></i>Logout</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <main id="main" class="game-main">
+        <section class="game-header">
+            <div class="container">
+                <div class="game-breadcrumb"><a href="../games.html" class="breadcrumb-link"><i class="fas fa-arrow-left" aria-hidden="true"></i>Back to Games</a></div>
+                <div class="game-title"><h1>Hi-Lo</h1><p>Guess if the next card is higher or lower</p></div>
+            </div>
+        </section>
+
+        <section class="game-interface">
+            <div class="container">
+                <div class="game-container" style="max-width: 600px; margin: 0 auto; text-align: center;">
+                    <div class="game-area" style="background: var(--card-bg); padding: 3rem 2rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid var(--border);">
+                        <div class="game-display" style="font-size: 2rem; margin-bottom: 2rem; color: var(--text-primary);">📊</div>
+                        <div class="game-result" id="gameResult" style="font-size: 1.2rem; margin-bottom: 2rem; color: var(--text-primary); min-height: 30px;">Place your bet to start</div>
+                        
+                        <div class="bet-controls" style="margin-bottom: 2rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Bet Amount:</label>
+                            <div style="display: flex; justify-content: center; gap: 0.5rem; align-items: center;">
+                                <button id="decreaseBet" style="width: 40px; height: 40px; border: 2px solid var(--border); background: var(--card-bg); color: var(--text-primary); border-radius: 8px; cursor: pointer;">-</button>
+                                <input type="number" id="betAmount" min="1" max="100" value="10" style="width: 100px; padding: 0.5rem; border: 2px solid var(--border); border-radius: 8px; background: var(--background); color: var(--text-primary); text-align: center;">
+                                <button id="increaseBet" style="width: 40px; height: 40px; border: 2px solid var(--border); background: var(--card-bg); color: var(--text-primary); border-radius: 8px; cursor: pointer;">+</button>
+                            </div>
+                        </div>
+                        
+                        <button id="playGame" style="padding: 1rem 2rem; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer;">
+                            <i class="fas fa-play" style="margin-right: 0.5rem;"></i>
+                            Play Hi-Lo
+                        </button>
+                    </div>
+                    
+                    <div class="game-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem;">
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);" id="gamesPlayed">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">Games Played</div>
+                        </div>
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);" id="gamesWon">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">Games Won</div>
+                        </div>
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);" id="totalWinnings">$0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">Total Winnings</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../scripts/auth.js"></script>
+    <script src="../scripts/theme.js"></script>
+    <script src="../scripts/main.js"></script>
+    <script>
+        class HiLoGame {
+            constructor() {
+                this.betAmount = 10;
+                this.isPlaying = false;
+                this.gameStats = { gamesPlayed: 0, gamesWon: 0, totalWinnings: 0 };
+                this.init();
+            }
+            
+            init() {
+                if (!window.authManager?.isLoggedIn()) {
+                    window.location.href = '../login.html';
+                    return;
+                }
+                this.bindEvents();
+                this.loadGameStats();
+                this.updateDisplay();
+            }
+            
+            bindEvents() {
+                document.getElementById('decreaseBet').onclick = () => this.adjustBet(-5);
+                document.getElementById('increaseBet').onclick = () => this.adjustBet(5);
+                document.getElementById('betAmount').onchange = (e) => {
+                    this.betAmount = Math.max(1, Math.min(100, parseInt(e.target.value) || 1));
+                    e.target.value = this.betAmount;
+                };
+                document.getElementById('playGame').onclick = () => this.playGame();
+            }
+            
+            adjustBet(amount) {
+                this.betAmount = Math.max(1, Math.min(100, this.betAmount + amount));
+                document.getElementById('betAmount').value = this.betAmount;
+            }
+            
+            async playGame() {
+                if (this.isPlaying) return;
+                const user = window.authManager.getCurrentUser();
+                if (user.balance < this.betAmount) {
+                    this.showMessage('Insufficient funds!', 'error');
+                    return;
+                }
+                
+                this.isPlaying = true;
+                document.getElementById('playGame').disabled = true;
+                window.authManager.updateBalance(-this.betAmount);
+                
+                document.getElementById('gameResult').textContent = 'Playing...';
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const isWin = Math.random() < 0.46;
+                const winMultiplier = isWin ? (Math.random() * 2 + 1) : 0;
+                const winAmount = Math.floor(this.betAmount * winMultiplier);
+                
+                if (winAmount > 0) {
+                    window.authManager.updateBalance(winAmount);
+                }
+                
+                const profit = winAmount - this.betAmount;
+                this.updateGameStats(isWin, profit);
+                this.recordTransaction(isWin, profit);
+                
+                const message = isWin ? 
+                    `🎉 You won ${window.authManager.formatCurrency(profit)}!` : 
+                    'Better luck next time!';
+                document.getElementById('gameResult').textContent = message;
+                this.showMessage(message, isWin ? 'success' : 'error');
+                
+                this.isPlaying = false;
+                document.getElementById('playGame').disabled = false;
+                this.updateDisplay();
+            }
+            
+            updateGameStats(isWin, profit) {
+                this.gameStats.gamesPlayed++;
+                if (isWin) {
+                    this.gameStats.gamesWon++;
+                    this.gameStats.totalWinnings += profit;
+                    window.authManager.addXP(Math.floor(profit / 10));
+                }
+                this.saveGameStats();
+                this.updateStatsDisplay();
+            }
+            
+            recordTransaction(isWin, profit) {
+                window.authManager.addTransaction({
+                    type: 'game_bet', amount: this.betAmount, description: 'Hi-Lo',
+                    game: 'Hi-Lo', result: isWin ? 'win' : 'loss', winAmount: Math.max(0, profit)
+                });
+            }
+            
+            updateDisplay() {
+                const user = window.authManager.getCurrentUser();
+                if (user) document.getElementById('userBalance').textContent = window.authManager.formatCurrency(user.balance);
+            }
+            
+            updateStatsDisplay() {
+                document.getElementById('gamesPlayed').textContent = this.gameStats.gamesPlayed;
+                document.getElementById('gamesWon').textContent = this.gameStats.gamesWon;
+                document.getElementById('totalWinnings').textContent = window.authManager.formatCurrency(this.gameStats.totalWinnings);
+            }
+            
+            loadGameStats() {
+                const saved = localStorage.getItem('hiLoGame-game-stats');
+                if (saved) this.gameStats = { ...this.gameStats, ...JSON.parse(saved) };
+            }
+            
+            saveGameStats() {
+                localStorage.setItem('hiLoGame-game-stats', JSON.stringify(this.gameStats));
+            }
+            
+            showMessage(message, type = 'info') {
+                if (window.pyramidCasino) {
+                    window.pyramidCasino.showNotification(message, type);
+                } else {
+                    console.log(`${type.toUpperCase()}: ${message}`);
+                }
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            window.hiLoGame = new HiLoGame();
+        });
+    </script>
+</body>
+</html>

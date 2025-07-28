@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keno - Pyramid Casino</title>
+    <meta name="description" content="Play Keno at Pyramid Casino. Pick your lucky numbers and win big in this lottery-style game.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/theme.css">
+    <link rel="stylesheet" href="../styles/games.css">
+</head>
+<body>
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html" class="brand-link" aria-label="Pyramid Casino Home">
+                    <i class="fas fa-chess-queen" aria-hidden="true"></i>
+                    <span>Pyramid Casino</span>
+                </a>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="../index.html" class="nav-link"><i class="fas fa-home" aria-hidden="true"></i><span>Home</span></a>
+                    <a href="../games.html" class="nav-link"><i class="fas fa-gamepad" aria-hidden="true"></i><span>Games</span></a>
+                    <a href="../topup.html" class="nav-link"><i class="fas fa-coins" aria-hidden="true"></i><span>Top-Up</span></a>
+                    <a href="../history.html" class="nav-link"><i class="fas fa-history" aria-hidden="true"></i><span>History</span></a>
+                    <a href="../profile.html" class="nav-link"><i class="fas fa-user" aria-hidden="true"></i><span>Profile</span></a>
+                </div>
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon" aria-hidden="true"></i></button>
+                    <div class="auth-section" id="authSection">
+                        <a href="../login.html" class="nav-link auth-link"><i class="fas fa-sign-in-alt" aria-hidden="true"></i><span>Login</span></a>
+                        <a href="../signup.html" class="nav-link auth-link"><i class="fas fa-user-plus" aria-hidden="true"></i><span>Sign Up</span></a>
+                    </div>
+                    <div class="user-section hidden" id="userSection">
+                        <div class="balance-display"><i class="fas fa-coins" aria-hidden="true"></i><span id="userBalance">$0.00</span></div>
+                        <div class="user-menu">
+                            <button class="user-menu-btn" id="userMenuBtn" aria-label="User menu"><i class="fas fa-user-circle" aria-hidden="true"></i><span id="username"></span></button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="../profile.html" class="dropdown-link"><i class="fas fa-user" aria-hidden="true"></i>Profile</a>
+                                <a href="../settings.html" class="dropdown-link"><i class="fas fa-cog" aria-hidden="true"></i>Settings</a>
+                                <button class="dropdown-link logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt" aria-hidden="true"></i>Logout</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <main id="main" class="game-main">
+        <section class="game-header">
+            <div class="container">
+                <div class="game-breadcrumb"><a href="../games.html" class="breadcrumb-link"><i class="fas fa-arrow-left" aria-hidden="true"></i>Back to Games</a></div>
+                <div class="game-title"><h1>Keno</h1><p>Lottery-style number picking game</p></div>
+                <div class="game-info">
+                    <div class="info-item"><span class="info-label">Category:</span><span class="info-value">Specialty</span></div>
+                    <div class="info-item"><span class="info-label">Min Bet:</span><span class="info-value">$1.00</span></div>
+                    <div class="info-item"><span class="info-label">Max Bet:</span><span class="info-value">$100.00</span></div>
+                    <div class="info-item"><span class="info-label">RTP:</span><span class="info-value">95.0%</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="game-interface">
+            <div class="container">
+                <div class="keno-game" style="max-width: 800px; margin: 0 auto;">
+                    <div class="keno-board" style="background: var(--card-bg); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid var(--border);">
+                        <h3 style="text-align: center; margin-bottom: 1.5rem; color: var(--text-primary);">Pick 1-10 Numbers</h3>
+                        <div class="numbers-grid" style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 0.5rem; margin-bottom: 2rem;">
+                            <!-- Numbers 1-80 will be generated by JavaScript -->
+                        </div>
+                        <div class="selected-numbers" style="text-align: center; margin-bottom: 1.5rem;">
+                            <div style="color: var(--text-primary); margin-bottom: 0.5rem;">Selected Numbers: <span id="selectedCount">0</span>/10</div>
+                            <div id="selectedNumbers" style="color: var(--primary); font-weight: 600;"></div>
+                        </div>
+                        <div class="bet-controls" style="text-align: center; margin-bottom: 1.5rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Bet Amount:</label>
+                            <div style="display: flex; justify-content: center; gap: 0.5rem; align-items: center;">
+                                <button id="decreaseBet" style="width: 40px; height: 40px; border: 2px solid var(--border); background: var(--card-bg); color: var(--text-primary); border-radius: 8px; cursor: pointer;">-</button>
+                                <input type="number" id="betAmount" min="1" max="100" value="5" style="width: 80px; padding: 0.5rem; border: 2px solid var(--border); border-radius: 8px; background: var(--background); color: var(--text-primary); text-align: center;">
+                                <button id="increaseBet" style="width: 40px; height: 40px; border: 2px solid var(--border); background: var(--card-bg); color: var(--text-primary); border-radius: 8px; cursor: pointer;">+</button>
+                            </div>
+                        </div>
+                        <div style="text-align: center; display: flex; gap: 1rem; justify-content: center;">
+                            <button id="clearNumbers" style="padding: 0.75rem 1.5rem; background: var(--danger); color: white; border: none; border-radius: 8px; cursor: pointer;">Clear All</button>
+                            <button id="quickPick" style="padding: 0.75rem 1.5rem; background: var(--secondary); color: white; border: none; border-radius: 8px; cursor: pointer;">Quick Pick</button>
+                            <button id="playKeno" disabled style="padding: 0.75rem 2rem; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; opacity: 0.6;">Play Keno</button>
+                        </div>
+                    </div>
+                    
+                    <div class="drawn-numbers" id="drawnNumbers" style="background: var(--surface); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid var(--border); display: none;">
+                        <h3 style="text-align: center; margin-bottom: 1rem; color: var(--text-primary);">Drawn Numbers</h3>
+                        <div id="drawnNumbersList" style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 0.5rem; margin-bottom: 1rem;"></div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.1rem; margin-bottom: 0.5rem;">Matches: <span id="matchCount" style="font-weight: 600; color: var(--primary);">0</span></div>
+                            <div style="font-size: 1.2rem; font-weight: 600; color: var(--success);">Payout: <span id="payoutAmount">$0</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem;">
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);" id="gamesPlayed">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">Games Played</div>
+                        </div>
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);" id="gamesWon">0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">Games Won</div>
+                        </div>
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);" id="biggestWin">$0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">Biggest Win</div>
+                        </div>
+                        <div style="background: var(--card-bg); padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);" id="totalWinnings">$0</div>
+                            <div style="color: var(--text-secondary); font-size: 0.8rem;">Total Winnings</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../scripts/auth.js"></script>
+    <script src="../scripts/theme.js"></script>
+    <script src="../scripts/main.js"></script>
+    <script>
+        class KenoGame {
+            constructor() {
+                this.selectedNumbers = new Set();
+                this.betAmount = 5;
+                this.isPlaying = false;
+                this.gameStats = { gamesPlayed: 0, gamesWon: 0, biggestWin: 0, totalWinnings: 0 };
+                this.payoutTable = {
+                    1: { 1: 3 }, 2: { 2: 12 }, 3: { 2: 2, 3: 42 }, 4: { 2: 1, 3: 4, 4: 180 }, 
+                    5: { 3: 1, 4: 7, 5: 800 }, 6: { 3: 1, 4: 2, 5: 90, 6: 1600 },
+                    7: { 4: 1, 5: 20, 6: 400, 7: 7000 }, 8: { 5: 12, 6: 98, 7: 1650, 8: 10000 },
+                    9: { 5: 4, 6: 44, 7: 335, 8: 4700, 9: 10000 }, 10: { 5: 2, 6: 24, 7: 142, 8: 1000, 9: 4500, 10: 10000 }
+                };
+                this.init();
+            }
+            
+            init() {
+                this.checkAuth();
+                this.createNumbersGrid();
+                this.bindEvents();
+                this.loadGameStats();
+                this.updateDisplay();
+            }
+            
+            checkAuth() {
+                if (!window.authManager?.isLoggedIn()) {
+                    window.location.href = '../login.html';
+                    return;
+                }
+            }
+            
+            createNumbersGrid() {
+                const grid = document.querySelector('.numbers-grid');
+                for (let i = 1; i <= 80; i++) {
+                    const cell = document.createElement('div');
+                    cell.textContent = i;
+                    cell.className = 'number-cell';
+                    cell.style.cssText = 'padding: 0.5rem; background: var(--surface); border: 2px solid var(--border); border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s; color: var(--text-primary); font-weight: 600;';
+                    cell.addEventListener('click', () => this.toggleNumber(i, cell));
+                    grid.appendChild(cell);
+                }
+            }
+            
+            bindEvents() {
+                document.getElementById('decreaseBet').onclick = () => this.adjustBet(-1);
+                document.getElementById('increaseBet').onclick = () => this.adjustBet(1);
+                document.getElementById('betAmount').onchange = (e) => this.betAmount = Math.max(1, Math.min(100, parseInt(e.target.value) || 1));
+                document.getElementById('clearNumbers').onclick = () => this.clearAll();
+                document.getElementById('quickPick').onclick = () => this.quickPick();
+                document.getElementById('playKeno').onclick = () => this.playGame();
+            }
+            
+            toggleNumber(number, cell) {
+                if (this.isPlaying) return;
+                if (this.selectedNumbers.has(number)) {
+                    this.selectedNumbers.delete(number);
+                    cell.style.background = 'var(--surface)';
+                    cell.style.borderColor = 'var(--border)';
+                } else if (this.selectedNumbers.size < 10) {
+                    this.selectedNumbers.add(number);
+                    cell.style.background = 'var(--primary)';
+                    cell.style.borderColor = 'var(--primary)';
+                    cell.style.color = 'white';
+                }
+                this.updateSelectedDisplay();
+            }
+            
+            adjustBet(amount) {
+                this.betAmount = Math.max(1, Math.min(100, this.betAmount + amount));
+                document.getElementById('betAmount').value = this.betAmount;
+            }
+            
+            clearAll() {
+                if (this.isPlaying) return;
+                this.selectedNumbers.clear();
+                document.querySelectorAll('.number-cell').forEach(cell => {
+                    cell.style.background = 'var(--surface)';
+                    cell.style.borderColor = 'var(--border)';
+                    cell.style.color = 'var(--text-primary)';
+                });
+                this.updateSelectedDisplay();
+            }
+            
+            quickPick() {
+                if (this.isPlaying) return;
+                this.clearAll();
+                const count = Math.floor(Math.random() * 10) + 1;
+                const numbers = [];
+                while (numbers.length < count) {
+                    const num = Math.floor(Math.random() * 80) + 1;
+                    if (!numbers.includes(num)) numbers.push(num);
+                }
+                numbers.forEach(num => {
+                    this.selectedNumbers.add(num);
+                    const cell = document.querySelectorAll('.number-cell')[num - 1];
+                    cell.style.background = 'var(--primary)';
+                    cell.style.borderColor = 'var(--primary)';
+                    cell.style.color = 'white';
+                });
+                this.updateSelectedDisplay();
+            }
+            
+            updateSelectedDisplay() {
+                const count = this.selectedNumbers.size;
+                document.getElementById('selectedCount').textContent = count;
+                document.getElementById('selectedNumbers').textContent = Array.from(this.selectedNumbers).sort((a, b) => a - b).join(', ');
+                document.getElementById('playKeno').disabled = count === 0;
+                document.getElementById('playKeno').style.opacity = count === 0 ? '0.6' : '1';
+            }
+            
+            async playGame() {
+                if (this.isPlaying || this.selectedNumbers.size === 0) return;
+                const user = window.authManager.getCurrentUser();
+                if (user.balance < this.betAmount) {
+                    this.showMessage('Insufficient funds!', 'error');
+                    return;
+                }
+                
+                this.isPlaying = true;
+                document.getElementById('playKeno').disabled = true;
+                window.authManager.updateBalance(-this.betAmount);
+                
+                // Draw 20 random numbers
+                const drawnNumbers = [];
+                while (drawnNumbers.length < 20) {
+                    const num = Math.floor(Math.random() * 80) + 1;
+                    if (!drawnNumbers.includes(num)) drawnNumbers.push(num);
+                }
+                
+                // Show drawn numbers with animation
+                await this.showDrawnNumbers(drawnNumbers);
+                
+                // Calculate matches and payout
+                const matches = Array.from(this.selectedNumbers).filter(num => drawnNumbers.includes(num));
+                const matchCount = matches.length;
+                const selectedCount = this.selectedNumbers.size;
+                const payout = this.calculatePayout(selectedCount, matchCount);
+                const winAmount = payout * this.betAmount;
+                
+                if (winAmount > 0) {
+                    window.authManager.updateBalance(winAmount);
+                }
+                
+                // Update display
+                document.getElementById('matchCount').textContent = matchCount;
+                document.getElementById('payoutAmount').textContent = window.authManager.formatCurrency(winAmount);
+                
+                // Update stats
+                this.updateGameStats(winAmount > 0, winAmount - this.betAmount);
+                this.recordTransaction(matchCount, winAmount - this.betAmount);
+                
+                // Show result
+                const message = winAmount > 0 ? 
+                    `🎉 ${matchCount} matches! You won ${window.authManager.formatCurrency(winAmount - this.betAmount)}!` :
+                    `${matchCount} matches. Better luck next time!`;
+                this.showMessage(message, winAmount > 0 ? 'success' : 'info');
+                
+                setTimeout(() => this.resetGame(), 5000);
+            }
+            
+            async showDrawnNumbers(drawnNumbers) {
+                const container = document.getElementById('drawnNumbersList');
+                const section = document.getElementById('drawnNumbers');
+                section.style.display = 'block';
+                container.innerHTML = '';
+                
+                return new Promise(resolve => {
+                    drawnNumbers.forEach((num, index) => {
+                        setTimeout(() => {
+                            const cell = document.createElement('div');
+                            cell.textContent = num;
+                            cell.style.cssText = 'padding: 0.5rem; background: var(--accent); color: white; border-radius: 50%; text-align: center; font-weight: 600; animation: bounceIn 0.5s ease;';
+                            container.appendChild(cell);
+                            if (index === drawnNumbers.length - 1) setTimeout(resolve, 500);
+                        }, index * 100);
+                    });
+                });
+            }
+            
+            calculatePayout(selectedCount, matchCount) {
+                return this.payoutTable[selectedCount]?.[matchCount] || 0;
+            }
+            
+            resetGame() {
+                this.isPlaying = false;
+                this.clearAll();
+                document.getElementById('drawnNumbers').style.display = 'none';
+                this.updateDisplay();
+            }
+            
+            updateGameStats(isWin, profit) {
+                this.gameStats.gamesPlayed++;
+                if (isWin) {
+                    this.gameStats.gamesWon++;
+                    this.gameStats.totalWinnings += profit;
+                    this.gameStats.biggestWin = Math.max(this.gameStats.biggestWin, profit);
+                    window.authManager.addXP(Math.floor(profit / 10));
+                }
+                this.saveGameStats();
+                this.updateStatsDisplay();
+            }
+            
+            recordTransaction(matches, profit) {
+                window.authManager.addTransaction({
+                    type: 'game_bet', amount: this.betAmount, description: `Keno - ${matches} matches`,
+                    game: 'Keno', result: profit > 0 ? 'win' : 'loss', winAmount: Math.max(0, profit)
+                });
+            }
+            
+            updateDisplay() {
+                const user = window.authManager.getCurrentUser();
+                if (user) document.getElementById('userBalance').textContent = window.authManager.formatCurrency(user.balance);
+            }
+            
+            updateStatsDisplay() {
+                document.getElementById('gamesPlayed').textContent = this.gameStats.gamesPlayed;
+                document.getElementById('gamesWon').textContent = this.gameStats.gamesWon;
+                document.getElementById('biggestWin').textContent = window.authManager.formatCurrency(this.gameStats.biggestWin);
+                document.getElementById('totalWinnings').textContent = window.authManager.formatCurrency(this.gameStats.totalWinnings);
+            }
+            
+            loadGameStats() {
+                const saved = localStorage.getItem('keno-game-stats');
+                if (saved) this.gameStats = { ...this.gameStats, ...JSON.parse(saved) };
+            }
+            
+            saveGameStats() {
+                localStorage.setItem('keno-game-stats', JSON.stringify(this.gameStats));
+            }
+            
+            showMessage(message, type = 'info') {
+                if (window.pyramidCasino) {
+                    window.pyramidCasino.showNotification(message, type);
+                } else {
+                    console.log(`${type.toUpperCase()}: ${message}`);
+                }
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            window.kenoGame = new KenoGame();
+        });
+    </script>
+</body>
+</html>
