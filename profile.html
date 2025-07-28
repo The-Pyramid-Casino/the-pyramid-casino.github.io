@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Pyramid Casino</title>
+    <meta name="description" content="View your casino profile, track your progress, achievements, and gaming statistics at Pyramid Casino.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/profile.css">
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-link" aria-label="Pyramid Casino Home">
+                    <i class="fas fa-chess-queen" aria-hidden="true"></i>
+                    <span>Pyramid Casino</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="games.html" class="nav-link">
+                        <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        <span>Games</span>
+                    </a>
+                    <a href="topup.html" class="nav-link">
+                        <i class="fas fa-coins" aria-hidden="true"></i>
+                        <span>Top-Up</span>
+                    </a>
+                    <a href="history.html" class="nav-link">
+                        <i class="fas fa-history" aria-hidden="true"></i>
+                        <span>History</span>
+                    </a>
+                    <a href="profile.html" class="nav-link active" aria-current="page">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <span>Profile</span>
+                    </a>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                    
+                    <div class="auth-section" id="authSection">
+                        <a href="login.html" class="nav-link auth-link">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="signup.html" class="nav-link auth-link">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </div>
+                    
+                    <div class="user-section hidden" id="userSection">
+                        <div class="balance-display">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            <span id="userBalance">$0.00</span>
+                        </div>
+                        <div class="user-menu">
+                            <button class="user-menu-btn" id="userMenuBtn" aria-label="User menu">
+                                <i class="fas fa-user-circle" aria-hidden="true"></i>
+                                <span id="username"></span>
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="profile.html" class="dropdown-link">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    Profile
+                                </a>
+                                <a href="settings.html" class="dropdown-link">
+                                    <i class="fas fa-cog" aria-hidden="true"></i>
+                                    Settings
+                                </a>
+                                <button class="dropdown-link logout-btn" id="logoutBtn">
+                                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main" class="profile-main">
+        <!-- Profile Header -->
+        <section class="profile-header">
+            <div class="container">
+                <div class="profile-hero">
+                    <div class="profile-avatar">
+                        <div class="avatar-container">
+                            <i class="fas fa-user-circle" aria-hidden="true"></i>
+                            <div class="level-badge" id="levelBadge">1</div>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <h1 id="profileUsername">Player</h1>
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <span class="stat-value" id="memberSince">Jan 2025</span>
+                                <span class="stat-label">Member Since</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="totalGamesPlayed">0</span>
+                                <span class="stat-label">Games Played</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="biggestWin">$0</span>
+                                <span class="stat-label">Biggest Win</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- XP Progress -->
+        <section class="xp-section">
+            <div class="container">
+                <div class="xp-card">
+                    <div class="xp-header">
+                        <h2>Experience Points</h2>
+                        <div class="current-level">
+                            Level <span id="currentLevel">1</span>
+                        </div>
+                    </div>
+                    <div class="xp-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="xpProgress" style="width: 0%"></div>
+                        </div>
+                        <div class="xp-info">
+                            <span id="currentXP">0</span> / <span id="nextLevelXP">100</span> XP
+                        </div>
+                    </div>
+                    <div class="xp-rewards">
+                        <h3>Next Level Rewards</h3>
+                        <div class="rewards-list">
+                            <div class="reward-item">
+                                <i class="fas fa-coins" aria-hidden="true"></i>
+                                <span>$50 Bonus Credits</span>
+                            </div>
+                            <div class="reward-item">
+                                <i class="fas fa-trophy" aria-hidden="true"></i>
+                                <span>Achievement Badge</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements -->
+        <section class="achievements-section">
+            <div class="container">
+                <h2>Achievements</h2>
+                <div class="achievements-grid" id="achievementsGrid">
+                    <!-- Achievements will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Gaming Statistics -->
+        <section class="stats-section">
+            <div class="container">
+                <h2>Gaming Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="totalSpins">0</div>
+                            <div class="stat-label">Total Spins</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy" aria-hidden="true"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="totalWins">0</div>
+                            <div class="stat-label">Total Wins</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-percentage" aria-hidden="true"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="winRate">0%</div>
+                            <div class="stat-label">Win Rate</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="totalEarnings">$0</div>
+                            <div class="stat-label">Total Earnings</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock" aria-hidden="true"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="timePlayed">0h</div>
+                            <div class="stat-label">Time Played</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star" aria-hidden="true"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="favoriteGame">-</div>
+                            <div class="stat-label">Favorite Game</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Activity -->
+        <section class="activity-section">
+            <div class="container">
+                <h2>Recent Activity</h2>
+                <div class="activity-list" id="activityList">
+                    <!-- Recent activity will be populated by JavaScript -->
+                </div>
+                <div class="section-footer">
+                    <a href="history.html" class="btn btn-secondary">
+                        <i class="fas fa-history" aria-hidden="true"></i>
+                        View Full History
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/theme.js"></script>
+    <script src="scripts/main.js"></script>
+    <script>
+        // Profile Management System
+        class ProfileManager {
+            constructor() {
+                this.achievements = [
+                    {
+                        id: 'first_spin',
+                        name: 'First Spin',
+                        description: 'Made your first spin',
+                        icon: 'fa-play',
+                        requirement: 1,
+                        type: 'spins'
+                    },
+                    {
+                        id: 'lucky_winner',
+                        name: 'Lucky Winner',
+                        description: 'Won your first game',
+                        icon: 'fa-trophy',
+                        requirement: 1,
+                        type: 'wins'
+                    },
+                    {
+                        id: 'hundred_spins',
+                        name: 'Spin Master',
+                        description: 'Completed 100 spins',
+                        icon: 'fa-spinner',
+                        requirement: 100,
+                        type: 'spins'
+                    },
+                    {
+                        id: 'big_winner',
+                        name: 'Big Winner',
+                        description: 'Won $500 or more in a single game',
+                        icon: 'fa-gem',
+                        requirement: 500,
+                        type: 'single_win'
+                    },
+                    {
+                        id: 'high_roller',
+                        name: 'High Roller',
+                        description: 'Bet $50 or more in a single spin',
+                        icon: 'fa-rocket',
+                        requirement: 50,
+                        type: 'single_bet'
+                    },
+                    {
+                        id: 'level_10',
+                        name: 'Experienced Player',
+                        description: 'Reached level 10',
+                        icon: 'fa-star',
+                        requirement: 10,
+                        type: 'level'
+                    },
+                    {
+                        id: 'games_explorer',
+                        name: 'Games Explorer',
+                        description: 'Played 5 different games',
+                        icon: 'fa-map',
+                        requirement: 5,
+                        type: 'games_played'
+                    },
+                    {
+                        id: 'millionaire',
+                        name: 'Millionaire',
+                        description: 'Accumulated $1,000,000 in total winnings',
+                        icon: 'fa-crown',
+                        requirement: 1000000,
+                        type: 'total_winnings'
+                    }
+                ];
+                
+                this.init();
+            }
+            
+            init() {
+                this.checkAuth();
+                this.loadProfile();
+                this.renderAchievements();
+                this.loadRecentActivity();
+            }
+            
+            checkAuth() {
+                if (!window.authManager || !window.authManager.isLoggedIn()) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+            }
+            
+            loadProfile() {
+                const user = window.authManager.getCurrentUser();
+                if (!user) return;
+                
+                // Update profile header
+                document.getElementById('profileUsername').textContent = user.username;
+                
+                // Calculate and display level
+                const level = this.calculateLevel(user.xp || 0);
+                const xpForNextLevel = this.getXPForLevel(level + 1);
+                const currentLevelXP = this.getXPForLevel(level);
+                const progressXP = user.xp - currentLevelXP;
+                const neededXP = xpForNextLevel - currentLevelXP;
+                const progressPercent = (progressXP / neededXP) * 100;
+                
+                document.getElementById('currentLevel').textContent = level;
+                document.getElementById('levelBadge').textContent = level;
+                document.getElementById('currentXP').textContent = user.xp || 0;
+                document.getElementById('nextLevelXP').textContent = xpForNextLevel;
+                document.getElementById('xpProgress').style.width = `${progressPercent}%`;
+                
+                // Member since
+                const joinDate = new Date(user.createdAt || Date.now());
+                document.getElementById('memberSince').textContent = 
+                    joinDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                
+                // Load and display statistics
+                this.loadStatistics();
+            }
+            
+            calculateLevel(xp) {
+                return Math.floor(xp / 100) + 1;
+            }
+            
+            getXPForLevel(level) {
+                return (level - 1) * 100;
+            }
+            
+            loadStatistics() {
+                const stats = this.getPlayerStatistics();
+                
+                document.getElementById('totalGamesPlayed').textContent = stats.totalGames;
+                document.getElementById('biggestWin').textContent = window.authManager.formatCurrency(stats.biggestWin);
+                document.getElementById('totalSpins').textContent = stats.totalSpins;
+                document.getElementById('totalWins').textContent = stats.totalWins;
+                document.getElementById('winRate').textContent = stats.winRate + '%';
+                document.getElementById('totalEarnings').textContent = window.authManager.formatCurrency(stats.totalEarnings);
+                document.getElementById('timePlayed').textContent = this.formatPlayTime(stats.timePlayed);
+                document.getElementById('favoriteGame').textContent = stats.favoriteGame || '-';
+            }
+            
+            getPlayerStatistics() {
+                const user = window.authManager.getCurrentUser();
+                const transactions = user.transactions || [];
+                
+                const gameTransactions = transactions.filter(t => t.type === 'game_bet');
+                const winTransactions = gameTransactions.filter(t => t.result === 'win');
+                
+                let totalSpins = 0;
+                let totalWins = winTransactions.length;
+                let totalEarnings = 0;
+                let biggestWin = 0;
+                let gamesCounts = {};
+                
+                gameTransactions.forEach(t => {
+                    totalSpins++;
+                    if (t.result === 'win') {
+                        totalEarnings += t.winAmount || 0;
+                        biggestWin = Math.max(biggestWin, t.winAmount || 0);
+                    }
+                    
+                    if (t.game) {
+                        gamesCounts[t.game] = (gamesCounts[t.game] || 0) + 1;
+                    }
+                });
+                
+                const favoriteGame = Object.keys(gamesCounts).reduce((a, b) => 
+                    gamesCounts[a] > gamesCounts[b] ? a : b, '');
+                
+                const winRate = totalSpins > 0 ? Math.round((totalWins / totalSpins) * 100) : 0;
+                
+                return {
+                    totalGames: Object.keys(gamesCounts).length,
+                    totalSpins,
+                    totalWins,
+                    winRate,
+                    totalEarnings,
+                    biggestWin,
+                    timePlayed: this.calculatePlayTime(),
+                    favoriteGame
+                };
+            }
+            
+            calculatePlayTime() {
+                // Estimate based on number of games played (rough calculation)
+                const user = window.authManager.getCurrentUser();
+                const transactions = user.transactions || [];
+                const gameTransactions = transactions.filter(t => t.type === 'game_bet');
+                return gameTransactions.length * 2; // 2 minutes per game average
+            }
+            
+            formatPlayTime(minutes) {
+                if (minutes < 60) return `${minutes}m`;
+                const hours = Math.floor(minutes / 60);
+                const mins = minutes % 60;
+                return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
+            }
+            
+            renderAchievements() {
+                const achievementsGrid = document.getElementById('achievementsGrid');
+                const stats = this.getPlayerStatistics();
+                const user = window.authManager.getCurrentUser();
+                
+                achievementsGrid.innerHTML = this.achievements.map(achievement => {
+                    const isUnlocked = this.isAchievementUnlocked(achievement, stats, user);
+                    const progress = this.getAchievementProgress(achievement, stats, user);
+                    
+                    return `
+                        <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
+                            <div class="achievement-icon">
+                                <i class="fas ${achievement.icon}" aria-hidden="true"></i>
+                            </div>
+                            <div class="achievement-info">
+                                <h3>${achievement.name}</h3>
+                                <p>${achievement.description}</p>
+                                <div class="achievement-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: ${progress}%"></div>
+                                    </div>
+                                    <span class="progress-text">${progress}%</span>
+                                </div>
+                            </div>
+                            ${isUnlocked ? '<div class="achievement-badge"><i class="fas fa-check"></i></div>' : ''}
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            isAchievementUnlocked(achievement, stats, user) {
+                const current = this.getCurrentValue(achievement, stats, user);
+                return current >= achievement.requirement;
+            }
+            
+            getAchievementProgress(achievement, stats, user) {
+                const current = this.getCurrentValue(achievement, stats, user);
+                return Math.min(100, Math.round((current / achievement.requirement) * 100));
+            }
+            
+            getCurrentValue(achievement, stats, user) {
+                switch (achievement.type) {
+                    case 'spins':
+                        return stats.totalSpins;
+                    case 'wins':
+                        return stats.totalWins;
+                    case 'single_win':
+                        return stats.biggestWin;
+                    case 'single_bet':
+                        return this.getBiggestBet(user);
+                    case 'level':
+                        return this.calculateLevel(user.xp || 0);
+                    case 'games_played':
+                        return stats.totalGames;
+                    case 'total_winnings':
+                        return stats.totalEarnings;
+                    default:
+                        return 0;
+                }
+            }
+            
+            getBiggestBet(user) {
+                const transactions = user.transactions || [];
+                const bets = transactions.filter(t => t.type === 'game_bet').map(t => t.amount);
+                return bets.length > 0 ? Math.max(...bets) : 0;
+            }
+            
+            loadRecentActivity() {
+                const user = window.authManager.getCurrentUser();
+                const transactions = user.transactions || [];
+                const recent = transactions.slice(-10).reverse();
+                
+                const activityList = document.getElementById('activityList');
+                
+                if (recent.length === 0) {
+                    activityList.innerHTML = `
+                        <div class="no-activity">
+                            <i class="fas fa-history" aria-hidden="true"></i>
+                            <p>No recent activity</p>
+                            <a href="games.html" class="btn btn-primary">Start Playing</a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                activityList.innerHTML = recent.map(transaction => {
+                    const date = new Date(transaction.timestamp);
+                    const timeAgo = this.getTimeAgo(date);
+                    
+                    let icon, colorClass, description;
+                    
+                    switch (transaction.type) {
+                        case 'game_bet':
+                            icon = 'fa-gamepad';
+                            colorClass = transaction.result === 'win' ? 'win' : 'loss';
+                            description = transaction.result === 'win' 
+                                ? `Won ${window.authManager.formatCurrency(transaction.winAmount)} in ${transaction.game}`
+                                : `Lost ${window.authManager.formatCurrency(transaction.amount)} in ${transaction.game}`;
+                            break;
+                        case 'topup':
+                            icon = 'fa-plus-circle';
+                            colorClass = 'topup';
+                            description = `Added ${window.authManager.formatCurrency(transaction.amount)} to balance`;
+                            break;
+                        case 'signup_bonus':
+                            icon = 'fa-gift';
+                            colorClass = 'bonus';
+                            description = `Received ${window.authManager.formatCurrency(transaction.amount)} signup bonus`;
+                            break;
+                        default:
+                            icon = 'fa-circle';
+                            colorClass = 'other';
+                            description = transaction.description || 'Transaction';
+                    }
+                    
+                    return `
+                        <div class="activity-item ${colorClass}">
+                            <div class="activity-icon">
+                                <i class="fas ${icon}" aria-hidden="true"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-description">${description}</div>
+                                <div class="activity-time">${timeAgo}</div>
+                            </div>
+                            <div class="activity-amount ${transaction.type === 'game_bet' && transaction.result === 'loss' ? 'negative' : 'positive'}">
+                                ${transaction.type === 'game_bet' && transaction.result === 'loss' ? '-' : '+'}${window.authManager.formatCurrency(transaction.type === 'game_bet' && transaction.result === 'win' ? transaction.winAmount : transaction.amount)}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            getTimeAgo(date) {
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMins / 60);
+                const diffDays = Math.floor(diffHours / 24);
+                
+                if (diffMins < 1) return 'Just now';
+                if (diffMins < 60) return `${diffMins}m ago`;
+                if (diffHours < 24) return `${diffHours}h ago`;
+                if (diffDays < 7) return `${diffDays}d ago`;
+                
+                return date.toLocaleDateString();
+            }
+        }
+        
+        // Initialize profile when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.profileManager = new ProfileManager();
+        });
+    </script>
+</body>
+</html>

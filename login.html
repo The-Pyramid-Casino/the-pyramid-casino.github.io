@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Pyramid Casino</title>
+    <meta name="description" content="Log in to your Pyramid Casino account to access premium games and features.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/auth.css">
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-link" aria-label="Pyramid Casino Home">
+                    <i class="fas fa-chess-queen" aria-hidden="true"></i>
+                    <span>Pyramid Casino</span>
+                </a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                </button>
+                
+                <a href="signup.html" class="btn btn-secondary">
+                    <i class="fas fa-user-plus" aria-hidden="true"></i>
+                    Sign Up
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main" class="auth-main">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <div class="auth-icon">
+                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                    </div>
+                    <h1>Welcome Back</h1>
+                    <p>Sign in to your Pyramid Casino account</p>
+                </div>
+                
+                <form class="auth-form" id="loginForm" novalidate>
+                    <div class="form-group">
+                        <label for="username" class="form-label">Username or Email</label>
+                        <div class="input-group">
+                            <div class="input-icon">
+                                <i class="fas fa-user" aria-hidden="true"></i>
+                            </div>
+                            <input 
+                                type="text" 
+                                id="username" 
+                                name="username" 
+                                class="form-input" 
+                                required 
+                                autocomplete="username"
+                                aria-describedby="username-error"
+                                placeholder="Enter your username or email"
+                            >
+                        </div>
+                        <div id="username-error" class="error-message" role="alert"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <div class="input-icon">
+                                <i class="fas fa-lock" aria-hidden="true"></i>
+                            </div>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                class="form-input" 
+                                required 
+                                autocomplete="current-password"
+                                aria-describedby="password-error"
+                                placeholder="Enter your password"
+                            >
+                            <button type="button" class="password-toggle" id="passwordToggle" aria-label="Show password">
+                                <i class="fas fa-eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div id="password-error" class="error-message" role="alert"></div>
+                    </div>
+                    
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="rememberMe" name="rememberMe">
+                            <span class="checkbox-custom"></span>
+                            Remember me
+                        </label>
+                        
+                        <button type="button" class="link-button" id="forgotPassword">
+                            Forgot password?
+                        </button>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-large auth-submit" id="loginSubmit">
+                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                        Sign In
+                    </button>
+                    
+                    <div class="auth-divider">
+                        <span>or</span>
+                    </div>
+                    
+                    <div class="demo-section">
+                        <p class="demo-text">Try with demo account:</p>
+                        <button type="button" class="btn btn-glass" id="demoLogin">
+                            <i class="fas fa-play" aria-hidden="true"></i>
+                            Demo Login
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="signup.html" class="auth-link">Sign up here</a></p>
+                </div>
+            </div>
+            
+            <div class="auth-visual">
+                <div class="visual-content">
+                    <h2>Join the Ultimate Gaming Experience</h2>
+                    <ul class="feature-list">
+                        <li>
+                            <i class="fas fa-gamepad" aria-hidden="true"></i>
+                            Access to 20+ premium games
+                        </li>
+                        <li>
+                            <i class="fas fa-trophy" aria-hidden="true"></i>
+                            Unlock achievements and earn XP
+                        </li>
+                        <li>
+                            <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                            Secure and fair gameplay
+                        </li>
+                        <li>
+                            <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                            Play anywhere, anytime
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay hidden" id="loadingOverlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+            <p>Signing you in...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/theme.js"></script>
+    <script>
+        // Login page specific functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            const passwordToggle = document.getElementById('passwordToggle');
+            const passwordInput = document.getElementById('password');
+            const demoLoginBtn = document.getElementById('demoLogin');
+            const forgotPasswordBtn = document.getElementById('forgotPassword');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            // Password visibility toggle
+            if (passwordToggle && passwordInput) {
+                passwordToggle.addEventListener('click', () => {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    const icon = passwordToggle.querySelector('i');
+                    icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+                    
+                    passwordToggle.setAttribute('aria-label', type === 'password' ? 'Show password' : 'Hide password');
+                });
+            }
+            
+            // Form submission
+            if (loginForm) {
+                loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(loginForm);
+                    const username = formData.get('username').trim();
+                    const password = formData.get('password');
+                    
+                    // Clear previous errors
+                    clearErrors();
+                    
+                    // Validate inputs
+                    let isValid = true;
+                    
+                    if (!username) {
+                        showError('username-error', 'Username or email is required');
+                        isValid = false;
+                    }
+                    
+                    if (!password) {
+                        showError('password-error', 'Password is required');
+                        isValid = false;
+                    }
+                    
+                    if (!isValid) return;
+                    
+                    // Show loading
+                    showLoading(true);
+                    
+                    try {
+                        // Simulate API delay
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        
+                        // Attempt login
+                        if (window.authManager) {
+                            const user = window.authManager.login(username, password);
+                            
+                            // Success - redirect to games page
+                            if (window.pyramidCasino) {
+                                window.pyramidCasino.showNotification('Welcome back! Login successful.', 'success');
+                            }
+                            
+                            setTimeout(() => {
+                                window.location.href = 'games.html';
+                            }, 1000);
+                        }
+                    } catch (error) {
+                        showError('password-error', error.message);
+                        
+                        if (window.pyramidCasino) {
+                            window.pyramidCasino.showNotification(error.message, 'error');
+                        }
+                    } finally {
+                        showLoading(false);
+                    }
+                });
+            }
+            
+            // Demo login
+            if (demoLoginBtn) {
+                demoLoginBtn.addEventListener('click', async () => {
+                    showLoading(true);
+                    
+                    try {
+                        // Create demo user if it doesn't exist
+                        const demoUser = {
+                            username: 'demo',
+                            email: 'demo@pyramidcasino.com',
+                            password: 'Demo123!'
+                        };
+                        
+                        // Try to login with demo account first
+                        try {
+                            if (window.authManager) {
+                                window.authManager.login('demo', 'Demo123!');
+                            }
+                        } catch (error) {
+                            // If demo user doesn't exist, create it
+                            if (window.authManager) {
+                                window.authManager.register(demoUser);
+                            }
+                        }
+                        
+                        if (window.pyramidCasino) {
+                            window.pyramidCasino.showNotification('Demo account logged in!', 'success');
+                        }
+                        
+                        setTimeout(() => {
+                            window.location.href = 'games.html';
+                        }, 1000);
+                        
+                    } catch (error) {
+                        if (window.pyramidCasino) {
+                            window.pyramidCasino.showNotification('Demo login failed. Please try again.', 'error');
+                        }
+                    } finally {
+                        showLoading(false);
+                    }
+                });
+            }
+            
+            // Forgot password
+            if (forgotPasswordBtn) {
+                forgotPasswordBtn.addEventListener('click', () => {
+                    if (window.pyramidCasino) {
+                        window.pyramidCasino.showNotification('Password reset functionality coming soon!', 'info');
+                    }
+                });
+            }
+            
+            function showError(elementId, message) {
+                const errorElement = document.getElementById(elementId);
+                if (errorElement) {
+                    errorElement.textContent = message;
+                    errorElement.style.display = 'block';
+                    
+                    // Add error styling to input
+                    const inputId = elementId.replace('-error', '');
+                    const input = document.getElementById(inputId);
+                    if (input) {
+                        input.classList.add('error');
+                        input.setAttribute('aria-invalid', 'true');
+                    }
+                }
+            }
+            
+            function clearErrors() {
+                const errorElements = document.querySelectorAll('.error-message');
+                errorElements.forEach(element => {
+                    element.textContent = '';
+                    element.style.display = 'none';
+                });
+                
+                const inputs = document.querySelectorAll('.form-input');
+                inputs.forEach(input => {
+                    input.classList.remove('error');
+                    input.removeAttribute('aria-invalid');
+                });
+            }
+            
+            function showLoading(show) {
+                if (loadingOverlay) {
+                    if (show) {
+                        loadingOverlay.classList.remove('hidden');
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        loadingOverlay.classList.add('hidden');
+                        document.body.style.overflow = 'auto';
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,986 +1,635 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Top Up | Pyramid Casino</title>
-  <meta name="description" content="Top up your chips at Pyramid Casino - add funds to continue playing your favorite games." />
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="shared-modern.css" />
-  
-  <style>
-    /* Page-specific styles using design system */
-    .topup-container {
-      max-width: 600px;
-      margin: 2rem auto;
-      text-align: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top-Up Balance - Pyramid Casino</title>
+    <meta name="description" content="Add credits to your Pyramid Casino account balance and get ready to play your favorite games.">
     
-    .topup-title {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: var(--theme-text-primary);
-      margin-bottom: 1rem;
-    }
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    .topup-description {
-      font-size: 1.125rem;
-      color: var(--theme-text-secondary);
-      margin-bottom: 2rem;
-      line-height: 1.6;
-    }
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    .current-balance {
-      background: var(--theme-bg-glass);
-      backdrop-filter: blur(var(--blur-lg));
-      border: 1px solid var(--theme-border-secondary);
-      border-radius: var(--radius-xl);
-      padding: 2rem;
-      margin: 2rem 0;
-      text-align: center;
-    }
-    
-    .balance-label {
-      font-size: 1rem;
-      color: var(--theme-text-muted);
-      margin-bottom: 0.5rem;
-    }
-    
-    .balance-amount {
-      font-size: 3rem;
-      font-weight: 800;
-      color: var(--theme-text-primary);
-      margin-bottom: 1rem;
-    }
-    
-    .topup-options {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 1rem;
-      margin: 2rem 0;
-    }
-    
-    .topup-option {
-      background: var(--theme-bg-glass);
-      backdrop-filter: blur(var(--blur-lg));
-      border: 2px solid var(--theme-border-secondary);
-      border-radius: var(--radius-xl);
-      padding: 1.5rem 1rem;
-      cursor: pointer;
-      transition: all var(--transition-base);
-      text-align: center;
-    }
-    
-    .topup-option:hover {
-      border-color: var(--theme-border-primary);
-      transform: translateY(-2px);
-      background: var(--theme-bg-secondary);
-    }
-    
-    .topup-option.selected {
-      border-color: var(--theme-info);
-      background: rgba(59, 130, 246, 0.1);
-    }
-    
-    .option-amount {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--theme-text-primary);
-      margin-bottom: 0.5rem;
-    }
-    
-    .option-label {
-      font-size: 0.875rem;
-      color: var(--theme-text-muted);
-    }
-    
-    .custom-amount {
-      margin: 2rem 0;
-    }
-    
-    .custom-input {
-      background: var(--theme-bg-surface);
-      border: 1px solid var(--theme-border-secondary);
-      border-radius: var(--radius-lg);
-      color: var(--theme-text-primary);
-      font-size: 1.25rem;
-      padding: 1rem;
-      text-align: center;
-      outline: none;
-      transition: all var(--transition-fast);
-      width: 200px;
-      max-width: 100%;
-    }
-    
-    .custom-input:focus {
-      border-color: var(--theme-border-focus);
-      background: var(--theme-bg-glass);
-    }
-    
-    .topup-actions {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin: 2rem 0;
-    }
-    
-    .disclaimer {
-      background: var(--theme-bg-glass);
-      backdrop-filter: blur(var(--blur-lg));
-      border: 1px solid rgba(255, 215, 0, 0.3);
-      border-radius: var(--radius-xl);
-      padding: 1.5rem;
-      margin: 2rem 0;
-      text-align: center;
-      color: var(--theme-text-secondary);
-    }
-    
-    .disclaimer strong {
-      color: var(--theme-text-primary);
-    }
-    
-    /* Mobile responsiveness */
-    @media (max-width: 768px) {
-      .topup-options {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .topup-actions {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .balance-amount {
-        font-size: 2.5rem;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .topup-options {
-        grid-template-columns: 1fr;
-      }
-      
-      .option-amount {
-        font-size: 1.25rem;
-      }
-    }
-  </style>
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/topup.css">
 </head>
 <body>
-  <!-- Skip link for accessibility -->
-  <a href="#main-content" class="skip-link">Skip to main content</a>
-  
-  <!-- Consistent Navbar -->
-  <nav class="navbar" role="banner">
-    <a href="index.html" class="navbar-brand">
-      <span role="img" aria-label="pyramid">🏜️</span>
-      Pyramid Casino
-    </a>
+    <a href="#main" class="skip-link">Skip to main content</a>
     
-    <ul class="navbar-nav" role="navigation" aria-label="Main navigation">
-      <li><a href="index.html" class="nav-link">Home</a></li>
-      <li><a href="index.html#games" class="nav-link">Games</a></li>
-      <li><a href="topup.html" class="nav-link active" aria-current="page">Top Up</a></li>
-      <li><a href="history.html" class="nav-link">History</a></li>
-      <li><a href="https://forms.gle/QYQqh72sSuweCue49" class="nav-link" target="_blank" rel="noopener">Suggest</a></li>
-      <li>
-        <button 
-          class="theme-toggle" 
-          onclick="toggleTheme()" 
-          aria-label="Toggle between light and dark theme"
-          title="Toggle theme"
-        >
-          <span id="theme-icon">🌙</span>
-        </button>
-      </li>
-    </ul>
-  </nav>
-  
-  <main id="main-content" class="main-content container" role="main">
-    <!-- Back to Menu -->
-    <div style="margin-bottom: 2rem;">
-      <a href="index.html" class="btn btn-secondary btn-sm">← Back to Menu</a>
-    </div>
-    
-    <!-- Top Up Container -->
-    <div class="topup-container">
-      <h1 class="topup-title">💳 Top Up</h1>
-      <p class="topup-description">
-        Add chips to your account to continue playing your favorite casino games.
-      </p>
-      
-      <!-- Current Balance -->
-      <div class="current-balance">
-        <div class="balance-label">Current Balance</div>
-        <div class="balance-amount" id="current-balance">1000</div>
-        <div style="color: var(--theme-text-muted); font-size: 0.875rem;">chips</div>
-      </div>
-      
-      <!-- Top Up Options -->
-      <div class="topup-options" role="group" aria-labelledby="topup-options-heading">
-        <h2 id="topup-options-heading" class="sr-only">Top up amount options</h2>
-        
-        <div class="topup-option" onclick="selectAmount(100)" data-amount="100">
-          <div class="option-amount">100</div>
-          <div class="option-label">Starter</div>
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-link" aria-label="Pyramid Casino Home">
+                    <i class="fas fa-chess-queen" aria-hidden="true"></i>
+                    <span>Pyramid Casino</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="games.html" class="nav-link">
+                        <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        <span>Games</span>
+                    </a>
+                    <a href="topup.html" class="nav-link active" aria-current="page">
+                        <i class="fas fa-coins" aria-hidden="true"></i>
+                        <span>Top-Up</span>
+                    </a>
+                    <a href="history.html" class="nav-link">
+                        <i class="fas fa-history" aria-hidden="true"></i>
+                        <span>History</span>
+                    </a>
+                    <a href="profile.html" class="nav-link">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <span>Profile</span>
+                    </a>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                    
+                    <div class="auth-section" id="authSection">
+                        <a href="login.html" class="nav-link auth-link">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="signup.html" class="nav-link auth-link">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </div>
+                    
+                    <div class="user-section hidden" id="userSection">
+                        <div class="balance-display">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            <span id="userBalance">$0.00</span>
+                        </div>
+                        <div class="user-menu">
+                            <button class="user-menu-btn" id="userMenuBtn" aria-label="User menu">
+                                <i class="fas fa-user-circle" aria-hidden="true"></i>
+                                <span id="username"></span>
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="profile.html" class="dropdown-link">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    Profile
+                                </a>
+                                <a href="settings.html" class="dropdown-link">
+                                    <i class="fas fa-cog" aria-hidden="true"></i>
+                                    Settings
+                                </a>
+                                <button class="dropdown-link logout-btn" id="logoutBtn">
+                                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
-        
-        <div class="topup-option" onclick="selectAmount(500)" data-amount="500">
-          <div class="option-amount">500</div>
-          <div class="option-label">Standard</div>
-        </div>
-        
-        <div class="topup-option" onclick="selectAmount(1000)" data-amount="1000">
-          <div class="option-amount">1000</div>
-          <div class="option-label">Popular</div>
-        </div>
-        
-        <div class="topup-option" onclick="selectAmount(2500)" data-amount="2500">
-          <div class="option-amount">2500</div>
-          <div class="option-label">Premium</div>
-        </div>
-        
-        <div class="topup-option" onclick="selectAmount(5000)" data-amount="5000">
-          <div class="option-amount">5000</div>
-          <div class="option-label">VIP</div>
-        </div>
-        
-        <div class="topup-option" onclick="selectAmount(10000)" data-amount="10000">
-          <div class="option-amount">10000</div>
-          <div class="option-label">Elite</div>
-        </div>
-      </div>
-      
-      <!-- Custom Amount -->
-      <div class="custom-amount">
-        <label for="custom-amount-input" style="display: block; margin-bottom: 1rem; color: var(--theme-text-secondary); font-weight: 600;">
-          Or enter custom amount:
-        </label>
-        <input 
-          type="number" 
-          id="custom-amount-input" 
-          class="custom-input" 
-          placeholder="Enter amount" 
-          min="1" 
-          max="100000"
-          oninput="handleCustomAmount()"
-        />
-      </div>
-      
-      <!-- Actions -->
-      <div class="topup-actions">
-        <button id="topup-btn" class="btn btn-primary btn-lg" onclick="processTopUp()" disabled>
-          💳 Add <span id="selected-amount">0</span> Chips
-        </button>
-        <button class="btn btn-secondary btn-lg" onclick="resetSelection()">
-          🔄 Reset
-        </button>
-      </div>
-      
-      <!-- Disclaimer -->
-      <div class="disclaimer" role="alert">
-        <strong>💡 FOR ENTERTAINMENT ONLY!</strong><br>
-        This is a <strong>FREE casino simulation</strong>. No real money is involved.<br>
-        Adding chips is just for fun and gameplay continuation.
-      </div>
-    </div>
-  </main>
-  
-  <!-- Footer -->
-  <footer class="glass-surface text-center" role="contentinfo" style="padding: 2rem; margin-top: 3rem;">
-    <p>Pyramid Casino &copy; 2025 | 🎮 For Entertainment Only</p>
-  </footer>
-  
-  <!-- Toast notification container -->
-  <div class="toast-container" id="toast-container"></div>
-  
-  <!-- Scripts -->
-  <script src="theme.js"></script>
-  <script src="admin-config.js"></script>
-  <script src="shared-modern.js"></script>
-  
-  <script>
-    let selectedAmount = 0;
-    
-    // Theme toggle functionality
-    function updateThemeIcon() {
-      const themeIcon = document.getElementById('theme-icon');
-      const currentTheme = getCurrentTheme();
-      themeIcon.textContent = currentTheme === 'light' ? '🌙' : '☀️';
-    }
-    
-    // Listen for theme changes
-    window.addEventListener('themeChanged', updateThemeIcon);
-    
-    // Initialize page
-    document.addEventListener('DOMContentLoaded', function() {
-      updateThemeIcon();
-      updateCurrentBalance();
-    });
-    
-    // Update current balance display
-    function updateCurrentBalance() {
-      const balanceEl = document.getElementById('current-balance');
-      if (typeof getCasinoBalanceSecure === 'function') {
-        balanceEl.textContent = getCasinoBalanceSecure();
-      } else if (typeof getCasinoBalance === 'function') {
-        balanceEl.textContent = getCasinoBalance();
-      } else {
-        let bal = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-        if (isNaN(bal)) bal = 1000;
-        balanceEl.textContent = bal;
-      }
-    }
-    
-    // Select amount option
-    function selectAmount(amount) {
-      // Clear previous selections
-      document.querySelectorAll('.topup-option').forEach(option => {
-        option.classList.remove('selected');
-      });
-      
-      // Select new option
-      const selectedOption = document.querySelector(`[data-amount="${amount}"]`);
-      if (selectedOption) {
-        selectedOption.classList.add('selected');
-      }
-      
-      // Clear custom input
-      document.getElementById('custom-amount-input').value = '';
-      
-      // Update selected amount
-      selectedAmount = amount;
-      updateTopUpButton();
-    }
-    
-    // Handle custom amount input
-    function handleCustomAmount() {
-      const customInput = document.getElementById('custom-amount-input');
-      const amount = parseInt(customInput.value);
-      
-      // Clear option selections
-      document.querySelectorAll('.topup-option').forEach(option => {
-        option.classList.remove('selected');
-      });
-      
-      if (amount && amount > 0) {
-        selectedAmount = amount;
-      } else {
-        selectedAmount = 0;
-      }
-      
-      updateTopUpButton();
-    }
-    
-    // Update top up button state
-    function updateTopUpButton() {
-      const topUpBtn = document.getElementById('topup-btn');
-      const amountSpan = document.getElementById('selected-amount');
-      
-      amountSpan.textContent = selectedAmount;
-      
-      if (selectedAmount > 0) {
-        topUpBtn.disabled = false;
-        topUpBtn.classList.remove('btn-secondary');
-        topUpBtn.classList.add('btn-primary');
-      } else {
-        topUpBtn.disabled = true;
-        topUpBtn.classList.remove('btn-primary');
-        topUpBtn.classList.add('btn-secondary');
-      }
-    }
-    
-    // Process top up
-    function processTopUp() {
-      if (selectedAmount <= 0) return;
-      
-      // Get current balance
-      let currentBalance;
-      if (typeof getCasinoBalanceSecure === 'function') {
-        currentBalance = getCasinoBalanceSecure();
-      } else if (typeof getCasinoBalance === 'function') {
-        currentBalance = getCasinoBalance();
-      } else {
-        currentBalance = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-        if (isNaN(currentBalance)) currentBalance = 1000;
-      }
-      
-      // Add chips
-      const newBalance = currentBalance + selectedAmount;
-      
-      // Update balance
-      if (typeof setCasinoBalanceSecure === 'function') {
-        setCasinoBalanceSecure(newBalance);
-      } else if (typeof setCasinoBalance === 'function') {
-        setCasinoBalance(newBalance);
-      } else {
-        localStorage.setItem('pyramidCasinoBalance', newBalance.toString());
-      }
-      
-      // Update display
-      updateCurrentBalance();
-      
-      // Show success message
-      showNotification(`✅ Successfully added ${selectedAmount} chips!`, 'success');
-      
-      // Reset selection
-      resetSelection();
-    }
-    
-    // Reset selection
-    function resetSelection() {
-      selectedAmount = 0;
-      document.querySelectorAll('.topup-option').forEach(option => {
-        option.classList.remove('selected');
-      });
-      document.getElementById('custom-amount-input').value = '';
-      updateTopUpButton();
-    }
-    
-    // Show notification
-    function showNotification(message, type) {
-      if (typeof displayNotification === 'function') {
-        displayNotification(message, type);
-      } else {
-        alert(message);
-      }
-    }
-  </script>
-</body>
-</html>
-      min-height: 60vh;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    .balance-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      font-size: 1.12rem;
-      color: #ffe277;
-      font-weight: bold;
-      background: rgba(35, 27, 54, 0.8);
-      padding: 10px 20px;
-      border-radius: 25px;
-      border: 1px solid #f9d923;
-    }
-    .history-btn {
-      background: #a0843a;
-      color: #fff;
-      border-radius: 8px;
-      border: none;
-      font-size: 0.97rem;
-      font-weight: bold;
-      padding: 0.28em 1.1em;
-      cursor: pointer;
-      box-shadow: 0 2px 6px #0002;
-      transition: background 0.15s;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .history-btn:hover {
-      background: #f9d923;
-      color: #18122b;
-    }
-    .page-title {
-      text-align: center;
-      color: #f9d923;
-      margin-bottom: 2rem;
-      font-size: 2.5rem;
-      text-shadow: 0 0 10px rgba(249, 217, 35, 0.3);
-    }
-    .topup-container {
-      background: linear-gradient(135deg, #231b36 0%, #1a0f2a 50%, #231b36 100%);
-      border: 2px solid rgba(249, 217, 35, 0.3);
-      border-radius: 20px;
-      padding: 2.5rem;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      position: relative;
-      overflow: hidden;
-    }
-    .topup-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, transparent, rgba(249, 217, 35, 0.05), transparent);
-      pointer-events: none;
-    }
-    .current-status {
-      background: rgba(249, 217, 35, 0.1);
-      border: 1px solid #f9d923;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      position: relative;
-    }
-    .status-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-    .status-item {
-      text-align: center;
-    }
-    .status-label {
-      color: #a0843a;
-      font-size: 0.9rem;
-      margin-bottom: 0.3rem;
-    }
-    .status-value {
-      color: #f9d923;
-      font-size: 1.3rem;
-      font-weight: bold;
-    }
-    .topup-form {
-      margin: 2rem 0;
-    }
-    .amount-selector {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
-    .amount-btn {
-      background: linear-gradient(135deg, #a0843a 0%, #8a6f2e 100%);
-      color: #fff;
-      border: 2px solid #a0843a;
-      border-radius: 12px;
-      padding: 1rem 0.5rem;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .amount-btn:hover {
-      background: linear-gradient(135deg, #f9d923 0%, #eed920 100%);
-      color: #18122b;
-      border-color: #f9d923;
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(249, 217, 35, 0.3);
-    }
-    .amount-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.6s ease;
-    }
-    .amount-btn:hover::before {
-      left: 100%;
-    }
-    .custom-amount {
-      margin: 1.5rem 0;
-    }
-    .custom-amount input {
-      background: rgba(35, 27, 54, 0.8);
-      color: #f3e9dc;
-      border: 2px solid #a0843a;
-      border-radius: 12px;
-      padding: 1rem;
-      font-size: 1.2rem;
-      text-align: center;
-      width: 200px;
-      max-width: 100%;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-    .custom-amount input:focus {
-      border-color: #f9d923;
-      box-shadow: 0 0 15px rgba(249, 217, 35, 0.3);
-      outline: none;
-    }
-    .custom-amount input::placeholder {
-      color: #a0843a;
-    }
-    .topup-main-btn {
-      background: linear-gradient(135deg, #43c734 0%, #2ea827 100%);
-      color: #fff;
-      border: none;
-      border-radius: 15px;
-      padding: 1.2rem 3rem;
-      font-size: 1.3rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 1.5rem;
-      box-shadow: 0 5px 20px rgba(67, 199, 52, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-    .topup-main-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(67, 199, 52, 0.4);
-    }
-    .topup-main-btn:active {
-      transform: translateY(-1px);
-    }
-    .topup-main-btn:disabled {
-      background: #666;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-    .limits-info {
-      background: rgba(160, 132, 58, 0.1);
-      border: 1px solid #a0843a;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-top: 2rem;
-      font-size: 0.95rem;
-    }
-    .limits-info h3 {
-      color: #f9d923;
-      margin-top: 0;
-      margin-bottom: 1rem;
-    }
-    .limits-info ul {
-      margin: 0;
-      padding-left: 1.5rem;
-    }
-    .limits-info li {
-      margin-bottom: 0.5rem;
-      color: #ffe277;
-    }
-    .warning-text {
-      color: #d7263d;
-      font-weight: bold;
-      margin-top: 1rem;
-      padding: 1rem;
-      background: rgba(215, 38, 61, 0.1);
-      border: 1px solid #d7263d;
-      border-radius: 8px;
-    }
-    .quick-actions {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
-    .quick-action-btn {
-      background: #231b36;
-      color: #f3e9dc;
-      border: 1px solid #a0843a;
-      border-radius: 8px;
-      padding: 0.8rem 1.5rem;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .quick-action-btn:hover {
-      background: #a0843a;
-      color: #fff;
-    }
-    .footer {
-      margin-top: 3rem;
-      background: linear-gradient(135deg, #231b36 0%, #0f0a1a 50%, #231b36 100%);
-      border-top: 2px solid #f9d923;
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      padding: 15px 20px;
-    }
-    @media (max-width: 768px) {
-      .topup-container {
-        padding: 1.5rem;
-      }
-      .amount-selector {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .custom-amount input {
-        width: 100%;
-      }
-      .status-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-  </style>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-
-  gtag("config", "G-V9DHVKBD85");
-</script>
-</head>
-<body>
-  <header class="header">
-    <div class="logo">
-      <span role="img" aria-label="pyramid">🏜️</span> Pyramid Casino
-    </div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="topup.html">Top Up</a></li>
-        <li><a href="history.html">History</a></li>
-        <li><a href="https://forms.gle/QYQqh72sSuweCue49">Suggest A Game</a></li>
-      </ul>
     </nav>
-  </header>
-  
-  <main class="main-content">
-    <div class="balance-row">
-      <span>💰 Current Balance: <span id="balance">1000</span> chips</span>
-      <a href="history.html" class="history-btn">📊 History</a>
+
+    <!-- Main Content -->
+    <main id="main" class="topup-main">
+        <!-- Header -->
+        <section class="topup-header">
+            <div class="container">
+                <h1>Add Credits to Your Account</h1>
+                <p>Top up your balance and start playing your favorite casino games</p>
+                
+                <div class="current-balance">
+                    <div class="balance-card">
+                        <div class="balance-icon">
+                            <i class="fas fa-wallet" aria-hidden="true"></i>
+                        </div>
+                        <div class="balance-info">
+                            <div class="balance-label">Current Balance</div>
+                            <div class="balance-amount" id="currentBalance">$0.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Top-Up Options -->
+        <section class="quick-topup">
+            <div class="container">
+                <h2>Quick Top-Up</h2>
+                <div class="topup-options">
+                    <button class="topup-option" data-amount="10">
+                        <div class="option-amount">$10</div>
+                        <div class="option-bonus">+$1 Bonus</div>
+                    </button>
+                    <button class="topup-option" data-amount="25">
+                        <div class="option-amount">$25</div>
+                        <div class="option-bonus">+$3 Bonus</div>
+                    </button>
+                    <button class="topup-option popular" data-amount="50">
+                        <div class="option-badge">Popular</div>
+                        <div class="option-amount">$50</div>
+                        <div class="option-bonus">+$8 Bonus</div>
+                    </button>
+                    <button class="topup-option" data-amount="100">
+                        <div class="option-amount">$100</div>
+                        <div class="option-bonus">+$20 Bonus</div>
+                    </button>
+                    <button class="topup-option best-value" data-amount="250">
+                        <div class="option-badge">Best Value</div>
+                        <div class="option-amount">$250</div>
+                        <div class="option-bonus">+$75 Bonus</div>
+                    </button>
+                    <button class="topup-option" data-amount="500">
+                        <div class="option-amount">$500</div>
+                        <div class="option-bonus">+$200 Bonus</div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Custom Amount -->
+        <section class="custom-topup">
+            <div class="container">
+                <div class="topup-form-container">
+                    <div class="form-section">
+                        <h2>Custom Amount</h2>
+                        <form id="topupForm" class="topup-form">
+                            <div class="form-group">
+                                <label for="customAmount">Enter Amount</label>
+                                <div class="amount-input-group">
+                                    <span class="currency-symbol">$</span>
+                                    <input 
+                                        type="number" 
+                                        id="customAmount" 
+                                        placeholder="0.00" 
+                                        min="1" 
+                                        max="10000" 
+                                        step="0.01"
+                                        aria-label="Custom top-up amount"
+                                    >
+                                </div>
+                                <div class="amount-info">
+                                    <span class="min-amount">Minimum: $1.00</span>
+                                    <span class="max-amount">Maximum: $10,000.00</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bonus-calculator" id="bonusCalculator">
+                                <div class="bonus-breakdown">
+                                    <div class="breakdown-item">
+                                        <span class="breakdown-label">Base Amount:</span>
+                                        <span class="breakdown-value" id="baseAmount">$0.00</span>
+                                    </div>
+                                    <div class="breakdown-item bonus">
+                                        <span class="breakdown-label">Bonus Credits:</span>
+                                        <span class="breakdown-value" id="bonusAmount">$0.00</span>
+                                    </div>
+                                    <div class="breakdown-item total">
+                                        <span class="breakdown-label">Total Added:</span>
+                                        <span class="breakdown-value" id="totalAmount">$0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-large" id="topupBtn" disabled>
+                                <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                                Add Credits
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="info-section">
+                        <div class="info-card">
+                            <h3>
+                                <i class="fas fa-gift" aria-hidden="true"></i>
+                                Bonus Credits
+                            </h3>
+                            <div class="bonus-tiers">
+                                <div class="bonus-tier">
+                                    <span class="tier-range">$1 - $24</span>
+                                    <span class="tier-bonus">10% Bonus</span>
+                                </div>
+                                <div class="bonus-tier">
+                                    <span class="tier-range">$25 - $49</span>
+                                    <span class="tier-bonus">12% Bonus</span>
+                                </div>
+                                <div class="bonus-tier">
+                                    <span class="tier-range">$50 - $99</span>
+                                    <span class="tier-bonus">16% Bonus</span>
+                                </div>
+                                <div class="bonus-tier">
+                                    <span class="tier-range">$100 - $249</span>
+                                    <span class="tier-bonus">20% Bonus</span>
+                                </div>
+                                <div class="bonus-tier highlighted">
+                                    <span class="tier-range">$250 - $499</span>
+                                    <span class="tier-bonus">30% Bonus</span>
+                                </div>
+                                <div class="bonus-tier premium">
+                                    <span class="tier-range">$500+</span>
+                                    <span class="tier-bonus">40% Bonus</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h3>
+                                <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                                Safe & Secure
+                            </h3>
+                            <ul class="security-features">
+                                <li>
+                                    <i class="fas fa-lock" aria-hidden="true"></i>
+                                    Secure transaction processing
+                                </li>
+                                <li>
+                                    <i class="fas fa-clock" aria-hidden="true"></i>
+                                    Instant credit addition
+                                </li>
+                                <li>
+                                    <i class="fas fa-history" aria-hidden="true"></i>
+                                    Complete transaction history
+                                </li>
+                                <li>
+                                    <i class="fas fa-handshake" aria-hidden="true"></i>
+                                    Educational purposes only
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Top-Ups -->
+        <section class="recent-topups">
+            <div class="container">
+                <h2>Recent Top-Ups</h2>
+                <div class="recent-list" id="recentTopups">
+                    <!-- Recent top-ups will be populated by JavaScript -->
+                </div>
+                <div class="section-footer">
+                    <a href="history.html" class="btn btn-secondary">
+                        <i class="fas fa-history" aria-hidden="true"></i>
+                        View Full History
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Success Modal -->
+    <div class="modal hidden" id="successModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content success">
+            <div class="modal-header">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle" aria-hidden="true"></i>
+                </div>
+                <h3>Credits Added Successfully!</h3>
+            </div>
+            <div class="modal-body">
+                <div class="success-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Amount Added:</span>
+                        <span class="detail-value" id="successAmount">$0.00</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Bonus Credits:</span>
+                        <span class="detail-value" id="successBonus">$0.00</span>
+                    </div>
+                    <div class="detail-item total">
+                        <span class="detail-label">Total Added:</span>
+                        <span class="detail-value" id="successTotal">$0.00</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">New Balance:</span>
+                        <span class="detail-value" id="successBalance">$0.00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="playNowBtn">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    Start Playing
+                </button>
+                <button class="btn btn-secondary" id="continueBtn">
+                    Continue
+                </button>
+            </div>
+        </div>
     </div>
-    
-    <h1 class="page-title">💳 Top Up Chips</h1>
-    
-    <div class="topup-container">
-      <div class="current-status">
-        <h2 style="color: #f9d923; margin-top: 0;">📈 Current Status</h2>
-        <div class="status-grid">
-          <div class="status-item">
-            <div class="status-label">💰 Balance</div>
-            <div class="status-value" id="status-balance">1000</div>
-          </div>
-          <div class="status-item">
-            <div class="status-label">🔄 Today's Top-ups</div>
-            <div class="status-value" id="status-topups">0/5</div>
-          </div>
-          <div class="status-item">
-            <div class="status-label">⏰ Remaining</div>
-            <div class="status-value" id="status-remaining">5</div>
-          </div>
-          <div class="status-item">
-            <div class="status-label">💎 Max Amount</div>
-            <div class="status-value">10,000</div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="topup-form">
-        <h3 style="color: #f9d923; margin-bottom: 1rem;">💸 Select Amount</h3>
-        
-        <div class="amount-selector">
-          <button class="amount-btn" onclick="selectAmount(100)">💰<br>100</button>
-          <button class="amount-btn" onclick="selectAmount(500)">💎<br>500</button>
-          <button class="amount-btn" onclick="selectAmount(1000)">🎯<br>1,000</button>
-          <button class="amount-btn" onclick="selectAmount(2500)">⭐<br>2,500</button>
-          <button class="amount-btn" onclick="selectAmount(5000)">🔥<br>5,000</button>
-          <button class="amount-btn" onclick="selectAmount(10000)">👑<br>10,000</button>
-        </div>
-        
-        <div class="custom-amount">
-          <h4 style="color: #ffe277; margin-bottom: 0.5rem;">✏️ Or Enter Custom Amount</h4>
-          <input type="number" id="custom-amount" min="1" max="10000" placeholder="Enter amount..." />
-        </div>
-        
-        <button class="topup-main-btn" id="topup-btn" onclick="processTopUp()">
-          🚀 TOP UP CHIPS
-        </button>
-      </div>
-      
-      <div class="limits-info">
-        <h3>⚖️ Top-up Limits & Rules</h3>
-        <ul>
-          <li>🔢 <strong>Maximum per top-up:</strong> 10,000 chips</li>
-          <li>📅 <strong>Daily limit:</strong> 5 top-ups per day</li>
-          <li>🔄 <strong>Resets:</strong> Daily limits reset at midnight</li>
-          <li>💾 <strong>Storage:</strong> Your data is saved locally on your device</li>
-          <li>🎮 <strong>Entertainment only:</strong> No real money involved</li>
-        </ul>
-        
-        <div id="limit-warning" class="warning-text" style="display: none;">
-          ⚠️ You have reached your daily top-up limit!<br>
-          Please try again tomorrow.
-        </div>
-      </div>
-      
-      <div class="quick-actions">
-        <a href="index.html" class="quick-action-btn">🏠 Back to Games</a>
-        <a href="history.html" class="quick-action-btn">📊 View History</a>
-        <button class="quick-action-btn" onclick="showTopUpHistory()">📈 Top-up History</button>
-      </div>
-    </div>
-  </main>
-  
-  <footer class="footer">
-    <div style="padding: 10px 0;">
-      <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
-      <p style="margin: 5px 0; font-size: 1.1rem;">
-        📧 <strong>Contact us:</strong> 
-        <a href="mailto:casino.the.pyramid@gmail.com" style="font-size: 1.1rem;">casino.the.pyramid@gmail.com</a>
-      </p>
-      <p style="margin: 5px 0; font-size: 0.9rem; opacity: 0.8;">
-        💰 No real money gambling | 🔞 18+ for entertainment
-      </p>
-    </div>
-  </footer>
-  
-  <script src="admin-config.js"></script>
-  <script src="shared-modern.js"></script>
-  <script>
-    let selectedAmount = 0;
-    
-    function initTopUp() {
-      document.getElementById('year').textContent = new Date().getFullYear();
-      updateStatus();
-      
-      // Add input validation
-      const customInput = document.getElementById('custom-amount');
-      customInput.addEventListener('input', function() {
-        selectedAmount = parseInt(this.value) || 0;
-        updateTopUpButton();
-      });
-      
-      customInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          processTopUp();
+
+    <!-- Scripts -->
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/theme.js"></script>
+    <script src="scripts/main.js"></script>
+    <script>
+        // Top-Up Management System
+        class TopUpManager {
+            constructor() {
+                this.bonusTiers = [
+                    { min: 1, max: 24, bonus: 0.10 },
+                    { min: 25, max: 49, bonus: 0.12 },
+                    { min: 50, max: 99, bonus: 0.16 },
+                    { min: 100, max: 249, bonus: 0.20 },
+                    { min: 250, max: 499, bonus: 0.30 },
+                    { min: 500, max: Infinity, bonus: 0.40 }
+                ];
+                
+                this.init();
+            }
+            
+            init() {
+                this.checkAuth();
+                this.bindEvents();
+                this.updateDisplay();
+                this.loadRecentTopUps();
+            }
+            
+            checkAuth() {
+                if (!window.authManager || !window.authManager.isLoggedIn()) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+            }
+            
+            bindEvents() {
+                // Quick top-up buttons
+                document.querySelectorAll('.topup-option').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const amount = parseFloat(e.currentTarget.dataset.amount);
+                        this.selectQuickAmount(amount);
+                    });
+                });
+                
+                // Custom amount input
+                const customAmount = document.getElementById('customAmount');
+                customAmount.addEventListener('input', (e) => {
+                    this.updateBonusCalculator(parseFloat(e.target.value) || 0);
+                    this.validateForm();
+                });
+                
+                // Top-up form
+                document.getElementById('topupForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.processTopUp();
+                });
+                
+                // Modal buttons
+                document.getElementById('playNowBtn').addEventListener('click', () => {
+                    window.location.href = 'games.html';
+                });
+                
+                document.getElementById('continueBtn').addEventListener('click', () => {
+                    this.hideSuccessModal();
+                });
+                
+                // Close modal on overlay click
+                document.querySelector('.modal-overlay').addEventListener('click', () => {
+                    this.hideSuccessModal();
+                });
+            }
+            
+            selectQuickAmount(amount) {
+                document.getElementById('customAmount').value = amount;
+                this.updateBonusCalculator(amount);
+                this.validateForm();
+                
+                // Highlight selected option
+                document.querySelectorAll('.topup-option').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                
+                document.querySelector(`[data-amount="${amount}"]`).classList.add('selected');
+            }
+            
+            updateBonusCalculator(amount) {
+                const bonus = this.calculateBonus(amount);
+                const total = amount + bonus;
+                
+                document.getElementById('baseAmount').textContent = window.authManager.formatCurrency(amount);
+                document.getElementById('bonusAmount').textContent = window.authManager.formatCurrency(bonus);
+                document.getElementById('totalAmount').textContent = window.authManager.formatCurrency(total);
+                
+                // Show/hide calculator
+                const calculator = document.getElementById('bonusCalculator');
+                if (amount > 0) {
+                    calculator.classList.add('visible');
+                } else {
+                    calculator.classList.remove('visible');
+                }
+            }
+            
+            calculateBonus(amount) {
+                if (amount <= 0) return 0;
+                
+                const tier = this.bonusTiers.find(t => amount >= t.min && amount <= t.max);
+                return tier ? amount * tier.bonus : 0;
+            }
+            
+            validateForm() {
+                const amount = parseFloat(document.getElementById('customAmount').value) || 0;
+                const topupBtn = document.getElementById('topupBtn');
+                
+                if (amount >= 1 && amount <= 10000) {
+                    topupBtn.disabled = false;
+                    topupBtn.innerHTML = `
+                        <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                        Add ${window.authManager.formatCurrency(amount + this.calculateBonus(amount))}
+                    `;
+                } else {
+                    topupBtn.disabled = true;
+                    topupBtn.innerHTML = `
+                        <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                        Add Credits
+                    `;
+                }
+            }
+            
+            processTopUp() {
+                const amount = parseFloat(document.getElementById('customAmount').value);
+                
+                if (amount < 1 || amount > 10000) {
+                    this.showNotification('Please enter an amount between $1.00 and $10,000.00', 'error');
+                    return;
+                }
+                
+                const bonus = this.calculateBonus(amount);
+                const total = amount + bonus;
+                
+                // Add to balance
+                window.authManager.updateBalance(total);
+                
+                // Record transaction
+                window.authManager.addTransaction({
+                    type: 'topup',
+                    amount: total,
+                    baseAmount: amount,
+                    bonusAmount: bonus,
+                    description: `Top-up: $${amount.toFixed(2)} + $${bonus.toFixed(2)} bonus`,
+                    method: 'demo_credits'
+                });
+                
+                // Add XP for top-up
+                window.authManager.addXP(Math.floor(amount / 10));
+                
+                // Show success modal
+                this.showSuccessModal(amount, bonus, total);
+                
+                // Reset form
+                document.getElementById('topupForm').reset();
+                document.querySelectorAll('.topup-option').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                this.updateBonusCalculator(0);
+                this.validateForm();
+                
+                // Update display
+                this.updateDisplay();
+                this.loadRecentTopUps();
+            }
+            
+            showSuccessModal(amount, bonus, total) {
+                const user = window.authManager.getCurrentUser();
+                
+                document.getElementById('successAmount').textContent = window.authManager.formatCurrency(amount);
+                document.getElementById('successBonus').textContent = window.authManager.formatCurrency(bonus);
+                document.getElementById('successTotal').textContent = window.authManager.formatCurrency(total);
+                document.getElementById('successBalance').textContent = window.authManager.formatCurrency(user.balance);
+                
+                document.getElementById('successModal').classList.remove('hidden');
+                
+                // Add celebration effect
+                this.createCelebrationEffect();
+            }
+            
+            hideSuccessModal() {
+                document.getElementById('successModal').classList.add('hidden');
+            }
+            
+            createCelebrationEffect() {
+                // Create confetti effect
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        this.createConfettiPiece();
+                    }, i * 20);
+                }
+            }
+            
+            createConfettiPiece() {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+            
+            updateDisplay() {
+                const user = window.authManager.getCurrentUser();
+                if (user) {
+                    document.getElementById('currentBalance').textContent = 
+                        window.authManager.formatCurrency(user.balance);
+                }
+            }
+            
+            loadRecentTopUps() {
+                const user = window.authManager.getCurrentUser();
+                const topups = (user.transactions || [])
+                    .filter(t => t.type === 'topup')
+                    .slice(-5)
+                    .reverse();
+                
+                const recentList = document.getElementById('recentTopups');
+                
+                if (topups.length === 0) {
+                    recentList.innerHTML = `
+                        <div class="no-topups">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            <p>No recent top-ups</p>
+                            <p>Add your first credits to start playing!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                recentList.innerHTML = topups.map(topup => {
+                    const date = new Date(topup.timestamp);
+                    const timeAgo = this.getTimeAgo(date);
+                    
+                    return `
+                        <div class="recent-item">
+                            <div class="recent-icon">
+                                <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                            </div>
+                            <div class="recent-content">
+                                <div class="recent-description">
+                                    ${topup.description}
+                                </div>
+                                <div class="recent-details">
+                                    <span class="recent-method">Demo Credits</span>
+                                    <span class="recent-time">${timeAgo}</span>
+                                </div>
+                            </div>
+                            <div class="recent-amount">
+                                +${window.authManager.formatCurrency(topup.amount)}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            getTimeAgo(date) {
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMins / 60);
+                const diffDays = Math.floor(diffHours / 24);
+                
+                if (diffMins < 1) return 'Just now';
+                if (diffMins < 60) return `${diffMins}m ago`;
+                if (diffHours < 24) return `${diffHours}h ago`;
+                if (diffDays < 7) return `${diffDays}d ago`;
+                
+                return date.toLocaleDateString();
+            }
+            
+            showNotification(message, type = 'info') {
+                if (window.pyramidCasino) {
+                    window.pyramidCasino.showNotification(message, type);
+                } else {
+                    console.log(`${type.toUpperCase()}: ${message}`);
+                }
+            }
         }
-      });
-    }
-    
-    function updateStatus() {
-      const balance = getCasinoBalance();
-      const todayTopups = getTodayTopupCount();
-      const remaining = Math.max(0, MAX_DAILY_TOPUPS - todayTopups);
-      
-      document.getElementById('balance').textContent = formatCurrency(balance);
-      document.getElementById('status-balance').textContent = formatCurrency(balance);
-      document.getElementById('status-topups').textContent = `${todayTopups}/${MAX_DAILY_TOPUPS}`;
-      document.getElementById('status-remaining').textContent = remaining;
-      
-      // Show/hide warning
-      const warning = document.getElementById('limit-warning');
-      const topupBtn = document.getElementById('topup-btn');
-      
-      if (!canTopUpToday()) {
-        warning.style.display = 'block';
-        topupBtn.disabled = true;
-        topupBtn.textContent = '❌ DAILY LIMIT REACHED';
-      } else {
-        warning.style.display = 'none';
-        topupBtn.disabled = false;
-        updateTopUpButton();
-      }
-    }
-    
-    function selectAmount(amount) {
-      selectedAmount = amount;
-      document.getElementById('custom-amount').value = amount;
-      
-      // Visual feedback
-      document.querySelectorAll('.amount-btn').forEach(btn => {
-        btn.style.background = 'linear-gradient(135deg, #a0843a 0%, #8a6f2e 100%)';
-        btn.style.borderColor = '#a0843a';
-        btn.style.color = '#fff';
-      });
-      
-      event.target.style.background = 'linear-gradient(135deg, #f9d923 0%, #eed920 100%)';
-      event.target.style.borderColor = '#f9d923';
-      event.target.style.color = '#18122b';
-      
-      updateTopUpButton();
-      
-      // Add animation
-      event.target.style.transform = 'translateY(-2px) scale(1.05)';
-      setTimeout(() => {
-        event.target.style.transform = 'translateY(-2px)';
-      }, 200);
-    }
-    
-    function updateTopUpButton() {
-      const topupBtn = document.getElementById('topup-btn');
-      
-      if (topupBtn.disabled) return;
-      
-      if (selectedAmount > 0 && selectedAmount <= MAX_TOPUP_AMOUNT) {
-        topupBtn.textContent = `🚀 TOP UP ${formatCurrency(selectedAmount)} CHIPS`;
-        topupBtn.style.background = 'linear-gradient(135deg, #43c734 0%, #2ea827 100%)';
-      } else if (selectedAmount > MAX_TOPUP_AMOUNT) {
-        topupBtn.textContent = `❌ MAX AMOUNT: ${formatCurrency(MAX_TOPUP_AMOUNT)}`;
-        topupBtn.style.background = 'linear-gradient(135deg, #d7263d 0%, #b91c2e 100%)';
-      } else {
-        topupBtn.textContent = '🚀 TOP UP CHIPS';
-        topupBtn.style.background = 'linear-gradient(135deg, #43c734 0%, #2ea827 100%)';
-      }
-    }
-    
-    function processTopUp() {
-      if (!canTopUpToday()) {
-        showNotification('❌ Daily top-up limit reached!\nTry again tomorrow.', 'lose');
-        return;
-      }
-      
-      if (selectedAmount <= 0) {
-        showNotification('❌ Please select or enter a valid amount!', 'lose');
-        return;
-      }
-      
-      if (selectedAmount > MAX_TOPUP_AMOUNT) {
-        showNotification(`❌ Maximum top-up amount is ${formatCurrency(MAX_TOPUP_AMOUNT)} chips!`, 'lose');
-        return;
-      }
-      
-      // Extra confirmation for large amounts
-      if (selectedAmount >= 5000) {
-        if (!confirm(`💰 Large Top-up Confirmation\n\nYou are about to top up ${formatCurrency(selectedAmount)} chips.\n\nCurrent Balance: ${formatCurrency(getCasinoBalance())}\nNew Balance: ${formatCurrency(getCasinoBalance() + selectedAmount)}\n\n⚠️ This will use one of your ${MAX_DAILY_TOPUPS - getTodayTopupCount()} remaining daily top-ups.\n\nProceed with this large top-up?`)) {
-          return;
-        }
-      }
-      
-      // Process the top-up
-      if (performTopUp(selectedAmount)) {
-        // Success - reset form and update status
-        selectedAmount = 0;
-        document.getElementById('custom-amount').value = '';
-        document.querySelectorAll('.amount-btn').forEach(btn => {
-          btn.style.background = 'linear-gradient(135deg, #a0843a 0%, #8a6f2e 100%)';
-          btn.style.borderColor = '#a0843a';
-          btn.style.color = '#fff';
-          btn.style.transform = '';
+        
+        // Initialize top-up manager when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.topUpManager = new TopUpManager();
         });
-        
-        updateStatus();
-        updateTopUpButton();
-        
-        // Show success animation
-        showSuccessAnimation();
-      }
-    }
-    
-    function showSuccessAnimation() {
-      const container = document.querySelector('.topup-container');
-      container.style.animation = 'pulse-glow 1s ease-out';
-      setTimeout(() => {
-        container.style.animation = '';
-      }, 1000);
-    }
-    
-    function showTopUpHistory() {
-      const transactions = getTransactionHistory().filter(t => t.type === 'topup');
-      
-      if (transactions.length === 0) {
-        showNotification('📈 No top-up history found!\nMake your first top-up to see it here.', 'info');
-        return;
-      }
-      
-      const totalTopups = transactions.reduce((sum, t) => sum + t.amount, 0);
-      const lastTopup = transactions[transactions.length - 1];
-      const lastDate = new Date(lastTopup.timestamp).toLocaleDateString();
-      
-      alert(`📈 Top-up History Summary\n\n💰 Total Top-ups: ${formatCurrency(totalTopups)} chips\n📊 Number of Top-ups: ${transactions.length}\n📅 Last Top-up: ${lastDate}\n💎 Last Amount: ${formatCurrency(lastTopup.amount)}\n\n📊 View full history in the History page!`);
-    }
-    
-    // Initialize when page loads
-    document.addEventListener('DOMContentLoaded', initTopUp);
-  </script>
+    </script>
 </body>
 </html>

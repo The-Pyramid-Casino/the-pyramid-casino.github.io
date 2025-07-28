@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games - Pyramid Casino</title>
+    <meta name="description" content="Discover 20+ premium casino games at Pyramid Casino. Play slots, table games, card games and more.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/games.css">
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-link" aria-label="Pyramid Casino Home">
+                    <i class="fas fa-chess-queen" aria-hidden="true"></i>
+                    <span>Pyramid Casino</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="games.html" class="nav-link active" aria-current="page">
+                        <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        <span>Games</span>
+                    </a>
+                    <a href="topup.html" class="nav-link">
+                        <i class="fas fa-coins" aria-hidden="true"></i>
+                        <span>Top-Up</span>
+                    </a>
+                    <a href="history.html" class="nav-link">
+                        <i class="fas fa-history" aria-hidden="true"></i>
+                        <span>History</span>
+                    </a>
+                    <a href="profile.html" class="nav-link">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <span>Profile</span>
+                    </a>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                    
+                    <div class="auth-section" id="authSection">
+                        <a href="login.html" class="nav-link auth-link">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="signup.html" class="nav-link auth-link">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </div>
+                    
+                    <div class="user-section hidden" id="userSection">
+                        <div class="balance-display">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            <span id="userBalance">$0.00</span>
+                        </div>
+                        <div class="user-menu">
+                            <button class="user-menu-btn" id="userMenuBtn" aria-label="User menu">
+                                <i class="fas fa-user-circle" aria-hidden="true"></i>
+                                <span id="username"></span>
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="profile.html" class="dropdown-link">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    Profile
+                                </a>
+                                <a href="settings.html" class="dropdown-link">
+                                    <i class="fas fa-cog" aria-hidden="true"></i>
+                                    Settings
+                                </a>
+                                <button class="dropdown-link logout-btn" id="logoutBtn">
+                                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main" class="games-main">
+        <!-- Hero Section -->
+        <section class="games-hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Game Collection</h1>
+                    <p>Choose from our premium selection of casino games and start your winning journey</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filters Section -->
+        <section class="games-filters">
+            <div class="container">
+                <div class="filters-header">
+                    <h2>Find Your Game</h2>
+                    <div class="search-box">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                            <input 
+                                type="text" 
+                                id="gameSearch" 
+                                placeholder="Search games..." 
+                                aria-label="Search games"
+                                autocomplete="off"
+                            >
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-category="all" aria-pressed="true">
+                        <i class="fas fa-th" aria-hidden="true"></i>
+                        All Games
+                    </button>
+                    <button class="filter-btn" data-category="slots" aria-pressed="false">
+                        <i class="fas fa-coins" aria-hidden="true"></i>
+                        Slots
+                    </button>
+                    <button class="filter-btn" data-category="table" aria-pressed="false">
+                        <i class="fas fa-chess-board" aria-hidden="true"></i>
+                        Table Games
+                    </button>
+                    <button class="filter-btn" data-category="card" aria-pressed="false">
+                        <i class="fas fa-spade" aria-hidden="true"></i>
+                        Card Games
+                    </button>
+                    <button class="filter-btn" data-category="arcade" aria-pressed="false">
+                        <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        Arcade
+                    </button>
+                    <button class="filter-btn" data-category="specialty" aria-pressed="false">
+                        <i class="fas fa-star" aria-hidden="true"></i>
+                        Specialty
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Games Grid -->
+        <section class="games-section">
+            <div class="container">
+                <div class="games-grid" id="gamesGrid">
+                    <!-- Slot Games -->
+                    <div class="game-card" data-category="slots">
+                        <div class="game-image">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Classic Slots</h3>
+                            <p>Traditional 3-reel slot machine with classic symbols</p>
+                            <div class="game-meta">
+                                <span class="game-category">Slots</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.8
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/slots.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="slots">
+                        <div class="game-image">
+                            <i class="fas fa-gem" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Diamond Deluxe</h3>
+                            <p>Modern 5-reel video slot with bonus features</p>
+                            <div class="game-meta">
+                                <span class="game-category">Slots</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.9
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/diamond-slots.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+
+
+                    <!-- Table Games -->
+                    <div class="game-card" data-category="table">
+                        <div class="game-image">
+                            <i class="fas fa-circle-notch" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>European Roulette</h3>
+                            <p>Classic European roulette with single zero</p>
+                            <div class="game-meta">
+                                <span class="game-category">Table</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.7
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/roulette.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="table">
+                        <div class="game-image">
+                            <i class="fas fa-dice" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Craps</h3>
+                            <p>Exciting dice game with multiple betting options</p>
+                            <div class="game-meta">
+                                <span class="game-category">Table</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.6
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/craps.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Card Games -->
+                    <div class="game-card" data-category="card">
+                        <div class="game-image">
+                            <i class="fas fa-spade" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Blackjack</h3>
+                            <p>Beat the dealer to 21 in this classic card game</p>
+                            <div class="game-meta">
+                                <span class="game-category">Card</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.9
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/blackjack.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="card">
+                        <div class="game-image">
+                            <i class="fas fa-heart" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Texas Hold'em</h3>
+                            <p>The world's most popular poker variant</p>
+                            <div class="game-meta">
+                                <span class="game-category">Card</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.8
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/poker.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="card">
+                        <div class="game-image">
+                            <i class="fas fa-diamond" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Baccarat</h3>
+                            <p>Elegant card game favored by high rollers</p>
+                            <div class="game-meta">
+                                <span class="game-category">Card</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.7
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/baccarat.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Arcade Games -->
+                    <div class="game-card" data-category="arcade">
+                        <div class="game-image">
+                            <i class="fas fa-gamepad" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Plinko</h3>
+                            <p>Drop chips and watch them bounce to big wins</p>
+                            <div class="game-meta">
+                                <span class="game-category">Arcade</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.6
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/plinko.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="arcade">
+                        <div class="game-image">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Coin Flip</h3>
+                            <p>Simple heads or tails betting game</p>
+                            <div class="game-meta">
+                                <span class="game-category">Arcade</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.5
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/coinflip.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="arcade">
+                        <div class="game-image">
+                            <i class="fas fa-dice-d6" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Dice Roll</h3>
+                            <p>Predict the outcome of dice rolls</p>
+                            <div class="game-meta">
+                                <span class="game-category">Arcade</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.4
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/dice.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Specialty Games -->
+                    <div class="game-card" data-category="specialty">
+                        <div class="game-image">
+                            <i class="fas fa-bullseye" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Keno</h3>
+                            <p>Lottery-style number picking game</p>
+                            <div class="game-meta">
+                                <span class="game-category">Specialty</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.3
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/keno.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="specialty">
+                        <div class="game-image">
+                            <i class="fas fa-chart-line" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Crash</h3>
+                            <p>Multiplier game - cash out before it crashes</p>
+                            <div class="game-meta">
+                                <span class="game-category">Specialty</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.6
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/crash.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Additional Functional Games -->
+                    <div class="game-card" data-category="specialty">
+                        <div class="game-image">
+                            <i class="fas fa-mountain" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Limbo</h3>
+                            <p>High-risk, high-reward betting game</p>
+                            <div class="game-meta">
+                                <span class="game-category">Specialty</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.2
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/limbo.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="specialty">
+                        <div class="game-image">
+                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Hi-Lo</h3>
+                            <p>Guess if the next card is higher or lower</p>
+                            <div class="game-meta">
+                                <span class="game-category">Specialty</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.5
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/hilo.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="specialty">
+                        <div class="game-image">
+                            <i class="fas fa-bomb" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Mines</h3>
+                            <p>Navigate the minefield to multiply your bet</p>
+                            <div class="game-meta">
+                                <span class="game-category">Specialty</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.7
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/mines.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="table">
+                        <div class="game-image">
+                            <i class="fas fa-dog" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Red Dog</h3>
+                            <p>Classic card game with simple rules</p>
+                            <div class="game-meta">
+                                <span class="game-category">Table</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.0
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/red-dog.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="card">
+                        <div class="game-image">
+                            <i class="fas fa-sword" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>War</h3>
+                            <p>Simple card game - highest card wins</p>
+                            <div class="game-meta">
+                                <span class="game-category">Card</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.1
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/war.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="specialty">
+                        <div class="game-image">
+                            <i class="fas fa-dharmachakra" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Wheel of Fortune</h3>
+                            <p>Spin the wheel for instant prizes</p>
+                            <div class="game-meta">
+                                <span class="game-category">Specialty</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.6
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/wheel.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="specialty">
+                        <div class="game-image">
+                            <i class="fas fa-star" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Fortune Wheel</h3>
+                            <p>Try your luck with the fortune wheel</p>
+                            <div class="game-meta">
+                                <span class="game-category">Specialty</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.3
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/fortune.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="specialty">
+                        <div class="game-image">
+                            <i class="fas fa-ticket-alt" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Scratch Cards</h3>
+                            <p>Digital scratch-off lottery cards</p>
+                            <div class="game-meta">
+                                <span class="game-category">Specialty</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.4
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/scratch.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="table">
+                        <div class="game-image">
+                            <i class="fas fa-hockey-puck" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Sic Bo</h3>
+                            <p>Ancient Chinese dice game</p>
+                            <div class="game-meta">
+                                <span class="game-category">Table</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.3
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/sic-bo.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card" data-category="table">
+                        <div class="game-image">
+                            <i class="fas fa-chess" aria-hidden="true"></i>
+                            <div class="game-overlay">
+                                <span class="game-status available">Available</span>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <h3>Pai Gow</h3>
+                            <p>Chinese domino game adaptation</p>
+                            <div class="game-meta">
+                                <span class="game-category">Table</span>
+                                <span class="game-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    4.1
+                                </span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <a href="games/pai-gow.html" class="btn btn-primary">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Play Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="no-games-message hidden" id="noGamesMessage">
+                    <div class="no-games-content">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <h3>No games found</h3>
+                        <p>Try adjusting your search or filter criteria</p>
+                        <button class="btn btn-secondary" id="clearFiltersBtn">
+                            <i class="fas fa-times" aria-hidden="true"></i>
+                            Clear Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/theme.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/games.js"></script>
+</body>
+</html>

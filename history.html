@@ -1,514 +1,763 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Transaction History | Pyramid Casino</title>
-  <meta name="description" content="View your transaction history at Pyramid Casino - track your wins, losses, and top-ups." />
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="shared-modern.css" />
-  
-  <style>
-    /* Page-specific styles using design system */
-    .history-container {
-      max-width: 900px;
-      margin: 2rem auto;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History - Pyramid Casino</title>
+    <meta name="description" content="View your complete transaction history including deposits, wins, losses, and account activities at Pyramid Casino.">
     
-    .history-title {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: var(--theme-text-primary);
-      margin-bottom: 1rem;
-      text-align: center;
-    }
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    .history-description {
-      font-size: 1.125rem;
-      color: var(--theme-text-secondary);
-      margin-bottom: 2rem;
-      text-align: center;
-      line-height: 1.6;
-    }
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    .filters {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin: 2rem 0;
-      flex-wrap: wrap;
-      padding: 1.5rem;
-      background: var(--theme-bg-glass);
-      backdrop-filter: blur(var(--blur-lg)) saturate(150%);
-      -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(150%);
-      border: 1px solid var(--theme-border-secondary);
-      border-radius: var(--radius-xl);
-    }
-    
-    .filter-btn {
-      padding: 0.75rem 1.5rem;
-      background: var(--theme-bg-surface);
-      border: 1px solid var(--theme-border-primary);
-      border-radius: var(--radius-lg);
-      color: var(--theme-text-primary);
-      cursor: pointer;
-      transition: all var(--transition-fast);
-      font-weight: 600;
-    }
-    
-    .filter-btn:hover {
-      background: var(--theme-bg-glass);
-      border-color: var(--theme-border-focus);
-    }
-    
-    .filter-btn.active {
-      background: var(--theme-border-focus);
-      color: white;
-      border-color: var(--theme-border-focus);
-    }
-    
-    .stats-summary {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin: 2rem 0;
-    }
-    
-    .stat-card {
-      background: var(--theme-bg-glass);
-      backdrop-filter: blur(var(--blur-lg)) saturate(150%);
-      -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(150%);
-      border: 1px solid var(--theme-border-secondary);
-      border-radius: var(--radius-xl);
-      padding: 1.5rem;
-      text-align: center;
-    }
-    
-    .stat-value {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--theme-text-primary);
-      margin-bottom: 0.5rem;
-    }
-    
-    .stat-label {
-      color: var(--theme-text-secondary);
-      font-size: 0.875rem;
-    }
-    
-    .stat-value.positive {
-      color: var(--theme-success);
-    }
-    
-    .stat-value.negative {
-      color: var(--theme-error);
-    }
-    
-    .history-table {
-      background: var(--theme-bg-glass);
-      backdrop-filter: blur(var(--blur-lg)) saturate(150%);
-      -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(150%);
-      border: 1px solid var(--theme-border-secondary);
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-      margin: 2rem 0;
-    }
-    
-    .table-header {
-      background: var(--theme-bg-surface);
-      border-bottom: 1px solid var(--theme-border-secondary);
-      padding: 1.5rem;
-      font-weight: 600;
-      color: var(--theme-text-secondary);
-    }
-    
-    .table-row {
-      display: grid;
-      grid-template-columns: 1fr 120px 100px 120px 150px;
-      gap: 1rem;
-      align-items: center;
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--theme-border-secondary);
-      transition: all var(--transition-fast);
-    }
-    
-    .table-row:hover {
-      background: var(--theme-bg-surface);
-    }
-    
-    .table-row:last-child {
-      border-bottom: none;
-    }
-    
-    .transaction-type {
-      font-weight: 600;
-    }
-    
-    .transaction-amount {
-      font-weight: bold;
-      text-align: right;
-    }
-    
-    .transaction-amount.positive {
-      color: var(--theme-success);
-    }
-    
-    .transaction-amount.negative {
-      color: var(--theme-error);
-    }
-    
-    .transaction-date {
-      color: var(--theme-text-muted);
-      font-size: 0.875rem;
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: 3rem;
-      color: var(--theme-text-muted);
-    }
-    
-    .clear-history {
-      text-align: center;
-      margin: 2rem 0;
-    }
-    
-    /* Mobile responsiveness */
-    @media (max-width: 768px) {
-      .table-row {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-      }
-      
-      .table-header {
-        display: none;
-      }
-      
-      .transaction-amount {
-        text-align: left;
-      }
-      
-      .filters {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .stats-summary {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-  </style>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-
-  gtag("config", "G-V9DHVKBD85");
-</script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/history.css">
 </head>
 <body>
-  <!-- Skip link for accessibility -->
-  <a href="#main-content" class="skip-link">Skip to main content</a>
-  
-  <!-- Consistent Navbar -->
-  <nav class="navbar" role="banner">
-    <a href="index.html" class="navbar-brand">
-      <span role="img" aria-label="pyramid">🏜️</span>
-      Pyramid Casino
-    </a>
+    <a href="#main" class="skip-link">Skip to main content</a>
     
-    <ul class="navbar-nav" role="navigation" aria-label="Main navigation">
-      <li><a href="index.html" class="nav-link">Home</a></li>
-      <li><a href="index.html#games" class="nav-link">Games</a></li>
-      <li><a href="topup.html" class="nav-link">Top Up</a></li>
-      <li><a href="history.html" class="nav-link active" aria-current="page">History</a></li>
-      <li><a href="https://forms.gle/QYQqh72sSuweCue49" class="nav-link" target="_blank" rel="noopener">Suggest</a></li>
-      <li>
-        <button 
-          class="theme-toggle" 
-          onclick="toggleTheme()" 
-          aria-label="Toggle between light and dark theme"
-          title="Toggle theme"
-        >
-          <span id="theme-icon">🌙</span>
-        </button>
-      </li>
-    </ul>
-  </nav>
-  
-  <main id="main-content" class="main-content container" role="main">
-    <!-- Balance Bar -->
-    <div class="balance-bar">
-      <span>Current Balance: <span id="balance" aria-live="polite">1000</span> chips</span>
-      <a href="topup.html" class="btn btn-secondary btn-sm">💳 Top Up</a>
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" class="brand-link" aria-label="Pyramid Casino Home">
+                    <i class="fas fa-chess-queen" aria-hidden="true"></i>
+                    <span>Pyramid Casino</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home" aria-hidden="true"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="games.html" class="nav-link">
+                        <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        <span>Games</span>
+                    </a>
+                    <a href="topup.html" class="nav-link">
+                        <i class="fas fa-coins" aria-hidden="true"></i>
+                        <span>Top-Up</span>
+                    </a>
+                    <a href="history.html" class="nav-link active" aria-current="page">
+                        <i class="fas fa-history" aria-hidden="true"></i>
+                        <span>History</span>
+                    </a>
+                    <a href="profile.html" class="nav-link">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <span>Profile</span>
+                    </a>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                    </button>
+                    
+                    <div class="auth-section" id="authSection">
+                        <a href="login.html" class="nav-link auth-link">
+                            <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="signup.html" class="nav-link auth-link">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    </div>
+                    
+                    <div class="user-section hidden" id="userSection">
+                        <div class="balance-display">
+                            <i class="fas fa-coins" aria-hidden="true"></i>
+                            <span id="userBalance">$0.00</span>
+                        </div>
+                        <div class="user-menu">
+                            <button class="user-menu-btn" id="userMenuBtn" aria-label="User menu">
+                                <i class="fas fa-user-circle" aria-hidden="true"></i>
+                                <span id="username"></span>
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="profile.html" class="dropdown-link">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    Profile
+                                </a>
+                                <a href="settings.html" class="dropdown-link">
+                                    <i class="fas fa-cog" aria-hidden="true"></i>
+                                    Settings
+                                </a>
+                                <button class="dropdown-link logout-btn" id="logoutBtn">
+                                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main" class="history-main">
+        <!-- Header -->
+        <section class="history-header">
+            <div class="container">
+                <h1>Transaction History</h1>
+                <p>Complete record of all your account activities and gaming transactions</p>
+                
+                <!-- Summary Stats -->
+                <div class="summary-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line" aria-hidden="true"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalTransactions">0</div>
+                            <div class="stat-label">Total Transactions</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalDeposits">$0</div>
+                            <div class="stat-label">Total Deposits</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy" aria-hidden="true"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalWinnings">$0</div>
+                            <div class="stat-label">Total Winnings</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="netProfit">$0</div>
+                            <div class="stat-label">Net Profit/Loss</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filters -->
+        <section class="history-filters">
+            <div class="container">
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label for="filterType">Transaction Type</label>
+                        <select id="filterType">
+                            <option value="all">All Types</option>
+                            <option value="topup">Top-ups</option>
+                            <option value="game_bet">Game Bets</option>
+                            <option value="signup_bonus">Signup Bonus</option>
+                            <option value="level_bonus">Level Bonus</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filterGame">Game</label>
+                        <select id="filterGame">
+                            <option value="all">All Games</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filterResult">Result</label>
+                        <select id="filterResult">
+                            <option value="all">All Results</option>
+                            <option value="win">Wins</option>
+                            <option value="loss">Losses</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filterDate">Date Range</label>
+                        <select id="filterDate">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-actions">
+                        <button class="btn btn-secondary" id="clearFilters">
+                            <i class="fas fa-times" aria-hidden="true"></i>
+                            Clear
+                        </button>
+                        <button class="btn btn-primary" id="exportHistory">
+                            <i class="fas fa-download" aria-hidden="true"></i>
+                            Export
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="search-row">
+                    <div class="search-box">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input 
+                            type="text" 
+                            id="searchTransactions" 
+                            placeholder="Search transactions..." 
+                            aria-label="Search transactions"
+                        >
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transaction Table -->
+        <section class="history-content">
+            <div class="container">
+                <div class="table-container">
+                    <table class="history-table" id="historyTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Date & Time
+                                </th>
+                                <th>
+                                    Type
+                                </th>
+                                <th>Description</th>
+                                <th>Game</th>
+                                <th>
+                                    Amount
+                                </th>
+                                <th>Result</th>
+                                <th>
+                                    Balance After
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <!-- Transactions will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be populated by JavaScript -->
+                </div>
+                
+                <!-- No Results -->
+                <div class="no-results hidden" id="noResults">
+                    <div class="no-results-content">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <h3>No transactions found</h3>
+                        <p>Try adjusting your search criteria or filters</p>
+                        <button class="btn btn-secondary" id="clearFiltersNoResults">
+                            <i class="fas fa-times" aria-hidden="true"></i>
+                            Clear All Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Transaction Details Modal -->
+    <div class="modal hidden" id="transactionModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Transaction Details</h3>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="transaction-details" id="transactionDetails">
+                    <!-- Details will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <!-- Back to Menu -->
-    <div style="margin-bottom: 1rem;">
-      <a href="index.html" class="btn btn-secondary btn-sm">← Back to Menu</a>
-    </div>
-    
-    <!-- History Page -->
-    <div class="history-container">
-      <h1 class="history-title">📊 Transaction History</h1>
-      <p class="history-description">
-        Track your gaming activity, wins, losses, and account transactions
-      </p>
-      
-      <!-- Filters -->
-      <div class="filters">
-        <button class="filter-btn active" data-filter="all">All Transactions</button>
-        <button class="filter-btn" data-filter="wins">Wins Only</button>
-        <button class="filter-btn" data-filter="losses">Losses Only</button>
-        <button class="filter-btn" data-filter="topups">Top-ups Only</button>
-      </div>
-      
-      <!-- Stats Summary -->
-      <div class="stats-summary">
-        <div class="stat-card">
-          <div class="stat-value positive" id="total-wins">0</div>
-          <div class="stat-label">Total Wins</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value negative" id="total-losses">0</div>
-          <div class="stat-label">Total Losses</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="net-result">0</div>
-          <div class="stat-label">Net Result</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="total-transactions">0</div>
-          <div class="stat-label">Total Transactions</div>
-        </div>
-      </div>
-      
-      <!-- History Table -->
-      <div class="history-table">
-        <div class="table-header table-row">
-          <div>Game/Type</div>
-          <div style="text-align: right;">Amount</div>
-          <div style="text-align: right;">Balance</div>
-          <div style="text-align: right;">Date</div>
-          <div style="text-align: right;">Details</div>
-        </div>
-        
-        <div id="history-content">
-          <div class="empty-state">
-            <p>No transactions found</p>
-            <p style="font-size: 0.875rem; margin-top: 1rem;">
-              Start playing games to see your transaction history here
-            </p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Clear History -->
-      <div class="clear-history">
-        <button id="clear-history-btn" class="btn btn-warning">
-          🗑️ Clear History
-        </button>
-      </div>
-    </div>
-  </main>
-  
-  <!-- Footer -->
-  <footer class="glass-surface text-center" role="contentinfo">
-    <div>
-      <p style="margin: 5px 0;">Pyramid Casino &copy; <span id="year"></span> | 🎮 For Entertainment Only</p>
-      <p style="margin: 5px 0; font-size: 1.1rem;">
-        📧 <strong>Contact us:</strong> 
-        <a href="mailto:casino.the.pyramid@gmail.com" style="color: var(--theme-text-primary); text-decoration: none;" aria-label="Send email to casino.the.pyramid@gmail.com">
-          casino.the.pyramid@gmail.com
-        </a>
-      </p>
-      <p style="margin: 5px 0; font-size: 0.9rem; color: var(--theme-text-muted);">
-        💰 No real money gambling | 🔞 18+ for entertainment
-      </p>
-    </div>
-  </footer>
-  
-  <!-- Toast notification container -->
-  <div class="toast-container" id="toast-container"></div>
-  
-  <!-- Scripts -->
-  <script src="theme.js"></script>
-  <script src="admin-config.js"></script>
-  <script src="shared-modern.js"></script>
-  
-  <script>
-    // Theme toggle functionality
-    function updateThemeIcon() {
-      const themeIcon = document.getElementById('theme-icon');
-      const currentTheme = getCurrentTheme();
-      themeIcon.textContent = currentTheme === 'light' ? '🌙' : '☀️';
-    }
-    
-    // Listen for theme changes
-    window.addEventListener('themeChanged', updateThemeIcon);
-    
-    // Initialize page
-    document.addEventListener('DOMContentLoaded', function() {
-      updateThemeIcon();
-      initializeBalance();
-      loadTransactionHistory();
-      updateStatsSummary();
-      
-      // Add event listeners
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => filterTransactions(e.target.dataset.filter));
-      });
-      
-      document.getElementById('clear-history-btn').addEventListener('click', clearHistory);
-      document.getElementById('year').textContent = new Date().getFullYear();
-    });
-    
-    // Initialize balance
-    function initializeBalance() {
-      const balanceEl = document.getElementById('balance');
-      if (typeof getCasinoBalance === 'function') {
-        balanceEl.textContent = getCasinoBalance();
-      } else {
-        let balance = parseInt(localStorage.getItem('pyramidCasinoBalance'), 10);
-        if (isNaN(balance)) balance = 1000;
-        balanceEl.textContent = balance;
-      }
-    }
-    
-    // Load transaction history
-    function loadTransactionHistory() {
-      const transactions = getTransactionHistory();
-      displayTransactions(transactions);
-    }
-    
-    // Get transaction history from localStorage
-    function getTransactionHistory() {
-      try {
-        const history = localStorage.getItem('pyramidCasinoHistory');
-        return history ? JSON.parse(history) : [];
-      } catch (e) {
-        console.error('Error loading transaction history:', e);
-        return [];
-      }
-    }
-    
-    // Display transactions
-    function displayTransactions(transactions) {
-      const content = document.getElementById('history-content');
-      
-      if (transactions.length === 0) {
-        content.innerHTML = `
-          <div class="empty-state">
-            <p>No transactions found</p>
-            <p style="font-size: 0.875rem; margin-top: 1rem;">
-              Start playing games to see your transaction history here
-            </p>
-          </div>
-        `;
-        return;
-      }
-      
-      // Sort by timestamp (newest first)
-      transactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      
-      content.innerHTML = transactions.map(transaction => {
-        const isPositive = transaction.amount > 0;
-        const amountClass = isPositive ? 'positive' : 'negative';
-        const amountText = `${isPositive ? '+' : ''}${transaction.amount}`;
-        
-        return `
-          <div class="table-row">
-            <div class="transaction-type">${transaction.game || 'Unknown'}</div>
-            <div class="transaction-amount ${amountClass}">${amountText}</div>
-            <div style="text-align: right;">${transaction.balance || 0}</div>
-            <div class="transaction-date">${formatDate(transaction.timestamp)}</div>
-            <div style="text-align: right; font-size: 0.875rem;">${transaction.details || ''}</div>
-          </div>
-        `;
-      }).join('');
-    }
-    
-    // Format date for display
-    function formatDate(timestamp) {
-      const date = new Date(timestamp);
-      const now = new Date();
-      const diffMs = now - date;
-      const diffHours = diffMs / (1000 * 60 * 60);
-      
-      if (diffHours < 24) {
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      } else {
-        return date.toLocaleDateString();
-      }
-    }
-    
-    // Filter transactions
-    function filterTransactions(filter) {
-      // Update active filter button
-      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
-      
-      const allTransactions = getTransactionHistory();
-      let filteredTransactions = allTransactions;
-      
-      switch (filter) {
-        case 'wins':
-          filteredTransactions = allTransactions.filter(t => t.amount > 0 && t.game !== 'Top-up');
-          break;
-        case 'losses':
-          filteredTransactions = allTransactions.filter(t => t.amount < 0);
-          break;
-        case 'topups':
-          filteredTransactions = allTransactions.filter(t => t.game === 'Top-up');
-          break;
-        default:
-          filteredTransactions = allTransactions;
-      }
-      
-      displayTransactions(filteredTransactions);
-    }
-    
-    // Update stats summary
-    function updateStatsSummary() {
-      const transactions = getTransactionHistory();
-      
-      let totalWins = 0;
-      let totalLosses = 0;
-      
-      transactions.forEach(transaction => {
-        if (transaction.amount > 0 && transaction.game !== 'Top-up') {
-          totalWins += transaction.amount;
-        } else if (transaction.amount < 0) {
-          totalLosses += Math.abs(transaction.amount);
+
+    <!-- Scripts -->
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/theme.js"></script>
+    <script src="scripts/main.js"></script>
+    <script>
+        // Transaction History Management System
+        class HistoryManager {
+            constructor() {
+                this.transactions = [];
+                this.filteredTransactions = [];
+                this.currentPage = 1;
+                this.itemsPerPage = 20;
+                
+                this.init();
+            }
+            
+            init() {
+                this.checkAuth();
+                this.loadTransactions();
+                this.bindEvents();
+                this.updateSummaryStats();
+                this.populateGameFilter();
+                this.applyFilters();
+            }
+            
+            checkAuth() {
+                if (!window.authManager || !window.authManager.isLoggedIn()) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+            }
+            
+            loadTransactions() {
+                const user = window.authManager.getCurrentUser();
+                this.transactions = (user.transactions || []).map((transaction, index) => ({
+                    ...transaction,
+                    id: transaction.id || index
+                }));
+            }
+            
+            bindEvents() {
+                // Filter controls
+                document.getElementById('filterType').addEventListener('change', () => {
+                    this.applyFilters();
+                });
+                
+                document.getElementById('filterGame').addEventListener('change', () => {
+                    this.applyFilters();
+                });
+                
+                document.getElementById('filterResult').addEventListener('change', () => {
+                    this.applyFilters();
+                });
+                
+                document.getElementById('filterDate').addEventListener('change', () => {
+                    this.applyFilters();
+                });
+                
+                // Search
+                document.getElementById('searchTransactions').addEventListener('input', (e) => {
+                    this.searchTransactions(e.target.value);
+                });
+                
+                // Clear filters
+                document.getElementById('clearFilters').addEventListener('click', () => {
+                    this.clearFilters();
+                });
+                
+                document.getElementById('clearFiltersNoResults').addEventListener('click', () => {
+                    this.clearFilters();
+                });
+                
+                // Export
+                document.getElementById('exportHistory').addEventListener('click', () => {
+                    this.exportHistory();
+                });
+                
+                // Modal close
+                document.getElementById('modalClose').addEventListener('click', () => {
+                    this.hideModal();
+                });
+                
+                document.querySelector('.modal-overlay').addEventListener('click', () => {
+                    this.hideModal();
+                });
+            }
+            
+            updateSummaryStats() {
+                const totalTransactions = this.transactions.length;
+                const deposits = this.transactions.filter(t => t.type === 'topup');
+                const gameBets = this.transactions.filter(t => t.type === 'game_bet');
+                const wins = gameBets.filter(t => t.result === 'win');
+                
+                const totalDeposits = deposits.reduce((sum, t) => sum + (t.baseAmount || t.amount), 0);
+                const totalWinnings = wins.reduce((sum, t) => sum + (t.winAmount || 0), 0);
+                const totalBets = gameBets.reduce((sum, t) => sum + t.amount, 0);
+                const netProfit = totalWinnings - totalBets;
+                
+                document.getElementById('totalTransactions').textContent = totalTransactions;
+                document.getElementById('totalDeposits').textContent = window.authManager.formatCurrency(totalDeposits);
+                document.getElementById('totalWinnings').textContent = window.authManager.formatCurrency(totalWinnings);
+                
+                const netProfitElement = document.getElementById('netProfit');
+                netProfitElement.textContent = window.authManager.formatCurrency(netProfit);
+                netProfitElement.className = 'stat-value ' + (netProfit >= 0 ? 'positive' : 'negative');
+            }
+            
+            populateGameFilter() {
+                const games = [...new Set(this.transactions
+                    .filter(t => t.game)
+                    .map(t => t.game)
+                )].sort();
+                
+                const gameFilter = document.getElementById('filterGame');
+                gameFilter.innerHTML = '<option value="all">All Games</option>';
+                
+                games.forEach(game => {
+                    const option = document.createElement('option');
+                    option.value = game;
+                    option.textContent = game;
+                    gameFilter.appendChild(option);
+                });
+            }
+            
+            applyFilters() {
+                let filtered = [...this.transactions];
+                
+                // Type filter
+                const typeFilter = document.getElementById('filterType').value;
+                if (typeFilter !== 'all') {
+                    filtered = filtered.filter(t => t.type === typeFilter);
+                }
+                
+                // Game filter
+                const gameFilter = document.getElementById('filterGame').value;
+                if (gameFilter !== 'all') {
+                    filtered = filtered.filter(t => t.game === gameFilter);
+                }
+                
+                // Result filter
+                const resultFilter = document.getElementById('filterResult').value;
+                if (resultFilter !== 'all') {
+                    filtered = filtered.filter(t => t.result === resultFilter);
+                }
+                
+                // Date filter
+                const dateFilter = document.getElementById('filterDate').value;
+                if (dateFilter !== 'all') {
+                    const now = new Date();
+                    const cutoff = new Date();
+                    
+                    switch (dateFilter) {
+                        case 'today':
+                            cutoff.setHours(0, 0, 0, 0);
+                            break;
+                        case 'week':
+                            cutoff.setDate(now.getDate() - 7);
+                            break;
+                        case 'month':
+                            cutoff.setMonth(now.getMonth() - 1);
+                            break;
+                        case 'year':
+                            cutoff.setFullYear(now.getFullYear() - 1);
+                            break;
+                    }
+                    
+                    filtered = filtered.filter(t => new Date(t.timestamp) >= cutoff);
+                }
+                
+                this.filteredTransactions = filtered;
+                this.currentPage = 1;
+                this.renderTable();
+                this.renderPagination();
+            }
+            
+            searchTransactions(query) {
+                if (!query.trim()) {
+                    this.applyFilters();
+                    return;
+                }
+                
+                const searchTerm = query.toLowerCase();
+                this.filteredTransactions = this.filteredTransactions.filter(transaction => {
+                    return (
+                        transaction.description?.toLowerCase().includes(searchTerm) ||
+                        transaction.game?.toLowerCase().includes(searchTerm) ||
+                        transaction.type?.toLowerCase().includes(searchTerm) ||
+                        transaction.result?.toLowerCase().includes(searchTerm)
+                    );
+                });
+                
+                this.currentPage = 1;
+                this.renderTable();
+                this.renderPagination();
+            }
+
+            
+            renderTable() {
+                const tbody = document.getElementById('historyTableBody');
+                const start = (this.currentPage - 1) * this.itemsPerPage;
+                const end = start + this.itemsPerPage;
+                const pageTransactions = this.filteredTransactions.slice(start, end);
+                
+                if (pageTransactions.length === 0) {
+                    document.getElementById('noResults').classList.remove('hidden');
+                    tbody.innerHTML = '';
+                    return;
+                }
+                
+                document.getElementById('noResults').classList.add('hidden');
+                
+                tbody.innerHTML = pageTransactions.map(transaction => {
+                    const date = new Date(transaction.timestamp);
+                    const formattedDate = date.toLocaleDateString();
+                    const formattedTime = date.toLocaleTimeString();
+                    
+                    let typeIcon, typeLabel, amountClass, resultBadge;
+                    
+                    switch (transaction.type) {
+                        case 'topup':
+                            typeIcon = 'fa-plus-circle';
+                            typeLabel = 'Top-up';
+                            amountClass = 'positive';
+                            resultBadge = '<span class="badge success">Success</span>';
+                            break;
+                        case 'game_bet':
+                            typeIcon = 'fa-gamepad';
+                            typeLabel = 'Game Bet';
+                            amountClass = transaction.result === 'win' ? 'positive' : 'negative';
+                            resultBadge = `<span class="badge ${transaction.result === 'win' ? 'success' : 'danger'}">${transaction.result === 'win' ? 'Win' : 'Loss'}</span>`;
+                            break;
+                        case 'signup_bonus':
+                            typeIcon = 'fa-gift';
+                            typeLabel = 'Signup Bonus';
+                            amountClass = 'positive';
+                            resultBadge = '<span class="badge bonus">Bonus</span>';
+                            break;
+                        case 'level_bonus':
+                            typeIcon = 'fa-trophy';
+                            typeLabel = 'Level Bonus';
+                            amountClass = 'positive';
+                            resultBadge = '<span class="badge bonus">Bonus</span>';
+                            break;
+                        default:
+                            typeIcon = 'fa-circle';
+                            typeLabel = transaction.type;
+                            amountClass = '';
+                            resultBadge = '<span class="badge secondary">Other</span>';
+                    }
+                    
+                    const displayAmount = transaction.type === 'game_bet' && transaction.result === 'win' 
+                        ? transaction.winAmount 
+                        : transaction.amount;
+                    
+                    return `
+                        <tr class="transaction-row" data-id="${transaction.id}">
+                            <td>
+                                <div class="date-time">
+                                    <div class="date">${formattedDate}</div>
+                                    <div class="time">${formattedTime}</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="transaction-type">
+                                    <i class="fas ${typeIcon}" aria-hidden="true"></i>
+                                    ${typeLabel}
+                                </div>
+                            </td>
+                            <td class="description">${transaction.description || '-'}</td>
+                            <td class="game">${transaction.game || '-'}</td>
+                            <td class="amount ${amountClass}">
+                                ${transaction.type === 'game_bet' && transaction.result === 'loss' ? '-' : '+'}${window.authManager.formatCurrency(displayAmount)}
+                            </td>
+                            <td>${resultBadge}</td>
+                            <td class="balance">${window.authManager.formatCurrency(transaction.balanceAfter || 0)}</td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                // Add click handlers for transaction details
+                document.querySelectorAll('.transaction-row').forEach(row => {
+                    row.addEventListener('click', (e) => {
+                        const transactionId = e.currentTarget.dataset.id;
+                        this.showTransactionDetails(transactionId);
+                    });
+                });
+            }
+            
+            renderPagination() {
+                const pagination = document.getElementById('pagination');
+                const totalPages = Math.ceil(this.filteredTransactions.length / this.itemsPerPage);
+                
+                if (totalPages <= 1) {
+                    pagination.innerHTML = '';
+                    return;
+                }
+                
+                let paginationHTML = '';
+                
+                // Previous button
+                paginationHTML += `
+                    <button class="page-btn ${this.currentPage === 1 ? 'disabled' : ''}" data-page="${this.currentPage - 1}">
+                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                    </button>
+                `;
+                
+                // Page numbers
+                const startPage = Math.max(1, this.currentPage - 2);
+                const endPage = Math.min(totalPages, this.currentPage + 2);
+                
+                if (startPage > 1) {
+                    paginationHTML += `<button class="page-btn" data-page="1">1</button>`;
+                    if (startPage > 2) {
+                        paginationHTML += `<span class="page-ellipsis">...</span>`;
+                    }
+                }
+                
+                for (let i = startPage; i <= endPage; i++) {
+                    paginationHTML += `
+                        <button class="page-btn ${i === this.currentPage ? 'active' : ''}" data-page="${i}">
+                            ${i}
+                        </button>
+                    `;
+                }
+                
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                        paginationHTML += `<span class="page-ellipsis">...</span>`;
+                    }
+                    paginationHTML += `<button class="page-btn" data-page="${totalPages}">${totalPages}</button>`;
+                }
+                
+                // Next button
+                paginationHTML += `
+                    <button class="page-btn ${this.currentPage === totalPages ? 'disabled' : ''}" data-page="${this.currentPage + 1}">
+                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                `;
+                
+                pagination.innerHTML = paginationHTML;
+                
+                // Add click handlers
+                pagination.querySelectorAll('.page-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const page = parseInt(e.currentTarget.dataset.page);
+                        if (page && page !== this.currentPage && !e.currentTarget.classList.contains('disabled')) {
+                            this.currentPage = page;
+                            this.renderTable();
+                            this.renderPagination();
+                        }
+                    });
+                });
+            }
+            
+            showTransactionDetails(transactionId) {
+                const transaction = this.transactions.find(t => t.id == transactionId);
+                if (!transaction) return;
+                
+                const detailsHTML = `
+                    <div class="detail-row">
+                        <span class="detail-label">Transaction ID:</span>
+                        <span class="detail-value">${transaction.id}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Date & Time:</span>
+                        <span class="detail-value">${new Date(transaction.timestamp).toLocaleString()}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Type:</span>
+                        <span class="detail-value">${transaction.type}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Description:</span>
+                        <span class="detail-value">${transaction.description || '-'}</span>
+                    </div>
+                    ${transaction.game ? `
+                        <div class="detail-row">
+                            <span class="detail-label">Game:</span>
+                            <span class="detail-value">${transaction.game}</span>
+                        </div>
+                    ` : ''}
+                    <div class="detail-row">
+                        <span class="detail-label">Amount:</span>
+                        <span class="detail-value">${window.authManager.formatCurrency(transaction.amount)}</span>
+                    </div>
+                    ${transaction.winAmount ? `
+                        <div class="detail-row">
+                            <span class="detail-label">Win Amount:</span>
+                            <span class="detail-value">${window.authManager.formatCurrency(transaction.winAmount)}</span>
+                        </div>
+                    ` : ''}
+                    ${transaction.bonusAmount ? `
+                        <div class="detail-row">
+                            <span class="detail-label">Bonus Amount:</span>
+                            <span class="detail-value">${window.authManager.formatCurrency(transaction.bonusAmount)}</span>
+                        </div>
+                    ` : ''}
+                    <div class="detail-row">
+                        <span class="detail-label">Balance After:</span>
+                        <span class="detail-value">${window.authManager.formatCurrency(transaction.balanceAfter || 0)}</span>
+                    </div>
+                    ${transaction.result ? `
+                        <div class="detail-row">
+                            <span class="detail-label">Result:</span>
+                            <span class="detail-value badge ${transaction.result === 'win' ? 'success' : 'danger'}">
+                                ${transaction.result}
+                            </span>
+                        </div>
+                    ` : ''}
+                `;
+                
+                document.getElementById('transactionDetails').innerHTML = detailsHTML;
+                document.getElementById('transactionModal').classList.remove('hidden');
+            }
+            
+            hideModal() {
+                document.getElementById('transactionModal').classList.add('hidden');
+            }
+            
+            clearFilters() {
+                document.getElementById('filterType').value = 'all';
+                document.getElementById('filterGame').value = 'all';
+                document.getElementById('filterResult').value = 'all';
+                document.getElementById('filterDate').value = 'all';
+                document.getElementById('searchTransactions').value = '';
+                
+                this.applyFilters();
+            }
+            
+            exportHistory() {
+                const data = {
+                    exportDate: new Date().toISOString(),
+                    summary: {
+                        totalTransactions: this.transactions.length,
+                        totalDeposits: this.transactions.filter(t => t.type === 'topup').reduce((sum, t) => sum + (t.baseAmount || t.amount), 0),
+                        totalWinnings: this.transactions.filter(t => t.type === 'game_bet' && t.result === 'win').reduce((sum, t) => sum + (t.winAmount || 0), 0),
+                        totalBets: this.transactions.filter(t => t.type === 'game_bet').reduce((sum, t) => sum + t.amount, 0)
+                    },
+                    transactions: this.filteredTransactions
+                };
+                
+                this.downloadJSON(data, `pyramid-casino-history-${Date.now()}.json`);
+            }
+            
+            downloadJSON(data, filename) {
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
         }
-      });
-      
-      const netResult = totalWins - totalLosses;
-      
-      document.getElementById('total-wins').textContent = totalWins;
-      document.getElementById('total-losses').textContent = totalLosses;
-      document.getElementById('total-transactions').textContent = transactions.length;
-      
-      const netResultEl = document.getElementById('net-result');
-      netResultEl.textContent = netResult;
-      netResultEl.className = `stat-value ${netResult >= 0 ? 'positive' : 'negative'}`;
-    }
-    
-    // Clear history
-    function clearHistory() {
-      if (confirm('Are you sure you want to clear your transaction history? This action cannot be undone.')) {
-        localStorage.removeItem('pyramidCasinoHistory');
-        loadTransactionHistory();
-        updateStatsSummary();
         
-        if (typeof showToast === 'function') {
-          showToast('Transaction history cleared', 'info');
-        }
-      }
-    }
-  </script>
+        // Initialize history manager when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.historyManager = new HistoryManager();
+        });
+    </script>
 </body>
 </html>
