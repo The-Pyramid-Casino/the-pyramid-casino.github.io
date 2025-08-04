@@ -3,193 +3,220 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Pyramid Casino - Site Update" />
+  <meta name="description" content="The Pyramid Casino website is currently undergoing maintenance." />
   <meta name="author" content="The Pyramid Casino" />
-  <title>Pyramid Casino</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V9DHVKBD85"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-V9DHVKBD85');
-  </script>
-
+  <title>The Pyramid Casino</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #0f0f0f;
-      --surface: #1a1a1a;
-      --text: #f0f0f0;
-      --accent: #ffd700;
-      --muted: #999;
-      --card-bg: white;
-      --card-text: black;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 16px; scroll-behavior: smooth; }
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.75;
-      padding: 2rem;
+      background: #121212;
+      color: #f0f0f0;
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
     }
-
-    header {
+    header, footer {
+      background: #1e1e1e;
       text-align: center;
-      margin-bottom: 3rem;
+      padding: 2rem 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
     }
-
-    header h1 {
-      font-size: 2.75rem;
-      font-weight: 700;
+    .container {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
-
-    header p {
-      color: var(--muted);
-      margin-top: 0.5rem;
-      font-size: 1.1rem;
-    }
-
-    .card {
-      background: var(--surface);
+    section {
+      background: #1a1a1a;
+      border-radius: 10px;
       padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 0 1px #222;
       margin-bottom: 2rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-    }
-
-    .card h2 {
-      font-size: 1.75rem;
-      margin-bottom: 1rem;
-    }
-
-    .card ul {
-      list-style: disc inside;
-      margin-top: 1rem;
-    }
-
-    .card li {
-      margin-top: 0.5rem;
-    }
-
-    a {
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    footer {
+    h1, h2, h3 { color: #ffffff; margin-bottom: 1rem; }
+    p, li { color: #cccccc; margin-bottom: 1rem; }
+    ul { padding-left: 1.5rem; }
+    a { color: #8888ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    #hidden-game {
+      display: none;
+      background: #111;
+      padding: 2rem;
+      border-radius: 10px;
+      margin-top: 2rem;
       text-align: center;
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-top: 4rem;
     }
-
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 2.2rem;
-      }
+    .cards {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 1rem 0;
     }
+    .card {
+      width: 60px;
+      height: 90px;
+      border-radius: 8px;
+      background: #fff;
+      color: #000;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    button {
+      background: #333;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0.25rem;
+    }
+    button:hover { background: #444; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Pyramid Casino</h1>
-    <p>Temporarily unavailable due to scheduled maintenance.</p>
+    <h1>The Pyramid Casino</h1>
+    <p>This website is currently undergoing extended maintenance.</p>
   </header>
 
-  <div class="card">
-    <h2>System Notice</h2>
-    <p>Access is currently paused while internal updates are performed. Services will resume automatically once maintenance is completed.</p>
-    <p>Availability is estimated to return within 2 to 3 months. All features will be restored in full when the update cycle concludes.</p>
-  </div>
+  <div class="container">
+    <section>
+      <h2>Status Update</h2>
+      <p>The Pyramid Casino website is currently offline due to necessary changes and upgrades. The downtime is expected to last approximately 2–3 months.</p>
+      <p>When the site returns, users can expect a refreshed experience, updated design, and improvements to overall usability.</p>
+    </section>
 
-  <div class="card">
-    <h2>Upcoming Changes</h2>
-    <p>Once the site is back online, users can expect enhancements across the platform designed to streamline interaction and provide a more refined experience.</p>
-    <ul>
-      <li>Updated visuals and layout</li>
-      <li>Improved responsiveness across devices</li>
-      <li>General performance and reliability improvements</li>
-    </ul>
-  </div>
+    <section>
+      <h2>Contact</h2>
+      <p>For inquiries or further updates, please contact <a href="mailto:casino.the.pyramid@gmail.com">casino.the.pyramid@gmail.com</a>.</p>
+    </section>
 
-  <div class="card">
-    <h2>Contact</h2>
-    <p>Email: <a href="mailto:casino.the.pyramid@gmail.com">casino.the.pyramid@gmail.com</a></p>
+    <div id="hidden-game">
+      <h3>Blackjack</h3>
+      <div>
+        <p><strong>Dealer's Hand:</strong></p>
+        <div id="dealer-cards" class="cards"></div>
+      </div>
+      <div>
+        <p><strong>Your Hand:</strong></p>
+        <div id="player-cards" class="cards"></div>
+      </div>
+      <div>
+        <button onclick="hit()">Hit</button>
+        <button onclick="stand()">Stand</button>
+        <button onclick="startGame()">Deal</button>
+      </div>
+      <p id="message"></p>
+    </div>
   </div>
 
   <footer>
-    <p>&copy; 2025 Pyramid Casino. All rights reserved.</p>
+    <p>&copy; 2025 The Pyramid Casino. All Rights Reserved.</p>
   </footer>
 
   <script>
-    const code = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
-    let i = 0;
+    const konamiCode = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+    let konamiIndex = 0;
     document.addEventListener('keydown', e => {
-      if (e.key === code[i]) {
-        i++;
-        if (i === code.length) {
-          i = 0;
-          const g = document.createElement('div');
-          Object.assign(g.style, {
-            background: '#1a1a1a',
-            padding: '2rem',
-            borderRadius: '1rem',
-            marginTop: '2rem',
-            textAlign: 'center',
-            color: '#fff',
-            boxShadow: '0 0 20px rgba(0,0,0,0.3)'
-          });
-
-          const title = document.createElement('h2');
-          title.innerText = 'Card Table';
-          g.appendChild(title);
-
-          const btn = document.createElement('button');
-          btn.innerText = 'Deal';
-          btn.style = 'background:#ffd700;color:#000;padding:0.5rem 1rem;border:none;border-radius:0.5rem;font-weight:bold;cursor:pointer;margin-top:1rem';
-
-          const output = document.createElement('div');
-          output.style.marginTop = '1rem';
-          g.appendChild(output);
-
-          const suits = ['♠','♥','♦','♣'];
-          const values = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
-
-          function drawHand(){
-            output.innerHTML = '';
-            for(let j=0;j<2;j++){
-              const c = document.createElement('div');
-              c.style = 'display:inline-block;background:white;color:black;border-radius:8px;width:50px;height:70px;margin:0.25rem;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.2rem;box-shadow:0 2px 5px rgba(0,0,0,0.5)';
-              const v = values[Math.floor(Math.random()*values.length)];
-              const s = suits[Math.floor(Math.random()*suits.length)];
-              c.innerText = v + s;
-              output.appendChild(c);
-            }
-          }
-
-          btn.onclick = drawHand;
-          g.appendChild(btn);
-          document.body.appendChild(g);
+      if (e.key === konamiCode[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiCode.length) {
+          document.getElementById('hidden-game').style.display = 'block';
+          startGame();
+          konamiIndex = 0;
         }
       } else {
-        i = 0;
+        konamiIndex = 0;
       }
     });
+
+    const suits = ['♠', '♥', '♦', '♣'];
+    const values = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+    let deck = [], playerHand = [], dealerHand = [];
+
+    function createDeck() {
+      deck = [];
+      for (let s of suits) {
+        for (let v of values) {
+          deck.push({ suit: s, value: v });
+        }
+      }
+    }
+
+    function shuffleDeck() {
+      for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+      }
+    }
+
+    function getCardValue(card) {
+      if (['J','Q','K'].includes(card.value)) return 10;
+      if (card.value === 'A') return 11;
+      return parseInt(card.value);
+    }
+
+    function calculateHandValue(hand) {
+      let total = 0, aces = 0;
+      hand.forEach(card => {
+        total += getCardValue(card);
+        if (card.value === 'A') aces++;
+      });
+      while (total > 21 && aces > 0) {
+        total -= 10;
+        aces--;
+      }
+      return total;
+    }
+
+    function renderHand(hand, elementId) {
+      const el = document.getElementById(elementId);
+      el.innerHTML = '';
+      hand.forEach(card => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.textContent = `${card.value}${card.suit}`;
+        el.appendChild(div);
+      });
+    }
+
+    function startGame() {
+      createDeck();
+      shuffleDeck();
+      playerHand = [deck.pop(), deck.pop()];
+      dealerHand = [deck.pop(), deck.pop()];
+      renderHand(playerHand, 'player-cards');
+      renderHand(dealerHand, 'dealer-cards');
+      document.getElementById('message').textContent = '';
+    }
+
+    function hit() {
+      playerHand.push(deck.pop());
+      renderHand(playerHand, 'player-cards');
+      const val = calculateHandValue(playerHand);
+      if (val > 21) document.getElementById('message').textContent = 'You bust!';
+    }
+
+    function stand() {
+      while (calculateHandValue(dealerHand) < 17) {
+        dealerHand.push(deck.pop());
+      }
+      renderHand(dealerHand, 'dealer-cards');
+      const playerVal = calculateHandValue(playerHand);
+      const dealerVal = calculateHandValue(dealerHand);
+      let result = '';
+      if (dealerVal > 21 || playerVal > dealerVal) result = 'You win!';
+      else if (playerVal < dealerVal) result = 'Dealer wins!';
+      else result = "It's a tie!";
+      document.getElementById('message').textContent = result;
+    }
   </script>
 </body>
 </html>
