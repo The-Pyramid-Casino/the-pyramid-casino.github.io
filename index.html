@@ -23,6 +23,17 @@
       text-align: center;
       padding: 2rem 1rem;
       box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    #countdown {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 0.875rem;
+      color: #aaaaaa;
+      background: #222;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
     }
     .container {
       max-width: 960px;
@@ -84,6 +95,7 @@
   <header>
     <h1>The Pyramid Casino</h1>
     <p>This website is currently undergoing extended maintenance.</p>
+    <div id="countdown">Loading countdown...</div>
   </header>
 
   <div class="container">
@@ -118,7 +130,7 @@
   </div>
 
   <footer>
-    <p>&copy; 2025 The Pyramid Casino. All Rights Reserved.</p>
+    <p>&copy; 2025 The Pyramid Casino. All Rights Reserved. Contact us at <a href="mailto:casino.the.pyramid@gmail.com">casino.the.pyramid@gmail.com</a>.</p>
   </footer>
 
   <script>
@@ -143,9 +155,9 @@
 
     function createDeck() {
       deck = [];
-      for (let s of suits) {
-        for (let v of values) {
-          deck.push({ suit: s, value: v });
+      for (let suit of suits) {
+        for (let value of values) {
+          deck.push({ suit, value });
         }
       }
     }
@@ -158,8 +170,8 @@
     }
 
     function getCardValue(card) {
-      if (['J','Q','K'].includes(card.value)) return 10;
-      if (card.value === 'A') return 11;
+      if (["J","Q","K"].includes(card.value)) return 10;
+      if (card.value === "A") return 11;
       return parseInt(card.value);
     }
 
@@ -217,6 +229,26 @@
       else result = "It's a tie!";
       document.getElementById('message').textContent = result;
     }
+
+    const targetDate = new Date('2025-10-05T12:45:00');
+    const countdownEl = document.getElementById('countdown');
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+      if (diff <= 0) {
+        countdownEl.textContent = "We're back online!";
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      countdownEl.textContent = `Maintenance ends in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
   </script>
 </body>
 </html>
