@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Roulette</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0a3d62;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 { margin-bottom: 10px; }
+    #game {
+      max-width: 700px;
+      margin: auto;
+      background: #1e5f74;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px black;
+    }
+    #wheel {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      border: 10px solid #fff;
+      margin: 20px auto;
+      background: conic-gradient(
+        red 0deg 9.73deg, black 9.73deg 19.45deg,
+        red 19.45deg 29.18deg, black 29.18deg 38.9deg,
+        red 38.9deg 48.63deg, black 48.63deg 58.35deg,
+        red 58.35deg 68.08deg, black 68.08deg 77.8deg,
+        red 77.8deg 87.53deg, black 87.53deg 97.25deg,
+        red 97.25deg 106.98deg, black 106.98deg 116.7deg,
+        red 116.7deg 126.43deg, black 126.43deg 136.15deg,
+        red 136.15deg 145.88deg, black 145.88deg 155.6deg,
+        red 155.6deg 165.33deg, black 165.33deg 175.05deg,
+        green 175.05deg 185.78deg,
+        red 185.78deg 195.5deg, black 195.5deg 205.23deg,
+        red 205.23deg 214.95deg, black 214.95deg 224.68deg,
+        red 224.68deg 234.4deg, black 234.4deg 244.13deg,
+        red 244.13deg 253.85deg, black 253.85deg 263.58deg,
+        red 263.58deg 273.3deg, black 273.3deg 283.03deg,
+        red 283.03deg 292.75deg, black 292.75deg 302.48deg,
+        red 302.48deg 312.2deg, black 312.2deg 321.93deg,
+        red 321.93deg 331.65deg, black 331.65deg 341.38deg,
+        red 341.38deg 351.1deg, black 351.1deg 360deg
+      );
+      position: relative;
+    }
+    #ball {
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    button {
+      background: gold;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover { background: orange; }
+    input { width: 80px; }
+    #message { margin: 15px 0; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Roulette</h1>
+  <div id="game">
+    <p>Balance: $<span id="balance"></span></p>
+    <p>Bet: $<input type="number" id="bet" value="50" min="1"></p>
+
+    <div>
+      <button onclick="placeBet('red')">Bet Red</button>
+      <button onclick="placeBet('black')">Bet Black</button>
+      <button onclick="placeBet('even')">Bet Even</button>
+      <button onclick="placeBet('odd')">Bet Odd</button>
+      <br>
+      <input type="number" id="numberBet" min="0" max="36" placeholder="Number 0-36">
+      <button onclick="betNumber()">Bet Number</button>
+    </div>
+
+    <div id="wheel">
+      <div id="ball"></div>
+    </div>
+
+    <button onclick="spin()">Spin</button>
+    <button onclick="resetBalance()">Reset Balance</button>
+
+    <div id="message"></div>
+  </div>
+
+  <script>
+    let balance = parseInt(localStorage.getItem("roulette_balance")) || 1000;
+    let currentBet = null;
+    let betAmount = 50;
+
+    const balanceEl = document.getElementById("balance");
+    const messageEl = document.getElementById("message");
+    const betInput = document.getElementById("bet");
+    const numberBetInput = document.getElementById("numberBet");
+    const ball = document.getElementById("ball");
+
+    updateBalance();
+
+    function updateBalance() {
+      balanceEl.textContent = balance;
+    }
+    function saveBalance() {
+      localStorage.setItem("roulette_balance", balance);
+      updateBalance();
+    }
+    function resetBalance() {
+      balance = 1000;
+      saveBalance();
+    }
+
+    function placeBet(type) {
+      betAmount = parseInt(betInput.value);
+      if (betAmount <= 0 || betAmount > balance) {
+        messageEl.textContent = "Invalid bet!";
+        return;
+      }
+      currentBet = { type, amount: betAmount };
+      messageEl.textContent = "Bet placed on " + type;
+    }
+
+    function betNumber() {
+      betAmount = parseInt(betInput.value);
+      const num = parseInt(numberBetInput.value);
+      if (isNaN(num) || num < 0 || num > 36) {
+        messageEl.textContent = "Enter a valid number (0–36).";
+        return;
+      }
+      if (betAmount <= 0 || betAmount > balance) {
+        messageEl.textContent = "Invalid bet!";
+        return;
+      }
+      currentBet = { type: "number", value: num, amount: betAmount };
+      messageEl.textContent = "Bet placed on number " + num;
+    }
+
+    function spin() {
+      if (!currentBet) {
+        messageEl.textContent = "Place a bet first!";
+        return;
+      }
+
+      balance -= currentBet.amount;
+      saveBalance();
+
+      const result = Math.floor(Math.random() * 37); // 0-36
+      const isRed = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(result);
+      const isBlack = result !== 0 && !isRed;
+
+      // Animate ball (simple rotation)
+      const angle = (result / 37) * 360 + 1440; // spin + land
+      ball.style.transition = "transform 3s ease-out";
+      ball.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+
+      setTimeout(() => {
+        let win = false;
+        let payout = 0;
+
+        if (currentBet.type === "red" && isRed) {
+          win = true; payout = currentBet.amount * 2;
+        } else if (currentBet.type === "black" && isBlack) {
+          win = true; payout = currentBet.amount * 2;
+        } else if (currentBet.type === "even" && result !== 0 && result % 2 === 0) {
+          win = true; payout = currentBet.amount * 2;
+        } else if (currentBet.type === "odd" && result % 2 === 1) {
+          win = true; payout = currentBet.amount * 2;
+        } else if (currentBet.type === "number" && result === currentBet.value) {
+          win = true; payout = currentBet.amount * 36;
+        }
+
+        if (win) {
+          messageEl.textContent = `Number: ${result}. You win $${payout - currentBet.amount}!`;
+          balance += payout;
+        } else {
+          messageEl.textContent = `Number: ${result}. You lose.`;
+        }
+        saveBalance();
+        currentBet = null;
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
