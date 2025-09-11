@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simple Slot Machine Demo</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    background: #222;
+    color: #eee;
+    padding: 20px;
+  }
+  h1 {
+    margin-bottom: 10px;
+  }
+  #balance {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  #slot-machine {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .reel {
+    width: 80px;
+    height: 80px;
+    margin: 0 10px;
+    font-size: 3rem;
+    line-height: 80px;
+    border: 4px solid #f39c12;
+    border-radius: 10px;
+    background: #333;
+    user-select: none;
+  }
+  button {
+    background: #f39c12;
+    border: none;
+    color: #222;
+    font-size: 1.2rem;
+    padding: 10px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button:hover:enabled {
+    background: #e67e22;
+  }
+  button:disabled {
+    background: #7f6a2e;
+    cursor: not-allowed;
+  }
+  #message {
+    margin-top: 20px;
+    font-size: 1.3rem;
+    min-height: 30px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Simple Slot Machine</h1>
+<div id="balance">Balance: $100</div>
+
+<div id="slot-machine">
+  <div class="reel" id="reel1">🍒</div>
+  <div class="reel" id="reel2">🍋</div>
+  <div class="reel" id="reel3">🍊</div>
+</div>
+
+<button id="spin-btn">Spin ($10)</button>
+
+<div id="message"></div>
+
+<script>
+  const symbols = ['🍒', '🍋', '🍊', '🍉', '⭐', '7️⃣'];
+  let balance = 100;
+  const spinCost = 10;
+
+  const balanceEl = document.getElementById('balance');
+  const messageEl = document.getElementById('message');
+  const spinBtn = document.getElementById('spin-btn');
+  const reels = [
+    document.getElementById('reel1'),
+    document.getElementById('reel2'),
+    document.getElementById('reel3'),
+  ];
+
+  function getRandomSymbol() {
+    return symbols[Math.floor(Math.random() * symbols.length)];
+  }
+
+  function checkWin(result) {
+    // If all three symbols are the same
+    if (result[0] === result[1] && result[1] === result[2]) {
+      // Jackpot for 7️⃣
+      if (result[0] === '7️⃣') {
+        return { win: true, amount: 100 };
+      }
+      // Star symbol wins 50
+      if (result[0] === '⭐') {
+        return { win: true, amount: 50 };
+      }
+      // Other symbols win 20
+      return { win: true, amount: 20 };
+    }
+    // If two symbols match
+    if (result[0] === result[1] || result[1] === result[2] || result[0] === result[2]) {
+      return { win: true, amount: 5 };
+    }
+    return { win: false, amount: 0 };
+  }
+
+  function updateBalance(amount) {
+    balance += amount;
+    balanceEl.textContent = `Balance: $${balance}`;
+  }
+
+  function spin() {
+    if (balance < spinCost) {
+      messageEl.textContent = 'Insufficient balance!';
+      spinBtn.disabled = true;
+      return;
+    }
+
+    spinBtn.disabled = true;
+    messageEl.textContent = 'Spinning...';
+
+    // Deduct spin cost
+    updateBalance(-spinCost);
+
+    // Animate reels spinning
+    let spinCount = 0;
+    const maxSpins = 20;
+    const spinInterval = setInterval(() => {
+      reels.forEach(reel => {
+        reel.textContent = getRandomSymbol();
+      });
+      spinCount++;
+      if (spinCount >= maxSpins) {
+        clearInterval(spinInterval);
+        // Final result
+        const finalResult = reels.map(reel => reel.textContent);
+        const outcome = checkWin(finalResult);
+        if (outcome.win) {
+          updateBalance(outcome.amount);
+          messageEl.textContent = `You won $${outcome.amount}! 🎉`;
+        } else {
+          messageEl.textContent = `No win this time, try again!`;
+        }
+        if (balance < spinCost) {
+          messageEl.textContent += ' Game over: not enough balance to spin.';
+          spinBtn.disabled = true;
+        } else {
+          spinBtn.disabled = false;
+        }
+      }
+    }, 100);
+  }
+
+  spinBtn.addEventListener('click', spin);
+</script>
+
+</body>
+</html>
